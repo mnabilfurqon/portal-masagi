@@ -4,6 +4,7 @@ import LoginPage from "../pages/loginPage/LoginPage";
 import LoadingComponent from "../components/loadingComponent/LoadingComponent";
 import LayoutComponent from "../components/layouts/LayoutComponent";
 import CompanyConfiguration from "../pages/companyConfiguration/CompanyConfiguration";
+import RoleConfig from "../pages/roleConfig/RoleConfig";
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -23,7 +24,7 @@ const RouteManagement = () => {
           <Routes>
             <React.Fragment>
               <Route
-                path="/company"
+                path="/dashboard"
                 element={
                   <LayoutComponent>
                     <CompanyConfiguration />
@@ -31,7 +32,7 @@ const RouteManagement = () => {
                 }
               />
               <Route
-                path="/employee"
+                path="/company"
                 element={
                   <LayoutComponent>
                     
@@ -50,23 +51,7 @@ const RouteManagement = () => {
                 path="/role"
                 element={
                   <LayoutComponent>
-                    
-                  </LayoutComponent>
-                }
-              />
-              <Route
-                path="/division"
-                element={
-                  <LayoutComponent>
-                    
-                  </LayoutComponent>
-                }
-              />
-              <Route
-                path="/posisition"
-                element={
-                  <LayoutComponent>
-                    
+                    <RoleConfig/>
                   </LayoutComponent>
                 }
               />
