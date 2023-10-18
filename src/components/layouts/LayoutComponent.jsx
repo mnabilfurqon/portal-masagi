@@ -6,38 +6,31 @@ import {
 } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets";
-import "./layoutComponent.css";
 import { Link } from "react-router-dom";
+import "./layoutComponent.css";
 
 const LayoutComponent = ({ children }) => {
   const { Header, Content, Sider } = Layout;
+  const { SubMenu } = Menu;
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const items = [
-    getItem("Dashboard", "/dashboard", <HomeOutlined />),
-    getItem("Master Data", "/master-data", <UserOutlined />, [
-      getItem("Company", "/company"),
-      getItem("Employee", "/employee"),
-      getItem("User", "/user"),
-      getItem("Role", "/role"),
-      getItem("Division", "/division"),
-      getItem("Posisition", "/posisition"),
-    ]),
-  ];
+  // Ganti Judul Tiap Ganti Halaman
+  let pageTitle = 'Dashboard';
 
-  function getItem(label, key, icon, children) {
-    return {
-      key,
-      icon,
-      children,
-      label,
-    };
+  if (location.pathname === '/company') {
+    pageTitle = 'Company';
+  } else if (location.pathname === '/user') {
+    pageTitle = 'User';
+  } else if (location.pathname === '/role') {
+    pageTitle = 'Role';
   }
 
   return (
     <Layout className="layout-container">
+
+      {/* Sider */}
       <Sider
         style={{
           background: colorBgContainer,
@@ -48,10 +41,26 @@ const LayoutComponent = ({ children }) => {
         <Menu
           defaultSelectedKeys={["/dashboard"]}
           mode="inline"
-          items={items}
           style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
-        />
+        >
+          <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+            <Link to="/dashboard">Dashboard</Link>
+          </Menu.Item>
+          <SubMenu key="masterData" icon={<UserOutlined />} title="Master Data">
+            <Menu.Item key="/company">
+              <Link to="/company">Company</Link>
+            </Menu.Item>
+            <Menu.Item key="/user">
+              <Link to="/user">User</Link>
+            </Menu.Item>
+            <Menu.Item key="/role">
+              <Link to="/role">Role</Link>
+            </Menu.Item>
+          </SubMenu>
+        </Menu>
       </Sider>
+
+      {/* Header */}
       <Layout>
         <Header
           style={{
@@ -72,17 +81,19 @@ const LayoutComponent = ({ children }) => {
             }}
           >
             <div className="brand">
-              <p>Company Configuration</p>
+              <p>{pageTitle}</p>
             </div>
 
             <Flex>
               <Space style={{ padding: "10px" }}>
-                <BellDropdown />
+                <BellOutlined/>
                 <MyDropdown />
               </Space>
             </Flex>
           </Flex>
         </Header>
+
+        {/* Content */}
         <Content
           style={{
             margin: "0 16px",
@@ -104,6 +115,7 @@ const LayoutComponent = ({ children }) => {
   );
 };
 
+// Dropdown Profile
 const MyDropdown = () => {
   // the name should be "items"
   const items = [
@@ -120,6 +132,7 @@ const MyDropdown = () => {
       key: "2",
     },
   ];
+  
   return (
     <>
       <Dropdown menu={{ items }} trigger={["click"]}>
@@ -147,36 +160,4 @@ const MyDropdown = () => {
   );
 };
 
-const BellDropdown = () => {
-  const items = [
-    {
-      label: <Link to="">Akun 1</Link>,
-      key: "0",
-    },
-    {
-      label: <Link to="">Akun 2</Link>,
-      key: "1",
-    },
-    {
-      label: <Link to="">Akun 3</Link>,
-      key: "2",
-    },
-  ];
-
-  return (
-    <>
-      <Dropdown menu={{ items }} trigger={["click"]}>
-        <a
-          onClick={(e) => e.preventDefault()}
-          style={{
-            textDecoration: "none",
-            color: "GrayText",
-          }}
-        >
-          <BellOutlined />
-        </a>
-      </Dropdown>
-    </>
-  );
-};
 export default LayoutComponent;
