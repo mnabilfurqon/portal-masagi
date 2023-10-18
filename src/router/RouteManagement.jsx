@@ -27,7 +27,7 @@ const RouteManagement = () => {
                 path="/dashboard"
                 element={
                   <LayoutComponent>
-                    <CompanyConfiguration />
+                    
                   </LayoutComponent>
                 }
               />
@@ -35,7 +35,7 @@ const RouteManagement = () => {
                 path="/company"
                 element={
                   <LayoutComponent>
-                    
+                    <CompanyConfiguration />
                   </LayoutComponent>
                 }
               />
