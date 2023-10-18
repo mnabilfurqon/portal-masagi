@@ -1,0 +1,18 @@
+.count-button {
+    display: inline-flex;
+    width: 62px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.ant-select-selection-item {
+    color: #629093;
+}
+
+/* Mengubah warna border saat elemen tidak berfokus */
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-color: #629093;
+    border: 1px solid #629093;
+    border-radius: 4px;
+}

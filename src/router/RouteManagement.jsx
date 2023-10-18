@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/loginPage/LoginPage";
 import LoadingComponent from "../components/loadingComponent/LoadingComponent";
 import LayoutComponent from "../components/layouts/LayoutComponent";
+import CompanyConfiguration from "../pages/companyConfiguration/CompanyConfiguration";
 import RoleConfig from "../pages/roleConfig/RoleConfig";
 
 const RouteManagement = () => {
@@ -26,7 +27,7 @@ const RouteManagement = () => {
                 path="/dashboard"
                 element={
                   <LayoutComponent>
-                    
+                    <CompanyConfiguration />
                   </LayoutComponent>
                 }
               />

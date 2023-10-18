@@ -1,0 +1,11 @@
+.sort-button {
+    display: inline-flex;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    color: #629093;
+    border: 1px solid #629093;
+    border-radius: 4px;
+}
