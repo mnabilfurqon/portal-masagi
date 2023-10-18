@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/loginPage/LoginPage";
 import LoadingComponent from "../components/loadingComponent/LoadingComponent";
 import LayoutComponent from "../components/layouts/LayoutComponent";
+import RoleConfig from "../pages/roleConfig/RoleConfig";
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -49,7 +50,7 @@ const RouteManagement = () => {
                 path="/role"
                 element={
                   <LayoutComponent>
-                    
+                    <RoleConfig/>
                   </LayoutComponent>
                 }
               />
