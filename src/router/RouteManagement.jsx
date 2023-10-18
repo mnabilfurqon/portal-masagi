@@ -22,7 +22,7 @@ const RouteManagement = () => {
           <Routes>
             <React.Fragment>
               <Route
-                path="/company"
+                path="/dashboard"
                 element={
                   <LayoutComponent>
                     
@@ -30,7 +30,7 @@ const RouteManagement = () => {
                 }
               />
               <Route
-                path="/employee"
+                path="/company"
                 element={
                   <LayoutComponent>
                     
@@ -47,22 +47,6 @@ const RouteManagement = () => {
               />
               <Route
                 path="/role"
-                element={
-                  <LayoutComponent>
-                    
-                  </LayoutComponent>
-                }
-              />
-              <Route
-                path="/division"
-                element={
-                  <LayoutComponent>
-                    
-                  </LayoutComponent>
-                }
-              />
-              <Route
-                path="/posisition"
                 element={
                   <LayoutComponent>
                     

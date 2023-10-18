@@ -17,20 +17,20 @@ body {
 }
 
 .form-container {
-  font-family: "Inter", sans-serif;
-  position: absolute;
-  width: 600px;
-  height: 450px;
-  top: 50px;
-  left: 300px;
-  border-radius: 15px;
-  border: 2px solid transparent;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.4);
+    font-family: "Inter", sans-serif;
+    position: absolute;
+    width: 600px;
+    height: 450px;
+    top: 50px;
+    left: 300px;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .custom-input {
