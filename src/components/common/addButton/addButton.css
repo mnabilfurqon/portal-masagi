@@ -1,7 +1,5 @@
 .add-button {
     display: inline-flex;
-    padding: 8px 16px;
-    height: 34px;
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -9,4 +7,10 @@
     border-radius: 4px;
     background-color: #629093;
     color: white;
+}
+
+.add-button:hover {
+    background-color: #ffffff;
+    color: #629093 !important;
+    border: 1px solid #629093 !important;
 }

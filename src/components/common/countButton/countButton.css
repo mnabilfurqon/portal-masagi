@@ -1,6 +1,6 @@
 .count-button {
     display: inline-flex;
-    width: 62px;
+    width: 60px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -14,5 +14,17 @@
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
     border-color: #629093;
     border: 1px solid #629093;
+    border-radius: 4px;
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover {
+    border-color: #629093 !important;
+    border: 1px solid #629093 !important;
+    border-radius: 4px;
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector:not(:focus) {
+    border-color: #629093 !important;
+    border: 1px solid #629093 !important;
     border-radius: 4px;
 }
