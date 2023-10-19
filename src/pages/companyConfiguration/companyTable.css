@@ -1,0 +1,66 @@
+.ant-table-thead > tr > th {
+    background-color: #F3F6F9 !important
+}
+
+.custom-row td {
+    color: #556172; /* Change this to the color you want */
+}
+
+.ant-pagination-item a {
+    color: #629093 !important;
+}
+
+.ant-pagination-item {
+    background-color: #ffffff !important;
+    border-color: #629093 !important;
+}
+
+.ant-pagination-item:hover a {
+    color: #ffffff !important;
+}
+
+.ant-pagination-item:hover {
+    background-color: #629093 !important;
+}
+
+.ant-pagination-item-active a {
+    color: #ffffff !important;
+}
+
+.ant-pagination-item-active {
+    background-color: #629093 !important;
+}
+
+.active-button {
+    background-color: #ffffff !important;
+    border-color: #28A745 !important;; 
+    color: #28A745 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.active-button button {
+    pointer-events: none;
+}
+.not-active-button {
+    background-color: #ffffff !important;
+    border-color: #DC3545 !important;; 
+    color: #DC3545 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.not-active-button button {
+    pointer-events: none;
+}
+
+.action-button {
+    border: none;
+    margin-right: 10px;
+}
+
+.action-icon {
+    color: #629093;
+    font-size: 25px;
+    cursor: pointer;
+}
