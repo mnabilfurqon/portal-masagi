@@ -1,12 +1,35 @@
 import React from 'react';
-import { BsFilter } from "react-icons/bs";
-import { Button } from 'antd';
+import { Button, Dropdown } from 'antd';
+import { BsFilter } from 'react-icons/bs'; // Import the icon
 import './filterButton.css';
 
-const filterButton = () => (
-    <Button className="filter-button">
-        <BsFilter className="filter-icon" />
-        Filter
-    </Button>
+const items = [
+  {
+    key: 'active',
+    label: (
+      <a target="_blank" rel="noopener noreferrer" >
+        Active
+      </a>
+    ),
+  },
+  {
+    key: 'notActive',
+    label: (
+      <a target="_blank" rel="noopener noreferrer" >
+        Not Active
+      </a>
+    ),
+  },
+];
+
+const FilterButton = () => (
+    <Dropdown
+        menu={{
+          items,
+        }}
+        placement="bottomLeft"
+      >
+        <Button className='filter-button'> <BsFilter className='filter-icon'/> Filter </Button>
+    </Dropdown>
 );
-export default filterButton;
+export default FilterButton;
