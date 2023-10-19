@@ -1,11 +1,20 @@
 .filter-button {
     display: inline-flex;
-    padding: 8px 16px;
-    justify-content: center;
     align-items: center;
-    gap: 8px;
     flex-shrink: 0;
     color: #629093;
     border: 1px solid #629093;
+    padding: 0 10px;
     border-radius: 4px;
+    width: 70px;
+}
+
+.filter-icon {
+    margin-right: 5px;
+}
+
+.filter-button:hover {
+    background-color: #629093 !important;
+    border-color: #629093 !important;
+    color: #ffffff !important;
 }
