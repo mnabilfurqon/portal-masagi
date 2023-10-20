@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+}
+
+.table-container {
+    width: 100%;
+    border: #556172 1px solid;
+}
+
+.table-content {
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+th, td {
+    border: none; 
+    padding: 8px;
+    text-align: left;
+}
+  
+th {
+    width: 15%;
+    background-color: #F3F6F9;
+}
+
+.edit-data-button {
+    margin-top: 25px;
+    background-color: #629093;
+    border-color: #629093;
+    border-radius: 4px;
+    width: 100px;
+}
+
+.edit-data-button:hover {
+    background-color: #ffffff !important;
+    border-color: #629093 !important;
+    color: #629093 !important;
+}
