@@ -8,6 +8,10 @@ import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets";
 import { Link } from "react-router-dom";
 import "./layoutComponent.css";
+import SearchBox from "../common/SearchBox/SearchBox";
+import FilterButton from "../common/FilterButton/FilterButton";
+import SortButton from "../common/SortButton/SortButton";
+import CountButton from "../common/countButton/CountButton";
 
 const LayoutComponent = ({ children }) => {
   const { Header, Content, Sider } = Layout;
@@ -17,19 +21,18 @@ const LayoutComponent = ({ children }) => {
   } = theme.useToken();
 
   // Ganti Judul Tiap Ganti Halaman
-  let pageTitle = 'Dashboard';
+  let pageTitle = "Dashboard";
 
-  if (location.pathname === '/company') {
-    pageTitle = 'Company';
-  } else if (location.pathname === '/user') {
-    pageTitle = 'User';
-  } else if (location.pathname === '/role') {
-    pageTitle = 'Role';
+  if (location.pathname === "/company") {
+    pageTitle = "Company";
+  } else if (location.pathname === "/user") {
+    pageTitle = "User";
+  } else if (location.pathname === "/role") {
+    pageTitle = "Role";
   }
 
   return (
     <Layout className="layout-container">
-
       {/* Sider */}
       <Sider
         style={{
@@ -86,7 +89,7 @@ const LayoutComponent = ({ children }) => {
 
             <Flex>
               <Space style={{ padding: "10px" }}>
-                <BellOutlined/>
+                <BellOutlined />
                 <MyDropdown />
               </Space>
             </Flex>
@@ -107,6 +110,14 @@ const LayoutComponent = ({ children }) => {
               margin: "16px 0",
             }}
           >
+            <div className="buttons-container">
+              <div className="left-buttons">
+                <SearchBox className="search-box" />
+                <FilterButton className="filter-button" />
+                <SortButton className="sort-button" />
+                <CountButton className="count-button" />
+              </div>
+            </div>
             {children}
           </div>
         </Content>
@@ -132,7 +143,7 @@ const MyDropdown = () => {
       key: "2",
     },
   ];
-  
+
   return (
     <>
       <Dropdown menu={{ items }} trigger={["click"]}>
