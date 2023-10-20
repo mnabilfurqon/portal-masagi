@@ -64,3 +64,9 @@
     font-size: 25px;
     cursor: pointer;
 }
+
+.action-icon:hover {
+    color: #F9B700;
+    font-size: 25px;
+    cursor: pointer;
+}

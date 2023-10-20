@@ -1,0 +1,71 @@
+.add-company-form {
+    max-width: 100%;
+}
+
+.add-company-form .add-company-label {
+    text-align: left;
+}
+
+.add-company-form .add-company-input {
+    text-align: right;
+} 
+
+.input-address {
+    resize: none !important;
+    height: 100px;
+}
+
+.input-address:hover,
+.input-address:focus {
+    border-color: #17A2B8 !important;
+}
+
+.input-button:hover,
+.input-button:focus {
+    border-color: #17A2B8 !important;
+}
+
+.date-picker {
+    width: 100%;
+}
+
+.date-picker:hover,
+.date-picker:focus {
+    border-color: #17A2B8 !important;
+}
+
+.radio-status {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    gap: 20px;
+}
+
+.radio-status input[type="radio"]:checked + span {
+    background-color: #629093;
+    border-color: #629093;
+}
+
+.radio-status input[type="radio"]:hover + span {
+    border-color: #629093;
+}
+
+.action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.add-data-button {
+    background-color: #629093;
+    border-color: #629093;
+    border-radius: 4px;
+}
+
+.add-data-button:hover {
+    background-color: #ffffff !important;
+    border-color: #629093 !important;
+    color: #629093 !important;
+}
