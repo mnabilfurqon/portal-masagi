@@ -15,11 +15,5 @@
 
 .left-buttons{
   display: flex;
-}
-
-.left-buttons .search-box,
-.left-buttons .filter-button,
-.left-buttons .sort-button,
-.left-buttons .count-button {
-  margin-right: 20px;
+  gap: 20px;
 }

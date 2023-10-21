@@ -23,6 +23,7 @@ const CompanyTable = () => {
           title: 'Company Name',
           dataIndex: 'companyName',
           key: 'companyName',
+          width: 400,
         },
         {
           title: 'Email',
@@ -43,14 +44,14 @@ const CompanyTable = () => {
           title: 'Action',
           key: 'action',
             render: () => (
-                <>
+                <div className='action-button-container'>
                     <Button className="action-button" type="primary" size="small" ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" ghost>
                         <BsPersonAdd className="action-icon" />
                     </Button>
-                </>
+                </div>
             ),
         },
     ];

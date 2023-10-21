@@ -8,12 +8,12 @@ import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets";
 import { Link } from "react-router-dom";
 import "./layoutComponent.css";
-import SearchBox from "../common/SearchBox/SearchBox";
-import FilterButton from "../common/FilterButton/FilterButton";
+import SearchBox from "../common/searchBox/SearchBox";
+import FilterButton from "../common/filterButton/FilterButton";
 import SortButton from "../common/SortButton/SortButton";
 import CountButton from "../common/countButton/CountButton";
 
-const LayoutComponent = ({ children }) => {
+const LayoutComponent = ({ children, hideButtons }) => {
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
   const {
@@ -110,14 +110,16 @@ const LayoutComponent = ({ children }) => {
               margin: "16px 0",
             }}
           >
-            <div className="buttons-container">
-              <div className="left-buttons">
-                <SearchBox className="search-box" />
-                <FilterButton className="filter-button" />
-                <SortButton className="sort-button" />
-                <CountButton className="count-button" />
+            {hideButtons ? null : (
+              <div className="buttons-container">
+                <div className="left-buttons">
+                  <SearchBox className="search-box" />
+                  <FilterButton className="filter-button" />
+                  <SortButton className="sort-button" />
+                  <CountButton className="count-button" />
+                </div>
               </div>
-            </div>
+            )}
             {children}
           </div>
         </Content>

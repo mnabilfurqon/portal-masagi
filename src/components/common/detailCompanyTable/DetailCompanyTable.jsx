@@ -1,10 +1,8 @@
 import React from 'react'
 import './detailCompanyTable.css'
-import { Button } from 'antd'
 
 const DetailCompanyTable = () => {
   return (
-    <div className='container'>
         <table className='table-container'>
             <table className='table-content'>
                 <tr>
@@ -77,10 +75,6 @@ const DetailCompanyTable = () => {
                 </tr>
             </table>
         </table>
-        <Button type="primary" className='edit-data-button'>
-            Edit Data
-        </Button>
-    </div>
   )
 }
 
