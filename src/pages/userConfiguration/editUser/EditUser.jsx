@@ -22,9 +22,6 @@ const editUser = () => {
 
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState('vertical');
-  const onFormLayoutChange = ({ layout }) => {
-    setFormLayout(layout);
-  };
   const formItemLayout =
     formLayout === 'horizontal'
       ? {
@@ -39,8 +36,8 @@ const editUser = () => {
 
   return (
     <>
-      <Button type="none" onClick={showModal}>
-        <BiEdit className="icon-edit" size="20" />
+      <Button type="none" style={{margin:0, padding:0}} onClick={showModal}>
+        <BiEdit className="edit-icon" size="25" />
       </Button>
       <Modal
         // centered

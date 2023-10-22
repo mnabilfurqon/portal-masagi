@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "./deleteConfirmation.css"
 import { PiWarningCircleBold } from "react-icons/pi";
 import { MdOutlineDelete } from 'react-icons/md';
@@ -33,6 +33,45 @@ const DeleteConfirmation = () => {
         </Button>
     </>
     )
+}
+
+export const DeleteConfirmationDialog = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    console.log('Deleted');
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Button type="none" style={{margin:0, padding:0}} onClick={showModal}>
+        <MdOutlineDelete className="icon-delete" size="25" />
+      </Button>
+      <Modal
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={
+          <div>
+            <Button className="cancel-button" type="none" onClick={handleCancel}>CANCEL</Button>
+            <Button className="delete-button" type="danger" onClick={handleOk}>DELETE</Button>
+          </div>
+        }
+      >
+        <div className="dialog">
+          <PiWarningCircleBold className="icon-warning" size="70"/>
+          <h1>Attention</h1>
+          <p>Are you sure delete this account?</p>
+        </div>
+      </Modal>
+    </>
+  )
 }
 
 export default DeleteConfirmation

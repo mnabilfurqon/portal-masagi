@@ -3,16 +3,13 @@ import React from 'react'
 // import { Input } from 'antd'
 // import { Button, Dropdown } from 'antd'
 // import { InputNumber } from 'antd'
-import { Table, Tag, Flex, Space } from 'antd'
-import { BiEdit } from "react-icons/bi"
-import { MdOutlineDelete } from "react-icons/md"
+import { Table, Tag, Space } from 'antd'
 import './userConfiguration.css'
-import SearchBox from '../../components/common/SearchBox/SearchBox'
-import FilterButton from '../../components/common/FilterButton/FilterButton'
-import SortButton from '../../components/common/SortButton/SortButton'
-import CountButton from '../../components/common/countButton/CountButton'
 import EditUser from './editUser/EditUser'
-import DeleteConfirmation from './deleteConfirmation/DeleteConfirmation'
+import DeleteConfirmation, { DeleteConfirmationDialog } from './deleteConfirmation/DeleteConfirmation'
+import SuccessModal from '../../components/common/successModal/SuccessModal'
+import FailedModal from '../../components/common/failedModal/FailedModal'
+import { SuccessUpdateModal } from '../../components/common/successModal/SuccessModal'
 
 const UserConfiguration = () => {
     // // Search
@@ -122,10 +119,8 @@ const UserConfiguration = () => {
           key: 'action',
           render: (_, record) => (
             <Space size="small">
-              {/* <a><BiEdit className="icon-edit" size="20" /></a>
-              <a><MdOutlineDelete className="icon-delete" size="20" /></a> */}
               <EditUser />
-              <DeleteConfirmation />
+              <DeleteConfirmationDialog />
             </Space>
           ),
         },
@@ -184,20 +179,14 @@ const UserConfiguration = () => {
             <InputNumber min={1} max={100000} defaultValue={3} onChange={onChange} style={{ width:50 }}/>
               </Flex>*/}
 
-        <Flex horizontal="true" gap="large">
-            <SearchBox />
-            <FilterButton />
-            <SortButton />
-            <CountButton />
-        </Flex>
-        <br />
-
         <div>
             <Table columns={columns} dataSource={data} />
         </div>
 
         <div>
-          {/* <EditUser /> */}
+          <SuccessModal action="Delete"/>
+          <FailedModal />
+          <SuccessUpdateModal />
         </div>
         </>
     )
