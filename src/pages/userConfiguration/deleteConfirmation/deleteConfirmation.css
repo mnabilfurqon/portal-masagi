@@ -1,0 +1,12 @@
+.icon-delete {
+  color: #dc3545;
+}
+
+.icon-delete:hover {
+  color: #f9b700;
+}
+
+.icon-warning {
+  color: red;
+  width: 50px;
+}

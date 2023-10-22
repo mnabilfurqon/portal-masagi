@@ -1,15 +1,18 @@
 import React from 'react'
-import { AudioOutlined } from '@ant-design/icons';
-import { Input, Space } from 'antd';
-import { Button, Dropdown } from 'antd';
-import { InputNumber } from 'antd';
-import { Table, Tag, Flex } from 'antd';
+// import { AudioOutlined } from '@ant-design/icons'
+// import { Input } from 'antd'
+// import { Button, Dropdown } from 'antd'
+// import { InputNumber } from 'antd'
+import { Table, Tag, Flex, Space } from 'antd'
+import { BiEdit } from "react-icons/bi"
+import { MdOutlineDelete } from "react-icons/md"
 import './userConfiguration.css'
 import SearchBox from '../../components/common/SearchBox/SearchBox'
 import FilterButton from '../../components/common/FilterButton/FilterButton'
 import SortButton from '../../components/common/SortButton/SortButton'
 import CountButton from '../../components/common/countButton/CountButton'
-import AddButton from '../../components/common/addButton/AddButton'
+import EditUser from './editUser/EditUser'
+import DeleteConfirmation from './deleteConfirmation/DeleteConfirmation'
 
 const UserConfiguration = () => {
     // // Search
@@ -67,48 +70,62 @@ const UserConfiguration = () => {
           title: 'Username',
           dataIndex: 'username',
           key: 'username',
+          sorter: (record1, record2) => {
+            return record1.username > record2.username
+          }
         //   render: (text) => <a>{text}</a>,
         },
         {
           title: 'Password',
           dataIndex: 'password',
           key: 'password',
+          sorter: (record1, record2) => {
+            return record1.password > record2.password
+          }
         },
         {
           title: 'Role',
           dataIndex: 'role',
           key: 'role',
+          sorter: (a, b) => {
+            return a.role > b.role
+          }
         },
         {
           title: 'Status',
-          key: 'tags',
-          dataIndex: 'tags',
-          render: (_, { tags }) => (
+          key: 'is_active',
+          dataIndex: 'is_active',
+          render: (_, { is_active }) => (
             <>
-              {tags.map((tag) => {
+              {is_active.map((status) => {
                 let color = 'green';
-                if (tag === '0') {
+                if (status === '0') {
                   color = 'volcano';
-                  tag = 'Not Active';
+                  status = 'Not Active';
                 } else {
-                  tag='Active';
+                  status='Active';
                 }
                 return (
-                  <Tag color={color} key={tag}>
-                    {tag.toUpperCase()}
+                  <Tag color={color} key={status}>
+                    {status}
                   </Tag>
                 );
               })}
             </>
-          ),
+          ),          
+          sorter: (record1, record2) => {
+            return record1.is_active > record2.is_active
+          }
         },
         {
           title: 'Action',
           key: 'action',
           render: (_, record) => (
-            <Space size="middle">
-              <a>Edit</a>
-              <a>Delete</a>
+            <Space size="small">
+              {/* <a><BiEdit className="icon-edit" size="20" /></a>
+              <a><MdOutlineDelete className="icon-delete" size="20" /></a> */}
+              <EditUser />
+              <DeleteConfirmation />
             </Space>
           ),
         },
@@ -119,21 +136,21 @@ const UserConfiguration = () => {
           username: 'JohnBrown',
           password: "JohnB32",
           role: 'User',
-          tags: ['1'],
+          is_active: ['1'],
         },
         {
           key: '2',
           username: 'JimGreen',
           password: 'JimG42',
           role: 'Admin',
-          tags: ['0'],
+          is_active: ['0'],
         },
         {
           key: '3',
           username: 'JoeBlack',
           password: 'JoeB32',
           role: 'Admin',
-          tags: ['1'],
+          is_active: ['1'],
         },
     ];
 
@@ -167,7 +184,7 @@ const UserConfiguration = () => {
             <InputNumber min={1} max={100000} defaultValue={3} onChange={onChange} style={{ width:50 }}/>
               </Flex>*/}
 
-        <Flex horizontal gap="large">
+        <Flex horizontal="true" gap="large">
             <SearchBox />
             <FilterButton />
             <SortButton />
@@ -177,6 +194,10 @@ const UserConfiguration = () => {
 
         <div>
             <Table columns={columns} dataSource={data} />
+        </div>
+
+        <div>
+          {/* <EditUser /> */}
         </div>
         </>
     )
