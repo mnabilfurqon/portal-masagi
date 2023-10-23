@@ -1,0 +1,29 @@
+.ant-table-thead > tr > th {
+  background-color: #F3F6F9 !important;
+}
+
+.custom-row td {
+  color: #556172; /* Change this to the color you want */
+}
+
+.ant-table-cell-action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.action-button {
+  border: none;
+  margin-right: 10px;
+}
+
+.action-icon {
+  color: #629093;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.action-icon:hover {
+  color: #F9B700;
+  font-size: 25px;
+  cursor: pointer;
+}

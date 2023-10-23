@@ -1,0 +1,104 @@
+.right-buttons {
+  display: flex;
+  margin-left: 830px;
+  margin-top: -85px;
+  margin-bottom: 50px;
+}
+
+.add-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+}
+.add-button:hover {
+  background-color: #ffffff;
+  color: #629093 !important;
+  border: 1px solid #629093 !important;
+}
+
+.add-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+  width: 472px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.add-role-button:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.view-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+  width: 472px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.view-role-button:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.back-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #DC3545;
+  color: white;
+  width: 472px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.back-role-button:hover {
+  background-color: #ffffff;
+  color: #DC3545 !important;
+  border: 1px solid #DC3545 !important;
+}
+
+.add-role-title {
+  background: #F8F9FA;
+  font-size: 30px;
+  color: #0C2E60;
+  margin-bottom: 40px;
+  height: 100%;
+}
+
+.success-logo {
+  color: #00FF00;
+}
+
+.failed-logo {
+  color: red;
+  margin-left: 205px;
+}
+
+.failed-text {
+  margin-left: 218px;
+}
+
+.failed-message {
+  margin-left: 160px;
+}

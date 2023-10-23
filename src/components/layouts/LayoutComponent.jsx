@@ -1,17 +1,13 @@
-import {
-  HomeOutlined,
-  UserOutlined,
-  BellOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
+import { HomeOutlined, BellOutlined, DownOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets";
 import { Link } from "react-router-dom";
-import "./layoutComponent.css";
 import SearchBox from "../common/SearchBox/SearchBox";
 import FilterButton from "../common/FilterButton/FilterButton";
 import SortButton from "../common/SortButton/SortButton";
 import CountButton from "../common/countButton/CountButton";
+import { TbDatabasePlus } from "react-icons/tb";
+import "./layoutComponent.css";
 
 const LayoutComponent = ({ children }) => {
   const { Header, Content, Sider } = Layout;
@@ -49,7 +45,11 @@ const LayoutComponent = ({ children }) => {
           <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
             <Link to="/dashboard">Dashboard</Link>
           </Menu.Item>
-          <SubMenu key="masterData" icon={<UserOutlined />} title="Master Data">
+          <SubMenu
+            key="masterData"
+            icon={<TbDatabasePlus />}
+            title="Master Data"
+          >
             <Menu.Item key="/company">
               <Link to="/company">Company</Link>
             </Menu.Item>

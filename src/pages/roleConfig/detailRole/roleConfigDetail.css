@@ -1,0 +1,22 @@
+.input-container {
+  display: flex;
+}
+
+.input-role-name {
+  border: 1px solid #629093;
+  width: 500px;
+}
+
+.tree-permission .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.tree-permission .ant-tree-checkbox:hover .ant-tree-checkbox-inner,
+.tree-permission .ant-tree-checkbox:active .ant-tree-checkbox-inner {
+  background-color: #629093 !important;
+  border-color: #629093 !important;
+}
+
+.tree-permission {
+  border: 1px solid #629093;
+  border-radius: 5px;
+  padding: 10px;
+  width: 500px;
+}
