@@ -4,7 +4,7 @@ import { Button, Form, Input, DatePicker, Radio } from 'antd';
 import SubmitButton from '../submitButton/SubmitButton';
 import './formTemplate.css';
 
-const FormTemplate = ( {onFinish, onFinishFailed, buttonText}) => {
+const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => {
     // Address Input
     const { TextArea } = Input;
 
@@ -157,10 +157,14 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText}) => {
                 },
             ]}
             >
-            <Radio.Group onChange={onRadioChange} value={valueRadio} className='radio-status'>
-                <Radio value={1}>Active</Radio>
-                <Radio value={2}>Not Active</Radio>
-            </Radio.Group>
+                {isSuperAdmin ? (
+                    <Radio.Group onChange={onRadioChange} value={valueRadio} className='radio-status'>
+                        <Radio value={1}>Active</Radio>
+                        <Radio value={2}>Not Active</Radio>
+                    </Radio.Group>
+                ) : (
+                    <Input disabled='true' defaultValue="Active" className='input-button'/>
+                )}
             </Form.Item>
 
             <Form.Item

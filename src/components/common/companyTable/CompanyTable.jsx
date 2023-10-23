@@ -14,7 +14,7 @@ const CompanyTable = () => {
 
     const notActiveButton = (
         <Button className="not-active-button" type="primary" size="small" ghost>
-            non active
+            not active
         </Button>
     );
 
