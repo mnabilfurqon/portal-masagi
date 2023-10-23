@@ -1,8 +1,9 @@
 import React from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, Space } from 'antd';
 import './companyTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
+import { Link } from 'react-router-dom';
 
 const CompanyTable = () => {
     
@@ -44,14 +45,16 @@ const CompanyTable = () => {
           title: 'Action',
           key: 'action',
             render: () => (
-                <div className='action-button-container'>
+                <Space size="small">
+                  <Link to='/company/detail-company'>
                     <Button className="action-button" type="primary" size="small" ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
+                  </Link>
                     <Button className="action-button" type="primary" size="small" ghost>
                         <BsPersonAdd className="action-icon" />
                     </Button>
-                </div>
+                </Space>
             ),
         },
     ];

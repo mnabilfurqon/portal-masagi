@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { Button, Form, Input, DatePicker, Radio } from 'antd';
 import SubmitButton from '../submitButton/SubmitButton';
 import './formTemplate.css';
+import { Link } from 'react-router-dom';
 
 const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => {
     // Address Input
@@ -170,9 +171,11 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
             <Form.Item
             >
             <div className='action-button'>
+                <Link to='/company'>
                 <Button type="text">
                     Cancel
                 </Button>
+                </Link>
                 <SubmitButton buttonText={buttonText}/>
             </div>
             </Form.Item>

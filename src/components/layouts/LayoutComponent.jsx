@@ -5,7 +5,7 @@ import {
   DownOutlined,
 } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
-import { LogoMasagi } from "../../assets";
+import { LogoMasagi } from "../../assets/";
 import { Link } from "react-router-dom";
 import "./layoutComponent.css";
 import SearchBox from "../common/searchBox/SearchBox";
@@ -22,13 +22,45 @@ const LayoutComponent = ({ children, hideButtons }) => {
 
   // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
+  let pageSubTitle = "";
+  let finalPageTitle = "Dashboard";
 
   if (location.pathname === "/company") {
     pageTitle = "Company";
+    finalPageTitle = pageTitle;
   } else if (location.pathname === "/user") {
     pageTitle = "User";
+    finalPageTitle = pageTitle;
   } else if (location.pathname === "/role") {
     pageTitle = "Role";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === "/company/add-company") {
+    pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
+    pageSubTitle = <span style={{ color: '#17A2B8' }}>Add Company</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    )
+  } else if (location.pathname === "/company/detail-company") {
+    pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
+    pageSubTitle = <span style={{ color: '#17A2B8' }}>Detail Company</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    )
+  } else if (location.pathname === "/company/edit-company") {
+    pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
+    pageSubTitle = <span style={{ color: '#17A2B8' }}>Edit Company</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    )
   }
 
   return (
@@ -42,7 +74,7 @@ const LayoutComponent = ({ children, hideButtons }) => {
       >
         <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
         <Menu
-          defaultSelectedKeys={["/dashboard"]}
+          defaultSelectedKeys={[location.pathname]}
           mode="inline"
           style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
         >
@@ -84,7 +116,7 @@ const LayoutComponent = ({ children, hideButtons }) => {
             }}
           >
             <div className="brand">
-              <p>{pageTitle}</p>
+              <p>{finalPageTitle}</p>
             </div>
 
             <Flex>

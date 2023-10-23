@@ -30,7 +30,8 @@ const AddCompanyConfiguration = () => {
         <FormTemplate
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        buttonText="Add Data"/>
+        buttonText="Add Data"
+        isSuperAdmin={true}/>
 
         <SuccessAddDataModal
         visible={isSuccessModalVisible}

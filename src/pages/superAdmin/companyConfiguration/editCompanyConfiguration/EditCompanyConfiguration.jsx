@@ -30,7 +30,8 @@ const EditCompanyConfiguration = () => {
         <FormTemplate
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        buttonText="Save Data"/>
+        buttonText="Save Data"
+        isSuperAdmin={true}/>
 
         <SuccessAddDataModal
         visible={isSuccessModalVisible}

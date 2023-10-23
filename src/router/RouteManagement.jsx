@@ -4,6 +4,9 @@ import LoginPage from "../pages/loginPage/LoginPage";
 import LoadingComponent from "../components/loadingComponent/LoadingComponent";
 import LayoutComponent from "../components/layouts/LayoutComponent";
 import MainCompanyConfiguration from "../pages/superAdmin/companyConfiguration/mainCompanyConfiguration/MainCompanyConfiguration";
+import AddCompanyConfiguration from "../pages/superAdmin/companyConfiguration/addCompanyConfiguration/AddCompanyConfiguration";
+import DetailCompanyConfiguration from "../pages/superAdmin/companyConfiguration/detailCompanyConfiguration/DetailCompanyConfiguration";
+import EditCompanyConfiguration from "../pages/superAdmin/companyConfiguration/editCompanyConfiguration/EditCompanyConfiguration";
 import RoleConfig from "../pages/roleConfig/RoleConfig";
 import UserConfiguration from "../pages/userConfiguration/UserConfiguration";
 
@@ -27,11 +30,13 @@ const RouteManagement = () => {
               <Route
                 path="/dashboard"
                 element={
-                  <LayoutComponent>
+                  <LayoutComponent hideButtons={true}>
                     
                   </LayoutComponent>
                 }
               />
+              
+              {/* Company Configuration Route */}
               <Route
                 path="/company"
                 element={
@@ -40,6 +45,32 @@ const RouteManagement = () => {
                   </LayoutComponent>
                 }
               />
+              <Route
+                path="/company/add-company"
+                element={
+                  <LayoutComponent hideButtons={true}>
+                    <AddCompanyConfiguration />
+                  </LayoutComponent>
+                }
+              />
+              <Route
+                path="/company/detail-company"
+                element={
+                  <LayoutComponent hideButtons={true}>
+                    <DetailCompanyConfiguration />
+                  </LayoutComponent>
+                }
+              />
+              <Route
+                path="/company/edit-company"
+                element={
+                  <LayoutComponent hideButtons={true}>
+                    <EditCompanyConfiguration />
+                  </LayoutComponent>
+                }
+              />
+              {/* End of Company Configuration Route */}
+              
               <Route
                 path="/user"
                 element={
