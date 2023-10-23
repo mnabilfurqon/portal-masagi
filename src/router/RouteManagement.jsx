@@ -5,6 +5,7 @@ import LoadingComponent from "../components/loadingComponent/LoadingComponent";
 import LayoutComponent from "../components/layouts/LayoutComponent";
 import MainCompanyConfiguration from "../pages/superAdmin/companyConfiguration/mainCompanyConfiguration/MainCompanyConfiguration";
 import RoleConfig from "../pages/roleConfig/RoleConfig";
+import UserConfiguration from "../pages/userConfiguration/UserConfiguration";
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -43,7 +44,7 @@ const RouteManagement = () => {
                 path="/user"
                 element={
                   <LayoutComponent>
-                    
+                    <UserConfiguration />
                   </LayoutComponent>
                 }
               />

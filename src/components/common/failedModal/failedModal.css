@@ -1,0 +1,27 @@
+h1 {
+  margin: 0;
+  margin-top: 10px;
+  weight: 600;
+  size: 24px;
+}
+
+p {
+  margin: 0;
+  margin-bottom: 40px;
+  weight: 400;
+  font-size: 16px;
+}
+
+.failed-button {
+  background: #dc3545;
+  color: white;
+  width: 20%;
+}
+
+.failed-button:hover {
+  background: #ff7481;
+}
+
+.failed-icon {
+  color: #dc3545;
+}
