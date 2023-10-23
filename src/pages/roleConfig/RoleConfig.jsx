@@ -13,19 +13,19 @@ const RoleConfig = () => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
 
-  const addRoleTitle = <div className="add-role-title">Add Role</div>;
+const addRoleTitle = <div className="add-role-title">Add Role</div>;
 
   const successTitle = (
     <div className="success-title">
-      <AiOutlineCheckCircle size={80} className="success-logo" />
-      <p>Role added</p>
+      <AiOutlineCheckCircle size={80} className="success-icon" />
+      <p className="success-header">Role added</p>
     </div>
   );
 
   const failedTitle = (
     <div className="failed-title">
-      <AiOutlineCloseCircle size={70} className="failed-logo" />
-      <p className="failed-text">Failed</p>
+      <AiOutlineCloseCircle size={70} className="failed-icon" />
+      <p className="failed-header">Failed</p>
     </div>
   );
 
@@ -58,41 +58,42 @@ const RoleConfig = () => {
           Add Role
         </Button>
         <Modal
-          title={addRoleTitle}
-          centered
-          open={modalOpen}
-          onCancel={() => setModalOpen(false)}
-          footer={[
-            <Button
-              key="addRole"
-              className="add-role-button"
-              onClick={handleAddRole}
-            >
-              Add Role
-            </Button>,
-          ]}
-        >
-          <p >Role</p>
-          <Input placeholder="Employee" />
-        </Modal>
-      </div>
+        title={addRoleTitle}
+        centered
+        open={modalOpen}
+        onCancel={() => setModalOpen(false)}
+        footer={null}
+      >
+        <div className="modal-container">
+          <p>Role</p>
+          <Input placeholder="Employee" className="input-role"/>
+          <Button
+            key="addRole"
+            className="add-role-button"
+            onClick={handleAddRole}
+          >
+            Add Role
+          </Button>
+        </div>
+      </Modal>
 
       <Modal
         title={successTitle}
         centered
         visible={successModalOpen}
         onCancel={() => setSuccessModalOpen(false)}
-        footer={[
+        footer={null}
+      >
+        <div className="modal-success">
+          <p>Thanks for adding a new role</p>
           <Button
             key="viewRole"
             className="view-role-button"
             onClick={handleViewRole}
           >
             View Role
-          </Button>,
-        ]}
-      >
-        <p>Thanks for adding a new role</p>
+          </Button>
+        </div>
       </Modal>
 
       <Modal
@@ -100,19 +101,20 @@ const RoleConfig = () => {
         centered
         visible={errorModalOpen}
         onCancel={() => setErrorModalOpen(false)}
-        footer={[
+        footer={null}
+      >
+        <div className="modal-failed">
+          <p>Something went wrong!</p>
           <Button
             key="backRole"
             className="back-role-button"
             onClick={handleBackRole}
           >
             Back
-          </Button>,
-        ]}
-      >
-        <p className="failed-message">Something went wrong!</p>
+          </Button>
+        </div>
       </Modal>
-
+  </div>
       <div className="role-table-container">
         <RoleConfigTable />
       </div>

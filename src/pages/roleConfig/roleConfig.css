@@ -5,6 +5,17 @@
   margin-bottom: 50px;
 }
 
+.modal-container, .modal-success, .modal-failed {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.input-role {
+  margin-bottom: 20px;
+  margin-top: -20px;
+}
+
 .add-button {
   display: inline-flex;
   justify-content: center;
@@ -49,7 +60,7 @@
   border-radius: 4px;
   background-color: #629093;
   color: white;
-  width: 472px;
+  width: 100px;
   margin-top: 15px;
   margin-bottom: 10px;
 }
@@ -68,7 +79,7 @@
   border-radius: 4px;
   background-color: #DC3545;
   color: white;
-  width: 472px;
+  width: 100px;
   margin-top: 15px;
   margin-bottom: 10px;
 }
@@ -86,19 +97,27 @@
   height: 100%;
 }
 
-.success-logo {
+.success-icon {
   color: #00FF00;
 }
 
-.failed-logo {
+.success-title, .modal-success, .modal-failed {
+  align-items: center;
+  text-align: center;
+}
+
+.failed-icon {
   color: red;
-  margin-left: 205px;
+  margin-left: 200px;
 }
 
-.failed-text {
-  margin-left: 218px;
+.failed-header {
+  margin-left: 195px;
+  margin-top: 20px;
+  font-size: 30px;
 }
 
-.failed-message {
-  margin-left: 160px;
+.success-header {
+  margin-top: 20px;
+  font-size: 30px;
 }

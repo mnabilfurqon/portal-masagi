@@ -56,7 +56,9 @@ const RoleConfigDetail = () => {
       <p>Role Name</p>
       <div className="input-container">
         <Input className="input-role-name" />
-        <Button className="button-input" onClick={handleAddRole}>Edit Role</Button>
+        <Button className="button-input" onClick={handleAddRole}>
+          Edit Role
+        </Button>
       </div>
 
       <Modal
@@ -64,17 +66,18 @@ const RoleConfigDetail = () => {
         centered
         visible={successModalOpen}
         onCancel={() => setSuccessModalOpen(false)}
-        footer={[
+        footer={null}
+      >
+        <div className="modal-content">
+          <p className="success-caption">Data changes successful!</p>
           <Button
             key="editRole"
             className="save-button"
             onClick={handleEditRole}
           >
             Ok
-          </Button>,
-        ]}
-      >
-        <p className="success-caption">Data changes successfull!</p>
+          </Button>
+        </div>
       </Modal>
 
       <Modal
@@ -82,17 +85,18 @@ const RoleConfigDetail = () => {
         centered
         visible={errorModalOpen}
         onCancel={() => setErrorModalOpen(false)}
-        footer={[
+        footer={null}
+      >
+        <div className="modal-content">
+        <p className="failed-caption">Something went wrong!</p>
           <Button
-            key="backRole"
-            className="back-role-button"
+            key="backEdit"
+            className="back-edit-button"
             onClick={handleBackRole}
           >
             Back
-          </Button>,
-        ]}
-      >
-        <p className="failed-caption">Something went wrong!</p>
+          </Button>
+        </div>
       </Modal>
 
       <p className="permission-title">Permissions</p>
