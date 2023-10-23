@@ -13,7 +13,7 @@ import FilterButton from "../common/filterButton/FilterButton";
 import SortButton from "../common/SortButton/SortButton";
 import CountButton from "../common/countButton/CountButton";
 
-const LayoutComponent = ({ children, hideButtons }) => {
+const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
   const {
@@ -66,34 +66,77 @@ const LayoutComponent = ({ children, hideButtons }) => {
   return (
     <Layout className="layout-container">
       {/* Sider */}
-      <Sider
-        style={{
+      {isSuperAdmin ? (
+        // Conditional Rendering ketika user adalah Super Admin
+        <Sider
+          style={{
           background: colorBgContainer,
           backgroundColor: "rgba(248, 249, 250, 1)",
-        }}
-      >
-        <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
-        <Menu
-          defaultSelectedKeys={[location.pathname]}
-          mode="inline"
-          style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          }}
         >
-          <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
-            <Link to="/dashboard">Dashboard</Link>
-          </Menu.Item>
-          <SubMenu key="masterData" icon={<UserOutlined />} title="Master Data">
-            <Menu.Item key="/company">
-              <Link to="/company">Company</Link>
+          <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
+          <Menu
+            defaultSelectedKeys={[location.pathname]}
+            mode="inline"
+            style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          >
+            <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+              <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
-            <Menu.Item key="/user">
-              <Link to="/user">User</Link>
+            <SubMenu key="masterData" icon={<UserOutlined />} title="Master Data">
+              <Menu.Item key="/company">
+                <Link to="/company">Company</Link>
+              </Menu.Item>
+              <Menu.Item key="/user">
+                <Link to="/user">User</Link>
+              </Menu.Item>
+              <Menu.Item key="/role">
+                <Link to="/role">Role</Link>
+              </Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+      ) : (
+        // Conditional Rendering ketika user adalah Admin
+        <Sider
+          style={{
+          background: colorBgContainer,
+          backgroundColor: "rgba(248, 249, 250, 1)",
+          }}
+        >
+          <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
+          <Menu
+            defaultSelectedKeys={[location.pathname]}
+            mode="inline"
+            style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          >
+            <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+              <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
-            <Menu.Item key="/role">
-              <Link to="/role">Role</Link>
-            </Menu.Item>
-          </SubMenu>
-        </Menu>
-      </Sider>
+            <SubMenu key="masterData" icon={<UserOutlined />} title="Master Data">
+              <Menu.Item key="/company">
+                <Link to="/company">Company</Link>
+              </Menu.Item>
+              <Menu.Item key="/employee">
+                <Link to="/employee">Employee</Link>
+              </Menu.Item>
+              <Menu.Item key="/user">
+                <Link to="/user">User</Link>
+              </Menu.Item>
+              <Menu.Item key="/role">
+                <Link to="/role">Role</Link>
+              </Menu.Item>
+              <Menu.Item key="/division">
+                <Link to="/division">Division</Link>
+              </Menu.Item>
+              <Menu.Item key="/position">
+                <Link to="/position">Position</Link>
+              </Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+      )}
+
 
       {/* Header */}
       <Layout>

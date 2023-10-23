@@ -153,11 +153,12 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
             colon={false}
             rules={[
                 {
-                required: true,
-                message: 'Please select company status!',
+                    required: isSuperAdmin,
+                    message: 'Please select company status!',
                 },
             ]}
             >
+                {/* Conditional Rendering Company Status */}
                 {isSuperAdmin ? (
                     <Radio.Group onChange={onRadioChange} value={valueRadio} className='radio-status'>
                         <Radio value={1}>Active</Radio>
