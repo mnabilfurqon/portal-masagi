@@ -40,7 +40,7 @@ const LayoutComponent = ({ children, hideButtons }) => {
       >
         <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
         <Menu
-          defaultSelectedKeys={["/dashboard"]}
+          defaultSelectedKeys={[location.pathname]}
           mode="inline"
           style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
         >

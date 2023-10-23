@@ -2,27 +2,35 @@
   background-color: #F3F6F9 !important;
 }
 
-.custom-row td {
-  color: #556172; /* Change this to the color you want */
-}
-
-.ant-table-cell-action {
+.action-title {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  margin-right: 30px;
 }
 
-.action-button {
+.action-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.detail-button, .delete-button {
   border: none;
   margin-right: 10px;
 }
 
-.action-icon {
+.detail-icon, .delete-icon {
   color: #629093;
   font-size: 25px;
   cursor: pointer;
 }
-
-.action-icon:hover {
+.detail-icon:hover {
+  color: #F9B700;
+  font-size: 25px;
+  cursor: pointer;
+}
+.delete-icon:hover {
   color: #F9B700;
   font-size: 25px;
   cursor: pointer;
