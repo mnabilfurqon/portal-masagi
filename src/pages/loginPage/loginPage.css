@@ -39,6 +39,7 @@ body {
   gap: 1px;
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.4);
+  border-color: #73B3B7 !important;
 }
 .custom-input input {
   background-color: rgba(255, 255, 255, 0);
@@ -49,10 +50,13 @@ body {
   height: 40px;
   gap: 1px;
   border-radius: 20px;
-  background-color: rgba(98, 144, 147, 1);
+  background-color: #629093;
+  color: #FFFFFF;
 }
 .button-login:hover {
-  background-color: rgba(115, 179, 183, 1);
+  background-color: #73B3B7;
+  color: #FFFFFF !important;
+  border-color: #73B3B7 !important;
 } 
 
 .judul-input {
