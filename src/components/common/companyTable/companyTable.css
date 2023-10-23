@@ -1,3 +1,7 @@
+.ant-table {
+    margin-bottom: 80px !important;
+}
+
 .ant-table-thead > tr > th {
     background-color: #F3F6F9 !important
 }
@@ -54,9 +58,17 @@
     pointer-events: none;
 }
 
+.action-button-container {
+    display: flex;
+    gap: 10px;
+}
+
 .action-button {
     border: none;
-    margin-right: 10px;
+}
+
+.ant-btn {
+    margin: 0 !important;
 }
 
 .action-icon {
