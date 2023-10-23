@@ -2,14 +2,14 @@ import { HomeOutlined, BellOutlined, DownOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets";
 import { Link } from "react-router-dom";
-import SearchBox from "../common/SearchBox/SearchBox";
-import FilterButton from "../common/FilterButton/FilterButton";
+import SearchBox from "../common/searchBox/SearchBox";
+import FilterButton from "../common/filterButton/FilterButton";
 import SortButton from "../common/SortButton/SortButton";
 import CountButton from "../common/countButton/CountButton";
 import { TbDatabasePlus } from "react-icons/tb";
 import "./layoutComponent.css";
 
-const LayoutComponent = ({ children }) => {
+const LayoutComponent = ({ children, hideButtons }) => {
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
   const {
@@ -24,7 +24,9 @@ const LayoutComponent = ({ children }) => {
   } else if (location.pathname === "/user") {
     pageTitle = "User";
   } else if (location.pathname === "/role") {
-    pageTitle = "Role";
+    pageTitle = "Role"; 
+  } else if (location.pathname === "/role/detail-role") {
+    pageTitle = "Role / Detail Role ";
   }
 
   return (
@@ -110,14 +112,16 @@ const LayoutComponent = ({ children }) => {
               margin: "16px 0",
             }}
           >
-            <div className="buttons-container">
-              <div className="left-buttons">
-                <SearchBox className="search-box" />
-                <FilterButton className="filter-button" />
-                <SortButton className="sort-button" />
-                <CountButton className="count-button" />
+            {hideButtons ? null : (
+              <div className="buttons-container">
+                <div className="left-buttons">
+                  <SearchBox className="search-box" />
+                  <FilterButton className="filter-button" />
+                  <SortButton className="sort-button" />
+                  <CountButton className="count-button" />
+                </div>
               </div>
-            </div>
+            )}
             {children}
           </div>
         </Content>

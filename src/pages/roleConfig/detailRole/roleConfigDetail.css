@@ -1,10 +1,39 @@
 .input-container {
   display: flex;
+  margin-top: -30px;
+}
+
+.success-text {
+  margin-left: 190px;
+  margin-top: 20px;
+  font-size: 30px;
+}
+
+.failed-text {
+  margin-left: 200px;
+  margin-top: 20px;
+  font-size: 30px;
+}
+
+.success-caption {
+  margin-left: 150px;
+  margin-top: -30px;
+}
+
+.failed-caption {
+  margin-left: 150px;
+  margin-top: -30px;
 }
 
 .input-role-name {
   border: 1px solid #629093;
   width: 500px;
+  margin-right: 30px;
+}
+
+.permission-title {
+  margin-bottom: 10px;
+  margin-top: 40px;
 }
 
 .tree-permission .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
@@ -19,4 +48,65 @@
   border-radius: 5px;
   padding: 10px;
   width: 500px;
+}
+
+.button-input {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+  width: 100px;
+}
+.button-input:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.save-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #28A745;
+  color: white;
+  width: 100px;
+}
+.save-button:hover {
+  background-color: #28A745;
+  color: #ffffff !important;
+  border: 1px solid #28A745 !important;
+}
+
+.back-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #DC3545;
+  color: white;
+  width: 100px;
+}
+.back-role-button:hover {
+  background-color: #ffffff;
+  color: #DC3545 !important;
+  border: 1px solid #DC3545 !important;
+}
+
+.success-logo {
+  color: #28A745;
+  margin-left: 205px;
+}
+
+.failed-logo {
+  color: red;
+  margin-left: 205px;
 }

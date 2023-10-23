@@ -1,55 +1,33 @@
 import React, {useState} from 'react';
-import { Button, Form, Input, DatePicker, Radio, Modal } from 'antd';
-import './addCompanyConfiguration.css';
 import dayjs from 'dayjs';
-import SuccessAddDataModal from './successAddDataModal';
-import FailedAddDataModal from './FailedAddDataModal';
+import { Button, Form, Input, DatePicker, Radio } from 'antd';
+import SubmitButton from '../submitButton/SubmitButton';
+import './formTemplate.css';
 
-const AddCompanyConfiguration = () => {
+const FormTemplate = ( {onFinish, onFinishFailed, buttonText}) => {
     // Address Input
     const { TextArea } = Input;
 
     // Date Picker
     const dateFormatList = 'DD/MM/YYYY';
 
-    // Action Button
-    const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
-    const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
-
-    const onFinish = () => {
-        setIsSuccessModalVisible(true);
-    };
-
-    const onFinishFailed = () => {
-        setIsFailedModalVisible(true);
-    };
-
-    const handleSuccessModalClose = () => {
-        setIsSuccessModalVisible(false);
-    };
-
-    const handleFailedModalClose = () => {
-        setIsFailedModalVisible(false);
-    };
-
     // Radio Button
     const [valueRadio, setValue] = useState(1);
     const onRadioChange = (e) => {
-      console.log('radio checked', e.target.value);
-      setValue(e.target.value);
+        console.log('radio checked', e.target.value);
+        setValue(e.target.value);
     };
 
-    return (
-        <>
+  return (
+    <>
         <Form
             name="company"
             className='add-company-form'
             labelCol={{
-            span: 5,
+            span: 6,
             className: 'add-company-label'
             }}
             wrapperCol={{
-            span: 9,
             className: 'add-company-input'
             }}
             onFinish={onFinish}
@@ -186,33 +164,17 @@ const AddCompanyConfiguration = () => {
             </Form.Item>
 
             <Form.Item
-            wrapperCol={{
-            }}
             >
             <div className='action-button'>
                 <Button type="text">
                     Cancel
                 </Button>
-                <Button type="primary" htmlType="submit" className='add-data-button'>
-                    Add Data
-                </Button>
+                <SubmitButton buttonText={buttonText}/>
             </div>
             </Form.Item>
-
         </Form>
-
-        <SuccessAddDataModal
-        visible={isSuccessModalVisible}
-        onClose={handleSuccessModalClose}
-        />
-
-        <FailedAddDataModal
-        visible={isFailedModalVisible}
-        onClose={handleFailedModalClose}
-        />
-        
-        </>
-    )
+    </>
+  )
 }
 
-export default AddCompanyConfiguration;
+export default FormTemplate

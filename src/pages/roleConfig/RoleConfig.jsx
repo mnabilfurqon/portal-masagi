@@ -17,7 +17,7 @@ const RoleConfig = () => {
 
   const successTitle = (
     <div className="success-title">
-      <AiOutlineCheckCircle size={70} className="success-logo" />
+      <AiOutlineCheckCircle size={80} className="success-logo" />
       <p>Role added</p>
     </div>
   );
@@ -72,7 +72,7 @@ const RoleConfig = () => {
             </Button>,
           ]}
         >
-          <p>Role</p>
+          <p >Role</p>
           <Input placeholder="Employee" />
         </Modal>
       </div>

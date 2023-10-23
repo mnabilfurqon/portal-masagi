@@ -81,7 +81,7 @@
 .add-role-title {
   background: #F8F9FA;
   font-size: 30px;
-  color: #0C2E60;
+  color: #0C2E60 !important;
   margin-bottom: 40px;
   height: 100%;
 }

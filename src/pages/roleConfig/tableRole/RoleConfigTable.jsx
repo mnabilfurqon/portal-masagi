@@ -39,9 +39,19 @@ const RoleConfigTable = () => {
     }
   ]
 
+  const paginationConfig = {
+    pageSize: 10, // Jumlah item per halaman
+    showTotal: (total, range) => (
+        <span style={{ color: '#556172' }}>
+            Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
+        </span>
+    ),
+    showLessItems: true,
+};
+
   return (
     <>
-      <Table columns={colums} dataSource={data} rowClassName="custom-row" />
+      <Table columns={colums} dataSource={data} pagination={paginationConfig} rowClassName="custom-row" />
     </>
   );
 };

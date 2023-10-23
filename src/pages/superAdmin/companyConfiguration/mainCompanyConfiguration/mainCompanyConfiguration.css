@@ -1,6 +1,8 @@
 .right-buttons {
     display: flex;
-    margin-left: 830px;
+    justify-content: end;
+    align-items: end;
+    margin-left: 80%;
     margin-top: -85px;
     margin-bottom: 50px;
 }

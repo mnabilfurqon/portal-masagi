@@ -3,9 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/loginPage/LoginPage";
 import LoadingComponent from "../components/loadingComponent/LoadingComponent";
 import LayoutComponent from "../components/layouts/LayoutComponent";
-import CompanyConfiguration from "../pages/companyConfiguration/CompanyConfiguration";
+import MainCompanyConfiguration from "../pages/superAdmin/companyConfiguration/mainCompanyConfiguration/MainCompanyConfiguration";
 import RoleConfig from "../pages/roleConfig/RoleConfig";
 import RoleConfigDetail from "../pages/roleConfig/detailRole/RoleConfigDetail";
+import UserConfiguration from "../pages/userConfiguration/UserConfiguration";
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -26,17 +27,24 @@ const RouteManagement = () => {
         <React.Fragment>
           <Route
             path="/dashboard"
-            element={<LayoutComponent></LayoutComponent>}
+            element={<LayoutComponent hideButtons={true}></LayoutComponent>}
           />
           <Route
             path="/company"
             element={
               <LayoutComponent>
-                <CompanyConfiguration />
+                <MainCompanyConfiguration />
               </LayoutComponent>
             }
           />
-          <Route path="/user" element={<LayoutComponent></LayoutComponent>} />
+          <Route
+            path="/user"
+            element={
+              <LayoutComponent>
+                <UserConfiguration />
+              </LayoutComponent>
+            }
+          />
           <Route
             path="/role"
             element={
@@ -48,8 +56,8 @@ const RouteManagement = () => {
           <Route
             path="/role/detail-role"
             element={
-              <LayoutComponent>
-                <RoleConfigDetail/>
+              <LayoutComponent hideButtons={true}>
+                <RoleConfigDetail />
               </LayoutComponent>
             }
           />
