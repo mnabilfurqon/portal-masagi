@@ -58,11 +58,6 @@
     pointer-events: none;
 }
 
-.action-button-container {
-    display: flex;
-    gap: 10px;
-}
-
 .action-button {
     border: none;
 }

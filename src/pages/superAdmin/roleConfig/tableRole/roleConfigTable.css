@@ -1,0 +1,37 @@
+.ant-table-thead > tr > th {
+  background-color: #F3F6F9 !important;
+}
+
+.action-title {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.action-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.detail-button, .delete-button {
+  border: none;
+  margin-right: 10px;
+}
+
+.detail-icon, .delete-icon {
+  color: #629093;
+  font-size: 25px;
+  cursor: pointer;
+}
+.detail-icon:hover {
+  color: #F9B700;
+  font-size: 25px;
+  cursor: pointer;
+}
+.delete-icon:hover {
+  color: #F9B700;
+  font-size: 25px;
+  cursor: pointer;
+}
