@@ -1,0 +1,72 @@
+.ant-table {
+    margin-bottom: 80px !important;
+}
+
+.ant-table-thead > tr > th {
+    background-color: #F3F6F9 !important
+}
+
+.custom-row td {
+    color: #556172; /* Change this to the color you want */
+}
+
+.ant-pagination-item a {
+    color: #629093 !important;
+}
+
+.ant-pagination-item {
+    background-color: #ffffff !important;
+    border-color: #629093 !important;
+}
+
+.ant-pagination-item:hover a {
+    color: #ffffff !important;
+}
+
+.ant-pagination-item:hover {
+    background-color: #629093 !important;
+}
+
+.ant-pagination-item-active a {
+    color: #ffffff !important;
+}
+
+.ant-pagination-item-active {
+    background-color: #629093 !important;
+}
+
+.action-button {
+    border: none;
+}
+
+.ant-btn {
+    margin: 0 !important;
+}
+
+.action-icon-edit {
+    color: #629093;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.action-icon-edit:hover {
+    color: #F9B700;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.action-icon-delete {
+    color: #DC3545;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.action-icon-delete:hover {
+    color: #F9B700;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.ant-table-cell {
+    width: 300px !important;
+}

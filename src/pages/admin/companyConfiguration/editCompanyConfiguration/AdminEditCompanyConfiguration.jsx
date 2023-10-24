@@ -36,6 +36,7 @@ const AdminEditCompanyConfiguration = () => {
         <SuccessAddDataModal
         visible={isSuccessModalVisible}
         onClose={handleSuccessModalClose}
+        textParagraph="Data upload successful!"
         />
 
         <FailedAddDataModal

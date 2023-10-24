@@ -11,6 +11,7 @@ import AdminDetailCompanyConfiguration from "../pages/admin/companyConfiguration
 import AdminEditCompanyConfiguration from "../pages/admin/companyConfiguration/editCompanyConfiguration/AdminEditCompanyConfiguration";
 import RoleConfig from "../pages/roleConfig/RoleConfig";
 import UserConfiguration from "../pages/userConfiguration/UserConfiguration";
+import DivisionConfiguration from "../pages/admin/divisionConfiguration/DivisionConfiguration";
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -21,7 +22,7 @@ const RouteManagement = () => {
   //     navigate("/");
   //   }
   // }, [token, navigate]);
-  let isSuperAdmin = true;
+  let isSuperAdmin = false;
 
   if (isSuperAdmin) {
     // Routing untuk Super Admin
@@ -133,6 +134,16 @@ const RouteManagement = () => {
                 />
                 {/* End of Company Configuration Route */}
               
+                {/* Division Configuration Route */}
+                <Route
+                  path="/division"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <DivisionConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of Division Configuration Route */}
               </React.Fragment>
             </Routes>
       </Suspense>

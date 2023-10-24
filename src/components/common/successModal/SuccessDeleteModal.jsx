@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
-import './successAddDataModal.css';
+import './successDeleteModal.css';
 
-const SuccessAddDataModal = ({ visible, onClose, textParagraph }) => {
+const SuccessDeleteModal = ({ visible, onClose }) => {
   return (
     <Modal
       visible={visible}
@@ -14,7 +14,7 @@ const SuccessAddDataModal = ({ visible, onClose, textParagraph }) => {
       <div className='modal-container'>
         <AiOutlineCheckCircle className='icon-modal-success' />
         <h1 className='success-title'>Success</h1>
-        <p>{textParagraph}</p>
+        <p>Delete successful!</p>
         <Button key="ok" type="primary" onClick={onClose} className='ok-button'>
           OK
         </Button>,
@@ -23,4 +23,4 @@ const SuccessAddDataModal = ({ visible, onClose, textParagraph }) => {
   );
 };
 
-export default SuccessAddDataModal;
+export default SuccessDeleteModal;
