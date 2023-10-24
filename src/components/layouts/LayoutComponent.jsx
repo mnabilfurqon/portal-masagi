@@ -1,17 +1,13 @@
-import {
-  HomeOutlined,
-  UserOutlined,
-  BellOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
+import { HomeOutlined, BellOutlined, DownOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link } from "react-router-dom";
-import "./layoutComponent.css";
 import SearchBox from "../common/searchBox/SearchBox";
 import FilterButton from "../common/filterButton/FilterButton";
 import SortButton from "../common/SortButton/SortButton";
 import CountButton from "../common/countButton/CountButton";
+import { TbDatabasePlus } from "react-icons/tb";
+import "./layoutComponent.css";
 
 const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   const { Header, Content, Sider } = Layout;
@@ -27,12 +23,6 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
 
   if (location.pathname === "/company") {
     pageTitle = "Company";
-    finalPageTitle = pageTitle;
-  } else if (location.pathname === "/user") {
-    pageTitle = "User";
-    finalPageTitle = pageTitle;
-  } else if (location.pathname === "/role") {
-    pageTitle = "Role";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/company/add-company") {
     pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
@@ -61,6 +51,21 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     )
+  } else if (location.pathname === "/user") {
+    pageTitle = "User";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === "/role") {
+    pageTitle = "Role";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === "/role/detail-role") {
+    pageTitle = <Link to="/role" style={{ color: 'black' }}>Role / </Link>;
+    pageSubTitle = <span style={{ color: '#17A2B8' }}>Detail Role</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    )
   }
 
   return (
@@ -83,7 +88,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
             <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
               <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
-            <SubMenu key="masterData" icon={<UserOutlined />} title="Master Data">
+            <SubMenu key="masterData" icon={<TbDatabasePlus/>} title="Master Data">
               <Menu.Item key="/company">
                 <Link to="/company">Company</Link>
               </Menu.Item>
@@ -113,7 +118,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
             <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
               <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
-            <SubMenu key="masterData" icon={<UserOutlined />} title="Master Data">
+            <SubMenu key="masterData" icon={<TbDatabasePlus/>} title="Master Data">
               <Menu.Item key="/company">
                 <Link to="/company">Company</Link>
               </Menu.Item>

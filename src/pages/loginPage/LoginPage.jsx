@@ -59,7 +59,6 @@ const LoginPage = () => {
             {() => (
               <Button
                 className="button-login"
-                type="primary"
                 htmlType="submit"
               >
                 Masuk

@@ -2,6 +2,10 @@
   min-height: 100vh;
 }
 
+.brand {
+  margin-top: 40px;
+}
+
 .logo-masagi {
   height: 200px;
   margin-bottom: -40px;

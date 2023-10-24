@@ -9,9 +9,10 @@ import DetailCompanyConfiguration from "../pages/superAdmin/companyConfiguration
 import EditCompanyConfiguration from "../pages/superAdmin/companyConfiguration/editCompanyConfiguration/EditCompanyConfiguration";
 import AdminDetailCompanyConfiguration from "../pages/admin/companyConfiguration/detailCompanyConfiguration/AdminDetailCompanyConfiguration";
 import AdminEditCompanyConfiguration from "../pages/admin/companyConfiguration/editCompanyConfiguration/AdminEditCompanyConfiguration";
-import RoleConfig from "../pages/roleConfig/RoleConfig";
 import UserConfiguration from "../pages/userConfiguration/UserConfiguration";
 import DivisionConfiguration from "../pages/admin/divisionConfiguration/DivisionConfiguration";
+import RoleConfig from "../pages/superAdmin/roleConfig/RoleConfig";
+import RoleConfigDetail from "../pages/superAdmin/roleConfig/detailRole/RoleConfigDetail"
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -22,6 +23,7 @@ const RouteManagement = () => {
   //     navigate("/");
   //   }
   // }, [token, navigate]);
+
   let isSuperAdmin = false;
 
   if (isSuperAdmin) {
@@ -93,6 +95,14 @@ const RouteManagement = () => {
                     </LayoutComponent>
                   }
                 />
+                <Route
+                  path="/role/detail-role"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={true}>
+                      <RoleConfigDetail/>
+                    </LayoutComponent>
+                  }
+                />
               </React.Fragment>
             </Routes>
       </Suspense>
@@ -144,6 +154,22 @@ const RouteManagement = () => {
                   }
                 />
                 {/* End of Division Configuration Route */}
+                <Route
+                  path="/role"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <RoleConfig/>
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                  path="/role/detail-role"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      <RoleConfigDetail/>
+                    </LayoutComponent>
+                  }
+                />
               </React.Fragment>
             </Routes>
       </Suspense>
