@@ -1,20 +1,20 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 import { Button } from 'antd'
 import DetailCompanyTable from '../../../../components/common/detailCompanyTable/DetailCompanyTable'
-import './detailCompanyConfiguration.css'
-import { Link } from 'react-router-dom'
+import './adminDetailCompanyConfiguration.css'
 
-const DetailCompanyConfiguration = () => {
+const AdminDetailCompanyConfiguration = () => {
   return (
     <div className='container'>
         <DetailCompanyTable />
         <Link to='/company/edit-company'>
-          <Button type="primary" className='edit-data-button'>
-              Edit Data
-          </Button>
+        <Button type="primary" className='edit-data-button'>
+            Edit Data
+        </Button>
         </Link>
     </div>
   )
 }
 
-export default DetailCompanyConfiguration
+export default AdminDetailCompanyConfiguration
