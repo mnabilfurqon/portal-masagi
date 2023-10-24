@@ -3,7 +3,7 @@ import SuccessAddDataModal from '../../../../components/common/successModal/Succ
 import FailedAddDataModal from '../../../../components/common/failedModal/FailedAddDataModal';
 import FormTemplate from '../../../../components/common/formTemplate/FormTemplate';
 
-const EditCompanyConfiguration = () => {
+const AdminEditCompanyConfiguration = () => {
 
     // Modal Handler
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
@@ -30,8 +30,8 @@ const EditCompanyConfiguration = () => {
         <FormTemplate
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        buttonText="Save Data"
-        isSuperAdmin={true}/>
+        buttonText="Save"
+        isSuperAdmin={false}/>
 
         <SuccessAddDataModal
         visible={isSuccessModalVisible}
@@ -47,4 +47,4 @@ const EditCompanyConfiguration = () => {
     )
 }
 
-export default EditCompanyConfiguration;
+export default AdminEditCompanyConfiguration;

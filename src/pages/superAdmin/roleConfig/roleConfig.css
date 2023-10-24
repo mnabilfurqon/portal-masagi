@@ -1,0 +1,123 @@
+.right-buttons {
+  display: flex;
+  margin-left: 830px;
+  margin-top: -85px;
+  margin-bottom: 50px;
+}
+
+.modal-container, .modal-success, .modal-failed {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.input-role {
+  margin-bottom: 20px;
+  margin-top: -20px;
+}
+
+.add-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+}
+.add-button:hover {
+  background-color: #ffffff;
+  color: #629093 !important;
+  border: 1px solid #629093 !important;
+}
+
+.add-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+  width: 472px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.add-role-button:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.view-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+  width: 100px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.view-role-button:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.back-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #DC3545;
+  color: white;
+  width: 100px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.back-role-button:hover {
+  background-color: #ffffff;
+  color: #DC3545 !important;
+  border: 1px solid #DC3545 !important;
+}
+
+.add-role-title {
+  background: #F8F9FA;
+  font-size: 30px;
+  color: #0C2E60 !important;
+  margin-bottom: 40px;
+  height: 100%;
+}
+
+.success-icon {
+  color: #00FF00;
+}
+
+.success-title, .modal-success, .modal-failed {
+  align-items: center;
+  text-align: center;
+}
+
+.failed-icon {
+  color: red;
+  margin-left: 200px;
+}
+
+.failed-header {
+  margin-left: 195px;
+  margin-top: 20px;
+  font-size: 30px;
+}
+
+.success-header {
+  margin-top: 20px;
+  font-size: 30px;
+}

@@ -3,8 +3,9 @@ import dayjs from 'dayjs';
 import { Button, Form, Input, DatePicker, Radio } from 'antd';
 import SubmitButton from '../submitButton/SubmitButton';
 import './formTemplate.css';
+import { Link } from 'react-router-dom';
 
-const FormTemplate = ( {onFinish, onFinishFailed, buttonText}) => {
+const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => {
     // Address Input
     const { TextArea } = Input;
 
@@ -152,23 +153,30 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText}) => {
             colon={false}
             rules={[
                 {
-                required: true,
-                message: 'Please select company status!',
+                    required: isSuperAdmin,
+                    message: 'Please select company status!',
                 },
             ]}
             >
-            <Radio.Group onChange={onRadioChange} value={valueRadio} className='radio-status'>
-                <Radio value={1}>Active</Radio>
-                <Radio value={2}>Not Active</Radio>
-            </Radio.Group>
+                {/* Conditional Rendering Company Status */}
+                {isSuperAdmin ? (
+                    <Radio.Group onChange={onRadioChange} value={valueRadio} className='radio-status'>
+                        <Radio value={1}>Active</Radio>
+                        <Radio value={2}>Not Active</Radio>
+                    </Radio.Group>
+                ) : (
+                    <Input disabled='true' defaultValue="Active" className='input-button'/>
+                )}
             </Form.Item>
 
             <Form.Item
             >
             <div className='action-button'>
+                <Link to='/company'>
                 <Button type="text">
                     Cancel
                 </Button>
+                </Link>
                 <SubmitButton buttonText={buttonText}/>
             </div>
             </Form.Item>
