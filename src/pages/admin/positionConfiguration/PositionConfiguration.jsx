@@ -14,7 +14,6 @@ const PositionConfiguration = () => {
       key: 'name',
       width: '88%',
       // sorter: (record1, record2) => { return record1.username > record2.username }
-      // render: (text) => <a>{text}</a>,
     },
     {
       title: 'Action',

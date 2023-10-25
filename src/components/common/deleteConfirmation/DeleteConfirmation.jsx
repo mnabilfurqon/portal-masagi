@@ -54,6 +54,7 @@ export const DeleteConfirmationDialog = (props) => {
         <MdOutlineDelete className="icon-delete" size="25" />
       </Button>
       <Modal
+        centered={true}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

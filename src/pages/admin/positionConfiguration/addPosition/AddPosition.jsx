@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import "./addPosition.css"
-import { Button, Modal, Form, Input, } from 'antd';
+import { Button, Modal, Form, Input, } from 'antd'
 import { AiOutlinePlus } from "react-icons/ai"
+import AddButton from '../../../../components/common/addButton/AddButton'
 
 
 const AddPosition = () => {
@@ -37,12 +38,10 @@ const AddPosition = () => {
   
     return (
     <>
-    <Button type="none" className="add-button" onClick={showModal}>
-        <AiOutlinePlus className="add-icon" size="15" /> Add Position
-    </Button>
+    <AddButton handleClick={showModal} buttonText="Add Position" />
 
     <Modal
-        // centered
+        centered
         open={open}
         title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Add Position</h2>}
         onOk={handleOk}

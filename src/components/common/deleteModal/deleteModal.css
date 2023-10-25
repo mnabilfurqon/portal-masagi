@@ -1,0 +1,21 @@
+.dialog {
+    padding-left: 20px;
+}
+  
+.icon-warning {
+    color: #dc3545;
+}
+  
+.cancel-button:hover {
+    color: #629093;
+}
+  
+.delete-button {
+    background: #dc3545;
+    color: white;
+}
+  
+.delete-button:hover {
+    background: ##FF7481;
+}
+  

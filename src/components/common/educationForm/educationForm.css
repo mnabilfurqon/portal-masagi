@@ -1,0 +1,49 @@
+.add-education-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-education-form .add-education-label {
+    text-align: left;
+}
+
+.add-education-form .add-education-input {
+    text-align: right;
+} 
+
+.input-thesis {
+    resize: none !important;
+    height: 100px;
+}
+
+.input-thesis:hover,
+.input-thesis:focus {
+    border-color: #17A2B8 !important;
+}
+
+.input-button:hover,
+.input-button:focus {
+    border-color: #17A2B8 !important;
+}
+
+.action-button {
+    width:100%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.add-data-button {
+    background-color: #629093;
+    border-color: #629093;
+    border-radius: 4px;
+}
+
+.add-data-button:hover {
+    background-color: #ffffff !important;
+    border-color: #629093 !important;
+    color: #629093 !important;
+}

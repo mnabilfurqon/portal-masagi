@@ -22,6 +22,7 @@ const SuccessModal = (props) => {
         </Button>
         <Modal
             open={isModalOpen}
+            centered
             closable={false}
             onOk={handleOk}
             onCancel={handleCancel}
@@ -63,6 +64,7 @@ export const SuccessUpdateModal = () => {
       </Button>
       <Modal
         open={isModalOpen}
+        centered
         onOk={handleUpdate}
         onCancel={handleClose}
         footer={

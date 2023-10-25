@@ -40,7 +40,7 @@ const EditPosition = () => {
         <BiEdit className="edit-icon" size="25" />
       </Button>
       <Modal
-        // centered
+        centered
         open={open}
         title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Edit Position</h2>}
         onOk={handleOk}

@@ -1,0 +1,26 @@
+.profile-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 30px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-name {
+    font-size: 30px;
+    margin: 0;
+}
+
+.profile-role {
+    margin: 0;
+}
+
+.profile-divider {
+    margin-bottom: 0;
+}
