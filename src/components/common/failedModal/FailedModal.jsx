@@ -22,18 +22,19 @@ const FailedModal = () => {
         </Button>
         <Modal
             open={isModalOpen}
+            closable={false}
             onOk={handleOk}
             onCancel={handleCancel}
             footer={[
                 <center>
-                <Button key="submit" type="none" onClick={handleOk} className="failed-button">
+                <Button type="none" onClick={handleOk} className="failed-button">
                   Back
                 </Button>
                 </center>,
             ]}
         >
           <center>
-            <VscError className="failed-icon" size="100"/>
+            <VscError style={{ color: "#dc3545" }} size="100"/>
             <h1>Failed</h1>
             <p>Something went wrong!</p>
           </center>

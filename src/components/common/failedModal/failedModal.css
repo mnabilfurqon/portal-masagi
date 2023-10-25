@@ -21,7 +21,3 @@ p {
 .failed-button:hover {
   background: #ff7481;
 }
-
-.failed-icon {
-  color: #dc3545;
-}

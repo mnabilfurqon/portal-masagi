@@ -35,7 +35,7 @@ const DeleteConfirmation = () => {
     )
 }
 
-export const DeleteConfirmationDialog = () => {
+export const DeleteConfirmationDialog = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -67,7 +67,7 @@ export const DeleteConfirmationDialog = () => {
         <div className="dialog">
           <PiWarningCircleBold className="icon-warning" size="70"/>
           <h1>Attention</h1>
-          <p>Are you sure delete this account?</p>
+          <p>Are you sure delete this {props.data}?</p>
         </div>
       </Modal>
     </>

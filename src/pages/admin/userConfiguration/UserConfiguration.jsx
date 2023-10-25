@@ -6,10 +6,10 @@ import React from 'react'
 import { Table, Tag, Space } from 'antd'
 import './userConfiguration.css'
 import EditUser from './editUser/EditUser'
-import DeleteConfirmation, { DeleteConfirmationDialog } from './deleteConfirmation/DeleteConfirmation'
-import SuccessModal from '../../components/common/successModal/SuccessModal'
-import FailedModal from '../../components/common/failedModal/FailedModal'
-import { SuccessUpdateModal } from '../../components/common/successModal/SuccessModal'
+import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
+import SuccessModal from '../../../components/common/successModal/SuccessModal'
+import FailedModal from '../../../components/common/failedModal/FailedModal'
+import { SuccessUpdateModal } from '../../../components/common/successModal/SuccessModal'
 
 const UserConfiguration = () => {
     // // Search
@@ -67,26 +67,22 @@ const UserConfiguration = () => {
           title: 'Username',
           dataIndex: 'username',
           key: 'username',
-          sorter: (record1, record2) => {
-            return record1.username > record2.username
-          }
+          // sorter: (record1, record2) => { return record1.username > record2.username }
         //   render: (text) => <a>{text}</a>,
         },
         {
           title: 'Password',
           dataIndex: 'password',
+          responsive: ["sm"],
           key: 'password',
-          sorter: (record1, record2) => {
-            return record1.password > record2.password
-          }
+          // sorter: (record1, record2) => { return record1.password > record2.password }
         },
         {
           title: 'Role',
           dataIndex: 'role',
           key: 'role',
-          sorter: (a, b) => {
-            return a.role > b.role
-          }
+          responsive: ["md"],
+          // sorter: (a, b) => { return a.role > b.role }
         },
         {
           title: 'Status',
@@ -98,21 +94,20 @@ const UserConfiguration = () => {
                 let color = 'green';
                 if (status === '0') {
                   color = 'volcano';
-                  status = 'Not Active';
+                  status = 'not active';
                 } else {
-                  status='Active';
+                  status='active';
                 }
                 return (
-                  <Tag color={color} key={status}>
+                  <Tag color={color} key={status} style={{borderRadius: 25}}>
                     {status}
                   </Tag>
                 );
               })}
             </>
-          ),          
-          sorter: (record1, record2) => {
-            return record1.is_active > record2.is_active
-          }
+          ),
+          responsive: ["md"],
+          // sorter: (record1, record2) => { return record1.is_active > record2.is_active }
         },
         {
           title: 'Action',
@@ -120,7 +115,7 @@ const UserConfiguration = () => {
           render: (_, record) => (
             <Space size="small">
               <EditUser />
-              <DeleteConfirmationDialog />
+              <DeleteConfirmationDialog data="account"/>
             </Space>
           ),
         },
