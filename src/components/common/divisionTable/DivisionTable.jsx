@@ -11,13 +11,13 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked}) => {
           title: 'Division',
           dataIndex: 'division',
           key: 'division',
-          width: 3000,
         },
         {
-          title: 'Action',
+          title: <div className="action-title">Action</div>,
           key: 'action',
             render: () => (
-                <Space size="small">
+              <div className="action-container">
+                <Space size="medium">
                     <Button className="action-button" type="primary" size="small" onClick={isEditButtonClicked} ghost>
                         <BiEdit className="action-icon-edit" />
                     </Button>
@@ -25,6 +25,7 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked}) => {
                         <MdOutlineDelete className="action-icon-delete" />
                     </Button>
                 </Space>
+              </div>
             ),
         },
     ];
