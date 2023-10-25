@@ -14,7 +14,7 @@ import DivisionConfiguration from "../pages/admin/divisionConfiguration/Division
 import RoleConfig from "../pages/superAdmin/roleConfig/RoleConfig";
 import RoleConfigDetail from "../pages/superAdmin/roleConfig/detailRole/RoleConfigDetail"
 import MainEmployeeConfiguration from "../pages/admin/employeeConfiguration/mainEmployeeConfiguration/MainEmployeeConfiguration";
-import EditEmployeeConfiguration from "../pages/admin/employeeConfiguration/editEmployeeConfiguration/EditEmployeeConfiguration";
+import DetailEmployeeConfiguration from "../pages/admin/employeeConfiguration/detailEmployeeConfiguration/DetailEmployeeConfiguration";
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -156,10 +156,10 @@ const RouteManagement = () => {
                   }
                 />
                 <Route
-                  path="/employee/edit-employee"
+                  path="/employee/detail-employee"
                   element={
                     <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                      <EditEmployeeConfiguration />
+                      <DetailEmployeeConfiguration />
                     </LayoutComponent>
                   }
                 />

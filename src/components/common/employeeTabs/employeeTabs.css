@@ -14,7 +14,8 @@
     color: #000000 !important;
 }
 
-.right-buttons-education {
+.right-buttons-education,
+.right-buttons-family {
     display: flex;
     justify-content: end;
     align-items: end;
@@ -23,27 +24,31 @@
     margin-top: 5px;
 }
 
-.edit-education-button {
+.edit-education-button,
+.edit-family-button {
     background-color: #629093;
     border-color: #629093;
     border-radius: 4px;
     width: 100px;
 }
 
-.edit-education-button:hover {
+.edit-education-button:hover,
+.edit-family-button:hover {
     background-color: #ffffff !important;
     border-color: #629093 !important;
     color: #629093 !important;
 }
 
-.education-detail {
+.education-detail,
+.family-detail {
     display: flex;
     flex-direction: column;
     justify-content: end;
     align-items: end;
 }
 
-.education-detail-button {
+.education-detail-button,
+.family-detail-button {
     display: flex;
     gap: 10px;
 }

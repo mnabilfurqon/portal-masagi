@@ -1,10 +1,10 @@
 import React from 'react'
-import "./editEmployeeConfiguration.css"
+import "./detailEmployeeConfiguration.css"
 import { Avatar, Divider } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import EmployeeTabs from '../../../../components/common/employeeTabs/EmployeeTabs';
 
-const EditEmployeeConfiguration = () => {
+const DetailEmployeeConfiguration = () => {
   return (
     <div>
         <div className='profile-container'>
@@ -22,4 +22,4 @@ const EditEmployeeConfiguration = () => {
   )
 }
 
-export default EditEmployeeConfiguration
+export default DetailEmployeeConfiguration

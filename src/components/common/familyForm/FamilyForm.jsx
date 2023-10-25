@@ -1,138 +1,128 @@
 import React, {useState} from 'react';
-import { Button, Form, Input } from 'antd';
+import dayjs from 'dayjs';
+import { Button, Form, Input, DatePicker } from 'antd';
 import SubmitButton from '../submitButton/SubmitButton';
-import './educationForm.css';
+import './familyForm.css';
 
-const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
+const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
     // Address Input
     const { TextArea } = Input;
+
+    // Date Picker
+    const dateFormatList = 'DD/MM/YYYY';
 
   return (
     <>
         <Form
-            name="education"
-            className='add-education-form'
+            name="family"
+            className='add-family-form'
             labelCol={{
             span: 6,
-            className: 'add-education-label'
+            className: 'add-family-label'
             }}
             wrapperCol={{
-            className: 'add-education-input'
+            className: 'add-family-input'
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
         >
             <Form.Item
-            label="Education"
-            name="education"
+            label="Full Name"
+            name="fullName"
             colon={false}
             rules={[
                 {
                 required: true,
-                message: 'Please input your education!',
+                message: 'Please input fullname!',
                 },
             ]}
             >
-            <Input placeholder='Enter education' className='input-button'/>
+            <Input placeholder='Enter Full Name' className='input-button'/>
             </Form.Item>
 
             <Form.Item
-            label="Institution"
-            name="institution"
+            label="NIK"
+            name="nik"
             colon={false}
             rules={[
                 {
                 required: true,
-                message: 'Please input your institution!',
+                message: 'Please input NIK!',
                 },
             ]}
             >
-            <Input placeholder='Enter Institution' className='input-button'/>
+            <Input placeholder='Enter NIK' className='input-button'/>
             </Form.Item>
 
             <Form.Item
-            label="Major"
-            name="major"
+            label="Birth Date"
+            name="birthDate"
             colon={false}
             rules={[
                 {
                 required: true,
-                message: 'Please input your major!',
+                message: 'Please input birth date!',
                 },
             ]}
             >
-            <Input placeholder='Enter Major' className='input-button'/>
+            <DatePicker placeholder='DD/MM/YYYY' defaultValue={dayjs('01/01/2015', dateFormatList)} format={dateFormatList} className='date-picker'/>
             </Form.Item>
 
             <Form.Item
-            label="Thesis"
-            name="thesis"
+            label="Birth Place"
+            name="birthPlace"
             colon={false}
             rules={[
                 {
                 required: true,
-                message: 'Please input your thesis!',
+                message: 'Please input birth place!',
                 },
             ]}
             >
-            <TextArea rows={4} className='input-thesis' placeholder='Enter Thesis'/>
+            <Input placeholder='Enter Birth Place' className='input-button'/>
             </Form.Item>
 
             <Form.Item
-            label="GPA"
-            name="gpa"
+            label="Address"
+            name="address"
             colon={false}
             rules={[
                 {
                 required: true,
-                message: 'Please input your GPA!',
+                message: 'Please input address!',
                 },
             ]}
             >
-            <Input placeholder='Enter GPA' className='input-button'/>
+            <TextArea rows={4} className='input-address' placeholder='Enter Address'/>
             </Form.Item>
 
             <Form.Item
-            label="Certificate Number"
-            name="certificateNumber"
+            label="Relation"
+            name="relation"
             colon={false}
             rules={[
                 {
                 required: true,
-                message: 'Please input your certificate number!',
+                message: 'Please input relation!',
                 },
             ]}
             >
-            <Input placeholder='Enter certificate number' className='input-button'/>
+            <Input placeholder='Enter Relation' className='input-button'/>
             </Form.Item>
 
             <Form.Item
-            label="Entry Year"
-            name="entryYear"
+            label="Job"
+            name="job"
             colon={false}
             rules={[
                 {
                 required: true,
-                message: 'Please input your entry year!',
+                message: 'Please input job!',
                 },
             ]}
             >
-            <Input placeholder='Enter Year' className='input-button'/>
-            </Form.Item>
-
-            <Form.Item
-            label="Out Year"
-            name="outYear"
-            colon={false}
-            rules={[
-                {
-                required: true,
-                message: 'Please input your out year!',
-                },
-            ]}
-            >
-            <Input placeholder='Enter Year' className='input-button'/>
+            <Input placeholder='Enter Job' className='input-button'/>
             </Form.Item>
 
             <Form.Item
@@ -149,4 +139,4 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
   )
 }
 
-export default EducationForm
+export default FamilyForm

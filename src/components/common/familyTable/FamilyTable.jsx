@@ -1,32 +1,32 @@
 import React from 'react';
 import { Table, Button, Space } from 'antd';
-import './educationTable.css'
+import './familyTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { Link } from 'react-router-dom';
 
-const EducationTable = ({onDetailClick}) => {
+const FamilyTable = ({onDetailClick}) => {
 
     const columns = [
         {
-          title: 'Education',
-          dataIndex: 'education',
-          key: 'education',
+          title: 'Full Name',
+          dataIndex: 'fullName',
+          key: 'fullName',
           width: 400,
         },
         {
-          title: 'Institution',
-          dataIndex: 'institution',
-          key: 'institution',
+          title: 'NIK',
+          dataIndex: 'nik',
+          key: 'nik',
         },
         {
-          title: 'Entry Year',
-          dataIndex: 'entryYear',
-          key: 'entryYear',
+          title: 'Relation',
+          dataIndex: 'relation',
+          key: 'relation',
         },
         {
-          title: 'Out Year',
-          key: 'outYear',
-          dataIndex: 'outYear',
+          title: 'Job',
+          key: 'job',
+          dataIndex: 'job',
         },
         {
           title: 'Action',
@@ -46,38 +46,24 @@ const EducationTable = ({onDetailClick}) => {
     const data = [
         {
           key: '1',
-          education: 'Magister',
-          institution: 'Harvard University',
-          entryYear: '2023',
-          outYear: '2026',
+          fullName: 'Maria Doe',
+          nik: '312312412341231231',
+          relation: 'Istri',
+          job: 'Ibu Rumah Tangga',
         },
         {
           key: '2',
-          education: 'Sarjana',
-          institution: 'Harvard University',
-          entryYear: '2023',
-          outYear: '2026',
+          fullName: 'Anton Doe',
+          nik: '312312412341231231',
+          relation: 'Anak',
+          job: 'Pelajar',
         },
         {
           key: '3',
-          education: 'Sekolah Menengah Atas',
-          institution: 'SMA Negeri 1 Jakarta',
-          entryYear: '2023',
-          outYear: '2026',
-        },
-        {
-          key: '4',
-          education: 'Sekolah Menengah Pertama',
-          institution: 'SMP Negeri 1 Jakarta',
-          entryYear: '2023',
-          outYear: '2026',
-        },
-        {
-          key: '5',
-          education: 'Sekolah Dasar',
-          institution: 'SD Negeri 1 Jakarta',
-          entryYear: '2023',
-          outYear: '2026',
+          fullName: 'Jack Doe',
+          nik: '312312412341231231',
+          relation: 'Anak',
+          job: 'Pelajar',
         },
     ];
 
@@ -103,4 +89,4 @@ const EducationTable = ({onDetailClick}) => {
     )
 }
 
-export default EducationTable;
+export default FamilyTable;
