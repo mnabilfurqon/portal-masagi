@@ -1,0 +1,30 @@
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-modal-success {
+    font-size: 100px;
+    color: #28A745;
+    margin-top: 20px;
+}
+
+.ok-button {
+    width: 20%;
+    border-radius: 4px;
+    background-color: #28A745;
+}
+
+.ok-button:hover {
+    width: 20%;
+    border-radius: 4px;
+    background-color: #ffffff !important;
+    color: #28A745 !important;
+    border-color: #28A745 !important;
+}
+
+.success-title {
+    margin-bottom: 0;
+}
