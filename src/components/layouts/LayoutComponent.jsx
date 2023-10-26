@@ -54,6 +54,15 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   } else if (location.pathname === "/user") {
     pageTitle = "User";
     finalPageTitle = pageTitle;
+  } else if (location.pathname === "/user/add-user") {
+    pageTitle = <Link to="/user" style={{ color: 'black' }}>User / </Link>;
+    pageSubTitle = <span style={{ color: '#17A2B8' }}>User Configuration</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    )
   } else if (location.pathname === "/role") {
     pageTitle = "Role";
     finalPageTitle = pageTitle;
@@ -73,6 +82,15 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     pageTitle = "Employee";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/employee/edit-employee") {
+    pageTitle = <Link to="/employee" style={{ color: 'black' }}>Employee / </Link>;
+    pageSubTitle = <span style={{ color: '#17A2B8' }}>Employee Configuration</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    )
+  } else if (location.pathname === "/employee/add-employee") {
     pageTitle = <Link to="/employee" style={{ color: 'black' }}>Employee / </Link>;
     pageSubTitle = <span style={{ color: '#17A2B8' }}>Employee Configuration</span>;
     finalPageTitle = (

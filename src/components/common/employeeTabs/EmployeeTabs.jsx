@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Tabs, Button } from 'antd';
+import { Tabs, Button, Form, Input, DatePicker, Radio } from 'antd';
 import { Link } from 'react-router-dom';
 import AddButton from '../addButton/AddButton';
 import './employeeTabs.css';
@@ -8,6 +8,7 @@ import DetailEducationTable from '../detailEducationTable/DetailEducationTable';
 import EducationForm from '../educationForm/EducationForm';
 import SuccessAddDataModal from '../successModal/SuccessAddDataModal';
 import FailedAddDataModal from '../failedModal/FailedAddDataModal';
+import EmployeeEditForm from '../employeeEditForm/EmployeeEditForm';
 
 const { TabPane } = Tabs;
 
@@ -73,8 +74,8 @@ const EmployeeTabs = () => {
 
     return (
         <Tabs defaultActiveKey="employeeData" onChange={onChange}>
-            <TabPane tab="Employee Data" key="employeeData">
-                Content of Tab Employee Data
+            <TabPane tab="Employee Data" key="employeeData"> <br />
+                <EmployeeEditForm />
             </TabPane>
             <TabPane tab="Education Data" key="educationData">
                 <div>
