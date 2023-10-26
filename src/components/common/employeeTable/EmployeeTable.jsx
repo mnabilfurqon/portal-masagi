@@ -51,9 +51,11 @@ const EmployeeTable = () => {
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
                   </Link>
+                  <Link to='/user/add-user'>
                     <Button className="action-button" type="primary" size="small" ghost>
                         <BsPersonAdd className="action-icon" />
                     </Button>
+                  </Link>
                 </Space>
             ),
         },

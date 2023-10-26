@@ -15,7 +15,6 @@ import RoleConfigDetail from "../pages/superAdmin/roleConfig/detailRole/RoleConf
 import PositionConfiguration from "../pages/admin/positionConfiguration/PositionConfiguration";
 import DivisionConfiguration from "../pages/admin/divisionConfiguration/DivisionConfiguration";
 import MainEmployeeConfiguration from "../pages/admin/employeeConfiguration/mainEmployeeConfiguration/MainEmployeeConfiguration";
-import EditEmployeeConfiguration from "../pages/admin/employeeConfiguration/editEmployeeConfiguration/EditEmployeeConfiguration";
 import DetailEmployeeConfiguration from "../pages/admin/employeeConfiguration/detailEmployeeConfiguration/DetailEmployeeConfiguration";
 import AddEmployee from "../pages/admin/employeeConfiguration/addEmployee/AddEmployee";
 import AddUser from "../pages/admin/userConfiguration/addUser/AddUser";
@@ -30,7 +29,7 @@ const RouteManagement = () => {
   //   }
   // }, [token, navigate]);
 
-  let isSuperAdmin = true;
+  let isSuperAdmin = false;
 
   if (isSuperAdmin) {
     // Routing untuk Super Admin
@@ -118,73 +117,6 @@ const RouteManagement = () => {
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-        </Routes>
-        <Routes>
-          <React.Fragment>
-            <Route
-              path="/dashboard"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-
-                </LayoutComponent>
-              }
-            />
-
-            {/* Company Configuration Route */}
-            <Route
-              path="/company"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <AdminDetailCompanyConfiguration />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/company/edit-company"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <AdminEditCompanyConfiguration />
-                </LayoutComponent>
-              }
-            />
-            {/* End of Company Configuration Route */}
-
-            <Route
-              path="/user"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <UserConfiguration />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/role"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <RoleConfig />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/role/detail-role"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <RoleConfigDetail />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/position"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <PositionConfiguration />
-                </LayoutComponent>
-              }
-            />
-          </React.Fragment>
-        </Routes>
-          <Routes>
             <Route path="/" element={<LoginPage />} />
           </Routes>
             <Routes>
@@ -227,14 +159,6 @@ const RouteManagement = () => {
                   }
                 />
                 <Route
-                  path="/employee/edit-employee"
-                  element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                      <EditEmployeeConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                <Route
                 path="/employee/detail-employee"
                 element={
                   <LayoutComponent hideButtons={true} isSuperAdmin={false}>
@@ -242,7 +166,34 @@ const RouteManagement = () => {
                   </LayoutComponent>
                 }
                 />
+                <Route
+                path="/employee/add-employee"
+                element={
+                  <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                    <AddEmployee />
+                  </LayoutComponent>
+                }
+                />
                 {/* End of Employee Configuration Route */}
+
+                {/* User Configuration Route */}
+                <Route
+                  path="/user"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <UserConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                  path="/user/add-user"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <AddUser />
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of User Configuration Route */}
 
                 {/* Division Configuration Route */}
                 <Route
@@ -254,6 +205,8 @@ const RouteManagement = () => {
                   }
                 />
                 {/* End of Division Configuration Route */}
+
+                {/* Role Configuration Route */}
                 <Route
                   path="/role"
                   element={
@@ -270,8 +223,20 @@ const RouteManagement = () => {
                     </LayoutComponent>
                   }
                 />
+                {/* End of Role Configuration Route */}
+
+                {/* Position Configuration Route */}
+                <Route
+                  path="/position"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <PositionConfiguration/>
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of Position Configuration Route */}
               </React.Fragment>
-            </Routes>
+            </Routes>          
       </Suspense>
     );
   }
