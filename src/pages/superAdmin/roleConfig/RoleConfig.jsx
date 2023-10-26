@@ -30,7 +30,7 @@ const addRoleTitle = <div className="add-role-title">Add Role</div>;
   );
 
   const handleAddRole = () => {
-    const operationSucceeded = true;
+    const operationSucceeded = false;
 
     if (operationSucceeded) {
       setSuccessModalOpen(true);

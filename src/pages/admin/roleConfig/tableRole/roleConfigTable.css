@@ -2,6 +2,53 @@
   background-color: #F3F6F9 !important;
 }
 
+.caution-icon {
+  color: red;
+  margin-left: 10px;
+}
+
+.delete-header {
+  margin-left: 20px;
+  margin-top: 20px;
+  font-size: 30px;
+}
+
+.delete-caption {
+  margin-left: 20px;
+  margin-top: -30px;
+}
+
+.delete-role {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #DC3545;
+  color: white;
+  width: 100px;
+}
+.delete-role:hover {
+  background-color: #FF7481;
+  color: #FFFFFF !important;
+  border: 1px solid #DC3545 !important;
+}
+
+.cancel-delete-role {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: #000000;
+  width: 100px;
+}
+.cancel-delete-role:hover {
+  background-color: white !important;
+  color: #629093 !important;
+}
+
 .action-title {
   display: flex;
   justify-content: flex-end;
@@ -20,7 +67,7 @@
   margin-right: 10px;
 }
 
-.detail-icon, .delete-icon {
+.detail-icon {
   color: #629093;
   font-size: 25px;
   cursor: pointer;
@@ -29,6 +76,13 @@
   color: #F9B700;
   font-size: 25px;
   cursor: pointer;
+}
+
+.delete-icon {
+  color: #DC3545;
+  font-size: 25px;
+  cursor: pointer;
+  margin-top: -4px;
 }
 .delete-icon:hover {
   color: #F9B700;

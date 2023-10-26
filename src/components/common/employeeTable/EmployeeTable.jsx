@@ -46,7 +46,7 @@ const EmployeeTable = () => {
           key: 'action',
             render: () => (
                 <Space size="small">
-                  <Link to='/employee/edit-employee'>
+                  <Link to='/employee/detail-employee'>
                     <Button className="action-button" type="primary" size="small" ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>

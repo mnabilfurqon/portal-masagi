@@ -9,6 +9,9 @@ import EducationForm from '../educationForm/EducationForm';
 import SuccessAddDataModal from '../successModal/SuccessAddDataModal';
 import FailedAddDataModal from '../failedModal/FailedAddDataModal';
 import EmployeeEditForm from '../employeeEditForm/EmployeeEditForm';
+import FamilyTable from '../familyTable/FamilyTable';
+import DetailFamilyTable from '../detailFamilyTable/DetailFamilyTable';
+import FamilyForm from '../familyForm/FamilyForm';
 
 const { TabPane } = Tabs;
 
@@ -19,54 +22,106 @@ const EmployeeTabs = () => {
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
     const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
 
-    const handleAddButtonClick = () => {
+    const handleEducationAddButtonClick = () => {
         setActiveEducationTab('education-add-form');
     }
 
-    const handleDetailButtonClick = () => {
+    const handleEducationDetailButtonClick = () => {
         setActiveEducationTab('education-detail');
     }
 
-    const handleBackButtonClick = () => {
+    const handleEducationBackButtonClick = () => {
         setActiveEducationTab('education-data');
     }
 
-    const handleEditButtonClick = () => {
+    const handleEducationEditButtonClick = () => {
         setActiveEducationTab('education-edit-form');
     }
 
-    const handleCancleAddFormButtonClick = () => {
+    const handleEducationCancleAddFormButtonClick = () => {
         setActiveEducationTab('education-data');
     }
 
-    const handleCancleEditFormButtonClick = () => {
+    const handleEducationCancleEditFormButtonClick = () => {
         setActiveEducationTab('education-detail');
     }
 
-    const handleSuccessAddForm = () => {
+    const handleEducationSuccessAddForm = () => {
         setIsSuccessModalVisible(true);
     }
 
-    const handleFailedAddForm = () => {
+    const handleEducationFailedAddForm = () => {
         setIsFailedModalVisible(true);
     }
 
-    const handleSuccessEditForm = () => {
+    const handleEducationSuccessEditForm = () => {
         setIsSuccessModalVisible(true);
     }
 
-    const handleFailedEditForm = () => {
+    const handleEducationFailedEditForm = () => {
         setIsFailedModalVisible(true);
     }
 
-    const handleSuccessModalClose = () => {
+    const handleEducationSuccessModalClose = () => {
         setIsSuccessModalVisible(false);
     };
 
-    const handleFailedModalClose = () => {
+    const handleEducationFailedModalClose = () => {
         setIsFailedModalVisible(false);
     };
     // end of handler education data tabs
+
+    // handler family data tabs
+    const [activeFamilyTab, setActiveFamilyTab] = useState('family-data');
+
+    const handleFamilyAddButtonClick = () => {
+        setActiveFamilyTab('family-add-form');
+    }
+
+    const handleFamilyDetailButtonClick = () => {
+        setActiveFamilyTab('family-detail');
+    }
+
+    const handleFamilyBackButtonClick = () => {
+        setActiveFamilyTab('family-data');
+    }
+
+    const handleFamilyEditButtonClick = () => {
+        setActiveFamilyTab('family-edit-form');
+    }
+
+    const handleFamilyCancleAddFormButtonClick = () => {
+        setActiveFamilyTab('family-data');
+    }
+
+    const handleFamilyCancleEditFormButtonClick = () => {
+        setActiveFamilyTab('family-detail');
+    }
+
+    const handleFamilySuccessAddForm = () => {
+        setIsSuccessModalVisible(true);
+    }
+
+    const handleFamilyFailedAddForm = () => {
+        setIsFailedModalVisible(true);
+    }
+
+    const handleFamilySuccessEditForm = () => {
+        setIsSuccessModalVisible(true);
+    }
+
+    const handleFamilyFailedEditForm = () => {
+        setIsFailedModalVisible(true);
+    }
+
+    const handleFamilySuccessModalClose = () => {
+        setIsSuccessModalVisible(false);
+    };
+
+    const handleFamilyFailedModalClose = () => {
+        setIsFailedModalVisible(false);
+    };
+    // end of handler family data tabs
     
     const onChange = (key) => {
         console.log(key);
@@ -82,9 +137,9 @@ const EmployeeTabs = () => {
                     {activeEducationTab === 'education-data' && (
                         <div className='education-data'>
                             <div className='right-buttons-education'>
-                                <AddButton buttonText="Add Education" handleClick={handleAddButtonClick}/>
+                                <AddButton buttonText="Add Education" handleClick={handleEducationAddButtonClick}/>
                             </div>
-                            <EducationTable onDetailClick={handleDetailButtonClick}/>
+                            <EducationTable onDetailClick={handleEducationDetailButtonClick}/>
                         </div>       
                     )}
                     
@@ -92,10 +147,10 @@ const EmployeeTabs = () => {
                         <div className='education-detail'>
                             <DetailEducationTable />
                             <div className='education-detail-button'>
-                                <Button type="text" onClick={handleBackButtonClick}>
+                                <Button type="text" onClick={handleEducationBackButtonClick}>
                                 Back
                                 </Button>
-                                <Button type="primary" className='edit-education-button' onClick={handleEditButtonClick}>
+                                <Button type="primary" className='edit-education-button' onClick={handleEducationEditButtonClick}>
                                 Edit Data
                                 </Button>
                             </div>
@@ -105,19 +160,19 @@ const EmployeeTabs = () => {
                     {activeEducationTab === 'education-add-form' && (
                         <div className='education-add-form'>
                             <EducationForm
-                            onCancleEditFormButton={handleCancleAddFormButtonClick}
-                            onFinish={handleSuccessAddForm}
-                            onFinishFailed={handleFailedAddForm}/>
+                            onCancleEditFormButton={handleEducationCancleAddFormButtonClick}
+                            onFinish={handleEducationSuccessAddForm}
+                            onFinishFailed={handleEducationFailedAddForm}/>
 
                             <SuccessAddDataModal
                             visible={isSuccessModalVisible}
-                            onClose={handleSuccessModalClose}
+                            onClose={handleEducationSuccessModalClose}
                             textParagraph="Data upload successful!"
                             />
 
                             <FailedAddDataModal
                             visible={isFailedModalVisible}
-                            onClose={handleFailedModalClose}
+                            onClose={handleEducationFailedModalClose}
                             />
                         </div>
                     )} 
@@ -125,26 +180,89 @@ const EmployeeTabs = () => {
                     {activeEducationTab === 'education-edit-form' && (
                         <div className='education-edit-form'>
                             <EducationForm
-                            onCancleEditFormButton={handleCancleEditFormButtonClick}
-                            onFinish={handleSuccessEditForm}
-                            onFinishFailed={handleFailedEditForm}/>
+                            onCancleEditFormButton={handleEducationCancleEditFormButtonClick}
+                            onFinish={handleEducationSuccessEditForm}
+                            onFinishFailed={handleEducationFailedEditForm}/>
 
                             <SuccessAddDataModal
                             visible={isSuccessModalVisible}
-                            onClose={handleSuccessModalClose}
+                            onClose={handleEducationSuccessModalClose}
                             textParagraph="Data upload successful!"
                             />
 
                             <FailedAddDataModal
                             visible={isFailedModalVisible}
-                            onClose={handleFailedModalClose}
+                            onClose={handleEducationFailedModalClose}
                             />
                         </div>
                     )}    
                 </div>
             </TabPane>
             <TabPane tab="Family Data" key="familyData">
-                Content of Tab Family Data
+            <div>
+                    {activeFamilyTab === 'family-data' && (
+                        <div className='family-data'>
+                            <div className='right-buttons-family'>
+                                <AddButton buttonText="Add Family" handleClick={handleFamilyAddButtonClick}/>
+                            </div>
+                            <FamilyTable onDetailClick={handleFamilyDetailButtonClick}/>
+                        </div>       
+                    )}
+                    
+                    {activeFamilyTab === 'family-detail' && (
+                        <div className='family-detail'>
+                            <DetailFamilyTable />
+                            <div className='family-detail-button'>
+                                <Button type="text" onClick={handleFamilyBackButtonClick}>
+                                Back
+                                </Button>
+                                <Button type="primary" className='edit-family-button' onClick={handleFamilyEditButtonClick}>
+                                Edit Data
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeFamilyTab === 'family-add-form' && (
+                        <div className='family-add-form'>
+                            <FamilyForm
+                            onCancleEditFormButton={handleFamilyCancleAddFormButtonClick}
+                            onFinish={handleFamilySuccessAddForm}
+                            onFinishFailed={handleFamilyFailedAddForm}/>
+
+                            <SuccessAddDataModal
+                            visible={isSuccessModalVisible}
+                            onClose={handleFamilySuccessModalClose}
+                            textParagraph="Data upload successful!"
+                            />
+
+                            <FailedAddDataModal
+                            visible={isFailedModalVisible}
+                            onClose={handleFamilyFailedModalClose}
+                            />
+                        </div>
+                    )} 
+                    
+                    {activeFamilyTab === 'family-edit-form' && (
+                        <div className='family-edit-form'>
+                            <FamilyForm
+                            onCancleEditFormButton={handleFamilyCancleEditFormButtonClick}
+                            onFinish={handleFamilySuccessEditForm}
+                            onFinishFailed={handleFamilyFailedEditForm}/>
+
+                            <SuccessAddDataModal
+                            visible={isSuccessModalVisible}
+                            onClose={handleFamilySuccessModalClose}
+                            textParagraph="Data upload successful!"
+                            />
+
+                            <FailedAddDataModal
+                            visible={isFailedModalVisible}
+                            onClose={handleFamilyFailedModalClose}
+                            />
+                        </div>
+                    )}    
+                </div>
             </TabPane>
         </Tabs>
     );

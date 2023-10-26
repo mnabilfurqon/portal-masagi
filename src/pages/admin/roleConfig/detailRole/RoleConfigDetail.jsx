@@ -69,7 +69,7 @@ const RoleConfigDetail = () => {
         footer={null}
       >
         <div className="modal-content">
-          <p className="success-caption">Data changes successful!</p>
+          <p className="success-caption">Data changes successfull!</p>
           <Button
             key="editRole"
             className="save-button"
