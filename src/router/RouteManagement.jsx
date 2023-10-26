@@ -147,6 +147,25 @@ const RouteManagement = () => {
             />
             {/* End of Company Configuration Route */}
 
+            {/* Employee Configuration Route */}
+            <Route
+              path="/employee"
+              element={
+                <LayoutComponent isSuperAdmin={false}>
+                  <MainEmployeeConfiguration />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="/employee/detail-employee"
+              element={
+                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                  <DetailEmployeeConfiguration />
+                </LayoutComponent>
+              }
+            />
+            {/* End of Employee Configuration Route */}
+
             <Route
               path="/user"
               element={
@@ -155,6 +174,7 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
+
             <Route
               path="/role"
               element={
@@ -163,6 +183,7 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
+
             <Route
               path="/role/detail-role"
               element={
@@ -171,6 +192,18 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
+
+            {/* Division Configuration Route */}
+            <Route
+              path="/division"
+              element={
+                <LayoutComponent isSuperAdmin={false}>
+                  <DivisionConfiguration />
+                </LayoutComponent>
+              }
+            />
+            {/* End of Division Configuration Route */}
+
             <Route
               path="/position"
               element={
@@ -181,86 +214,6 @@ const RouteManagement = () => {
             />
           </React.Fragment>
         </Routes>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-          </Routes>
-            <Routes>
-              <React.Fragment>
-                <Route
-                  path="/dashboard"
-                  element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                      
-                    </LayoutComponent>
-                  }
-                />
-                
-                {/* Company Configuration Route */}
-                <Route
-                  path="/company"
-                  element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                      <AdminDetailCompanyConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                <Route
-                  path="/company/edit-company"
-                  element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                      <AdminEditCompanyConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                {/* End of Company Configuration Route */}
-              
-                {/* Employee Configuration Route */}
-                <Route
-                  path="/employee"
-                  element={
-                    <LayoutComponent isSuperAdmin={false}>
-                      <MainEmployeeConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                <Route
-                  path="/employee/detail-employee"
-                  element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                      <DetailEmployeeConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                {/* End of Employee Configuration Route */}
-
-                {/* Division Configuration Route */}
-                <Route
-                  path="/division"
-                  element={
-                    <LayoutComponent isSuperAdmin={false}>
-                      <DivisionConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                {/* End of Division Configuration Route */}
-                <Route
-                  path="/role"
-                  element={
-                    <LayoutComponent isSuperAdmin={false}>
-                      <RoleConfig/>
-                    </LayoutComponent>
-                  }
-                />
-                <Route
-                  path="/role/detail-role"
-                  element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                      <RoleConfigDetail/>
-                    </LayoutComponent>
-                  }
-                />
-              </React.Fragment>
-            </Routes>
       </Suspense>
     );
   }
