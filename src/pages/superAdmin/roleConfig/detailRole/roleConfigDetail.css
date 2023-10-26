@@ -101,8 +101,8 @@
   width: 100px;
 }
 .back-edit-button:hover {
-  background-color: #ffffff;
-  color: #DC3545 !important;
+  background-color: #FF7481;
+  color: #FFFFFF !important;
   border: 1px solid #DC3545 !important;
 }
 

@@ -27,7 +27,7 @@ const RouteManagement = () => {
   //   }
   // }, [token, navigate]);
 
-  let isSuperAdmin = false;
+  let isSuperAdmin = true;
 
   if (isSuperAdmin) {
     // Routing untuk Super Admin
