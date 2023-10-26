@@ -1,0 +1,56 @@
+import React from 'react'
+import "./positionConfiguration.css"
+import EditPosition from './editPosition/EditPosition'
+import { Table, Space, } from "antd"
+import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
+import AddPosition from './addPosition/AddPosition'
+
+const PositionConfiguration = () => {
+  // Table
+  const columns = [
+    {
+      title: 'Nama',
+      dataIndex: 'name',
+      key: 'name',
+      width: '88%',
+      // sorter: (record1, record2) => { return record1.username > record2.username }
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="small">
+          <EditPosition />
+          <DeleteConfirmationDialog data="position"/>
+        </Space>
+      ),
+    },
+  ];
+  const data = [
+    {
+      key: '1',
+      name: 'General Manager',
+    },
+    {
+      key: '2',
+      name: 'Supervisor',
+    },
+    {
+      key: '3',
+      name: 'Human Resource',
+    },
+];
+
+  return (
+    <>
+      <div className='right-buttons'>
+        <AddPosition />
+      </div>
+      <div>
+        <Table columns={columns} dataSource={data} />
+      </div>
+    </>
+  )
+}
+
+export default PositionConfiguration

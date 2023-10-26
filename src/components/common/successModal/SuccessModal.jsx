@@ -22,23 +22,22 @@ const SuccessModal = (props) => {
         </Button>
         <Modal
             open={isModalOpen}
+            centered
+            closable={false}
             onOk={handleOk}
             onCancel={handleCancel}
-            footer={[
+            footer={
                 <center>
-                <Button key="submit" type="none" onClick={handleOk} className="success-button">
+                <Button type="none" onClick={handleOk} className="success-button">
                   OK
                 </Button>
-                </center>,
-            ]}
+                </center>
+            }
         >
           <center>
-            <GoCheckCircle className="success-icon" size="100"/>
+            <GoCheckCircle style={{ color: "#28a745" }} size="100"/>
             <h1>Success</h1>
             <p>{props.action} successfull</p>
-            {/* <Button key="submit" type="none" onClick={handleOk} className="success-button">
-                OK
-            </Button> */}
           </center>
         </Modal>
     </>
@@ -65,6 +64,7 @@ export const SuccessUpdateModal = () => {
       </Button>
       <Modal
         open={isModalOpen}
+        centered
         onOk={handleUpdate}
         onCancel={handleClose}
         footer={
@@ -74,7 +74,7 @@ export const SuccessUpdateModal = () => {
         }
       >
         <div style={{padding: 20, margin:0, paddingBottom:0}}>
-          <GoCheckCircle className="success-icon" size="70"/>
+          <GoCheckCircle style={{ color: "#28a745" }} size="70"/>
           <h1 style={{fontWeight:600}}>User Updated</h1>
           <p>Thanks for updating user account!</p>
         </div>

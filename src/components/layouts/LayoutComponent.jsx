@@ -66,6 +66,9 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     )
+  } else if (location.pathname === "/position") {
+    pageTitle = "Position";
+    finalPageTitle = pageTitle;
   } else if (location.pathname === "/employee") {
     pageTitle = "Employee";
     finalPageTitle = pageTitle;
