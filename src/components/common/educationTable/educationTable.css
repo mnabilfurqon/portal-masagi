@@ -43,43 +43,14 @@
     margin: 0 !important;
 }
 
-.action-icon-edit {
+.action-icon {
     color: #629093;
     font-size: 25px;
     cursor: pointer;
 }
 
-.action-icon-edit:hover {
+.action-icon:hover {
     color: #F9B700;
     font-size: 25px;
     cursor: pointer;
-}
-
-.action-icon-delete {
-    color: #DC3545;
-    font-size: 25px;
-    cursor: pointer;
-}
-
-.action-icon-delete:hover {
-    color: #F9B700;
-    font-size: 25px;
-    cursor: pointer;
-}
-
-.ant-table-cell {
-    width: 300px !important;
-}
-
-.action-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.action-title {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-right: 30px;
 }

@@ -13,6 +13,8 @@ import UserConfiguration from "../pages/userConfiguration/UserConfiguration";
 import DivisionConfiguration from "../pages/admin/divisionConfiguration/DivisionConfiguration";
 import RoleConfig from "../pages/superAdmin/roleConfig/RoleConfig";
 import RoleConfigDetail from "../pages/superAdmin/roleConfig/detailRole/RoleConfigDetail"
+import MainEmployeeConfiguration from "../pages/admin/employeeConfiguration/mainEmployeeConfiguration/MainEmployeeConfiguration";
+import DetailEmployeeConfiguration from "../pages/admin/employeeConfiguration/detailEmployeeConfiguration/DetailEmployeeConfiguration";
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -144,6 +146,25 @@ const RouteManagement = () => {
                 />
                 {/* End of Company Configuration Route */}
               
+                {/* Employee Configuration Route */}
+                <Route
+                  path="/employee"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <MainEmployeeConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                  path="/employee/detail-employee"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      <DetailEmployeeConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of Employee Configuration Route */}
+
                 {/* Division Configuration Route */}
                 <Route
                   path="/division"
