@@ -5,7 +5,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
-const EmployeeTable = () => {
+const EmployeeTable = ({searchValue}) => {
     
     const activeButton = (
         <Button className="active-button" type="primary" size="small" ghost>
@@ -195,12 +195,17 @@ const EmployeeTable = () => {
         },
         {
           key: '20',
-          employeeName: 'John Doe',
+          employeeName: 'Testing',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
           status: activeButton,
         },
     ];
+
+    // Filter data berdasarkan searchValue
+    const filteredData = data.filter(item =>
+      item.employeeName.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
     const paginationConfig = {
         pageSize: 10, // Jumlah item per halaman
@@ -216,7 +221,7 @@ const EmployeeTable = () => {
       <>
         <Table 
             columns={columns}
-            dataSource={data}
+            dataSource={filteredData}
             pagination={paginationConfig}
             rowClassName="custom-row"  
         />

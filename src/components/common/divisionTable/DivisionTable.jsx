@@ -4,7 +4,7 @@ import './divisionTable.css'
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 
-const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked}) => {
+const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue}) => {
 
     const columns = [
         {
@@ -53,6 +53,11 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked}) => {
         },
     ];
 
+    // Filter data berdasarkan searchValue
+    const filteredData = data.filter(item =>
+      item.division.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
     const paginationConfig = {
         pageSize: 10, // Jumlah item per halaman
         showTotal: (total, range) => (
@@ -67,7 +72,7 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked}) => {
       <>
         <Table 
             columns={columns}
-            dataSource={data}
+            dataSource={filteredData}
             pagination={paginationConfig}
             rowClassName="custom-row"  
         />

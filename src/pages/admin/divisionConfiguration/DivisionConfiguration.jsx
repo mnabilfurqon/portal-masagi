@@ -8,7 +8,7 @@ import AddEditModal from '../../../components/common/addEditModal/AddEditModal'
 import SuccessAddDataModal from '../../../components/common/successModal/SuccessAddDataModal'
 import FailedAddDataModal from '../../../components/common/failedModal/FailedAddDataModal'
 
-const DivisionConfiguration = () => {
+const DivisionConfiguration = ({searchValue}) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isSuccessDeleteModalOpen, setIsSuccessDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -110,6 +110,7 @@ const DivisionConfiguration = () => {
             <DivisionTable
             isDeleteButtonClicked={isDeleteButtonClicked}
             isEditButtonClicked={isEditButtonClicked}
+            searchValue={searchValue}
             />
 
             <AddEditModal

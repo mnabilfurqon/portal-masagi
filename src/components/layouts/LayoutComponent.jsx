@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { HomeOutlined, BellOutlined, DownOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
@@ -15,6 +16,14 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  // search handler
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = (value) => {
+      setSearchValue(value);
+  }
+  // end of search handler
 
   // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
@@ -208,14 +217,14 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
             {hideButtons ? null : (
               <div className="buttons-container">
                 <div className="left-buttons">
-                  <SearchBox className="search-box" />
+                  <SearchBox className="search-box" onSearch={handleSearch} />
                   <FilterButton className="filter-button" />
                   <SortButton className="sort-button" />
                   <CountButton className="count-button" />
                 </div>
               </div>
             )}
-            {children}
+            {React.cloneElement(children, { searchValue })}
           </div>
         </Content>
       </Layout>

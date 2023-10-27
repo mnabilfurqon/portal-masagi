@@ -9,7 +9,7 @@ import { PiWarningCircleLight } from "react-icons/pi";
 import { paginationConfig, tabel_data } from "./constans";
 import "./roleConfigTable.css";
 
-const RoleConfigTable = () => {
+const RoleConfigTable = ({searchValue}) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
 
@@ -70,11 +70,16 @@ const RoleConfigTable = () => {
     },
   ];
 
+  // Filter data berdasarkan searchValue
+  const filteredData = tabel_data.filter(item =>
+    item.roleName.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <>
       <Table
         columns={title}
-        dataSource={tabel_data}
+        dataSource={filteredData}
         pagination={paginationConfig}
       />
       <Modal

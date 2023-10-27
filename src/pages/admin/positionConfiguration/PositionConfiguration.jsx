@@ -5,7 +5,7 @@ import { Table, Space, } from "antd"
 import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
 import AddPosition from './addPosition/AddPosition'
 
-const PositionConfiguration = () => {
+const PositionConfiguration = ({searchValue}) => {
   // Table
   const columns = [
     {
@@ -41,13 +41,18 @@ const PositionConfiguration = () => {
     },
 ];
 
+    // Filter data berdasarkan searchValue
+    const filteredData = data.filter(item =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
   return (
     <>
       <div className='right-buttons'>
         <AddPosition />
       </div>
       <div>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={filteredData} />
       </div>
     </>
   )

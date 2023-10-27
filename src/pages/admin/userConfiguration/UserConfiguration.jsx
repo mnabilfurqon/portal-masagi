@@ -11,7 +11,7 @@ import SuccessModal from '../../../components/common/successModal/SuccessModal'
 import FailedModal from '../../../components/common/failedModal/FailedModal'
 import { SuccessUpdateModal } from '../../../components/common/successModal/SuccessModal'
 
-const UserConfiguration = () => {
+const UserConfiguration = ({searchValue}) => {
     // // Search
     // const { Search } = Input;
     // const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -144,6 +144,11 @@ const UserConfiguration = () => {
         },
     ];
 
+    // Filter data berdasarkan searchValue
+    const filteredData = data.filter(item =>
+      item.username.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
     return (
         <>
         {/* <Flex horizontal gap="middle"
@@ -175,7 +180,7 @@ const UserConfiguration = () => {
               </Flex>*/}
 
         <div>
-            <Table columns={columns} dataSource={data} />
+            <Table columns={columns} dataSource={filteredData} />
         </div>
 
         <div>

@@ -5,8 +5,8 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
-const CompanyTable = () => {
-    
+const CompanyTable = ({ searchValue }) => {
+
     const activeButton = (
         <Button className="active-button" type="primary" size="small" ghost>
             active
@@ -195,12 +195,17 @@ const CompanyTable = () => {
         },
         {
           key: '20',
-          companyName: 'PT Masagi',
+          companyName: 'Testing',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
           status: activeButton,
         },
     ];
+
+    // Filter data berdasarkan searchValue
+    const filteredData = data.filter(item =>
+      item.companyName.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
     const paginationConfig = {
         pageSize: 10, // Jumlah item per halaman
@@ -216,7 +221,7 @@ const CompanyTable = () => {
       <>
         <Table 
             columns={columns}
-            dataSource={data}
+            dataSource={filteredData}
             pagination={paginationConfig}
             rowClassName="custom-row"  
         />
