@@ -11,7 +11,7 @@ import SuccessModal from '../../../components/common/successModal/SuccessModal'
 import FailedModal from '../../../components/common/failedModal/FailedModal'
 import { SuccessUpdateModal } from '../../../components/common/successModal/SuccessModal'
 
-const UserConfiguration = ({searchValue, filterValue, sortValue}) => {
+const UserConfiguration = ({searchValue, filterValue, sortValue, countValue }) => {
     // // Search
     // const { Search } = Input;
     // const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -159,6 +159,16 @@ const UserConfiguration = ({searchValue, filterValue, sortValue}) => {
       }
     });
 
+    const paginationConfig = {
+      pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
+      showTotal: (total, range) => (
+          <span style={{ color: '#556172' }}>
+              Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
+          </span>
+      ),
+      showLessItems: true,
+    };
+
     return (
         <>
         {/* <Flex horizontal gap="middle"
@@ -190,7 +200,7 @@ const UserConfiguration = ({searchValue, filterValue, sortValue}) => {
               </Flex>*/}
 
         <div>
-            <Table columns={columns} dataSource={sortedData} />
+            <Table columns={columns} dataSource={sortedData} pagination={paginationConfig} />
         </div>
 
         <div>

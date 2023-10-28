@@ -6,10 +6,10 @@ import { BiTrash } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { PiWarningCircleLight } from "react-icons/pi";
-import { paginationConfig, tabel_data } from "./constans";
+import { tabel_data } from "./constans";
 import "./roleConfigTable.css";
 
-const RoleConfigTable = ({searchValue, sortValue}) => {
+const RoleConfigTable = ({searchValue, sortValue, countValue}) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
 
@@ -85,6 +85,16 @@ const RoleConfigTable = ({searchValue, sortValue}) => {
       return 0;
     }
   });
+
+  const paginationConfig = {
+    pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
+    showTotal: (total, range) => (
+        <span style={{ color: '#556172' }}>
+            Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
+        </span>
+    ),
+    showLessItems: true,
+  };
 
   return (
     <>

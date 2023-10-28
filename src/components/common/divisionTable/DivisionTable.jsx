@@ -4,7 +4,7 @@ import './divisionTable.css'
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 
-const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue}) => {
+const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue, countValue}) => {
 
     const columns = [
         {
@@ -70,7 +70,7 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
     });
 
     const paginationConfig = {
-        pageSize: 10, // Jumlah item per halaman
+        pageSize: countValue, // Jumlah item per halaman
         showTotal: (total, range) => (
             <span style={{ color: '#556172' }}>
                 Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
