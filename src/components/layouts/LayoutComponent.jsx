@@ -25,6 +25,14 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   }
   // end of search handler
 
+  // filter handler
+  const [filterValue, setFilterValue] = useState('');
+
+  const handleFilter = (value) => {
+      setFilterValue(value);
+  }
+  // end of filter handler
+
   // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
   let pageSubTitle = "";
@@ -218,13 +226,13 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
               <div className="buttons-container">
                 <div className="left-buttons">
                   <SearchBox className="search-box" onSearch={handleSearch} />
-                  <FilterButton className="filter-button" />
+                  <FilterButton className="filter-button" onFilter={handleFilter} />
                   <SortButton className="sort-button" />
                   <CountButton className="count-button" />
                 </div>
               </div>
             )}
-            {React.cloneElement(children, { searchValue })}
+            {React.cloneElement(children, { searchValue, filterValue })}
           </div>
         </Content>
       </Layout>

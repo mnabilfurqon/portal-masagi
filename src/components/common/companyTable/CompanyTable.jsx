@@ -5,19 +5,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
-const CompanyTable = ({ searchValue }) => {
-
-    const activeButton = (
-        <Button className="active-button" type="primary" size="small" ghost>
-            active
-        </Button>
-    );
-
-    const notActiveButton = (
-        <Button className="not-active-button" type="primary" size="small" ghost>
-            not active
-        </Button>
-    );
+const CompanyTable = ({ searchValue, filterValue }) => {
 
     const columns = [
         {
@@ -40,6 +28,21 @@ const CompanyTable = ({ searchValue }) => {
           title: 'Status',
           key: 'status',
           dataIndex: 'status',
+          render: (text) => {
+            if (text === 'active') {
+              return (
+                <Button className="active-button" type="primary" size="small" value="active" ghost>
+                active
+                </Button>
+              );
+            } else {
+              return (
+                <Button className="not-active-button" type="primary" size="small" value="notActive" ghost>
+                not active
+                </Button>
+              );
+            }
+          },
         },
         {
           title: 'Action',
@@ -65,146 +68,148 @@ const CompanyTable = ({ searchValue }) => {
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '2',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '3',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '4',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '5',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '6',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '7',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '8',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '9',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '10',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '11',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '12',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '13',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '14',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '15',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '16',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '17',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '18',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '19',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '20',
           companyName: 'Testing',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
     ];
 
     // Filter data berdasarkan searchValue
     const filteredData = data.filter(item =>
-      item.companyName.toLowerCase().includes(searchValue.toLowerCase())
+      item.companyName.toLowerCase().includes(searchValue.toLowerCase()) &&
+      // conditional rendering if else untuk filterValue
+      (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
     );
 
     const paginationConfig = {

@@ -5,19 +5,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
-const EmployeeTable = ({searchValue}) => {
-    
-    const activeButton = (
-        <Button className="active-button" type="primary" size="small" ghost>
-            active
-        </Button>
-    );
-
-    const notActiveButton = (
-        <Button className="not-active-button" type="primary" size="small" ghost>
-            not active
-        </Button>
-    );
+const EmployeeTable = ({searchValue, filterValue}) => {
 
     const columns = [
         {
@@ -40,6 +28,21 @@ const EmployeeTable = ({searchValue}) => {
           title: 'Status',
           key: 'status',
           dataIndex: 'status',
+          render: (text) => {
+            if (text === 'active') {
+              return (
+                <Button className="active-button" type="primary" size="small" value="active" ghost>
+                active
+                </Button>
+              );
+            } else {
+              return (
+                <Button className="not-active-button" type="primary" size="small" value="notActive" ghost>
+                not active
+                </Button>
+              );
+            }
+          },
         },
         {
           title: 'Action',
@@ -65,146 +68,148 @@ const EmployeeTable = ({searchValue}) => {
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '2',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '3',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '4',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '5',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '6',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '7',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '8',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '9',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '10',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '11',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '12',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '13',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '14',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '15',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '16',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '17',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '18',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '19',
           employeeName: 'John Doe',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '20',
           employeeName: 'Testing',
           nip: '199707182023092008',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
     ];
 
     // Filter data berdasarkan searchValue
     const filteredData = data.filter(item =>
-      item.employeeName.toLowerCase().includes(searchValue.toLowerCase())
+      item.employeeName.toLowerCase().includes(searchValue.toLowerCase()) &&
+      // conditional rendering if else untuk filterValue
+      (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
     );
 
     const paginationConfig = {
