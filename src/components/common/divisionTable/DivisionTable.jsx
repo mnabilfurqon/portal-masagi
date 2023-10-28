@@ -4,7 +4,7 @@ import './divisionTable.css'
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 
-const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue}) => {
+const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue}) => {
 
     const columns = [
         {
@@ -58,6 +58,17 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue}
       item.division.toLowerCase().includes(searchValue.toLowerCase())
     );
 
+    // Sort data berdasarkan sortValue
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.division.localeCompare(b.division);
+      } else if (sortValue === 'zToA') {
+        return b.division.localeCompare(a.division);
+      } else {
+        return 0;
+      }
+    });
+
     const paginationConfig = {
         pageSize: 10, // Jumlah item per halaman
         showTotal: (total, range) => (
@@ -72,7 +83,7 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue}
       <>
         <Table 
             columns={columns}
-            dataSource={filteredData}
+            dataSource={sortedData}
             pagination={paginationConfig}
             rowClassName="custom-row"  
         />

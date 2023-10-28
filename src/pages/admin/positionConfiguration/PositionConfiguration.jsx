@@ -5,7 +5,7 @@ import { Table, Space, } from "antd"
 import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
 import AddPosition from './addPosition/AddPosition'
 
-const PositionConfiguration = ({searchValue}) => {
+const PositionConfiguration = ({searchValue, sortValue}) => {
   // Table
   const columns = [
     {
@@ -46,13 +46,24 @@ const PositionConfiguration = ({searchValue}) => {
       item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
 
+    // Sort data berdasarkan sortValue
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.name.localeCompare(b.name);
+      } else if (sortValue === 'zToA') {
+        return b.name.localeCompare(a.name);
+      } else {
+        return 0;
+      }
+    });
+
   return (
     <>
       <div className='right-buttons'>
         <AddPosition />
       </div>
       <div>
-        <Table columns={columns} dataSource={filteredData} />
+        <Table columns={columns} dataSource={sortedData} />
       </div>
     </>
   )

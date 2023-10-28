@@ -11,7 +11,7 @@ import SuccessModal from '../../../components/common/successModal/SuccessModal'
 import FailedModal from '../../../components/common/failedModal/FailedModal'
 import { SuccessUpdateModal } from '../../../components/common/successModal/SuccessModal'
 
-const UserConfiguration = ({searchValue, filterValue}) => {
+const UserConfiguration = ({searchValue, filterValue, sortValue}) => {
     // // Search
     // const { Search } = Input;
     // const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -148,6 +148,17 @@ const UserConfiguration = ({searchValue, filterValue}) => {
       (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
     );
 
+    // Sort data berdasarkan sortValue
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.username.localeCompare(b.username);
+      } else if (sortValue === 'zToA') {
+        return b.username.localeCompare(a.username);
+      } else {
+        return 0;
+      }
+    });
+
     return (
         <>
         {/* <Flex horizontal gap="middle"
@@ -179,7 +190,7 @@ const UserConfiguration = ({searchValue, filterValue}) => {
               </Flex>*/}
 
         <div>
-            <Table columns={columns} dataSource={filteredData} />
+            <Table columns={columns} dataSource={sortedData} />
         </div>
 
         <div>

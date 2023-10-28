@@ -5,7 +5,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
-const EmployeeTable = ({searchValue, filterValue}) => {
+const EmployeeTable = ({searchValue, filterValue, sortValue}) => {
 
     const columns = [
         {
@@ -191,16 +191,16 @@ const EmployeeTable = ({searchValue, filterValue}) => {
         },
         {
           key: '19',
-          employeeName: 'John Doe',
+          employeeName: 'Sorting',
           nip: '199707182023092008',
-          joinDate: '08/08/2023',
+          joinDate: '06/08/2023',
           status: 'active',
         },
         {
           key: '20',
           employeeName: 'Testing',
           nip: '199707182023092008',
-          joinDate: '08/08/2023',
+          joinDate: '07/08/2023',
           status: 'active',
         },
     ];
@@ -211,6 +211,21 @@ const EmployeeTable = ({searchValue, filterValue}) => {
       // conditional rendering if else untuk filterValue
       (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
     );
+
+    // Sort data berdasarkan sortValue
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.employeeName.localeCompare(b.employeeName);
+      } else if (sortValue === 'zToA') {
+        return b.employeeName.localeCompare(a.employeeName);
+      } else if (sortValue === 'latest') {
+        return new Date(b.joinDate) - new Date(a.joinDate);
+      } else if (sortValue === 'oldest') {
+        return new Date(a.joinDate) - new Date(b.joinDate);
+      } else {
+        return 0;
+      }
+    });
 
     const paginationConfig = {
         pageSize: 10, // Jumlah item per halaman
@@ -226,7 +241,7 @@ const EmployeeTable = ({searchValue, filterValue}) => {
       <>
         <Table 
             columns={columns}
-            dataSource={filteredData}
+            dataSource={sortedData}
             pagination={paginationConfig}
             rowClassName="custom-row"  
         />

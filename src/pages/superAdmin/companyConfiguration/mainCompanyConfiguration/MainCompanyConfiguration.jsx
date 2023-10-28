@@ -4,7 +4,7 @@ import AddButton from '../../../../components/common/addButton/AddButton'
 import CompanyTable from '../../../../components/common/companyTable/CompanyTable'
 import { Link } from 'react-router-dom'
 
-const MainCompanyConfiguration = ({searchValue, filterValue}) => {
+const MainCompanyConfiguration = ({searchValue, filterValue, sortValue}) => {
 
   return (
     <div className='main-company-configuration'>
@@ -14,7 +14,7 @@ const MainCompanyConfiguration = ({searchValue, filterValue}) => {
         </Link>
       </div>
       <div className='company-table-container'>
-        <CompanyTable searchValue={searchValue} filterValue={filterValue}/>
+        <CompanyTable searchValue={searchValue} filterValue={filterValue} sortValue={sortValue} />
       </div>
     </div>
   )

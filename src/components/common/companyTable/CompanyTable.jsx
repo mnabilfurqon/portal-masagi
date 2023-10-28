@@ -5,7 +5,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
-const CompanyTable = ({ searchValue, filterValue }) => {
+const CompanyTable = ({ searchValue, filterValue, sortValue }) => {
 
     const columns = [
         {
@@ -191,26 +191,42 @@ const CompanyTable = ({ searchValue, filterValue }) => {
         },
         {
           key: '19',
-          companyName: 'PT Masagi',
+          companyName: 'Sorting',
           email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
+          joinDate: '06/08/2023',
           status: 'active',
         },
         {
           key: '20',
           companyName: 'Testing',
           email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
+          joinDate: '07/08/2023',
           status: 'active',
         },
     ];
 
     // Filter data berdasarkan searchValue
     const filteredData = data.filter(item =>
+      // conditional rendering untuk searchValue
       item.companyName.toLowerCase().includes(searchValue.toLowerCase()) &&
       // conditional rendering if else untuk filterValue
       (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
     );
+
+    // Sort data berdasarkan sortValue
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.companyName.localeCompare(b.companyName);
+      } else if (sortValue === 'zToA') {
+        return b.companyName.localeCompare(a.companyName);
+      } else if (sortValue === 'latest') {
+        return new Date(b.joinDate) - new Date(a.joinDate);
+      } else if (sortValue === 'oldest') {
+        return new Date(a.joinDate) - new Date(b.joinDate);
+      } else {
+        return 0;
+      }
+    });
 
     const paginationConfig = {
         pageSize: 10, // Jumlah item per halaman
@@ -226,7 +242,7 @@ const CompanyTable = ({ searchValue, filterValue }) => {
       <>
         <Table 
             columns={columns}
-            dataSource={filteredData}
+            dataSource={sortedData}
             pagination={paginationConfig}
             rowClassName="custom-row"  
         />

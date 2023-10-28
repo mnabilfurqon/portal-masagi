@@ -33,6 +33,14 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   }
   // end of filter handler
 
+  // sort handler
+  const [sortValue, setSortValue] = useState('');
+
+  const handleSort = (value) => {
+      setSortValue(value);
+  }
+  // end of sort handler
+
   // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
   let pageSubTitle = "";
@@ -227,12 +235,12 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
                 <div className="left-buttons">
                   <SearchBox className="search-box" onSearch={handleSearch} />
                   <FilterButton className="filter-button" onFilter={handleFilter} />
-                  <SortButton className="sort-button" />
+                  <SortButton className="sort-button" onSort={handleSort} />
                   <CountButton className="count-button" />
                 </div>
               </div>
             )}
-            {React.cloneElement(children, { searchValue, filterValue })}
+            {React.cloneElement(children, { searchValue, filterValue, sortValue })}
           </div>
         </Content>
       </Layout>

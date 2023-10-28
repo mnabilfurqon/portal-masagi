@@ -9,7 +9,7 @@ import { PiWarningCircleLight } from "react-icons/pi";
 import { paginationConfig, tabel_data } from "./constans";
 import "./roleConfigTable.css";
 
-const RoleConfigTable = ({searchValue}) => {
+const RoleConfigTable = ({searchValue, sortValue}) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
 
@@ -75,11 +75,22 @@ const RoleConfigTable = ({searchValue}) => {
     item.roleName.toLowerCase().includes(searchValue.toLowerCase())
   );
 
+  // Sort data berdasarkan sortValue
+  const sortedData = [...filteredData].sort((a, b) => {
+    if (sortValue === 'aToZ') {
+      return a.roleName.localeCompare(b.roleName);
+    } else if (sortValue === 'zToA') {
+      return b.roleName.localeCompare(a.roleName);
+    } else {
+      return 0;
+    }
+  });
+
   return (
     <>
       <Table
         columns={title}
-        dataSource={filteredData}
+        dataSource={sortedData}
         pagination={paginationConfig}
       />
       <Modal

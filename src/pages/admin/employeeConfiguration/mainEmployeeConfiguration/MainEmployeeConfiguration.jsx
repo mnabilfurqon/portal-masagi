@@ -5,7 +5,7 @@ import EmployeeTable from '../../../../components/common/employeeTable/EmployeeT
 import { Link } from 'react-router-dom'
 
 
-const MainEmployeeConfiguration = ({searchValue, filterValue}) => {
+const MainEmployeeConfiguration = ({searchValue, filterValue, sortValue}) => {
   return (
     <div className='main-employee-configuration'>
       <div className='right-buttons'>
@@ -14,7 +14,7 @@ const MainEmployeeConfiguration = ({searchValue, filterValue}) => {
         </Link>
       </div>
       <div className='employee-table-container'>
-        <EmployeeTable searchValue={searchValue} filterValue={filterValue}/>
+        <EmployeeTable searchValue={searchValue} filterValue={filterValue} sortValue={sortValue}/>
       </div>
     </div>
   )

@@ -8,7 +8,7 @@ import RoleConfigTable from "./tableRole/RoleConfigTable";
 import { Button, Input, Modal } from "antd";
 import { useState } from "react";
 
-const RoleConfig = ({searchValue}) => {
+const RoleConfig = ({searchValue, sortValue}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
@@ -116,7 +116,7 @@ const addRoleTitle = <div className="add-role-title">Add Role</div>;
       </Modal>
   </div>
       <div className="role-table-container">
-        <RoleConfigTable searchValue={searchValue} />
+        <RoleConfigTable searchValue={searchValue} sortValue={sortValue} />
       </div>
     </>
   );
