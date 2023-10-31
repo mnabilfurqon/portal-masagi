@@ -13,17 +13,24 @@ const LoginPage = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
-  const onFinish = (values) => {
-    axios
-      .post("http://127.0.0.1:5000/api/v1/auth/login", values)
-      .then((res) => {
-        console.log(res.data);
-        Cookies.set("token", res.data.token)
-        navigate("../dashboard")
-      })
-      .catch((err) => {
-        console.log(err);
+  const onFinish = async (values) => {
+    try {
+      const loginResponse = await axios.post("http://127.0.0.1:5000/api/v1/auth/login", values);
+      console.log(loginResponse.data);
+      Cookies.set("token", loginResponse.data.token);
+
+      const protectedResponse = await axios.get("http://127.0.0.1:5000/api/v1/auth/protected", {
+        headers: {
+          "Authorization": loginResponse.data.token,
+        },
       });
+      Cookies.set("role_id", protectedResponse.data.user.role_id);
+      Cookies.set("username", protectedResponse.data.user.username);
+
+      navigate("../dashboard");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
