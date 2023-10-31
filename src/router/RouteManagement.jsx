@@ -16,6 +16,8 @@ import PositionConfiguration from "../pages/admin/positionConfiguration/Position
 import DivisionConfiguration from "../pages/admin/divisionConfiguration/DivisionConfiguration";
 import MainEmployeeConfiguration from "../pages/admin/employeeConfiguration/mainEmployeeConfiguration/MainEmployeeConfiguration";
 import DetailEmployeeConfiguration from "../pages/admin/employeeConfiguration/detailEmployeeConfiguration/DetailEmployeeConfiguration";
+import AddEmployee from "../pages/admin/employeeConfiguration/addEmployee/AddEmployee";
+import AddUser from "../pages/admin/userConfiguration/addUser/AddUser";
 
 const RouteManagement = () => {
   // const token = localStorage.getItem("token");
@@ -27,7 +29,7 @@ const RouteManagement = () => {
   //   }
   // }, [token, navigate]);
 
-  let isSuperAdmin = true;
+  let isSuperAdmin = false;
 
   if (isSuperAdmin) {
     // Routing untuk Super Admin
@@ -115,105 +117,126 @@ const RouteManagement = () => {
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-        </Routes>
-        <Routes>
-          <React.Fragment>
-            <Route
-              path="/dashboard"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+            <Route path="/" element={<LoginPage />} />
+          </Routes>
+            <Routes>
+              <React.Fragment>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      
+                    </LayoutComponent>
+                  }
+                />
+                
+                {/* Company Configuration Route */}
+                <Route
+                  path="/company"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      <AdminDetailCompanyConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                  path="/company/edit-company"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      <AdminEditCompanyConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of Company Configuration Route */}
+              
+                {/* Employee Configuration Route */}
+                <Route
+                  path="/employee"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <MainEmployeeConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                path="/employee/detail-employee"
+                element={
+                  <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                    <DetailEmployeeConfiguration />
+                  </LayoutComponent>
+                }
+                />
+                <Route
+                path="/employee/add-employee"
+                element={
+                  <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                    <AddEmployee />
+                  </LayoutComponent>
+                }
+                />
+                {/* End of Employee Configuration Route */}
 
-                </LayoutComponent>
-              }
-            />
+                {/* User Configuration Route */}
+                <Route
+                  path="/user"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <UserConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                  path="/user/add-user"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <AddUser />
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of User Configuration Route */}
 
-            {/* Company Configuration Route */}
-            <Route
-              path="/company"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <AdminDetailCompanyConfiguration />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/company/edit-company"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <AdminEditCompanyConfiguration />
-                </LayoutComponent>
-              }
-            />
-            {/* End of Company Configuration Route */}
+                {/* Division Configuration Route */}
+                <Route
+                  path="/division"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <DivisionConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of Division Configuration Route */}
 
-            {/* Employee Configuration Route */}
-            <Route
-              path="/employee"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <MainEmployeeConfiguration />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/employee/detail-employee"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <DetailEmployeeConfiguration />
-                </LayoutComponent>
-              }
-            />
-            {/* End of Employee Configuration Route */}
+                {/* Role Configuration Route */}
+                <Route
+                  path="/role"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <RoleConfig/>
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                  path="/role/detail-role"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      <RoleConfigDetail/>
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of Role Configuration Route */}
 
-            <Route
-              path="/user"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <UserConfiguration />
-                </LayoutComponent>
-              }
-            />
-
-            <Route
-              path="/role"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <RoleConfig />
-                </LayoutComponent>
-              }
-            />
-
-            <Route
-              path="/role/detail-role"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <RoleConfigDetail />
-                </LayoutComponent>
-              }
-            />
-
-            {/* Division Configuration Route */}
-            <Route
-              path="/division"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <DivisionConfiguration />
-                </LayoutComponent>
-              }
-            />
-            {/* End of Division Configuration Route */}
-
-            <Route
-              path="/position"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <PositionConfiguration />
-                </LayoutComponent>
-              }
-            />
-          </React.Fragment>
-        </Routes>
+                {/* Position Configuration Route */}
+                <Route
+                  path="/position"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <PositionConfiguration/>
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of Position Configuration Route */}
+              </React.Fragment>
+            </Routes>          
       </Suspense>
     );
   }
