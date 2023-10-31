@@ -13,7 +13,7 @@ const RoleConfig = ({searchValue, sortValue, countValue}) => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
 
-const addRoleTitle = <div className="add-role-title">Add Role</div>;
+  const addRoleTitle = <div className="add-role-title">Add Role</div>;
 
   const successTitle = (
     <div className="success-title">

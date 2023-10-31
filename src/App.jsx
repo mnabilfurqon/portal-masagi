@@ -1,11 +1,13 @@
 import RouteManagement from "./router/RouteManagement";
-import "./assets/styles/global.css"
+import { useEffect } from "react";
+import "./assets/styles/global.css";
+import { useState } from "react";
 
 export const App = () => {
+  const [domLoaded, setDomLoaded] = useState(false);
 
-  return (
-    <>
-      <RouteManagement/>
-    </>
-  );
+  useEffect(() => {
+    setDomLoaded(true);
+  }, [domLoaded]);
+  return <>{domLoaded && <RouteManagement />}</>;
 };

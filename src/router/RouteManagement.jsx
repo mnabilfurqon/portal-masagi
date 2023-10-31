@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { Suspense, useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import LoginPage from "../pages/loginPage/LoginPage";
 import LoadingComponent from "../components/loadingComponent/LoadingComponent";
 import LayoutComponent from "../components/layouts/LayoutComponent";
@@ -18,33 +18,33 @@ import MainEmployeeConfiguration from "../pages/admin/employeeConfiguration/main
 import DetailEmployeeConfiguration from "../pages/admin/employeeConfiguration/detailEmployeeConfiguration/DetailEmployeeConfiguration";
 import AddEmployee from "../pages/admin/employeeConfiguration/addEmployee/AddEmployee";
 import AddUser from "../pages/admin/userConfiguration/addUser/AddUser";
+import Cookies from "js-cookie";
+import DashboardPage from "../pages/superAdmin/dashboardPage/DashboardPage";
 
 const RouteManagement = () => {
-  // const token = localStorage.getItem("token");
-  // const navigate = useNavigate();
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!token) {
-  //     navigate("/");
-  //   }
-  // }, [token, navigate]);
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
 
-  let isSuperAdmin = false;
+  let isSuperAdmin = true;
 
   if (isSuperAdmin) {
     // Routing untuk Super Admin
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-        </Routes>
-        <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <React.Fragment>
             <Route
               path="/dashboard"
               element={
                 <LayoutComponent hideButtons={true} isSuperAdmin={true}>
-
+                  <DashboardPage/>
                 </LayoutComponent>
               }
             />
@@ -117,15 +117,13 @@ const RouteManagement = () => {
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
-            <Route path="/" element={<LoginPage />} />
-          </Routes>
-            <Routes>
+            <Route path="/login" element={<LoginPage />} />
               <React.Fragment>
                 <Route
                   path="/dashboard"
                   element={
                     <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                      
+                      <DashboardPage/>
                     </LayoutComponent>
                   }
                 />

@@ -106,7 +106,7 @@ const RoleConfigTable = ({searchValue, sortValue, countValue}) => {
       <Modal
         title={deleteTitle}
         centered
-        visible={deleteModalOpen}
+        open={deleteModalOpen}
         onCancel={handleCancelButton}
         footer={[
           <Button
@@ -128,7 +128,7 @@ const RoleConfigTable = ({searchValue, sortValue, countValue}) => {
       <Modal
         title={successTitle}
         centered
-        visible={deleteSuccessModalOpen}
+        open={deleteSuccessModalOpen}
         onCancel={() => setDeleteSuccessModalOpen(false)}
         footer={null}
       >
