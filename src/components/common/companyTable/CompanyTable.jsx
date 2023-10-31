@@ -5,19 +5,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
-const CompanyTable = () => {
-    
-    const activeButton = (
-        <Button className="active-button" type="primary" size="small" ghost>
-            active
-        </Button>
-    );
-
-    const notActiveButton = (
-        <Button className="not-active-button" type="primary" size="small" ghost>
-            not active
-        </Button>
-    );
+const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
 
     const columns = [
         {
@@ -40,6 +28,21 @@ const CompanyTable = () => {
           title: 'Status',
           key: 'status',
           dataIndex: 'status',
+          render: (text) => {
+            if (text === 'active') {
+              return (
+                <Button className="active-button" type="primary" size="small" value="active" ghost>
+                active
+                </Button>
+              );
+            } else {
+              return (
+                <Button className="not-active-button" type="primary" size="small" value="notActive" ghost>
+                not active
+                </Button>
+              );
+            }
+          },
         },
         {
           title: 'Action',
@@ -65,145 +68,168 @@ const CompanyTable = () => {
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '2',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '3',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '4',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '5',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '6',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '7',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '8',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '9',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '10',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '11',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '12',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '13',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '14',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '15',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '16',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '17',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: notActiveButton,
+          status: 'notActive',
         },
         {
           key: '18',
           companyName: 'PT Masagi',
           email: 'helpdesk@masagi.co.id',
           joinDate: '08/08/2023',
-          status: activeButton,
+          status: 'active',
         },
         {
           key: '19',
-          companyName: 'PT Masagi',
+          companyName: 'Sorting',
           email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: activeButton,
+          joinDate: '06/08/2023',
+          status: 'active',
         },
         {
           key: '20',
-          companyName: 'PT Masagi',
+          companyName: 'Testing',
           email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: activeButton,
+          joinDate: '07/08/2023',
+          status: 'active',
         },
     ];
 
+    // Filter data berdasarkan searchValue
+    const filteredData = data.filter(item =>
+      // conditional rendering untuk searchValue
+      item.companyName.toLowerCase().includes(searchValue.toLowerCase()) &&
+      // conditional rendering if else untuk filterValue
+      (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
+    );
+
+    // Sort data berdasarkan sortValue
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.companyName.localeCompare(b.companyName);
+      } else if (sortValue === 'zToA') {
+        return b.companyName.localeCompare(a.companyName);
+      } else if (sortValue === 'latest') {
+        return new Date(b.joinDate) - new Date(a.joinDate);
+      } else if (sortValue === 'oldest') {
+        return new Date(a.joinDate) - new Date(b.joinDate);
+      } else {
+        return 0;
+      }
+    });
+
     const paginationConfig = {
-        pageSize: 10, // Jumlah item per halaman
+        pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
         showTotal: (total, range) => (
             <span style={{ color: '#556172' }}>
                 Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
@@ -216,7 +242,7 @@ const CompanyTable = () => {
       <>
         <Table 
             columns={columns}
-            dataSource={data}
+            dataSource={sortedData}
             pagination={paginationConfig}
             rowClassName="custom-row"  
         />

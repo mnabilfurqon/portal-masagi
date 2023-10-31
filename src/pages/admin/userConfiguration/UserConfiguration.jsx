@@ -3,7 +3,7 @@ import React from 'react'
 // import { Input } from 'antd'
 // import { Button, Dropdown } from 'antd'
 // import { InputNumber } from 'antd'
-import { Table, Tag, Space } from 'antd'
+import { Table, Tag, Space, Button } from 'antd'
 import './userConfiguration.css'
 import EditUser from './editUser/EditUser'
 import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
@@ -11,7 +11,7 @@ import SuccessModal from '../../../components/common/successModal/SuccessModal'
 import FailedModal from '../../../components/common/failedModal/FailedModal'
 import { SuccessUpdateModal } from '../../../components/common/successModal/SuccessModal'
 
-const UserConfiguration = () => {
+const UserConfiguration = ({searchValue, filterValue, sortValue, countValue }) => {
     // // Search
     // const { Search } = Input;
     // const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -86,26 +86,23 @@ const UserConfiguration = () => {
         },
         {
           title: 'Status',
-          key: 'is_active',
-          dataIndex: 'is_active',
-          render: (_, { is_active }) => (
-            <>
-              {is_active.map((status) => {
-                let color = 'green';
-                if (status === '0') {
-                  color = 'volcano';
-                  status = 'not active';
-                } else {
-                  status='active';
-                }
-                return (
-                  <Tag color={color} key={status} style={{borderRadius: 25}}>
-                    {status}
-                  </Tag>
-                );
-              })}
-            </>
-          ),
+          key: 'status',
+          dataIndex: 'status',
+          render: (text) => {
+            if (text === 'active') {
+              return (
+                <Button className="active-button" type="primary" size="small" value="active" ghost>
+                active
+                </Button>
+              );
+            } else {
+              return (
+                <Button className="not-active-button" type="primary" size="small" value="notActive" ghost>
+                not active
+                </Button>
+              );
+            }
+          },
           responsive: ["md"],
           // sorter: (record1, record2) => { return record1.is_active > record2.is_active }
         },
@@ -126,23 +123,51 @@ const UserConfiguration = () => {
           username: 'JohnBrown',
           password: "JohnB32",
           role: 'User',
-          is_active: ['1'],
+          status: 'active',
         },
         {
           key: '2',
           username: 'JimGreen',
           password: 'JimG42',
           role: 'Admin',
-          is_active: ['0'],
+          status: 'notActive',
         },
         {
           key: '3',
           username: 'JoeBlack',
           password: 'JoeB32',
           role: 'Admin',
-          is_active: ['1'],
+          status: 'active',
         },
     ];
+
+    // Filter data berdasarkan searchValue
+    const filteredData = data.filter(item =>
+      item.username.toLowerCase().includes(searchValue.toLowerCase()) &&
+      // conditional rendering if else untuk filterValue
+      (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
+    );
+
+    // Sort data berdasarkan sortValue
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.username.localeCompare(b.username);
+      } else if (sortValue === 'zToA') {
+        return b.username.localeCompare(a.username);
+      } else {
+        return 0;
+      }
+    });
+
+    const paginationConfig = {
+      pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
+      showTotal: (total, range) => (
+          <span style={{ color: '#556172' }}>
+              Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
+          </span>
+      ),
+      showLessItems: true,
+    };
 
     return (
         <>
@@ -175,7 +200,7 @@ const UserConfiguration = () => {
               </Flex>*/}
 
         <div>
-            <Table columns={columns} dataSource={data} />
+            <Table columns={columns} dataSource={sortedData} pagination={paginationConfig} />
         </div>
 
         <div>

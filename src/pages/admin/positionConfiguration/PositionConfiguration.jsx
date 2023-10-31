@@ -5,7 +5,7 @@ import { Table, Space, } from "antd"
 import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
 import AddPosition from './addPosition/AddPosition'
 
-const PositionConfiguration = () => {
+const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
   // Table
   const columns = [
     {
@@ -41,13 +41,39 @@ const PositionConfiguration = () => {
     },
 ];
 
+    // Filter data berdasarkan searchValue
+    const filteredData = data.filter(item =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    // Sort data berdasarkan sortValue
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.name.localeCompare(b.name);
+      } else if (sortValue === 'zToA') {
+        return b.name.localeCompare(a.name);
+      } else {
+        return 0;
+      }
+    });
+
+    const paginationConfig = {
+      pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
+      showTotal: (total, range) => (
+          <span style={{ color: '#556172' }}>
+              Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
+          </span>
+      ),
+      showLessItems: true,
+    };
+
   return (
     <>
       <div className='right-buttons'>
         <AddPosition />
       </div>
       <div>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={sortedData} pagination={paginationConfig} />
       </div>
     </>
   )

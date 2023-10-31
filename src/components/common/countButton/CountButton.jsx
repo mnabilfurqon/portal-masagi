@@ -1,15 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Select } from 'antd';
 import './countButton.css';
 
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
+const CountButton = ({onCount}) => {
 
-const CountButton = () => (
+  const [countValue, setCountValue] = useState('10');
+
+  const handleChange = (value) => {
+    setCountValue(value);
+    onCount(value);
+  }
+
+  return (
     <Select
       className="count-button"
       defaultValue="8"
+      value={countValue}
       onChange={handleChange}
       options={[
         {
@@ -54,5 +60,6 @@ const CountButton = () => (
         },
       ]}
     />
-);
+  )
+};
 export default CountButton;

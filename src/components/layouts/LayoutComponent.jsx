@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { HomeOutlined, BellOutlined, DownOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
@@ -15,6 +16,38 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  // search handler
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = (value) => {
+      setSearchValue(value);
+  }
+  // end of search handler
+
+  // filter handler
+  const [filterValue, setFilterValue] = useState('');
+
+  const handleFilter = (value) => {
+      setFilterValue(value);
+  }
+  // end of filter handler
+
+  // sort handler
+  const [sortValue, setSortValue] = useState('');
+
+  const handleSort = (value) => {
+      setSortValue(value);
+  }
+  // end of sort handler
+
+  // count handler
+  const [countValue, setCountValue] = useState('10');
+
+  const handleCount = (value) => {
+      setCountValue(value);
+  }
+  // end of count handler
 
   // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
@@ -208,14 +241,14 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
             {hideButtons ? null : (
               <div className="buttons-container">
                 <div className="left-buttons">
-                  <SearchBox className="search-box" />
-                  <FilterButton className="filter-button" />
-                  <SortButton className="sort-button" />
-                  <CountButton className="count-button" />
+                  <SearchBox className="search-box" onSearch={handleSearch} />
+                  <FilterButton className="filter-button" onFilter={handleFilter} />
+                  <SortButton className="sort-button" onSort={handleSort} />
+                  <CountButton className="count-button" onCount={handleCount}/>
                 </div>
               </div>
             )}
-            {children}
+            {React.cloneElement(children, { searchValue, filterValue, sortValue, countValue })}
           </div>
         </Content>
       </Layout>
