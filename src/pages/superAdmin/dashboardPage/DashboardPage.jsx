@@ -3,7 +3,7 @@ import React from 'react';
 const DashboardPage = () => {
   return (
     <>
-      <p>AKWOAKWOAKOWKA</p>
+      <p>Ini Dashboard</p>
     </>
   );
 }

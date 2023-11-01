@@ -1,11 +1,36 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Table, Button, Space } from 'antd';
 import './companyTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import moment from 'moment';
 
 const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
+  const token = Cookies.get("token");
+  const [companyData, setCompanyData] = useState([]);
+  const formatDate = (dateString) => {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
+
+  const getCompanyData = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:5000/api/v1/company/", {
+        headers: {
+          "Authorization": token,
+        },
+      });
+      setCompanyData(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getCompanyData();
+  }, []);
 
     const columns = [
         {
@@ -20,9 +45,9 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
           key: 'email',
         },
         {
-          title: 'Join Date',
-          dataIndex: 'joinDate',
-          key: 'joinDate',
+          title: 'Data Founded',
+          dataIndex: 'dateFounded',
+          key: 'dateFounded',
         },
         {
           title: 'Status',
@@ -61,149 +86,16 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
             ),
         },
     ];
-      
-    const data = [
-        {
-          key: '1',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '2',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '3',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '4',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '5',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '6',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '7',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'notActive',
-        },
-        {
-          key: '8',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'notActive',
-        },
-        {
-          key: '9',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'notActive',
-        },
-        {
-          key: '10',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '11',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '12',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '13',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '14',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'notActive',
-        },
-        {
-          key: '15',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'notActive',
-        },
-        {
-          key: '16',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'notActive',
-        },
-        {
-          key: '17',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'notActive',
-        },
-        {
-          key: '18',
-          companyName: 'PT Masagi',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '08/08/2023',
-          status: 'active',
-        },
-        {
-          key: '19',
-          companyName: 'Sorting',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '06/08/2023',
-          status: 'active',
-        },
-        {
-          key: '20',
-          companyName: 'Testing',
-          email: 'helpdesk@masagi.co.id',
-          joinDate: '07/08/2023',
-          status: 'active',
-        },
-    ];
+    
+    const data = companyData.map(item => {
+      return {
+        key: item.uuid,
+        companyName: item.company_name,
+        email: item.email_address,
+        dateFounded: formatDate(item.date_founded),
+        status: item.is_active ? 'active' : 'notActive',
+      }
+    });
 
     // Filter data berdasarkan searchValue
     const filteredData = data.filter(item =>
@@ -215,14 +107,18 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
 
     // Sort data berdasarkan sortValue
     const sortedData = [...filteredData].sort((a, b) => {
+
+      const momentA = moment(a.joinDate, 'DD/MM/YYYY');
+      const momentB = moment(b.joinDate, 'DD/MM/YYYY');
+
       if (sortValue === 'aToZ') {
         return a.companyName.localeCompare(b.companyName);
       } else if (sortValue === 'zToA') {
         return b.companyName.localeCompare(a.companyName);
       } else if (sortValue === 'latest') {
-        return new Date(b.joinDate) - new Date(a.joinDate);
+        return momentB.diff(momentA);
       } else if (sortValue === 'oldest') {
-        return new Date(a.joinDate) - new Date(b.joinDate);
+        return momentA.diff(momentB);
       } else {
         return 0;
       }

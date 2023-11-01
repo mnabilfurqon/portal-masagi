@@ -6,6 +6,8 @@ import './formTemplate.css';
 import { Link } from 'react-router-dom';
 
 const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => {
+    const [form] = Form.useForm();
+
     // Address Input
     const { TextArea } = Input;
 
@@ -13,9 +15,8 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
     const dateFormatList = 'DD/MM/YYYY';
 
     // Radio Button
-    const [valueRadio, setValue] = useState(1);
+    const [valueRadio, setValue] = useState('active');
     const onRadioChange = (e) => {
-        console.log('radio checked', e.target.value);
         setValue(e.target.value);
     };
 
@@ -23,6 +24,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
     <>
         <Form
             name="company"
+            form={form}
             className='add-company-form'
             labelCol={{
             span: 6,
@@ -37,7 +39,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
         >
             <Form.Item
             label="Company Name"
-            name="companyName"
+            name="company_name"
             colon={false}
             rules={[
                 {
@@ -65,7 +67,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
 
             <Form.Item
             label="Phone Number"
-            name="phoneNumber"
+            name="phone_number"
             colon={false}
             rules={[
                 {
@@ -79,7 +81,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
 
             <Form.Item
             label="Date Founded "
-            name="dateFounded"
+            name="date_founded"
             colon={false}
             rules={[
                 {
@@ -93,7 +95,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
 
             <Form.Item
             label="Email"
-            name="email"
+            name="email_address"
             colon={false}
             rules={[
                 {
@@ -121,7 +123,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
 
             <Form.Item
             label="Contact Person"
-            name="contactPerson"
+            name="contact_person"
             colon={false}
             rules={[
                 {
@@ -135,7 +137,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
 
             <Form.Item
             label="Contact Name"
-            name="contactName"
+            name="contact_name"
             colon={false}
             rules={[
                 {
@@ -149,7 +151,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
 
             <Form.Item
             label="Status"
-            name="status"
+            name="is_active"
             colon={false}
             rules={[
                 {
@@ -161,8 +163,8 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin}) => 
                 {/* Conditional Rendering Company Status */}
                 {isSuperAdmin ? (
                     <Radio.Group onChange={onRadioChange} value={valueRadio} className='radio-status'>
-                        <Radio value={1}>Active</Radio>
-                        <Radio value={2}>Not Active</Radio>
+                        <Radio value={true}>Active</Radio>
+                        <Radio value={false}>Not Active</Radio>
                     </Radio.Group>
                 ) : (
                     <Input disabled='true' defaultValue="Active" className='input-button'/>
