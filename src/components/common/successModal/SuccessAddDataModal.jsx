@@ -6,7 +6,7 @@ import './successAddDataModal.css';
 const SuccessAddDataModal = ({ visible, onClose, textParagraph }) => {
   return (
     <Modal
-      visible={visible}
+      open={visible}
       closable={false}
       footer={[]}
       centered={true}

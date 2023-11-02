@@ -7,12 +7,19 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
   const token = Cookies.get("token");
+  const navigate = useNavigate();
   const [companyData, setCompanyData] = useState([]);
   const formatDate = (dateString) => {
     return moment(dateString).format("DD/MM/YYYY");
+  }
+
+  const handleDetailClick = (record) => {
+    const value = record.key;
+    navigate(`/company/detail-company/${value}`);
   }
 
   const getCompanyData = async () => {
@@ -29,8 +36,11 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
   }
 
   useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
     getCompanyData();
-  }, []);
+  }, [token, navigate]);
 
     const columns = [
         {
@@ -45,9 +55,9 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
           key: 'email',
         },
         {
-          title: 'Data Founded',
-          dataIndex: 'dateFounded',
-          key: 'dateFounded',
+          title: 'Join Date',
+          dataIndex: 'joinDate',
+          key: 'joinDate',
         },
         {
           title: 'Status',
@@ -72,16 +82,14 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
         {
           title: 'Action',
           key: 'action',
-            render: () => (
+            render: (record) => (
                 <Space size="small">
-                  <Link to='/company/detail-company'>
-                    <Button className="action-button" type="primary" size="small" ghost>
-                        <AiOutlineFileSearch className="action-icon" />
-                    </Button>
-                  </Link>
-                    <Button className="action-button" type="primary" size="small" ghost>
-                        <BsPersonAdd className="action-icon" />
-                    </Button>
+                  <Button className="action-button" type="primary" size="small" ghost onClick={() => handleDetailClick(record)}>
+                      <AiOutlineFileSearch className="action-icon" />
+                  </Button>
+                  <Button className="action-button" type="primary" size="small" ghost>
+                      <BsPersonAdd className="action-icon" />
+                  </Button>
                 </Space>
             ),
         },
@@ -91,9 +99,16 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
       return {
         key: item.uuid,
         companyName: item.company_name,
-        email: item.email_address,
+        address: item.address,
+        phoneNumber: item.phone_number,
         dateFounded: formatDate(item.date_founded),
+        email: item.email_address,
+        website: item.website,
+        contactPerson: item.contact_person,
+        contactName: item.contact_name,
         status: item.is_active ? 'active' : 'notActive',
+        joinDate: formatDate(item.created_date),
+        updatedDate: formatDate(item.updated_date),
       }
     });
 

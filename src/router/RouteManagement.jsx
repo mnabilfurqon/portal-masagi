@@ -71,7 +71,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/company/detail-company"
+              path="/company/detail-company/:uuid"
               element={
                 <LayoutComponent hideButtons={true} isSuperAdmin={true}>
                   <DetailCompanyConfiguration />
@@ -79,7 +79,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/company/edit-company"
+              path="/company/edit-company/:uuid"
               element={
                 <LayoutComponent hideButtons={true} isSuperAdmin={true}>
                   <EditCompanyConfiguration />
