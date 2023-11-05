@@ -10,7 +10,7 @@ import EditCompanyConfiguration from "../pages/superAdmin/companyConfiguration/e
 import AdminDetailCompanyConfiguration from "../pages/admin/companyConfiguration/detailCompanyConfiguration/AdminDetailCompanyConfiguration";
 import AdminEditCompanyConfiguration from "../pages/admin/companyConfiguration/editCompanyConfiguration/AdminEditCompanyConfiguration";
 import UserConfiguration from "../pages/admin/userConfiguration/UserConfiguration";
-import RoleConfig from "../pages/superAdmin/roleConfig/RoleConfig";
+import RoleConfig from "../pages/superAdmin/roleConfig/addRole/RoleConfig";
 import RoleConfigDetail from "../pages/superAdmin/roleConfig/detailRole/RoleConfigDetail"
 import PositionConfiguration from "../pages/admin/positionConfiguration/PositionConfiguration";
 import DivisionConfiguration from "../pages/admin/divisionConfiguration/DivisionConfiguration";
@@ -100,7 +100,7 @@ const RouteManagement = () => {
               path="/role"
               element={
                 <LayoutComponent isSuperAdmin={true}>
-                  <RoleConfig />
+                  <RoleConfig/>
                 </LayoutComponent>
               }
             />

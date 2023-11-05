@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { HomeOutlined, BellOutlined, DownOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  BellOutlined,
+  DownOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,12 +20,6 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-  }, [token, navigate]);
-  
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
   const {
@@ -28,35 +27,35 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   } = theme.useToken();
 
   // search handler
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
 
   const handleSearch = (value) => {
-      setSearchValue(value);
-  }
+    setSearchValue(value);
+  };
   // end of search handler
 
   // filter handler
-  const [filterValue, setFilterValue] = useState('');
+  const [filterValue, setFilterValue] = useState("");
 
   const handleFilter = (value) => {
-      setFilterValue(value);
-  }
+    setFilterValue(value);
+  };
   // end of filter handler
 
   // sort handler
-  const [sortValue, setSortValue] = useState('');
+  const [sortValue, setSortValue] = useState("");
 
   const handleSort = (value) => {
-      setSortValue(value);
-  }
+    setSortValue(value);
+  };
   // end of sort handler
 
   // count handler
-  const [countValue, setCountValue] = useState('10');
+  const [countValue, setCountValue] = useState("10");
 
   const handleCount = (value) => {
-      setCountValue(value);
-  }
+    setCountValue(value);
+  };
   // end of count handler
 
   // Dropdown Profile
@@ -76,10 +75,17 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
       Cookies.remove("role_id");
       Cookies.remove("username");
       navigate("/login");
-    }
+    };
+
+    useEffect(() => {
+      if (!token) {
+        navigate("/login");
+      }
+    }, [token, navigate]);
+
     return (
       <>
-        <Dropdown menu={{ items, onClick: handlerLogout}} trigger={["click"]}>
+        <Dropdown menu={{ items, onClick: handlerLogout }} trigger={["click"]}>
           <a
             style={{
               textDecoration: "none",
@@ -112,56 +118,76 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     pageTitle = "Company";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/company/add-company") {
-    pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
-    pageSubTitle = <span style={{ color: '#17A2B8' }}>Add Company</span>;
+    pageTitle = (
+      <Link to="/company" style={{ color: "black" }}>
+        Company /{" "}
+      </Link>
+    );
+    pageSubTitle = <span style={{ color: "#17A2B8" }}>Add Company</span>;
     finalPageTitle = (
       <>
         {pageTitle}
         {pageSubTitle}
       </>
-    )
+    );
   } else if (location.pathname.includes("/company/detail-company/")) {
-    pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
-    pageSubTitle = <span style={{ color: '#17A2B8' }}>Detail Company</span>;
+    pageTitle = (
+      <Link to="/company" style={{ color: "black" }}>
+        Company /{" "}
+      </Link>
+    );
+    pageSubTitle = <span style={{ color: "#17A2B8" }}>Detail Company</span>;
     finalPageTitle = (
       <>
         {pageTitle}
         {pageSubTitle}
       </>
-    )
+    );
   } else if (location.pathname.includes("/company/edit-company/")) {
-    pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
-    pageSubTitle = <span style={{ color: '#17A2B8' }}>Edit Company</span>;
+    pageTitle = (
+      <Link to="/company" style={{ color: "black" }}>
+        Company /{" "}
+      </Link>
+    );
+    pageSubTitle = <span style={{ color: "#17A2B8" }}>Edit Company</span>;
     finalPageTitle = (
       <>
         {pageTitle}
         {pageSubTitle}
       </>
-    )
+    );
   } else if (location.pathname === "/user") {
     pageTitle = "User";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/user/add-user") {
-    pageTitle = <Link to="/user" style={{ color: 'black' }}>User / </Link>;
-    pageSubTitle = <span style={{ color: '#17A2B8' }}>User Configuration</span>;
+    pageTitle = (
+      <Link to="/user" style={{ color: "black" }}>
+        User /{" "}
+      </Link>
+    );
+    pageSubTitle = <span style={{ color: "#17A2B8" }}>User Configuration</span>;
     finalPageTitle = (
       <>
         {pageTitle}
         {pageSubTitle}
       </>
-    )
+    );
   } else if (location.pathname === "/role") {
     pageTitle = "Role";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/role/detail-role") {
-    pageTitle = <Link to="/role" style={{ color: 'black' }}>Role / </Link>;
-    pageSubTitle = <span style={{ color: '#17A2B8' }}>Detail Role</span>;
+    pageTitle = (
+      <Link to="/role" style={{ color: "black" }}>
+        Role /{" "}
+      </Link>
+    );
+    pageSubTitle = <span style={{ color: "#17A2B8" }}>Detail Role</span>;
     finalPageTitle = (
       <>
         {pageTitle}
         {pageSubTitle}
       </>
-    )
+    );
   } else if (location.pathname === "/position") {
     pageTitle = "Position";
     finalPageTitle = pageTitle;
@@ -169,23 +195,35 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     pageTitle = "Employee";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/employee/detail-employee") {
-    pageTitle = <Link to="/employee" style={{ color: 'black' }}>Employee / </Link>;
-    pageSubTitle = <span style={{ color: '#17A2B8' }}>Employee Configuration</span>;
+    pageTitle = (
+      <Link to="/employee" style={{ color: "black" }}>
+        Employee /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span style={{ color: "#17A2B8" }}>Employee Configuration</span>
+    );
     finalPageTitle = (
       <>
         {pageTitle}
         {pageSubTitle}
       </>
-    )
+    );
   } else if (location.pathname === "/employee/add-employee") {
-    pageTitle = <Link to="/employee" style={{ color: 'black' }}>Employee / </Link>;
-    pageSubTitle = <span style={{ color: '#17A2B8' }}>Employee Configuration</span>;
+    pageTitle = (
+      <Link to="/employee" style={{ color: "black" }}>
+        Employee /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span style={{ color: "#17A2B8" }}>Employee Configuration</span>
+    );
     finalPageTitle = (
       <>
         {pageTitle}
         {pageSubTitle}
       </>
-    )
+    );
   }
 
   return (
@@ -195,8 +233,8 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
         // Conditional Rendering ketika user adalah Super Admin
         <Sider
           style={{
-          background: colorBgContainer,
-          backgroundColor: "rgba(248, 249, 250, 1)",
+            background: colorBgContainer,
+            backgroundColor: "rgba(248, 249, 250, 1)",
           }}
         >
           <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
@@ -208,7 +246,11 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
             <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
               <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
-            <SubMenu key="masterData" icon={<TbDatabasePlus/>} title="Master Data">
+            <SubMenu
+              key="masterData"
+              icon={<TbDatabasePlus />}
+              title="Master Data"
+            >
               <Menu.Item key="/company">
                 <Link to="/company">Company</Link>
               </Menu.Item>
@@ -225,8 +267,8 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
         // Conditional Rendering ketika user adalah Admin
         <Sider
           style={{
-          background: colorBgContainer,
-          backgroundColor: "rgba(248, 249, 250, 1)",
+            background: colorBgContainer,
+            backgroundColor: "rgba(248, 249, 250, 1)",
           }}
         >
           <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
@@ -238,7 +280,11 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
             <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
               <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
-            <SubMenu key="masterData" icon={<TbDatabasePlus/>} title="Master Data">
+            <SubMenu
+              key="masterData"
+              icon={<TbDatabasePlus />}
+              title="Master Data"
+            >
               <Menu.Item key="/company">
                 <Link to="/company">Company</Link>
               </Menu.Item>
@@ -261,7 +307,6 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
           </Menu>
         </Sider>
       )}
-
 
       {/* Header */}
       <Layout>
@@ -314,13 +359,21 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
               <div className="buttons-container">
                 <div className="left-buttons">
                   <SearchBox className="search-box" onSearch={handleSearch} />
-                  <FilterButton className="filter-button" onFilter={handleFilter} />
+                  <FilterButton
+                    className="filter-button"
+                    onFilter={handleFilter}
+                  />
                   <SortButton className="sort-button" onSort={handleSort} />
-                  <CountButton className="count-button" onCount={handleCount}/>
+                  <CountButton className="count-button" onCount={handleCount} />
                 </div>
               </div>
             )}
-            {React.cloneElement(children, { searchValue, filterValue, sortValue, countValue })}
+            {React.cloneElement(children, {
+              searchValue,
+              filterValue,
+              sortValue,
+              countValue,
+            })}
           </div>
         </Content>
       </Layout>
