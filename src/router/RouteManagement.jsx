@@ -23,7 +23,9 @@ import DashboardPage from "../pages/superAdmin/dashboardPage/DashboardPage";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
+  const role_id = Cookies.get("role_id");
   const navigate = useNavigate();
+  let isSuperAdmin = false;
 
   useEffect(() => {
     if (!token) {
@@ -31,7 +33,9 @@ const RouteManagement = () => {
     }
   }, [token, navigate]);
 
-  let isSuperAdmin = true;
+  if (role_id === "1") {
+    isSuperAdmin = true;
+  }
 
   if (isSuperAdmin) {
     // Routing untuk Super Admin
@@ -67,7 +71,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/company/detail-company"
+              path="/company/detail-company/:uuid"
               element={
                 <LayoutComponent hideButtons={true} isSuperAdmin={true}>
                   <DetailCompanyConfiguration />
@@ -75,7 +79,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/company/edit-company"
+              path="/company/edit-company/:uuid"
               element={
                 <LayoutComponent hideButtons={true} isSuperAdmin={true}>
                   <EditCompanyConfiguration />

@@ -1,16 +1,26 @@
-import React, { useState } from "react";
-import { HomeOutlined, BellOutlined, DownOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { HomeOutlined, BellOutlined, DownOutlined, UserOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchBox from "../common/searchBox/SearchBox";
 import FilterButton from "../common/filterButton/FilterButton";
 import SortButton from "../common/SortButton/SortButton";
 import CountButton from "../common/countButton/CountButton";
 import { TbDatabasePlus } from "react-icons/tb";
+import Cookies from "js-cookie";
 import "./layoutComponent.css";
 
 const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+  
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
   const {
@@ -49,6 +59,50 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   }
   // end of count handler
 
+  // Dropdown Profile
+  const MyDropdown = () => {
+    const username = Cookies.get("username");
+    const navigate = useNavigate();
+    // the name should be "items"
+    const items = [
+      {
+        label: "Logout",
+        key: "0",
+      },
+    ];
+
+    const handlerLogout = () => {
+      Cookies.remove("token");
+      Cookies.remove("role_id");
+      Cookies.remove("username");
+      navigate("/login");
+    }
+    return (
+      <>
+        <Dropdown menu={{ items, onClick: handlerLogout}} trigger={["click"]}>
+          <a
+            style={{
+              textDecoration: "none",
+              color: "GrayText",
+            }}
+          >
+            <Space>
+              <Avatar
+                style={{ backgroundColor: "#17A2B8", verticalAlign: "middle" }}
+                size="medium"
+                gap={2}
+              >
+                <UserOutlined />
+              </Avatar>
+              {username}
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      </>
+    );
+  };
+
   // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
   let pageSubTitle = "";
@@ -66,7 +120,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     )
-  } else if (location.pathname === "/company/detail-company") {
+  } else if (location.pathname.includes("/company/detail-company/")) {
     pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
     pageSubTitle = <span style={{ color: '#17A2B8' }}>Detail Company</span>;
     finalPageTitle = (
@@ -75,7 +129,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     )
-  } else if (location.pathname === "/company/edit-company") {
+  } else if (location.pathname.includes("/company/edit-company/")) {
     pageTitle = <Link to="/company" style={{ color: 'black' }}>Company / </Link>;
     pageSubTitle = <span style={{ color: '#17A2B8' }}>Edit Company</span>;
     finalPageTitle = (
@@ -271,51 +325,6 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
         </Content>
       </Layout>
     </Layout>
-  );
-};
-
-// Dropdown Profile
-const MyDropdown = () => {
-  // the name should be "items"
-  const items = [
-    {
-      label: <Link to="">Akun 1</Link>,
-      key: "0",
-    },
-    {
-      label: <Link to="">Akun 2</Link>,
-      key: "1",
-    },
-    {
-      label: <Link to="">Akun 3</Link>,
-      key: "2",
-    },
-  ];
-
-  return (
-    <>
-      <Dropdown menu={{ items }} trigger={["click"]}>
-        <a
-          onClick={(e) => e.preventDefault()}
-          style={{
-            textDecoration: "none",
-            color: "GrayText",
-          }}
-        >
-          <Space>
-            <Avatar
-              style={{ backgroundColor: "#17A2B8", verticalAlign: "middle" }}
-              size="medium"
-              gap={2}
-            >
-              J
-            </Avatar>
-            John Doe
-            <DownOutlined />
-          </Space>
-        </a>
-      </Dropdown>
-    </>
   );
 };
 

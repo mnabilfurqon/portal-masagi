@@ -1,13 +1,18 @@
 import React from 'react'
 import './detailCompanyTable.css'
 
-const DetailCompanyTable = () => {
-  return (
-        <table className='table-container'>
+const DetailCompanyTable = ({detailCompanyData}) => {
+    if (!detailCompanyData) {
+        return null;
+    }
+
+    return (
+        <div className='table-container'>
             <table className='table-content'>
+                <tbody>
                 <tr>
                     <th>Company Name</th>
-                    <td>Mitra Solusi Aktual Integrasi</td>
+                    <td>{detailCompanyData.company_name}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -15,7 +20,7 @@ const DetailCompanyTable = () => {
                 </tr>
                 <tr>
                     <th>Address</th>
-                    <td>Point Lab Co-working Space Graha POS Lantai 2 Blok C Jalan Banda No.30 Citarum Wetan Kota Bandung Jawa Barat Indonesia</td>
+                    <td>{detailCompanyData.address}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -23,7 +28,7 @@ const DetailCompanyTable = () => {
                 </tr>
                 <tr>
                     <th>Phone Number</th>
-                    <td>022-12345678</td>
+                    <td>{detailCompanyData.phone_number}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -31,7 +36,7 @@ const DetailCompanyTable = () => {
                 </tr>
                 <tr>
                     <th>Date Founded</th>
-                    <td>05/10/2021</td>
+                    <td>{detailCompanyData.date_founded}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -39,7 +44,7 @@ const DetailCompanyTable = () => {
                 </tr>
                 <tr>
                     <th>Email</th>
-                    <td>helpdesk@masagi.co.id</td>
+                    <td>{detailCompanyData.email_address}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -47,7 +52,7 @@ const DetailCompanyTable = () => {
                 </tr>
                 <tr>
                     <th>Website</th>
-                    <td>https://masagi.co.id/</td>
+                    <td>{detailCompanyData.website}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -55,7 +60,7 @@ const DetailCompanyTable = () => {
                 </tr>
                 <tr>
                     <th>Contact Person</th>
-                    <td>081234567890</td>
+                    <td>{detailCompanyData.contact_person}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -63,7 +68,7 @@ const DetailCompanyTable = () => {
                 </tr>
                 <tr>
                     <th>Contact Name</th>
-                    <td>Suci Sukmawati</td>
+                    <td>{detailCompanyData.contact_name}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -71,10 +76,11 @@ const DetailCompanyTable = () => {
                 </tr>
                 <tr>
                     <th>Status</th>
-                    <td>Active</td>
+                    <td>{detailCompanyData.is_active ? 'Active' : 'Not Active'}</td>
                 </tr>
+                </tbody>
             </table>
-        </table>
+        </div>
   )
 }
 

@@ -6,7 +6,7 @@ import './failedAddDataModal.css'
 const FailedAddDataModal = ({ visible, onClose }) => {
   return (
     <Modal
-      visible={visible}
+      open={visible}
       closable={false}
       footer={[]}
       centered={true}
