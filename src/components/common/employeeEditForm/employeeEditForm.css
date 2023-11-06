@@ -1,0 +1,19 @@
+.edit-employee-button {
+    background-color: #629093;
+    border-color: #629093;
+    color : #ffffff;
+    border-radius: 4px;
+    width: 100px;
+}
+
+.edit-employee-button:hover {
+    background-color: #ffffff !important;
+    border-color: #629093 !important;
+    color: #629093 !important;
+}
+
+.input-id-card-address,
+.input-residence {
+    resize: none !important;
+    height: 100px;
+}

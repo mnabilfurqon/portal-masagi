@@ -200,7 +200,7 @@ const EmployeeEditForm = (props) => {
                 message: 'Please input your residence address!',
                 },
             ]}>
-                <TextArea rows={3} />
+                <TextArea rows={3} className='input-residence'/>
             </Form.Item>
             <Form.Item 
             label="ID Card Address"
@@ -211,8 +211,7 @@ const EmployeeEditForm = (props) => {
                 message: 'Please input your id card address!',
                 },
             ]}>
-                <TextArea rows={3} 
-            />
+                <TextArea rows={3} className='input-id-card-address'/>
             </Form.Item>
             <Flex 
             justify='space-between'
@@ -512,7 +511,7 @@ const EmployeeEditForm = (props) => {
             <Button
             disabled={buttonDisabled}
             onClick={handleEditButton}
-            className='submit-button'>
+            className='edit-employee-button'>
                Edit Data
             </Button>
         </Flex>

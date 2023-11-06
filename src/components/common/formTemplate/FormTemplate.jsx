@@ -21,7 +21,10 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin, edit
     };
 
     useEffect(() => {
-        if (editCompanyData) {            
+        if (editCompanyData) {     
+            if (!isSuperAdmin) {
+                editCompanyData.is_active = editCompanyData.is_active ? 'Active' : 'Not Active';
+            }       
           form.setFieldsValue({
             company_name: editCompanyData.company_name,
             address: editCompanyData.address,
@@ -185,7 +188,8 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin, edit
                                 <Radio value={false}>Not Active</Radio>
                             </Radio.Group>
                         ) : (
-                            <Input disabled='true' initialValues="Active" className='input-button'/>
+                            // Conditional Rendering Company Status when not super admin
+                            <Input disabled value={editCompanyData.is_active ? 'Active' : 'Not Active'} className='input-button'/>
                         )}
                     </Form.Item>
         
@@ -351,7 +355,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin, edit
                                 <Radio value={false}>Not Active</Radio>
                             </Radio.Group>
                         ) : (
-                            <Input disabled='true' initialValues="Active" className='input-button'/>
+                            <Input disabled value={valueRadio ? 'Active' : 'Not Active'} className='input-button'/>
                         )}
                     </Form.Item>
         
