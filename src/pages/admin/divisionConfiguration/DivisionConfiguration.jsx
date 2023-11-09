@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./divisionConfiguration.css"
 import AddButton from '../../../components/common/addButton/AddButton'
 import DivisionTable from '../../../components/common/divisionTable/DivisionTable'
@@ -7,8 +7,18 @@ import SuccessDeleteModal from '../../../components/common/successModal/SuccessD
 import AddEditModal from '../../../components/common/addEditModal/AddEditModal'
 import SuccessAddDataModal from '../../../components/common/successModal/SuccessAddDataModal'
 import FailedAddDataModal from '../../../components/common/failedModal/FailedAddDataModal'
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+  const [actionValue, setActionValue] = useState("");
+  const [uuid, setUuid] = useState("");
+  const [defaultDivisionName, setDefaultDivisionName] = useState("");
+
+  // Handler Declaration
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isSuccessDeleteModalOpen, setIsSuccessDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -16,6 +26,67 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
   const [isFailedAddDataModalOpen, setIsFailedAddDataModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSuccessEditDataModalOpen, setIsSuccessEditDataModalOpen] = useState(false);
+  const [isFailedEditDataModalOpen, setIsFailedEditDataModalOpen] = useState(false);
+
+  const handleActionValue = (e) => {
+      setActionValue(e.target.value)
+  }
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
+  // POST API for Add Division
+  const addDivision = async () => {
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/api/v1/division/", {
+        "name": actionValue,
+      }, {
+        headers: {
+          "Authorization": token,
+        },
+      });
+      setIsAddModalOpen(false);
+      setIsSuccessAddDataModalOpen(true);
+      setActionValue("");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // GET API for Selected Division
+  const getSelectedDivision = async () => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:5000/api/v1/division/${uuid}`, {
+        headers: {
+          "Authorization": token,
+        },
+      });
+      setDefaultDivisionName(response.data.name);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // PUT API for Edit Division
+  const editDivision = async () => {
+    try {
+      const response = await axios.put(`http://127.0.0.1:5000/api/v1/division/${uuid}`, {
+        "name": actionValue,
+      }, {
+        headers: {
+          "Authorization": token,
+        },
+      });
+      setIsEditModalOpen(false);
+      setIsSuccessEditDataModalOpen(true);
+      setActionValue("");
+    } catch (error) {
+      console.log(error);
+    } 
+  }
 
   // Open Delete Modal 
   const isDeleteButtonClicked = () => {
@@ -28,9 +99,21 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
   };
 
   // Open Edit Modal
-  const isEditButtonClicked = () => {
+  const isEditButtonClicked = (record) => {
+    const value = record.key;
+    setUuid(value);
     setIsEditModalOpen(true);
   };
+
+  useEffect(() => {
+    if (uuid) {
+      getSelectedDivision();
+    }
+  }, [uuid]);
+
+  useEffect(() => {
+    getSelectedDivision();
+  }, [isEditModalOpen]);
 
   // Delete Modal Handler
   const handleDeleteButtonDeleteModal = () => {
@@ -50,8 +133,11 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
 
   // Add Modal Handler
   const handleOkAddModal = () => {
-    setIsAddModalOpen(false);
-    setIsSuccessAddDataModalOpen(true);
+    if (actionValue.trim() !== "") {
+      addDivision();
+    } else {
+      setIsFailedAddDataModalOpen(true);
+    }
   }
 
   // Cancel Add Modal Handler
@@ -66,8 +152,11 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
 
   // Edit Modal Handler
   const handleOkEditModal = () => {
-    setIsEditModalOpen(false);
-    setIsSuccessEditDataModalOpen(true);
+    if (actionValue.trim() !== "") {
+      editDivision();
+    } else {
+      setIsFailedEditDataModalOpen(true);
+    }
   }
 
   // Cancel Edit Modal Handler
@@ -90,6 +179,11 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
     setIsFailedAddDataModalOpen(false);
   }
 
+  // Failed Edit Modal Handler
+  const handleOkFailedEditDataModal = () => {
+    setIsFailedEditDataModalOpen(false);
+  }
+
   return (
     <>
         <div className='right-buttons'>
@@ -103,6 +197,8 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
             textButton="Add Division"
             handleCancle={handleCancelAddModal}
             onFinishFailed={onFinishFailed}
+            actionValue={actionValue}
+            handleActionValue={handleActionValue}
             />
         </div>
         <div className='division-table-container'>
@@ -113,6 +209,8 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
             searchValue={searchValue}
             sortValue={sortValue}
             countValue={countValue}
+            isAddModalOpen={isAddModalOpen}
+            isEditModalOpen={isEditModalOpen}
             />
 
             <AddEditModal
@@ -120,10 +218,12 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
             title = "Edit Name"
             handleOk={handleOkEditModal}
             subtitle="Division"
-            placeholder="Edit Division name"
             textButton="Save"
             handleCancle={handleCancelEditModal}
             onFinishFailed={onFinishFailed}
+            defaultDivisionName={defaultDivisionName}
+            actionValue={actionValue}
+            handleActionValue={handleActionValue}
             />
 
             <DeleteModal
@@ -152,6 +252,11 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
             <FailedAddDataModal
             visible={isFailedAddDataModalOpen}
             onClose={handleOkFailedAddDataModal}
+            />
+
+            <FailedAddDataModal
+            visible={isFailedEditDataModalOpen}
+            onClose={handleOkFailedEditDataModal}
             />
       </div>
     </>
