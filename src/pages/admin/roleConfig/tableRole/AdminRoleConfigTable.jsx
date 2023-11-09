@@ -1,4 +1,4 @@
-import "./roleConfigTable.css";
+import "./adminRoleConfigTable.css";
 import React from "react";
 import { Modal, Table } from "antd";
 import { Button } from "antd";
@@ -10,7 +10,7 @@ import { PiWarningCircleLight } from "react-icons/pi";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
+const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
   const token = Cookies.get("token");
   const [roleData, setRoleData] = useState([]);
   const navigate = useNavigate();
@@ -194,4 +194,4 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
   );
 };
 
-export default RoleConfigTable;
+export default AdminRoleConfigTable;

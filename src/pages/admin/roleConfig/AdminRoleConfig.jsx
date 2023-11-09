@@ -1,17 +1,55 @@
-import "./roleConfig.css";
+import "./adminRoleConfig.css";
 import {
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
   AiOutlinePlus,
 } from "react-icons/ai";
-import RoleConfigTable from "../tableRole/RoleConfigTable";
+import RoleConfigTable from "./tableRole/AdminRoleConfigTable";
 import { Button, Input, Modal } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import AdminRoleConfigTable from "./tableRole/AdminRoleConfigTable";
 
-const RoleConfig = ({ searchValue, sortValue, countValue }) => {
+const AdminRoleConfig = ({ searchValue, sortValue, countValue }) => {
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+  const [roleName, setRoleName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
+
+  const addRole = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/v1/role/",
+        {
+          name: roleName,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setModalOpen(false);
+      setSuccessModalOpen(true);
+      setRoleName("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
+  const handleActionValue = (e) => {
+    setRoleName(e.target.value);
+  };
 
   const addRoleTitle = <div className="add-role-title">Add Role</div>;
 
@@ -30,19 +68,16 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
   );
 
   const handleAddRole = () => {
-    const operationSucceeded = false;
-
-    if (operationSucceeded) {
-      setSuccessModalOpen(true);
+    if (roleName.trim() !== "") {
+      addRole();
     } else {
       setErrorModalOpen(true);
     }
-
-    setModalOpen(false);
   };
 
   const handleViewRole = () => {
     setModalOpen(false);
+    setSuccessModalOpen(false);
   };
 
   const handleBackRole = () => {
@@ -66,7 +101,12 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
         >
           <div className="modal-container">
             <p>Role</p>
-            <Input placeholder="Employee" className="input-role" />
+            <Input
+              placeholder="Employee"
+              className="input-role"
+              value={roleName}
+              onChange={handleActionValue}
+            />
             <Button
               key="addRole"
               className="add-role-button"
@@ -115,15 +155,17 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
           </div>
         </Modal>
       </div>
+
       <div className="role-table-container">
-        <RoleConfigTable
+        <AdminRoleConfigTable
           searchValue={searchValue}
           sortValue={sortValue}
           countValue={countValue}
+          modalOpen={modalOpen}
         />
       </div>
     </>
   );
 };
 
-export default RoleConfig;
+export default AdminRoleConfig;

@@ -19,6 +19,12 @@ import "./layoutComponent.css";
 const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
 
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
@@ -76,12 +82,6 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
       Cookies.remove("username");
       navigate("/login");
     };
-
-    useEffect(() => {
-      if (!token) {
-        navigate("/login");
-      }
-    }, [token, navigate]);
 
     return (
       <>
@@ -175,7 +175,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   } else if (location.pathname === "/role") {
     pageTitle = "Role";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === "/role/detail-role") {
+  } else if (location.pathname.includes("/role/detail-role")) {
     pageTitle = (
       <Link to="/role" style={{ color: "black" }}>
         Role /{" "}
