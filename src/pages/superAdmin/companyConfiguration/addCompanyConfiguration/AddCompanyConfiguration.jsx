@@ -41,6 +41,7 @@ const AddCompanyConfiguration = () => {
 
     const handleSuccessModalClose = () => {
         setIsSuccessModalVisible(false);
+        navigate("/company");
     };
 
     const handleFailedModalClose = () => {
