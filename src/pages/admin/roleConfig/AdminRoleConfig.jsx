@@ -1,17 +1,18 @@
-import "./roleConfig.css";
+import "./adminRoleConfig.css";
 import {
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
   AiOutlinePlus,
 } from "react-icons/ai";
-import RoleConfigTable from "./tableRole/RoleConfigTable";
+import RoleConfigTable from "./tableRole/AdminRoleConfigTable";
 import { Button, Input, Modal } from "antd";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AdminRoleConfigTable from "./tableRole/AdminRoleConfigTable";
 
-const RoleConfig = ({ searchValue, sortValue, countValue }) => {
+const AdminRoleConfig = ({ searchValue, sortValue, countValue }) => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const [roleName, setRoleName] = useState("");
@@ -76,7 +77,7 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
 
   const handleViewRole = () => {
     setModalOpen(false);
-    setSuccessModalOpen(false)
+    setSuccessModalOpen(false);
   };
 
   const handleBackRole = () => {
@@ -156,7 +157,7 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
       </div>
 
       <div className="role-table-container">
-        <RoleConfigTable
+        <AdminRoleConfigTable
           searchValue={searchValue}
           sortValue={sortValue}
           countValue={countValue}
@@ -167,4 +168,4 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
   );
 };
 
-export default RoleConfig;
+export default AdminRoleConfig;

@@ -1,50 +1,54 @@
-// import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Card, Form, Input } from "antd";
 import { LogoMasagi } from "../../assets";
 import axios from "axios";
-import "./loginPage.css";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import "./loginPage.css";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
   const token = Cookies.get("token");
+  const [loginError, setLoginError] = useState(null);
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
     try {
-      const loginResponse = await axios.post("http://127.0.0.1:5000/api/v1/auth/login", values);
-      console.log(loginResponse.data);
+      const loginResponse = await axios.post(
+        "http://127.0.0.1:5000/api/v1/auth/login",
+        values
+      );
       Cookies.set("token", loginResponse.data.token);
 
-      const protectedResponse = await axios.get("http://127.0.0.1:5000/api/v1/auth/protected", {
-        headers: {
-          "Authorization": loginResponse.data.token,
-        },
-      });
+      const protectedResponse = await axios.get(
+        "http://127.0.0.1:5000/api/v1/auth/protected",
+        {
+          headers: {
+            Authorization: loginResponse.data.token,
+          },
+        }
+      );
       Cookies.set("role_id", protectedResponse.data.user.role_id);
       Cookies.set("username", protectedResponse.data.user.username);
 
       navigate("../dashboard");
     } catch (error) {
-      console.log(error);
+      setLoginError("Invalid username or password");
     }
   };
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      navigate("../dashboard")
+    if (token) {
+      navigate("../dashboard");
     }
   }, [token, navigate]);
 
   return (
     <>
       <div id="background-color">
-        <div className="form-container">
+        <Card className="form-container">
           <img className="logo-masagi" src={LogoMasagi} alt="Logo Masagi" />
           <Form
             form={form}
@@ -58,7 +62,7 @@ const LoginPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "username is required",
+                  message: "Username is required",
                 },
               ]}
             >
@@ -74,7 +78,7 @@ const LoginPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "password is required",
+                  message: "Password is required",
                 },
               ]}
             >
@@ -85,15 +89,14 @@ const LoginPage = () => {
                 className="custom-input"
               />
             </Form.Item>
-            <Form.Item shouldUpdate>
-              {() => (
-                <Button className="button-login" htmlType="submit">
-                  Masuk
-                </Button>
-              )}
+            {loginError && <div className="error-message">{loginError}</div>}
+            <Form.Item>
+              <Button className="button-login" htmlType="submit">
+                Login
+              </Button>
             </Form.Item>
           </Form>
-        </div>
+        </Card>
       </div>
     </>
   );
