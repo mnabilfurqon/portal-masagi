@@ -1,10 +1,37 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Table, Button, Space } from 'antd';
 import './divisionTable.css'
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
-const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue, countValue}) => {
+const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue, countValue, isAddModalOpen, isEditModalOpen}) => {
+  const navigate = useNavigate();
+  const token = Cookies.get('token');
+  const [divisionData, setDivisionData] = useState([]);
+
+  // API GET Division Data
+  const getDivisionData = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:5000/api/v1/division/', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setDivisionData(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+    getDivisionData();
+  }, [token, navigate, isAddModalOpen, isEditModalOpen]);
 
     const columns = [
         {
@@ -15,10 +42,10 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
         {
           title: <div className="action-title">Action</div>,
           key: 'action',
-            render: () => (
+            render: (record) => (
               <div className="action-container">
                 <Space size="medium">
-                    <Button className="action-button" type="primary" size="small" onClick={isEditButtonClicked} ghost>
+                    <Button className="action-button" type="primary" size="small" onClick={() => isEditButtonClicked(record)} ghost>
                         <BiEdit className="action-icon-edit" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" onClick={isDeleteButtonClicked} ghost>
@@ -30,28 +57,14 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
         },
     ];
       
-    const data = [
-        {
-          key: '1',
-          division: 'Human Resource',
-        },
-        {
-          key: '2',
-          division: 'Finance',
-        },
-        {
-          key: '3',
-          division: 'IT',
-        },
-        {
-          key: '4',
-          division: 'Marketing',
-        },
-        {
-          key: '5',
-          division: 'Quality Management & Research',
-        },
-    ];
+    const data = divisionData.map(item => {
+      return {
+        key: item.uuid,
+        division: item.name,
+        createdDate: item.created_date,
+        updatedDate: item.updated_date,
+      }
+    });
 
     // Filter data berdasarkan searchValue
     const filteredData = data.filter(item =>

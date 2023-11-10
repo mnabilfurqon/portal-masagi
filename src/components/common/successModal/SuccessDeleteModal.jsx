@@ -6,7 +6,7 @@ import './successDeleteModal.css';
 const SuccessDeleteModal = ({ visible, onClose }) => {
   return (
     <Modal
-      visible={visible}
+      open={visible}
       closable={false}
       footer={[]}
       centered={true}

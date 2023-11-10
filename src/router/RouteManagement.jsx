@@ -123,62 +123,62 @@ const RouteManagement = () => {
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <React.Fragment>
-            <Route
-              path="/dashboard"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <DashboardPage />
-                </LayoutComponent>
-              }
-            />
-
-            {/* Company Configuration Route */}
-            <Route
-              path="/company"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <AdminDetailCompanyConfiguration />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/company/edit-company"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <AdminEditCompanyConfiguration />
-                </LayoutComponent>
-              }
-            />
-            {/* End of Company Configuration Route */}
-
-            {/* Employee Configuration Route */}
-            <Route
-              path="/employee"
-              element={
-                <LayoutComponent isSuperAdmin={false}>
-                  <MainEmployeeConfiguration />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/employee/detail-employee"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <DetailEmployeeConfiguration />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="/employee/add-employee"
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <AddEmployee />
-                </LayoutComponent>
-              }
-            />
-            {/* End of Employee Configuration Route */}
+            <Route path="/login" element={<LoginPage />} />
+              <React.Fragment>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      <DashboardPage/>
+                    </LayoutComponent>
+                  }
+                />
+                
+                {/* Company Configuration Route */}
+                <Route
+                  path="/company"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      <AdminDetailCompanyConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                  path="/company/edit-company/:uuid"
+                  element={
+                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                      <AdminEditCompanyConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                {/* End of Company Configuration Route */}
+              
+                {/* Employee Configuration Route */}
+                <Route
+                  path="/employee"
+                  element={
+                    <LayoutComponent isSuperAdmin={false}>
+                      <MainEmployeeConfiguration />
+                    </LayoutComponent>
+                  }
+                />
+                <Route
+                path="/employee/detail-employee"
+                element={
+                  <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                    <DetailEmployeeConfiguration />
+                  </LayoutComponent>
+                }
+                />
+                <Route
+                path="/employee/add-employee"
+                element={
+                  <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                    <AddEmployee />
+                  </LayoutComponent>
+                }
+                />
+                {/* End of Employee Configuration Route */}
 
             {/* User Configuration Route */}
             <Route
