@@ -18,11 +18,11 @@ const SortButton = ({onSort}) => {
     },
     {
       key: 'latest',
-      label: 'Latest'
+      label: 'Latest Join Date'
     },
     {
       key: 'oldest',
-      label: 'Oldest'
+      label: 'Oldest Join Date'
     },
     {
       key: 'default',
@@ -38,9 +38,9 @@ const SortButton = ({onSort}) => {
     } else if (e.key === 'zToA') {
       setSortLabel('Z to A');
     } else if (e.key === 'latest') {
-      setSortLabel('Latest');
+      setSortLabel('Latest Join Date');
     } else if (e.key === 'oldest') {
-      setSortLabel('Oldest');
+      setSortLabel('Oldest Join Date');
     } else {
       setSortLabel('Sort');
     }
