@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue, countValue, isAddModalOpen, isEditModalOpen}) => {
+const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue, countValue, isAddModalOpen, isEditModalOpen, isDeleteModalOpen}) => {
   const navigate = useNavigate();
   const token = Cookies.get('token');
   const [divisionData, setDivisionData] = useState([]);
@@ -31,7 +31,7 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
       navigate('/login');
     }
     getDivisionData();
-  }, [token, navigate, isAddModalOpen, isEditModalOpen]);
+  }, [token, navigate, isAddModalOpen, isEditModalOpen, isDeleteModalOpen]);
 
     const columns = [
         {
@@ -48,7 +48,7 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
                     <Button className="action-button" type="primary" size="small" onClick={() => isEditButtonClicked(record)} ghost>
                         <BiEdit className="action-icon-edit" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={isDeleteButtonClicked} ghost>
+                    <Button className="action-button" type="primary" size="small" onClick={() => isDeleteButtonClicked(record)} ghost>
                         <MdOutlineDelete className="action-icon-delete" />
                     </Button>
                 </Space>
