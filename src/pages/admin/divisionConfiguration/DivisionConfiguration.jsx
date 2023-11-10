@@ -21,9 +21,12 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
   // Handler Declaration
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isSuccessDeleteModalOpen, setIsSuccessDeleteModalOpen] = useState(false);
+  const [isFailedDeleteModalOpen, setIsFailedDeleteModalOpen] = useState(false);
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSuccessAddDataModalOpen, setIsSuccessAddDataModalOpen] = useState(false);
   const [isFailedAddDataModalOpen, setIsFailedAddDataModalOpen] = useState(false);
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSuccessEditDataModalOpen, setIsSuccessEditDataModalOpen] = useState(false);
   const [isFailedEditDataModalOpen, setIsFailedEditDataModalOpen] = useState(false);
@@ -87,9 +90,28 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
       console.log(error);
     } 
   }
+  
+  // Delete API for Delete Division
+  const deleteDivision = async () => {
+    try {
+      const response = await axios.delete(`http://127.0.0.1:5000/api/v1/division/${uuid}`, {
+        headers: {
+          "Authorization": token,
+        },
+      });
+      console.log(response);
+      setIsDeleteModalOpen(false);
+      setIsSuccessDeleteModalOpen(true);
+    } catch (error) {
+      setIsFailedDeleteModalOpen(true);
+      console.log(error);
+    }
+  }
 
   // Open Delete Modal 
-  const isDeleteButtonClicked = () => {
+  const isDeleteButtonClicked = (record) => {
+    const value = record.key;
+    setUuid(value);
     setIsDeleteModalOpen(true);
   };
 
@@ -117,8 +139,7 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
 
   // Delete Modal Handler
   const handleDeleteButtonDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-    setIsSuccessDeleteModalOpen(true);
+    deleteDivision();
   };
 
   // Cancel Delete Modal Handler
@@ -184,6 +205,10 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
     setIsFailedEditDataModalOpen(false);
   }
 
+  const handleOkFailedDeleteDataModal = () => {
+    setIsFailedDeleteModalOpen(false);
+  }
+
   return (
     <>
         <div className='right-buttons'>
@@ -211,6 +236,7 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
             countValue={countValue}
             isAddModalOpen={isAddModalOpen}
             isEditModalOpen={isEditModalOpen}
+            isDeleteModalOpen={isDeleteModalOpen}
             />
 
             <AddEditModal
@@ -257,6 +283,11 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
             <FailedAddDataModal
             visible={isFailedEditDataModalOpen}
             onClose={handleOkFailedEditDataModal}
+            />
+
+            <FailedAddDataModal
+            visible={isFailedDeleteModalOpen}
+            onClose={handleOkFailedDeleteDataModal}
             />
       </div>
     </>
