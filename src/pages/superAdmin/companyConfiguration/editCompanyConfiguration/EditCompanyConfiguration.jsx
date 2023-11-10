@@ -38,8 +38,8 @@ const EditCompanyConfiguration = () => {
     const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
 
     const onFinish = async (values) => {
+        values.date_founded = dayjs(values.date_founded).format("YYYY-MM-DD");
         try {
-            values.date_founded = dayjs(values.date_founded, "DD/MM/YYYY").format("YYYY-MM-DD");
             const response = await axios.put(`http://127.0.0.1:5000/api/v1/company/${uuid}`, values, {
                 headers: {
                 "Authorization": token,
