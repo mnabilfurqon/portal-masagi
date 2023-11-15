@@ -194,7 +194,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   } else if (location.pathname === "/employee") {
     pageTitle = "Employee";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === "/employee/detail-employee") {
+  } else if (location.pathname.includes("/employee/detail-employee")) {
     pageTitle = (
       <Link to="/employee" style={{ color: "black" }}>
         Employee /{" "}
@@ -224,6 +224,9 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/division") {
+    pageTitle = "Division";
+    finalPageTitle = pageTitle;
   }
 
   return (

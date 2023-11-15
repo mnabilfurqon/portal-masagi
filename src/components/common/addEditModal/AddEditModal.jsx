@@ -4,7 +4,6 @@ import "./addEditModal.css"
 
 const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeholder, textButton, onFinishFailed, actionValue, handleActionValue, defaultDivisionName}) => {
     const addTitle = <div className="add-title">{title}</div>
-    console.log(defaultDivisionName)
 
     if (defaultDivisionName) {
         return (
