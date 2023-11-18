@@ -77,7 +77,6 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
           "Authorization": token,
         },
       });
-      console.log(response);
       setCompanyData(response.data.items);
       setTableParams({
         ...tableParams,
