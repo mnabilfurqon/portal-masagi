@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Select } from 'antd';
 import './countButton.css';
 
@@ -11,10 +11,13 @@ const CountButton = ({onCount}) => {
     onCount(value);
   }
 
+  useEffect(() => {
+    onCount(countValue);
+  }, [countValue, onCount]);
+
   return (
     <Select
       className="count-button"
-      defaultValue="10"
       value={countValue}
       onChange={handleChange}
       options={[
