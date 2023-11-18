@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import dayjs from 'dayjs';
+import { Spin } from 'antd';
 
 const AddCompanyConfiguration = () => {
     const token = Cookies.get("token");
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!token) {
@@ -23,8 +25,9 @@ const AddCompanyConfiguration = () => {
 
     const onFinish = async (values) => {
         try {
+            setLoading(true);
             values.date_founded = dayjs(values.date_founded, "DD/MM/YYYY").format("YYYY-MM-DD");
-            const response = await axios.post("http://127.0.0.1:5000/api/v1/company/", values, {
+            const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/company/", values, {
                 headers: {
                 "Authorization": token,
                 },
@@ -32,6 +35,8 @@ const AddCompanyConfiguration = () => {
             setIsSuccessModalVisible(true);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -50,23 +55,24 @@ const AddCompanyConfiguration = () => {
 
     return (
         <>
-        <FormTemplate
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        buttonText="Add Data"
-        isSuperAdmin={true}/>
+        <Spin spinning={loading} size='large' tip="Add Data...">
+            <FormTemplate
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            buttonText="Add Data"
+            isSuperAdmin={true}/>
 
-        <SuccessAddDataModal
-        visible={isSuccessModalVisible}
-        onClose={handleSuccessModalClose}
-        textParagraph="Data upload successful!"
-        />
+            <SuccessAddDataModal
+            visible={isSuccessModalVisible}
+            onClose={handleSuccessModalClose}
+            textParagraph="Data upload successful!"
+            />
 
-        <FailedAddDataModal
-        visible={isFailedModalVisible}
-        onClose={handleFailedModalClose}
-        />
-        
+            <FailedAddDataModal
+            visible={isFailedModalVisible}
+            onClose={handleFailedModalClose}
+            />
+        </Spin>
         </>
     )
 }
