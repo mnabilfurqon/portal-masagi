@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { BiSortAlt2 } from "react-icons/bi";
+import React, { useState } from 'react';
+import { BiSortAlt2 } from 'react-icons/bi';
 import { Button, Dropdown } from 'antd';
 import './sortButton.css';
 
@@ -13,7 +13,7 @@ const SortButton = ({onSort, items}) => {
     zToACompany: 'Z-A Company Name',
   };
 
-  const handlerSort = (e) => {
+  const handlerSort = e => {
     const value = e.key;
     onSort(value);
     setSortLabel(labelMap[value] || 'Sort');
@@ -30,6 +30,6 @@ const SortButton = ({onSort, items}) => {
           {' '}{sortLabel}{' '}
         </Button>
     </Dropdown>
-  )
+  );
 };
 export default SortButton;
