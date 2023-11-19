@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import DetailCompanyTable from '../../../../components/common/detailCompanyTable/DetailCompanyTable'
 import './adminDetailCompanyConfiguration.css'
 import axios from 'axios'
@@ -11,10 +11,12 @@ const AdminDetailCompanyConfiguration = () => {
   const navigate = useNavigate();
   const [companyProfile, setCompanyProfile] = useState([]);
   const [uuid, setUuid] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const getCompanyProfile = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/api/v1/company/profile", {
+      setLoading(true);
+      const response = await axios.get("https://attendance-1-r8738834.deta.app/api/v1/company/profile", {
         headers: {
           Authorization: token,
         },
@@ -23,6 +25,8 @@ const AdminDetailCompanyConfiguration = () => {
       setUuid(response.data.uuid);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -38,12 +42,14 @@ const AdminDetailCompanyConfiguration = () => {
   }
 
   return (
-    <div className='container'>
-        <DetailCompanyTable detailCompanyData={companyProfile} />
-        <Button type="primary" className='edit-data-button' onClick={handleEditCompanyData}>
-            Edit Data
-        </Button>
-    </div>
+    <Spin spinning={loading} size='large' tip="Get Company Data...">
+      <div className='container'>
+          <DetailCompanyTable detailCompanyData={companyProfile} />
+          <Button type="primary" className='edit-data-button' onClick={handleEditCompanyData}>
+              Edit Data
+          </Button>
+      </div>
+    </Spin>
   )
 }
 

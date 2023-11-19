@@ -1,5 +1,5 @@
 .add-button {
-    display: inline-flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -7,6 +7,7 @@
     border-radius: 4px;
     background-color: #629093;
     color: white;
+    width: 100%;
 }
 
 .add-button:hover {

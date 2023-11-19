@@ -5,11 +5,7 @@
     color: #629093;
     border: 1px solid #629093;
     border-radius: 4px;
-    width: 160px;
-}
-
-.sort-icon {
-    margin-right: 5px;
+    width: 100%;
 }
 
 .sort-button:hover {

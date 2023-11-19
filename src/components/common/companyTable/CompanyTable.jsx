@@ -10,12 +10,45 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
 const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
+  console.log(searchValue);
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const formatDate = (dateString) => {
     return moment(dateString).format("DD/MM/YYYY");
   }
+
+  // Handlre value filter button
+  const filterArray = Array.isArray(filterValue) ? filterValue : [];
+  const encodedFilterValue = filterArray.map(value => encodeURIComponent(value)).join(',');
+  // End of handler value filter button
+
+  // handle search value for status
+  if (searchValue === 'active') {
+    searchValue = 1;
+  } else if (searchValue === 'not active') {
+    searchValue = 0;
+  }
+  // end of handle search value for status
+
+  const [tableParams, setTableParams] = useState({
+    pagination : {
+      current: 1,
+      pageSize: countValue,
+      showTotal: (total, range) => (
+        <div className='total-data'>
+          {range[0]}-{range[1]} of {total} items
+        </div>
+      ),
+      showLessItems: true,
+    },
+  });
+
+  const [params, setParams] = useState({
+    page: tableParams.pagination.current,
+    per_page: tableParams.pagination.pageSize,
+  });
 
   const handleDetailClick = (record) => {
     const value = record.key;
@@ -24,14 +57,40 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
 
   const getCompanyData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/api/v1/company/", {
+      var page;
+      setLoading(true);
+      if (tableParams.pagination.total < countValue) {
+        page = 1;
+      } else {
+        page = tableParams.pagination.current;
+      }
+      const response = await axios.get("https://attendance-1-r8738834.deta.app/api/v1/company/", {
+        params: {
+          page: page,
+          per_page: countValue,
+          search: searchValue,
+          search_by: encodedFilterValue? encodedFilterValue : 'company_name',
+          desc: sortValue === 'latestJoinDate' || sortValue === 'zToACompany' ? true : false,
+          sort_by: sortValue === 'latestJoinDate' || sortValue === 'oldestJoinDate' ? 'created_date' : 'company_name',
+        },
         headers: {
           "Authorization": token,
         },
       });
+      console.log(response);
       setCompanyData(response.data.items);
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          total: response.data._meta.total_items,
+          pageSize: countValue,
+        },
+      });
     } catch (error) {
-      console.log(error);
+      console.log("Error : ", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -40,14 +99,13 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
       navigate("/login");
     }
     getCompanyData();
-  }, [token, navigate]);
+  }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
 
     const columns = [
         {
           title: 'Company Name',
           dataIndex: 'companyName',
           key: 'companyName',
-          width: 400,
         },
         {
           title: 'Email',
@@ -112,50 +170,38 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
       }
     });
 
-    // Filter data berdasarkan searchValue
-    const filteredData = data.filter(item =>
-      // conditional rendering untuk searchValue
-      item.companyName.toLowerCase().includes(searchValue.toLowerCase()) &&
-      // conditional rendering if else untuk filterValue
-      (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
-    );
-
-    // Sort data berdasarkan sortValue
-    const sortedData = [...filteredData].sort((a, b) => {
-
-      const momentA = moment(a.joinDate, 'DD/MM/YYYY');
-      const momentB = moment(b.joinDate, 'DD/MM/YYYY');
-
-      if (sortValue === 'aToZ') {
-        return a.companyName.localeCompare(b.companyName);
-      } else if (sortValue === 'zToA') {
-        return b.companyName.localeCompare(a.companyName);
-      } else if (sortValue === 'latest') {
-        return momentB.diff(momentA);
-      } else if (sortValue === 'oldest') {
-        return momentA.diff(momentB);
-      } else {
-        return 0;
+    const handleTableChange = (pagination, filters, sorter) => {
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          current: pagination.current,
+          pageSize: countValue,
+        },
+        filters,
+        ...sorter,
+      });
+  
+      setParams({
+        page: pagination.current,
+        per_page: pagination.pageSize,
+        search: searchValue,
+      });
+  
+      if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+        setCompanyData([]);
       }
-    });
-
-    const paginationConfig = {
-        pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
-        showTotal: (total, range) => (
-            <span style={{ color: '#556172' }}>
-                Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-            </span>
-        ),
-        showLessItems: true,
     };
 
     return (
       <>
         <Table 
             columns={columns}
-            dataSource={sortedData}
-            pagination={paginationConfig}
-            rowClassName="custom-row"  
+            dataSource={data}
+            pagination={tableParams.pagination}
+            loading={loading}
+            rowClassName="custom-row"
+            onChange={handleTableChange}
+            scroll={{ x: true, y: 650 }}
         />
       </>
     )
