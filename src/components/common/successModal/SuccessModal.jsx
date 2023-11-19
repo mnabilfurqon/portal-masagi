@@ -17,18 +17,18 @@ const SuccessModal = (props) => {
     
     return (
     <>
-        <Button type="none" onClick={showModal}>
+        {/* <Button type="none" onClick={props.showModal}>
           Success
-        </Button>
+        </Button> */}
         <Modal
-            open={isModalOpen}
+            open={props.isModalOpen}
             centered
             closable={false}
-            onOk={handleOk}
-            onCancel={handleCancel}
+            onOk={props.handleOk}
+            onCancel={props.handleCancel}
             footer={
                 <center>
-                <Button type="none" onClick={handleOk} className="success-button">
+                <Button type="none" onClick={props.handleOk} className="success-button">
                   OK
                 </Button>
                 </center>

@@ -159,13 +159,13 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
   } else if (location.pathname === "/user") {
     pageTitle = "User";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === "/user/add-user") {
+  } else if (location.pathname === "/employee/add-user") {
     pageTitle = (
-      <Link to="/user" style={{ color: "black" }}>
-        User /{" "}
+      <Link to="/employee" style={{ color: "black" }}>
+        Employee /{" "}
       </Link>
     );
-    pageSubTitle = <span style={{ color: "#17A2B8" }}>User Configuration</span>;
+    pageSubTitle = <span style={{ color: "#17A2B8" }}>Add User</span>;
     finalPageTitle = (
       <>
         {pageTitle}

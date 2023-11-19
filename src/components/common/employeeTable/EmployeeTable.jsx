@@ -54,7 +54,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
                   </Link>
-                  <Link to='/user/add-user'>
+                  <Link to='/employee/add-user'>
                     <Button className="action-button" type="primary" size="small" ghost>
                         <BsPersonAdd className="action-icon" />
                     </Button>

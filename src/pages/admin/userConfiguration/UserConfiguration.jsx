@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 // import { AudioOutlined } from '@ant-design/icons'
 // import { Input } from 'antd'
 // import { Button, Dropdown } from 'antd'
@@ -6,210 +6,161 @@ import React from 'react'
 import { Table, Tag, Space, Button } from 'antd'
 import './userConfiguration.css'
 import EditUser from './editUser/EditUser'
-import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
 import SuccessModal from '../../../components/common/successModal/SuccessModal'
 import FailedModal from '../../../components/common/failedModal/FailedModal'
+import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
 import { SuccessUpdateModal } from '../../../components/common/successModal/SuccessModal'
+import { useNavigate, useParams } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 
 const UserConfiguration = ({searchValue, filterValue, sortValue, countValue }) => {
-    // // Search
-    // const { Search } = Input;
-    // const onSearch = (value, _e, info) => console.log(info?.source, value);
+  // Declaration
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
 
-    // // Filter
-    // const items = [
-    //     {
-    //       key: '1',
-    //       label: (
-    //         <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-    //           Active
-    //         </a>
-    //       ),
-    //     },
-    //     {
-    //       key: '2',
-    //       label: (
-    //         <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-    //           Not Active
-    //         </a>
-    //       ),
-    //     },
-    // ];
+  const [users, setUsers] = useState([]);
+  const {showModal} = useParams();
+  const [isActive, setIsActive] = useState();
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-    // // Sort
-    // const sort = [
-    //     {
-    //       key: '1',
-    //       label: (
-    //         <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-    //           A to Z
-    //         </a>
-    //       ),
-    //     },
-    //     {
-    //       key: '2',
-    //       label: (
-    //         <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-    //           Z to A
-    //         </a>
-    //       ),
-    //     },
-    // ];
+  // Header
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+    getUsersData();
+    // setInterval(getUsersData, 1000);
+  }, [token, navigate, isAddModalOpen, isEditModalOpen, isDeleteModalOpen]);
 
-    // // View by Number
-    // const onChange = (value) => {
-    //     console.log('changed', value);
-    // };
+  // API GET Users Data
+  const getUsersData = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:5000/api/v1/users/', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setUsers(response.data[0].items);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-    // Table
-    const columns = [
-        {
-          title: 'Username',
-          dataIndex: 'username',
-          key: 'username',
-          // sorter: (record1, record2) => { return record1.username > record2.username }
-        //   render: (text) => <a>{text}</a>,
-        },
-        {
-          title: 'Password',
-          dataIndex: 'password',
-          responsive: ["sm"],
-          key: 'password',
-          // sorter: (record1, record2) => { return record1.password > record2.password }
-        },
-        {
-          title: 'Role',
-          dataIndex: 'role',
-          key: 'role',
-          responsive: ["md"],
-          // sorter: (a, b) => { return a.role > b.role }
-        },
-        {
-          title: 'Status',
-          key: 'status',
-          dataIndex: 'status',
-          render: (text) => {
-            if (text === 'active') {
-              return (
-                <Button className="active-button" type="primary" size="small" value="active" ghost>
-                active
-                </Button>
-              );
-            } else {
-              return (
-                <Button className="not-active-button" type="primary" size="small" value="notActive" ghost>
-                not active
-                </Button>
-              );
-            }
-          },
-          responsive: ["md"],
-          // sorter: (record1, record2) => { return record1.is_active > record2.is_active }
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          render: (_, record) => (
-            <Space size="small">
-              <EditUser />
-              <DeleteConfirmationDialog data="account"/>
-            </Space>
-          ),
-        },
-    ];
-    const data = [
-        {
-          key: '1',
-          username: 'JohnBrown',
-          password: "JohnB32",
-          role: 'User',
-          status: 'active',
-        },
-        {
-          key: '2',
-          username: 'JimGreen',
-          password: 'JimG42',
-          role: 'Admin',
-          status: 'notActive',
-        },
-        {
-          key: '3',
-          username: 'JoeBlack',
-          password: 'JoeB32',
-          role: 'Admin',
-          status: 'active',
-        },
-    ];
-
-    // Filter data berdasarkan searchValue
-    const filteredData = data.filter(item =>
-      item.username.toLowerCase().includes(searchValue.toLowerCase()) &&
-      // conditional rendering if else untuk filterValue
-      (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
-    );
-
-    // Sort data berdasarkan sortValue
-    const sortedData = [...filteredData].sort((a, b) => {
-      if (sortValue === 'aToZ') {
-        return a.username.localeCompare(b.username);
-      } else if (sortValue === 'zToA') {
-        return b.username.localeCompare(a.username);
-      } else {
-        return 0;
-      }
-    });
-
-    const paginationConfig = {
-      pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
-      showTotal: (total, range) => (
-          <span style={{ color: '#556172' }}>
-              Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-          </span>
+  // Table
+  const columns = [
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: 'Password',
+      dataIndex: 'password',
+      key: 'password',
+      responsive: ["sm"],
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+      responsive: ["md"],
+    },
+    {
+      title: 'Status',
+      key: 'status',
+      dataIndex: 'status',
+      responsive: ["md"],
+      render: (record) => {
+        // console.log("Status: ", record)
+        if (record) {
+          return (
+            <Button key={record.uuid} className="active-button" type="primary" size="small" value="active" ghost>
+              active
+            </Button>
+          );
+        } else {
+          return (
+            <Button key={record.uuid} className="not-active-button" type="primary" size="small" value="notActive" ghost>
+              not active
+            </Button>
+          );
+        }
+      },
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (record) => (
+        <Space size="small">
+          <EditUser uuid={(record)} onClick={setIsEditModalOpen(true)}/>
+          {/* <DeleteConfirmationDialog data="User" uuid={(record.key)}/> */}
+        </Space>
       ),
-      showLessItems: true,
-    };
+    },
+  ];
 
-    return (
-        <>
-        {/* <Flex horizontal gap="middle"
-            style={{
-                marginBottom: 20
-            }}
-            >
-            <Search
-                placeholder="Search"
-                onSearch={onSearch}
-                style={{
-                    width: 200,
-                }}
-            />
+  const data = users?.map(item => {
+    return {
+      key: item.uuid,
+      username: item.username,
+      // password: item.password,
+      status: item.is_active,
+      role: item. role_id,
+      company: item.company_id,
+      created_date: item.created_date,
+      updated_date: item.updated_date,
+    }
+  });
 
-            <Dropdown
-                menu={{ items }}
-                placement="bottom" >
-                    <Button>Filter</Button>
-            </Dropdown>
+  // Filter data berdasarkan searchValue
+  const filteredData = data?.filter(item =>
+    item.username?.toLowerCase().includes(searchValue?.toLowerCase()) &&
+    // conditional rendering if else untuk filterValue
+    (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true )
+  );
 
-            <Dropdown
-                menu={{ items }}
-                placement="bottom" >
-                    <Button>Sort</Button>
-            </Dropdown>
+  // Sort data berdasarkan sortValue
+  const sortedData = [...filteredData].sort((a, b) => {
+    if (sortValue === 'aToZ') {
+      return a.username.localeCompare(b.username);
+    } else if (sortValue === 'zToA') {
+      return b.username.localeCompare(a.username);
+    } else {
+      return 0;
+    }
+  });
 
-            <InputNumber min={1} max={100000} defaultValue={3} onChange={onChange} style={{ width:50 }}/>
-              </Flex>*/}
+  const paginationConfig = {
+    pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
+    showTotal: (total, range) => (
+      <span style={{ color: '#556172' }}>
+        Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
+      </span>
+    ),
+    showLessItems: true,
+  };
 
-        <div>
-            <Table columns={columns} dataSource={sortedData} pagination={paginationConfig} />
-        </div>
+  return (
+  <>
+    <div>
+      <Table 
+      columns={columns} 
+      // dataSource={data}
+      dataSource={sortedData} 
+      pagination={paginationConfig}
+      />
+    </div>
 
-        <div>
-          <SuccessModal action="Delete"/>
-          <FailedModal />
-          <SuccessUpdateModal />
-        </div>
-        </>
-    )
+    {/* <div>
+      <SuccessModal action="Delete"/>
+      <FailedModal />
+      <SuccessUpdateModal />
+    </div> */}
+  </>
+  )
 }
 
 export default UserConfiguration

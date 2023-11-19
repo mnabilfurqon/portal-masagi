@@ -190,9 +190,9 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/user/add-user"
+              path="/employee/add-user"
               element={
-                <LayoutComponent isSuperAdmin={false}>
+                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
                   <AddUser />
                 </LayoutComponent>
               }

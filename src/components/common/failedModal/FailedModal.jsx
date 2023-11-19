@@ -3,7 +3,7 @@ import { Button, Modal } from 'antd'
 import "./failedModal.css"
 import { VscError } from "react-icons/vsc"
 
-const FailedModal = () => {
+const FailedModal = (props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
         setIsModalOpen(true);
@@ -17,18 +17,18 @@ const FailedModal = () => {
     
     return (
     <>
-        <Button type="none" onClick={showModal}>
+        {/* <Button type="none" onClick={props.isModalOpen}>
           Failed
-        </Button>
+        </Button> */}
         <Modal
-            open={isModalOpen}
+            open={props.isModalOpen}
             centered
             closable={false}
-            onOk={handleOk}
-            onCancel={handleCancel}
+            onOk={props.handleOk}
+            onCancel={props.handleCancel}
             footer={
                 <center>
-                <Button type="none" onClick={handleOk} className="failed-button">
+                <Button type="none" onClick={props.handleOk} className="failed-button">
                   Back
                 </Button>
                 </center>

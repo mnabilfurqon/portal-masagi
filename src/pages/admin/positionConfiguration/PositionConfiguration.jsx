@@ -1,81 +1,162 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 import "./positionConfiguration.css"
-import EditPosition from './editPosition/EditPosition'
-import { Table, Space, } from "antd"
+// import { BiEdit } from "react-icons/bi";
+// import { MdOutlineDelete } from "react-icons/md";
+import { Table, Space, Button} from "antd"
 import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
+import { useNavigate } from 'react-router-dom'
+import EditPosition from './editPosition/EditPosition'
 import AddPosition from './addPosition/AddPosition'
+import SuccessModal from '../../../components/common/successModal/SuccessModal'
+import FailedModal from '../../../components/common/failedModal/FailedModal'
 
 const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
+  // Declaration
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+
+  const [positionData, setPositionData] = useState([]);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const [value, setValue] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
+  
+
+  // API GET Position Data
+  const getPositionData = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:5000/api/v1/position/', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setPositionData(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+    getPositionData();
+  }, [token, navigate, isAddModalOpen, isEditModalOpen, isDeleteModalOpen]);
+
   // Table
   const columns = [
     {
-      title: 'Nama',
+      title: 'Name',
       dataIndex: 'name',
       key: 'name',
       width: '88%',
-      // sorter: (record1, record2) => { return record1.username > record2.username }
     },
     {
       title: 'Action',
       key: 'action',
-      render: (_, record) => (
+      render: (record) => (
         <Space size="small">
-          <EditPosition />
-          <DeleteConfirmationDialog data="position"/>
+          <EditPosition uuid={(record)} />
+          <DeleteConfirmationDialog uuid={(record.key)} data="Position"/>
         </Space>
       ),
     },
   ];
-  const data = [
-    {
-      key: '1',
-      name: 'General Manager',
-    },
-    {
-      key: '2',
-      name: 'Supervisor',
-    },
-    {
-      key: '3',
-      name: 'Human Resource',
-    },
-];
 
-    // Filter data berdasarkan searchValue
-    const filteredData = data.filter(item =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
+  const data = positionData.map(item => {
+    return {
+      key: item.uuid,
+      name: item.name,
+      createdDate: item.created_date,
+      updatedDate: item.updated_date,
+    }
+  });
 
-    // Sort data berdasarkan sortValue
-    const sortedData = [...filteredData].sort((a, b) => {
-      if (sortValue === 'aToZ') {
-        return a.name.localeCompare(b.name);
-      } else if (sortValue === 'zToA') {
-        return b.name.localeCompare(a.name);
-      } else {
-        return 0;
-      }
-    });
+  // Handle Modal
+  const onClick = (record) => {
+    setOpen(true);
+  };
 
-    const paginationConfig = {
-      pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
-      showTotal: (total, range) => (
-          <span style={{ color: '#556172' }}>
-              Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-          </span>
-      ),
-      showLessItems: true,
-    };
+  const handleOk = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpen(false);
+    }, 3000);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  // Handel onChange Input
+  const handleValue = (e) => {
+    setValue(e.target.value)
+  }
+
+  // Success Modal Handle
+  const handleSuccessModalOk = () => {
+    setIsSuccessModalOpen(false);
+  };
+
+  const handleSuccessModalCancel = () => {
+    setIsSuccessModalOpen(false);
+  };
+
+  // Failed Modal Handle
+  const handleFailedModalOk = () => {
+    setIsFailedModalOpen(false);
+  };
+
+  const handleFailedModalCancel = () => {
+    setIsFailedModalOpen(false);
+  };
+
+  // Filter data berdasarkan searchValue
+  const filteredData = data.filter(item =>
+    item.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
+  // Sort data berdasarkan sortValue
+  const sortedData = [...filteredData].sort((a, b) => {
+    if (sortValue === 'aToZ') {
+      return a.name.localeCompare(b.name);
+    } else if (sortValue === 'zToA') {
+      return b.name.localeCompare(a.name);
+    } else {
+      return 0;
+    }
+  });
+
+  const paginationConfig = {
+    pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
+    showTotal: (total, range) => (
+      <span style={{ color: '#556172' }}>
+        Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
+      </span>
+    ),
+    showLessItems: true,
+  };
 
   return (
-    <>
-      <div className='right-buttons'>
-        <AddPosition />
-      </div>
-      <div>
-        <Table columns={columns} dataSource={sortedData} pagination={paginationConfig} />
-      </div>
-    </>
+  <>
+    <div className='right-buttons'>
+      <AddPosition />
+    </div>
+    <div>
+      <Table columns={columns} dataSource={sortedData} pagination={paginationConfig} />
+    </div>
+
+    {/* Modal Success and Failed for Update */}
+    <SuccessModal action="Add" handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} isModalOpen={isSuccessModalOpen} />
+    <FailedModal handleOk={handleFailedModalOk} handleCancel={handleFailedModalCancel} isModalOpen={isFailedModalOpen}/>
+  </>
   )
 }
 
