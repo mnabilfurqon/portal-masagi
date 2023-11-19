@@ -2,19 +2,46 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
     color: #629093;
     border: 1px solid #629093;
     border-radius: 4px;
-    width: 160px;
-}
-
-.filter-icon {
-    margin-right: 5px;
+    width: 100%;
 }
 
 .filter-button:hover {
     background-color: #629093 !important;
     border-color: #629093 !important;
     color: #ffffff !important;
+}
+
+.tree-filter .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.tree-filter .ant-tree-checkbox:hover .ant-tree-checkbox-inner,
+.tree-filter .ant-tree-checkbox:active .ant-tree-checkbox-inner {
+  background-color: #629093 !important;
+  border-color: #629093 !important;
+}
+
+.tree-filter {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.ant-tree-switcher {
+  display: none !important;
+}
+
+.button-reset {
+  text-align: center;
+  background-color: #629093;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 100%;
+  color: #ffffff;
+  border: 1px solid #629093;
+}
+
+.button-reset:hover {
+  background-color: #ffffff !important;
+  border-color: #629093 !important;
+  color: #629093 !important;
 }

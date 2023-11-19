@@ -26,3 +26,21 @@
 .brand {
   margin-top: 40px;
 }
+
+.page-title {
+  color: black;
+}
+
+.page-sub-title{
+  color: #17A2B8;
+}
+
+@media only screen and (max-width: 576px) {
+  .page-title {
+    font-size: 10px;
+  }
+
+  .page-sub-title {
+    font-size: 10px;
+  }
+}

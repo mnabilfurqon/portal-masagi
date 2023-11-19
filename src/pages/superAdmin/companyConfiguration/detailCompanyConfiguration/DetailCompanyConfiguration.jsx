@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import DetailCompanyTable from '../../../../components/common/detailCompanyTable/DetailCompanyTable'
 import './detailCompanyConfiguration.css'
 import { useParams, useNavigate } from 'react-router-dom'
@@ -11,10 +11,12 @@ const DetailCompanyConfiguration = () => {
   const navigate = useNavigate();
   const { uuid } = useParams();
   const [detailCompanyData, setDetailCompanyData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getSelectedCompanyData = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/${uuid}`, {
+      setLoading(true);
+      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, {
         headers: {
           "Authorization": token,
         },
@@ -23,6 +25,8 @@ const DetailCompanyConfiguration = () => {
       setDetailCompanyData(response.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -39,12 +43,14 @@ const DetailCompanyConfiguration = () => {
   }
 
   return (
-    <div className='container'>
-        <DetailCompanyTable detailCompanyData={detailCompanyData} />
-          <Button type="primary" className='edit-data-button' onClick={handleEditCompanyData}>
-              Edit Data
-          </Button>
-    </div>
+    <Spin spinning={loading} size='large' tip="Get Selected Data...">
+      <div className='container'>
+          <DetailCompanyTable detailCompanyData={detailCompanyData} />
+            <Button type="primary" className='edit-data-button' onClick={handleEditCompanyData}>
+                Edit Data
+            </Button>
+      </div>
+    </Spin>
   )
 }
 

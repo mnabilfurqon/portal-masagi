@@ -6,16 +6,21 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { Spin } from 'antd';
 
 const AdminEditCompanyConfiguration = () => {
     const token = Cookies.get("token");
     const navigate = useNavigate();
     const { uuid } = useParams();
     const [editCompanyData, setEditCompanyData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [tip, setTip] = useState("");
 
     const getSelectedCompanyData = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/${uuid}`, {
+            setLoading(true);
+            setTip("Get Company Data...");
+            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, {
                 headers: {
                   "Authorization": token,
                 },
@@ -23,6 +28,9 @@ const AdminEditCompanyConfiguration = () => {
             setEditCompanyData(response.data);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
+            setTip("");
         }
     }
 
@@ -44,8 +52,10 @@ const AdminEditCompanyConfiguration = () => {
             values.is_active = false;
         }
         try {
+            setLoading(true);
+            setTip("Save Data...");
             values.date_founded = dayjs(values.date_founded, "DD/MM/YYYY").format("YYYY-MM-DD");
-            const response = await axios.put(`http://127.0.0.1:5000/api/v1/company/${uuid}`, values, {
+            const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, values, {
                 headers: {
                 "Authorization": token,
                 },
@@ -53,6 +63,8 @@ const AdminEditCompanyConfiguration = () => {
             setIsSuccessModalVisible(true);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -71,24 +83,25 @@ const AdminEditCompanyConfiguration = () => {
 
     return (
         <>
-        <FormTemplate
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        buttonText="Save"
-        editCompanyData={editCompanyData}
-        isSuperAdmin={false}/>
+        <Spin spinning={loading} size='large' tip={tip}>
+            <FormTemplate
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            buttonText="Save"
+            editCompanyData={editCompanyData}
+            isSuperAdmin={false}/>
 
-        <SuccessAddDataModal
-        visible={isSuccessModalVisible}
-        onClose={handleSuccessModalClose}
-        textParagraph="Data upload successful!"
-        />
+            <SuccessAddDataModal
+            visible={isSuccessModalVisible}
+            onClose={handleSuccessModalClose}
+            textParagraph="Data upload successful!"
+            />
 
-        <FailedAddDataModal
-        visible={isFailedModalVisible}
-        onClose={handleFailedModalClose}
-        />
-        
+            <FailedAddDataModal
+            visible={isFailedModalVisible}
+            onClose={handleFailedModalClose}
+            />
+        </Spin>
         </>
     )
 }

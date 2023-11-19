@@ -7,35 +7,41 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import "./loginPage.css";
+import LoadingComponent from "../../components/loadingComponent/LoadingComponent";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
   const token = Cookies.get("token");
   const [loginError, setLoginError] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
     try {
+      setLoading(true);
       const loginResponse = await axios.post(
-        "http://127.0.0.1:5000/api/v1/auth/login",
+        "https://attendance-1-r8738834.deta.app/api/v1/auth/login",
         values
       );
       Cookies.set("token", loginResponse.data.token);
 
       const protectedResponse = await axios.get(
-        "http://127.0.0.1:5000/api/v1/auth/protected",
+        "https://attendance-1-r8738834.deta.app/api/v1/auth/protected",
         {
           headers: {
             Authorization: loginResponse.data.token,
           },
         }
       );
-      Cookies.set("role_id", protectedResponse.data.user.role_id);
+      Cookies.set("role_uuid", protectedResponse.data.user.role.uuid);
       Cookies.set("username", protectedResponse.data.user.username);
+      Cookies.set("company_uuid", protectedResponse.data.user.company.uuid);
 
       navigate("../dashboard");
     } catch (error) {
       setLoginError("Invalid username or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,7 +98,7 @@ const LoginPage = () => {
             {loginError && <div className="error-message">{loginError}</div>}
             <Form.Item>
               <Button className="button-login" htmlType="submit">
-                Login
+              {loading ? <LoadingComponent /> : "Login"}
               </Button>
             </Form.Item>
           </Form>

@@ -1,49 +1,37 @@
 import React, {useState} from 'react';
-import { Button, Dropdown } from 'antd';
+import { Button, Dropdown, Tree, Flex } from 'antd';
 import { BsFilter } from 'react-icons/bs'; // Import the icon
 import './filterButton.css';
 
-const FilterButton = ({onFilter}) => {
+const FilterButton = ({onFilter, treeData}) => {
+  const [checkedKeys, setCheckedKeys] = useState([]);
 
-  const [filterLabel, setFilterLabel] = useState('Filter');
+  const handleCheck = (checkedKeys) => {
+    setCheckedKeys(checkedKeys);
+    onFilter(checkedKeys);
+  };
 
-  const items = [
-    {
-      key: 'active',
-      label: 'Active',
-    },
-    {
-      key: 'notActive',
-      label: 'Not Active',
-    },
-    {
-      key: 'all',
-      label: 'All',
-    },
-  ];
-
-  const handlerFilter = (e) => {
-    const value = e.key;
-    onFilter(value);
-
-    if (e.key === 'active') {
-      setFilterLabel('Active');
-    } else if (e.key === 'notActive') {
-      setFilterLabel('Not Active');
-    } else {
-      setFilterLabel('Filter');
-    }
-};
+  const handleReset = () => {
+    setCheckedKeys([]);
+    onFilter([]);
+  }
 
   return (
     <Dropdown
-        menu={{
-          items,
-          onClick: handlerFilter,
-        }}
-        placement="bottomLeft"
+        overlay={
+          <div>
+          <Tree selectable={false} className='tree-filter' checkable checkedKeys={checkedKeys} treeData={treeData} onCheck={handleCheck} />
+              <div style={{marginTop: 5}}></div>
+              {checkedKeys.length > 0 && (
+                <Button className='button-reset' onClick={handleReset}>Reset</Button>
+              )}
+          </div>
+        }
+        placement="bottom"
       >
-        <Button className='filter-button'> <BsFilter className='filter-icon'/>{filterLabel} </Button>
+        <Flex justify='center' align='center'>
+        <Button icon={<BsFilter/>} className='filter-button'>Filter </Button>
+        </Flex>
     </Dropdown>
   );
 };
