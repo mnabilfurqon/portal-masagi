@@ -15,14 +15,16 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
   const [roleName, setRoleName] = useState('');
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
 
   const addRole = async () => {
     try {
+      setLoading(true);
       await axios.post(
-        'http://127.0.0.1:5000/api/v1/role/',
+        'https://attendance-1-r8738834.deta.app/api/v1/role/',
         {
           name: roleName,
         },
@@ -37,6 +39,8 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
       setRoleName('');
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -108,7 +112,8 @@ const RoleConfig = ({ searchValue, sortValue, countValue }) => {
             <Button
               key='addRole'
               className='add-role-button'
-              onClick={handleAddRole}>
+              onClick={handleAddRole}
+              loading={loading}>
               Add Role
             </Button>
           </div>

@@ -11,17 +11,19 @@ const RoleConfigDetail = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const { uuid } = useParams();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [detailRole, setDetailRole] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [roleName, setRoleName] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
 
   const getSelectedRole = async () => {
     try {
+      setLoading(true)
       const response = await axios.get(
-        `http://127.0.0.1:5000/api/v1/role/${uuid}`,
+        `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
         {
           headers: {
             Authorization: token,
@@ -31,13 +33,16 @@ const RoleConfigDetail = () => {
       setDetailRole(response.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false)
     }
   };
 
   const putSelectedRole = async () => {
     try {
+      setLoading(true)
       const response = await axios.put(
-        `http://127.0.0.1:5000/api/v1/role/${uuid}`,
+        `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
         {
           name: roleName,
         },
@@ -51,6 +56,8 @@ const RoleConfigDetail = () => {
       setSuccessModalOpen(true);
     } catch (error) {
       setErrorModalOpen(true);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -115,6 +122,7 @@ const RoleConfigDetail = () => {
         <Button
           className="button-input"
           onClick={isEditing ? handleSaveRole : handleEditRole}
+          loading={loading}
         >
           {isEditing ? "Save" : "Edit Role"}
         </Button>
@@ -156,6 +164,7 @@ const RoleConfigDetail = () => {
 
       <p className="permission-title">Permissions</p>
       <Tree
+        className="tree-permission"
         checkable
         defaultExpandedKeys={["0", "0"]}
         defaultSelectedKeys={["0", "0"]}
@@ -163,7 +172,7 @@ const RoleConfigDetail = () => {
         onSelect={onSelect}
         onCheck={onCheck}
         treeData={treeData}
-        className="tree-permission"
+        disabled={!isEditing}
       />
     </>
   );

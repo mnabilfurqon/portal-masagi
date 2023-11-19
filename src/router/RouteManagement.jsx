@@ -25,7 +25,7 @@ import AdminRoleConfigDetail from "../pages/admin/roleConfig/detailRole/AdminRol
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
-  const role_id = Cookies.get("role_id");
+  const role_uuid = Cookies.get("role_uuid");
   const navigate = useNavigate();
   let isSuperAdmin = false;
 
@@ -35,7 +35,7 @@ const RouteManagement = () => {
     }
   }, [token, navigate]);
 
-  if (role_id === "1") {
+  if (role_uuid === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc") {
     isSuperAdmin = true;
   }
 
@@ -163,7 +163,7 @@ const RouteManagement = () => {
                   }
                 />
                 <Route
-                path="/employee/detail-employee"
+                path="/employee/detail-employee/:uuid"
                 element={
                   <LayoutComponent hideButtons={true} isSuperAdmin={false}>
                     <DetailEmployeeConfiguration />
