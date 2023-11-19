@@ -163,7 +163,7 @@ const RouteManagement = () => {
                   }
                 />
                 <Route
-                path="/employee/detail-employee"
+                path="/employee/detail-employee/:uuid"
                 element={
                   <LayoutComponent hideButtons={true} isSuperAdmin={false}>
                     <DetailEmployeeConfiguration />

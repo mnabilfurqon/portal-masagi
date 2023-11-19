@@ -56,17 +56,17 @@ const UserConfiguration = ({searchValue, filterValue, sortValue, countValue }) =
       dataIndex: 'username',
       key: 'username',
     },
-    {
-      title: 'Password',
-      dataIndex: 'password',
-      key: 'password',
-      responsive: ["sm"],
-    },
+    // {
+    //   title: 'Password',
+    //   dataIndex: 'password',
+    //   key: 'password',
+    //   responsive: ["sm"],
+    // },
     {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      responsive: ["md"],
+      responsive: ["sm"],
     },
     {
       title: 'Status',
@@ -108,10 +108,10 @@ const UserConfiguration = ({searchValue, filterValue, sortValue, countValue }) =
       username: item.username,
       // password: item.password,
       status: item.is_active,
-      role: item. role_id,
-      company: item.company_id,
-      created_date: item.created_date,
-      updated_date: item.updated_date,
+      role: item.role.name,
+      // company: item.company.company_name,
+      // created_date: item.created_date,
+      // updated_date: item.updated_date,
     }
   });
 
