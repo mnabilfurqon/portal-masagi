@@ -103,16 +103,16 @@ const MainCompanyConfiguration = () => {
         <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
           <SearchBox onSearch={handleSearch} /> 
             </Col>
-        <Col xs={12} md={10} lg={8} xl={4} xxl={3}>
+        <Col xs={11} md={10} lg={8} xl={4} xxl={3}>
           <FilterButton onFilter={handleFilter} treeData={treeData} />
         </Col>
-        <Col xs={12} md={8} lg={8} xl={4} xxl={3}>
+        <Col xs={13} md={8} lg={8} xl={6} xxl={3}>
           <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
         </Col>
         <Col xs={8} md={4} lg={12} xl={2} xxl={2}>
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
-        <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 4}} xxl={{span: 4, offset: 6}}>
+        <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 2}} xxl={{span: 4, offset: 6}}>
           <Link to='/company/add-company'>
           <AddButton buttonText="Add Company"/>
           </Link>

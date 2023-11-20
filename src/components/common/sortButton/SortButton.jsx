@@ -11,6 +11,8 @@ const SortButton = ({onSort, items}) => {
     oldestJoinDate: 'Oldest Join Date',
     aToZCompany: 'A-Z Company Name',
     zToACompany: 'Z-A Company Name',
+    aToZDivision: 'A-Z Division Name',
+    zToADivision: 'Z-A Division Name',
   };
 
   const handlerSort = e => {
