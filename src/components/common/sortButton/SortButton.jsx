@@ -13,6 +13,8 @@ const SortButton = ({onSort, items}) => {
     zToACompany: 'Z-A Company Name',
     aToZDivision: 'A-Z Division Name',
     zToADivision: 'Z-A Division Name',
+    aToZEmployee: 'A-Z Employee Name',
+    zToAEmployee: 'Z-A Employee Name',
   };
 
   const handlerSort = e => {

@@ -1,94 +1,126 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Table, Button, Space } from 'antd';
 import './educationTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const EducationTable = ({onDetailClick}) => {
+  const [educationData, setEducationData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const token = Cookies.get('token');
+  const navigate = useNavigate();
+  const { uuid } = useParams();
+
+  const [tableParams, setTableParams] = useState({
+    pagination : {
+      current: 1,
+      pageSize: 5,
+      showTotal: (total, range) => (
+        <div className='total-data'>
+          {range[0]}-{range[1]} of {total} items
+        </div>
+      ),
+      showLessItems: true,
+    },
+  });
+
+  // API GET Education Data
+  const getEducationData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/education/employee/${uuid}`, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setEducationData(response.data.items);
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          pageSize: 5,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+    getEducationData();
+  }, [token, navigate]);
 
     const columns = [
         {
           title: 'Education',
           dataIndex: 'education',
           key: 'education',
-          width: 400,
         },
         {
           title: 'Institution',
-          dataIndex: 'institution',
-          key: 'institution',
+          dataIndex: 'institute',
+          key: 'institute',
         },
         {
           title: 'Entry Year',
-          dataIndex: 'entryYear',
-          key: 'entryYear',
+          dataIndex: 'entry_year',
+          key: 'entry_year',
+          defaultSortOrder: 'descend',
+          sorter: (a, b) => new Date(a.entry_year) - new Date(b.entry_year),
         },
         {
           title: 'Out Year',
-          key: 'outYear',
-          dataIndex: 'outYear',
+          key: 'out_year',
+          dataIndex: 'out_year',
         },
         {
           title: 'Action',
           key: 'action',
-            render: () => (
+            render: (record) => (
                 <Space size="small">
-                  <Link to='/employee/detail-employee'>
-                    <Button className="action-button" type="primary" size="small" ghost onClick={onDetailClick}>
+                    <Button className="action-button" type="primary" size="small" ghost onClick={() => onDetailClick(record)}>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                  </Link>
                 </Space>
             ),
         },
     ];
       
-    const data = [
-        {
-          key: '1',
-          education: 'Magister',
-          institution: 'Harvard University',
-          entryYear: '2023',
-          outYear: '2026',
-        },
-        {
-          key: '2',
-          education: 'Sarjana',
-          institution: 'Harvard University',
-          entryYear: '2023',
-          outYear: '2026',
-        },
-        {
-          key: '3',
-          education: 'Sekolah Menengah Atas',
-          institution: 'SMA Negeri 1 Jakarta',
-          entryYear: '2023',
-          outYear: '2026',
-        },
-        {
-          key: '4',
-          education: 'Sekolah Menengah Pertama',
-          institution: 'SMP Negeri 1 Jakarta',
-          entryYear: '2023',
-          outYear: '2026',
-        },
-        {
-          key: '5',
-          education: 'Sekolah Dasar',
-          institution: 'SD Negeri 1 Jakarta',
-          entryYear: '2023',
-          outYear: '2026',
-        },
-    ];
+    const data = educationData.map(item => {
+      return {
+        key: item.education_items.uuid,
+        education: item.education_items.education,
+        institute: item.education_items.institute,
+        major: item.education_items.major,
+        thesis: item.education_items.thesis,
+        ipk: item.education_items.ipk,
+        certificate_number: item.education_items.certificate_number,
+        entry_year: item.education_items.entry_year,
+        out_year: item.education_items.out_year,
+      }
+    });
 
-    const paginationConfig = {
-        pageSize: 10, // Jumlah item per halaman
-        showTotal: (total, range) => (
-            <span style={{ color: '#556172' }}>
-                Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-            </span>
-        ),
-        showLessItems: true,
+    const handleTableChange = (pagination, filters, sorter) => {
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          current: pagination.current,
+          pageSize: 5,
+        },
+        filters,
+        ...sorter,
+      });
+  
+      if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+        setEducationData([]);
+      }
     };
 
     return (
@@ -96,8 +128,11 @@ const EducationTable = ({onDetailClick}) => {
         <Table 
             columns={columns}
             dataSource={data}
-            pagination={paginationConfig}
+            pagination={tableParams.pagination}
             rowClassName="custom-row"  
+            loading={loading}
+            onChange={handleTableChange}
+            scroll={{ x: true, y: 650 }}
         />
       </>
     )

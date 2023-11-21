@@ -52,30 +52,30 @@ const MainCompanyConfiguration = () => {
       title: 'Company Name',
       key: 'company_name',
     },
-    {
-      title: 'Email Address',
-      key: 'email_address',
-    },
-    {
-      title: 'Address',
-      key: 'address',
-    },
-    {
-      title: 'Phone Number',
-      key: 'phone_number',
-    },
-    {
-      title: 'Website',
-      key: 'website',
-    },
-    {
-      title: 'Contact Name',
-      key: 'contact_name',
-    },
-    {
-      title: 'Contact Person',
-      key: 'contact_person',
-    },
+    // {
+    //   title: 'Email Address',
+    //   key: 'email_address',
+    // },
+    // {
+    //   title: 'Address',
+    //   key: 'address',
+    // },
+    // {
+    //   title: 'Phone Number',
+    //   key: 'phone_number',
+    // },
+    // {
+    //   title: 'Website',
+    //   key: 'website',
+    // },
+    // {
+    //   title: 'Contact Name',
+    //   key: 'contact_name',
+    // },
+    // {
+    //   title: 'Contact Person',
+    //   key: 'contact_person',
+    // },
   ];
 
   const itemsSort = [

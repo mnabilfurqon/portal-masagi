@@ -1,15 +1,33 @@
 import React, {useState} from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, DatePicker } from 'antd';
 import SubmitButton from '../submitButton/SubmitButton';
 import './educationForm.css';
+import dayjs from 'dayjs';
 
-const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
+const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editEducationData}) => {
     // Address Input
     const { TextArea } = Input;
+    const [form] = Form.useForm();
+    // Date Picker
+    const dateFormatList = 'YYYY-MM-DD';
 
-  return (
+    if (editEducationData) {
+        form.setFieldsValue({
+            education: editEducationData.education,
+            institute: editEducationData.institute,
+            major: editEducationData.major,
+            thesis: editEducationData.thesis,
+            ipk: editEducationData.ipk,
+            certificate_number: editEducationData.certificate_number,
+            entry_year: dayjs(editEducationData.entry_year, dateFormatList),
+            out_year: dayjs(editEducationData.out_year, dateFormatList),
+        })
+    }
+
+    return (
     <>
         <Form
+            form={form}
             name="education"
             className='add-education-form'
             labelCol={{
@@ -22,6 +40,10 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            initialValues={{
+                entry_year: dayjs('1970-01-01', dateFormatList),
+                out_year: dayjs('1970-01-01', dateFormatList),
+            }}
         >
             <Form.Item
             label="Education"
@@ -39,7 +61,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
 
             <Form.Item
             label="Institution"
-            name="institution"
+            name="institute"
             colon={false}
             rules={[
                 {
@@ -80,22 +102,26 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
             </Form.Item>
 
             <Form.Item
-            label="GPA"
-            name="gpa"
+            label="IPK"
+            name="ipk"
             colon={false}
             rules={[
                 {
                 required: true,
-                message: 'Please input your GPA!',
+                message: 'Please input your IPK!',
+                },
+                {
+                    pattern: /^[0-9.]+$/,
+                    message: 'Please enter a valid contact person (numbers and dot(.) only)!',
                 },
             ]}
             >
-            <Input placeholder='Enter GPA' className='input-button'/>
+            <Input placeholder='Enter IPK' className='input-button'/>
             </Form.Item>
 
             <Form.Item
             label="Certificate Number"
-            name="certificateNumber"
+            name="certificate_number"
             colon={false}
             rules={[
                 {
@@ -109,7 +135,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
 
             <Form.Item
             label="Entry Year"
-            name="entryYear"
+            name="entry_year"
             colon={false}
             rules={[
                 {
@@ -118,12 +144,12 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
                 },
             ]}
             >
-            <Input placeholder='Enter Year' className='input-button'/>
+            <DatePicker placeholder='YYYY-MM-DD' format={dateFormatList} className='date-picker'/>
             </Form.Item>
 
             <Form.Item
             label="Out Year"
-            name="outYear"
+            name="out_year"
             colon={false}
             rules={[
                 {
@@ -132,7 +158,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
                 },
             ]}
             >
-            <Input placeholder='Enter Year' className='input-button'/>
+            <DatePicker placeholder='YYYY-MM-DD' format={dateFormatList} className='date-picker'/>
             </Form.Item>
 
             <Form.Item
@@ -141,7 +167,9 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
                 <Button type="text" onClick={onCancleEditFormButton}>
                     Cancel
                 </Button>
-                <SubmitButton buttonText="Save"/>
+                {editEducationData ? <SubmitButton buttonText="Edit"/> :
+                <SubmitButton buttonText="Add"/>
+                }
             </div>
             </Form.Item>
         </Form>

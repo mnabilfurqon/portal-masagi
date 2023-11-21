@@ -1,13 +1,18 @@
 import React from 'react'
 import './detailEducationTable.css'
 
-const DetailEducationTable = () => {
-  return (
-        <table className='table-container'>
+const DetailEducationTable = ({detailEducationData}) => {
+    if (!detailEducationData) {
+        return null;
+    }
+
+    return (
+        <div className='table-container'>
             <table className='table-content'>
+                <tbody>
                 <tr>
                     <th>Education</th>
-                    <td>Magister</td>
+                    <td>{detailEducationData.education}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -15,7 +20,7 @@ const DetailEducationTable = () => {
                 </tr>
                 <tr>
                     <th>Institution</th>
-                    <td>Harvard University</td>
+                    <td>{detailEducationData.institute}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -23,7 +28,7 @@ const DetailEducationTable = () => {
                 </tr>
                 <tr>
                     <th>Major</th>
-                    <td>Computer Science</td>
+                    <td>{detailEducationData.major}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -31,7 +36,7 @@ const DetailEducationTable = () => {
                 </tr>
                 <tr>
                     <th>Thesis</th>
-                    <td>Smart City with IOT</td>
+                    <td>{detailEducationData.thesis}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -39,7 +44,7 @@ const DetailEducationTable = () => {
                 </tr>
                 <tr>
                     <th>GPA</th>
-                    <td>3.99</td>
+                    <td>{detailEducationData.ipk}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -47,7 +52,7 @@ const DetailEducationTable = () => {
                 </tr>
                 <tr>
                     <th>Certificate Number</th>
-                    <td>118993-H4-D/13919-411</td>
+                    <td>{detailEducationData.certificate_number}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -55,7 +60,7 @@ const DetailEducationTable = () => {
                 </tr>
                 <tr>
                     <th>Entry Year</th>
-                    <td>2023</td>
+                    <td>{detailEducationData.entry_year}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -63,10 +68,11 @@ const DetailEducationTable = () => {
                 </tr>
                 <tr>
                     <th>Out Year</th>
-                    <td>2026</td>
+                    <td>{detailEducationData.out_year}</td>
                 </tr>
+                </tbody>
             </table>
-        </table>
+        </div>
   )
 }
 
