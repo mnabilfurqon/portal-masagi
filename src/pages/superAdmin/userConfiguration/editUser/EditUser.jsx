@@ -11,7 +11,6 @@ import FailedModal from '../../../../components/common/failedModal/FailedModal'
 const editUser = (props) => {
   // Declaration
   const token = Cookies.get("token");
-  const company_uuid = Cookies.get("company_uuid");
   const navigate = useNavigate();
   
   const [uuid, setUuid] = useState('');
@@ -32,6 +31,10 @@ const editUser = (props) => {
 
   // Modal Edit Handler
   const showModal = () => {
+    setUuid(props.uuid.key);
+    console.log("1. update on ", key);
+    console.log("2. update on ", uuid);
+
     setOpen(true);
     getUser();
   };
@@ -41,9 +44,8 @@ const editUser = (props) => {
   // GET API User by Id
   const getUser = async () => {
     try {
-      // console.log("uuid: ", key)
-      // console.log("company_uuid: ", company_uuid)
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, {
+      console.log("uuid: ", key)
+      const response = await axios.get(`http://127.0.0.1:5000/api/v1/users/${key}`, {
           headers: { Authorization: token },
         }
       );
@@ -81,7 +83,7 @@ const editUser = (props) => {
   // GET API Roles
   const getRoles = async () => {
     try {
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
+      const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
           headers: { Authorization: token },
         }
       );
@@ -94,15 +96,13 @@ const editUser = (props) => {
   // PUT API to Update User
   const updateUser = async (event, values) => {
     try {
-      // event.preventDefault();
+      event.preventDefault();
       console.log(values);
-      console.log("Update to ", username, isActive, role, company_uuid);
-      const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/users/${uuid}`, 
+      const response = await axios.put(`http://127.0.0.1:5000/api/v1/users/${uuid}`, 
         {
           "username": username,
-          "role_uuid": role,
+          "role_id": role,
           "is_active": isActive,
-          "company_uuid": company_uuid,
         }, 
         {
           headers: { Authorization: token },
@@ -191,7 +191,7 @@ const editUser = (props) => {
             <Select defaultValue={role} value={role} onChange={handleChangeRole}>
               {roles?.map(role => {
                 return (
-                  <Select.Option key={(role.uuid)} value={(role.uuid)}>{(role.name)}</Select.Option>
+                  <Select.Option key={(role.uuid)} value={(role.id)}>{(role.name)}</Select.Option>
                 );
               })}
             </Select>

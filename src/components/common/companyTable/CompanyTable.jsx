@@ -55,6 +55,11 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
     navigate(`/company/detail-company/${value}`);
   }
 
+  const handleAddUserClick = (record) => {
+    const value = record.key;
+    navigate(`/company/add-user/${value}`);
+  }
+
   const getCompanyData = async () => {
     try {
       var page;
@@ -145,7 +150,7 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
                   <Button className="action-button" type="primary" size="small" ghost onClick={() => handleDetailClick(record)}>
                       <AiOutlineFileSearch className="action-icon" />
                   </Button>
-                  <Button className="action-button" type="primary" size="small" ghost>
+                  <Button className="action-button" type="primary" size="small" ghost onClick={() => handleAddUserClick(record)}>
                       <BsPersonAdd className="action-icon" />
                   </Button>
                 </Space>

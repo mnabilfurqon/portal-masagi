@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './addUser.css'
 import { Form, Input, Radio, Select, Flex, Button } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import SubmitButton from '../../../../components/common/submitButton/SubmitButton'
 import SuccessAddDataModal from '../../../../components/common/successModal/SuccessAddDataModal'
 import FailedAddDataModal from '../../../../components/common/failedModal/FailedAddDataModal'
@@ -12,9 +12,9 @@ import axios from 'axios'
 const AddUser = () => {
     // Declaration
     const token = Cookies.get("token");
-    const cookies = Cookies.get();
+    const company = useParams();
     const navigate = useNavigate();
-
+    
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('horizontal');
     const [requiredMark, setRequiredMarkType] = useState('optional');
@@ -27,8 +27,8 @@ const AddUser = () => {
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [status, setStatus] = useState(true);
-    const [company, setCompany] = useState("");
-    const company_uuid = Cookies.get("company_uuid");
+    // const [company, setCompany] = useState("");
+    // const company_uuid = Cookies.get("company_uuid");
 
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
     const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
@@ -40,9 +40,8 @@ const AddUser = () => {
         }
         getRoles();
         console.log(token)
-        console.log(company_uuid)
-        setCompany(company_uuid)
-        console.log(cookies)
+        console.log(company)
+        // setCompany(company_uuid)
         // console.log(company)
     }, [token, navigate]);
 
@@ -112,7 +111,7 @@ const AddUser = () => {
                 'password': values.password,
                 'role_uuid': values.role_uuid,
                 'is_active': values.is_active,
-                'company_uuid': company_uuid,
+                'company_uuid': company.uuid,
             }, 
             {
                 headers: { Authorization: token, },
@@ -153,7 +152,7 @@ const AddUser = () => {
             // is_active: status,
             // role_id: role,
           }}
-          autoComplete="off"
+          autoComplete='off'
         >
             <Form.Item
             label="Username"
@@ -223,13 +222,13 @@ const AddUser = () => {
                 </Radio.Group>
             </Form.Item>
             <Form.Item
-            // label="Company"
+            label="Company"
             labelAlign='left'
             name="company_uuid"
             colon={false}
             disabled
             >
-                <Input value={company} disabled bordered={false} />
+                <Input value={company.uuid} disabled bordered={true} />
             </Form.Item>
             <Flex justify='end' className='action'>
             <Form.Item>

@@ -68,14 +68,17 @@ const AddPosition = () => {
   // Add Position to API
   const addPosition = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/v1/position/", {
+      const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/position/", {
         'name': value,
       });
-      setIsModalOpen(false);
-      setIsSuccessModalOpen(true);
-      setValue("");
-      console.log(value);
-      console.log(response, " added");
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setIsModalOpen(false);
+        setIsSuccessModalOpen(true);
+        setValue("");
+        console.log("New position added!");
+      }, 3000);
     } catch (error) {
       console.log(error);
     }

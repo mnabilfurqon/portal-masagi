@@ -118,6 +118,9 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname.includes('/company/add-user/')) {
+    pageTitle = 'User Configuration';
+    finalPageTitle = pageTitle;
   } else if (location.pathname === '/user') {
     pageTitle = 'User';
     finalPageTitle = pageTitle;

@@ -16,6 +16,7 @@ const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
   // Declaration
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [positionData, setPositionData] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -31,7 +32,7 @@ const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
   // API GET Position Data
   const getPositionData = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/api/v1/position/', {
+      const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/position/', {
         headers: {
           Authorization: token,
         }
@@ -118,39 +119,47 @@ const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
     setIsFailedModalOpen(false);
   };
 
-  // Filter data berdasarkan searchValue
-  const filteredData = data.filter(item =>
-    item.name.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  // // Filter data berdasarkan searchValue
+  // const filteredData = data.filter(item =>
+  //   item.name.toLowerCase().includes(searchValue.toLowerCase())
+  // );
 
-  // Sort data berdasarkan sortValue
-  const sortedData = [...filteredData].sort((a, b) => {
-    if (sortValue === 'aToZ') {
-      return a.name.localeCompare(b.name);
-    } else if (sortValue === 'zToA') {
-      return b.name.localeCompare(a.name);
-    } else {
-      return 0;
-    }
-  });
+  // // Sort data berdasarkan sortValue
+  // const sortedData = [...filteredData].sort((a, b) => {
+  //   if (sortValue === 'aToZ') {
+  //     return a.name.localeCompare(b.name);
+  //   } else if (sortValue === 'zToA') {
+  //     return b.name.localeCompare(a.name);
+  //   } else {
+  //     return 0;
+  //   }
+  // });
 
-  const paginationConfig = {
-    pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
-    showTotal: (total, range) => (
-      <span style={{ color: '#556172' }}>
-        Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-      </span>
-    ),
-    showLessItems: true,
-  };
+  // const paginationConfig = {
+  //   pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
+  //   showTotal: (total, range) => (
+  //     <span style={{ color: '#556172' }}>
+  //       Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
+  //     </span>
+  //   ),
+  //   showLessItems: true,
+  // };
 
   return (
   <>
-    <div className='right-buttons'>
+    <div>
       <AddPosition />
     </div>
+    <br />
+
     <div>
-      <Table columns={columns} dataSource={sortedData} pagination={paginationConfig} />
+      <Table 
+      columns={columns} 
+      dataSource={data} 
+      loading={loading}
+      // dataSource={sortedData} 
+      // pagination={paginationConfig} 
+      />
     </div>
 
     {/* Modal Success and Failed for Update */}

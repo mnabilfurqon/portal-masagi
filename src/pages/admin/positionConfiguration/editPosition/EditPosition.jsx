@@ -29,7 +29,7 @@ const EditPosition = (props) => {
     const key = props.uuid.key;
     setValue(props.uuid.name);
 
-    console.log(key, value);
+    // console.log(key, value);
     setUuid(key);
     setOpen(true);
   };
@@ -57,15 +57,20 @@ const EditPosition = (props) => {
   const updatePosition = async (event) => {
     try {
       event.preventDefault();
-      console.log(value);
-      const response = await axios.put(`http://127.0.0.1:5000/api/v1/position/${uuid}`, {
+      // console.log(value);
+      const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/position/${uuid}`, {
           name: value,
         }, {
           headers: { Authorization: token },
         }
       );
-      setOpen(false);
-      setIsSuccessModalOpen(true);
+      setLoading(true); 
+      setTimeout(() => {
+        setOpen(false);
+        setLoading(false);
+        setIsSuccessModalOpen(true);
+        console.log("Position updated!");
+      }, 3000);
     } catch (error) {
       console.log(error);
       setOpen(false);
@@ -144,7 +149,7 @@ const EditPosition = (props) => {
       </Modal>
 
       {/* Modal Success and Failed */}
-      <SuccessModal action="Add" handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} isModalOpen={isSuccessModalOpen} />
+      <SuccessModal action="Update" handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} isModalOpen={isSuccessModalOpen} />
       <FailedModal handleOk={handleFailedModalOk} handleCancel={handleFailedModalCancel} isModalOpen={isFailedModalOpen} />
     </>
   )
