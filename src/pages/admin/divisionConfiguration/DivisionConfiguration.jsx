@@ -144,12 +144,11 @@ const DivisionConfiguration = () => {
   // Delete API for Delete Division
   const deleteDivision = async () => {
     try {
-      const response = await axios.delete(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
+      await axios.delete(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
         headers: {
           "Authorization": token,
         },
       });
-      console.log(response);
       setIsDeleteModalOpen(false);
       setIsSuccessDeleteModalOpen(true);
     } catch (error) {
@@ -282,7 +281,6 @@ const DivisionConfiguration = () => {
         </Col>
       </Row>
 
-      {addLoading ? <LoadingComponent /> :
         <AddEditModal
           visible={isAddModalOpen}
           title = "Add Division"
@@ -294,8 +292,8 @@ const DivisionConfiguration = () => {
           onFinishFailed={onFinishFailed}
           actionValue={actionValue}
           handleActionValue={handleActionValue}
+          loading={addLoading}
         />
-      }
 
       <div className='division-table-container'>
         <DivisionTable
@@ -309,7 +307,7 @@ const DivisionConfiguration = () => {
           isDeleteModalOpen={isDeleteModalOpen}
         />
 
-        {selectedLoading || editLoading ? <LoadingComponent /> :
+        {selectedLoading ? <LoadingComponent /> :
         <AddEditModal
           visible={isEditModalOpen}
           title = "Edit Name"
@@ -321,6 +319,7 @@ const DivisionConfiguration = () => {
           defaultDivisionName={defaultDivisionName}
           actionValue={actionValue}
           handleActionValue={handleActionValue}
+          loading={editLoading}
         />
         }
 

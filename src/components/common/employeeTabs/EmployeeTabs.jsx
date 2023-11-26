@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { Tabs, Button, Form, Input, DatePicker, Radio } from 'antd';
+import { Tabs, Button, Avatar, Divider, Row, Col, Spin } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import AddButton from '../addButton/AddButton';
 import './employeeTabs.css';
@@ -14,6 +15,8 @@ import DetailFamilyTable from '../detailFamilyTable/DetailFamilyTable';
 import FamilyForm from '../familyForm/FamilyForm';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import dayjs from 'dayjs';
+import LoadingComponent from '../../loadingComponent/LoadingComponent';
 
 const { TabPane } = Tabs;
 
@@ -23,6 +26,16 @@ const EmployeeTabs = () => {
     const token = Cookies.get("token");
     const navigate = useNavigate();
     const [selectedEmployeeData, setSelectedEmployeeData] = useState([]);
+    const [selectedEmployeeLoading, setSelectedEmployeeLoading] = useState(false);
+
+    const [selectedEducationData, setSelectedEducationData] = useState([]);
+    const [addEducationLoading, setAddEducationLoading] = useState(false);
+    const [editEducationLoading, setEditEducationLoading] = useState(false);
+
+    const [selectedFamilyData, setSelectedFamilyData] = useState([]);
+    const [addFamilyLoading, setAddFamilyLoading] = useState(false);
+    const [editFamilyLoading, setEditFamilyLoading] = useState(false);
+
     // handler education data tabs
     const [activeEducationTab, setActiveEducationTab] = useState('education-data');
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
@@ -32,7 +45,8 @@ const EmployeeTabs = () => {
         setActiveEducationTab('education-add-form');
     }
 
-    const handleEducationDetailButtonClick = () => {
+    const handleEducationDetailButtonClick = (record) => {
+        setSelectedEducationData(record);
         setActiveEducationTab('education-detail');
     }
 
@@ -52,16 +66,64 @@ const EmployeeTabs = () => {
         setActiveEducationTab('education-detail');
     }
 
-    const handleEducationSuccessAddForm = () => {
-        setIsSuccessModalVisible(true);
+    // API call to add education data
+    const addEducationData = async (values) => {
+        try {
+            values.entry_year = dayjs(values.entry_year, "YYYY-MM-DD").format("YYYY-MM-DD");
+            values.out_year = dayjs(values.out_year, "YYYY-MM-DD").format("YYYY-MM-DD");
+            values.ipk = parseFloat(values.ipk);
+            setAddEducationLoading(true);
+            await axios.post(`https://attendance-1-r8738834.deta.app/api/v1/employee/education/add`,
+            {
+                employee_uuid: uuid,
+                education: values.education,
+                institute: values.institution,
+                major: values.major,
+                thesis: values.thesis,
+                ipk: values.ipk,
+                certificate_number: values.certificate_number,
+                entry_year: values.entry_year,
+                out_year: values.out_year,
+            },
+            {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setIsSuccessModalVisible(true);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setAddEducationLoading(false);
+        }
+    }
+
+    const handleEducationSuccessAddForm = (values) => {
+        addEducationData(values);
     }
 
     const handleEducationFailedAddForm = () => {
         setIsFailedModalVisible(true);
     }
 
-    const handleEducationSuccessEditForm = () => {
-        setIsSuccessModalVisible(true);
+    // API call to edit education data
+    const editEducationData = async (values) => {
+        try {
+            values.entry_year = dayjs(values.entry_year, "YYYY-MM-DD").format("YYYY-MM-DD");
+            values.out_year = dayjs(values.out_year, "YYYY-MM-DD").format("YYYY-MM-DD");
+            setEditEducationLoading(true);
+            await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/education/item/${selectedEducationData.key}`, values, {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setIsSuccessModalVisible(true);
+        } catch (error) {
+            setIsFailedModalVisible(true);
+            console.log(error);
+        } finally {
+            setEditEducationLoading(false);
+        }
     }
 
     const handleEducationFailedEditForm = () => {
@@ -70,6 +132,7 @@ const EmployeeTabs = () => {
 
     const handleEducationSuccessModalClose = () => {
         setIsSuccessModalVisible(false);
+        setActiveEducationTab('education-data');
     };
 
     const handleEducationFailedModalClose = () => {
@@ -84,7 +147,8 @@ const EmployeeTabs = () => {
         setActiveFamilyTab('family-add-form');
     }
 
-    const handleFamilyDetailButtonClick = () => {
+    const handleFamilyDetailButtonClick = (record) => {
+        setSelectedFamilyData(record);
         setActiveFamilyTab('family-detail');
     }
 
@@ -104,16 +168,58 @@ const EmployeeTabs = () => {
         setActiveFamilyTab('family-detail');
     }
 
-    const handleFamilySuccessAddForm = () => {
-        setIsSuccessModalVisible(true);
+    const addFamilyData = async (values) => {
+        try {
+            setAddFamilyLoading(true);
+            await axios.post(`https://attendance-1-r8738834.deta.app/api/v1/employee/family/add`,
+            {
+                employee_uuid: uuid,
+                full_name: values.full_name,
+                nik: values.nik,
+                birth_date: values.birth_date,
+                birth_place: values.birth_place,
+                address: values.address,
+                relation: values.relation,
+                job: values.job,
+            },
+            {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setIsSuccessModalVisible(true);
+        } catch (error) {
+            setIsFailedModalVisible(true);
+            console.log(error);
+        } finally {
+            setAddFamilyLoading(false);
+        }
+    }
+
+    const handleFamilySuccessAddForm = (values) => {
+        addFamilyData(values);
     }
 
     const handleFamilyFailedAddForm = () => {
         setIsFailedModalVisible(true);
     }
 
-    const handleFamilySuccessEditForm = () => {
-        setIsSuccessModalVisible(true);
+    const editFamilyData = async (values) => {
+        try {
+            setEditFamilyLoading(true);
+            values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
+            await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/family/member/${selectedFamilyData.key}`, values, {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setIsSuccessModalVisible(true);
+        } catch (error) {
+            setIsFailedModalVisible(true);
+            console.log(error);
+        } finally {
+            setEditFamilyLoading(false);
+        }
     }
 
     const handleFamilyFailedEditForm = () => {
@@ -122,6 +228,7 @@ const EmployeeTabs = () => {
 
     const handleFamilySuccessModalClose = () => {
         setIsSuccessModalVisible(false);
+        setActiveFamilyTab('family-data');
     };
 
     const handleFamilyFailedModalClose = () => {
@@ -129,17 +236,20 @@ const EmployeeTabs = () => {
     };
     // end of handler family data tabs
     
+    // API call to get selected employee data
     const getSelectedEmployeeData = async () => {
-        console.log(uuid);
         try {
-          const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/${uuid}`, {
+            setSelectedEmployeeLoading(true);
+            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/${uuid}`, {
             headers: {
               "Authorization": token,
             },
-          });
-          setSelectedEmployeeData(response.data);
+            });
+            setSelectedEmployeeData(response.data);
         } catch (error) {
-          console.log(error);
+            console.log(error);
+        } finally {
+            setSelectedEmployeeLoading(false);
         }
     }
 
@@ -155,24 +265,43 @@ const EmployeeTabs = () => {
     }, [token, navigate]);
 
     return (
+        <>
+            <Row align='middle' gutter={[56, 8]}>
+            <Col xs={8} sm={6} md={6} lg={4} xl={3} xxl={2}>
+                <Avatar size={100} icon={<UserOutlined />} />
+            </Col>
+            <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
+                <div className='profile-info'>
+                <h4 className='profile-name'>{selectedEmployeeData.name}</h4>
+                <p className='profile-role'>{selectedEmployeeData.position_id}</p>
+                </div>
+            </Col>
+            </Row>
+        <Divider className='profile-divider'/>
         <Tabs defaultActiveKey="employeeData" onChange={onChange}>
             <TabPane tab="Employee Data" key="employeeData"> <br />
+            {selectedEmployeeLoading ? <LoadingComponent /> :
                 <EmployeeEditForm selectedEmployeeData={selectedEmployeeData} />
+            }
             </TabPane>
             <TabPane tab="Education Data" key="educationData">
                 <div>
                     {activeEducationTab === 'education-data' && (
-                        <div className='education-data'>
-                            <div className='right-buttons-education'>
+                        <>
+                        <Row>
+                            <Col style={{marginBottom: 16}} xs={24} md={{span: 12, offset:12}} lg={{span: 12, offset:12}} xl={{span: 6, offset:18}} xxl={{span: 4, offset:20}}>
                                 <AddButton buttonText="Add Education" handleClick={handleEducationAddButtonClick}/>
-                            </div>
+                            </Col>
+                        </Row>
+                        <div className='education-data'>
                             <EducationTable onDetailClick={handleEducationDetailButtonClick}/>
-                        </div>       
+                        </div>
+                        </>       
                     )}
                     
                     {activeEducationTab === 'education-detail' && (
                         <div className='education-detail'>
-                            <DetailEducationTable />
+                            <DetailEducationTable detailEducationData={selectedEducationData} />
                             <div className='education-detail-button'>
                                 <Button type="text" onClick={handleEducationBackButtonClick}>
                                 Back
@@ -186,6 +315,7 @@ const EmployeeTabs = () => {
 
                     {activeEducationTab === 'education-add-form' && (
                         <div className='education-add-form'>
+                            <Spin spinning={addEducationLoading} size='large' tip="Add Data...">
                             <EducationForm
                             onCancleEditFormButton={handleEducationCancleAddFormButtonClick}
                             onFinish={handleEducationSuccessAddForm}
@@ -201,26 +331,30 @@ const EmployeeTabs = () => {
                             visible={isFailedModalVisible}
                             onClose={handleEducationFailedModalClose}
                             />
+                            </Spin>
                         </div>
                     )} 
                     
                     {activeEducationTab === 'education-edit-form' && (
                         <div className='education-edit-form'>
+                            <Spin spinning={editEducationLoading} size='large' tip="Edit Data...">
                             <EducationForm
                             onCancleEditFormButton={handleEducationCancleEditFormButtonClick}
-                            onFinish={handleEducationSuccessEditForm}
-                            onFinishFailed={handleEducationFailedEditForm}/>
+                            onFinish={editEducationData}
+                            onFinishFailed={handleEducationFailedEditForm}
+                            editEducationData={selectedEducationData}/>
 
                             <SuccessAddDataModal
                             visible={isSuccessModalVisible}
                             onClose={handleEducationSuccessModalClose}
-                            textParagraph="Data upload successful!"
+                            textParagraph="Data update successful!"
                             />
 
                             <FailedAddDataModal
                             visible={isFailedModalVisible}
                             onClose={handleEducationFailedModalClose}
                             />
+                            </Spin>
                         </div>
                     )}    
                 </div>
@@ -228,17 +362,21 @@ const EmployeeTabs = () => {
             <TabPane tab="Family Data" key="familyData">
             <div>
                     {activeFamilyTab === 'family-data' && (
-                        <div className='family-data'>
-                            <div className='right-buttons-family'>
+                        <>
+                        <Row>
+                            <Col style={{marginBottom: 16}} xs={24} md={{span: 12, offset:12}} lg={{span: 12, offset:12}} xl={{span: 6, offset:18}} xxl={{span: 4, offset:20}}>
                                 <AddButton buttonText="Add Family" handleClick={handleFamilyAddButtonClick}/>
-                            </div>
+                            </Col>
+                        </Row>
+                        <div className='family-data'>
                             <FamilyTable onDetailClick={handleFamilyDetailButtonClick}/>
-                        </div>       
+                        </div>     
+                        </>  
                     )}
                     
                     {activeFamilyTab === 'family-detail' && (
                         <div className='family-detail'>
-                            <DetailFamilyTable />
+                            <DetailFamilyTable detailFamilyData={selectedFamilyData} />
                             <div className='family-detail-button'>
                                 <Button type="text" onClick={handleFamilyBackButtonClick}>
                                 Back
@@ -252,6 +390,7 @@ const EmployeeTabs = () => {
 
                     {activeFamilyTab === 'family-add-form' && (
                         <div className='family-add-form'>
+                            <Spin spinning={addFamilyLoading} size='large' tip="Add Data...">
                             <FamilyForm
                             onCancleEditFormButton={handleFamilyCancleAddFormButtonClick}
                             onFinish={handleFamilySuccessAddForm}
@@ -267,15 +406,18 @@ const EmployeeTabs = () => {
                             visible={isFailedModalVisible}
                             onClose={handleFamilyFailedModalClose}
                             />
+                            </Spin>
                         </div>
                     )} 
                     
                     {activeFamilyTab === 'family-edit-form' && (
+                        <Spin spinning={editFamilyLoading} size='large' tip="Edit Data...">
                         <div className='family-edit-form'>
                             <FamilyForm
                             onCancleEditFormButton={handleFamilyCancleEditFormButtonClick}
-                            onFinish={handleFamilySuccessEditForm}
-                            onFinishFailed={handleFamilyFailedEditForm}/>
+                            onFinish={editFamilyData}
+                            onFinishFailed={handleFamilyFailedEditForm}
+                            editFamilyData={selectedFamilyData}/>
 
                             <SuccessAddDataModal
                             visible={isSuccessModalVisible}
@@ -288,10 +430,12 @@ const EmployeeTabs = () => {
                             onClose={handleFamilyFailedModalClose}
                             />
                         </div>
+                        </Spin>
                     )}    
                 </div>
             </TabPane>
         </Tabs>
+        </>
     );
 };
 
