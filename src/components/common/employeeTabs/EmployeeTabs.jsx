@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Tabs, Button, Form, Input, DatePicker, Radio } from 'antd';
-import { Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import AddButton from '../addButton/AddButton';
 import './employeeTabs.css';
 import EducationTable from '../educationTable/EducationTable';
@@ -12,11 +12,17 @@ import EmployeeEditForm from '../employeeEditForm/EmployeeEditForm';
 import FamilyTable from '../familyTable/FamilyTable';
 import DetailFamilyTable from '../detailFamilyTable/DetailFamilyTable';
 import FamilyForm from '../familyForm/FamilyForm';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const { TabPane } = Tabs;
 
 const EmployeeTabs = () => {
 
+    const { uuid } = useParams();
+    const token = Cookies.get("token");
+    const navigate = useNavigate();
+    const [selectedEmployeeData, setSelectedEmployeeData] = useState([]);
     // handler education data tabs
     const [activeEducationTab, setActiveEducationTab] = useState('education-data');
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
@@ -123,14 +129,35 @@ const EmployeeTabs = () => {
     };
     // end of handler family data tabs
     
+    const getSelectedEmployeeData = async () => {
+        console.log(uuid);
+        try {
+          const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/${uuid}`, {
+            headers: {
+              "Authorization": token,
+            },
+          });
+          setSelectedEmployeeData(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+    }
+
     const onChange = (key) => {
         console.log(key);
     };
 
+    useEffect(() => {
+        if (!token) {
+          navigate("/login");
+        }
+        getSelectedEmployeeData();
+    }, [token, navigate]);
+
     return (
         <Tabs defaultActiveKey="employeeData" onChange={onChange}>
             <TabPane tab="Employee Data" key="employeeData"> <br />
-                <EmployeeEditForm />
+                <EmployeeEditForm selectedEmployeeData={selectedEmployeeData} />
             </TabPane>
             <TabPane tab="Education Data" key="educationData">
                 <div>

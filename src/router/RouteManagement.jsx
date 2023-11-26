@@ -49,7 +49,7 @@ const RouteManagement = () => {
             <Route
               path="/dashboard"
               element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={true}>
                   <DashboardPage />
                 </LayoutComponent>
               }
@@ -67,7 +67,7 @@ const RouteManagement = () => {
             <Route
               path="/company/add-company"
               element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={true}>
                   <AddCompanyConfiguration />
                 </LayoutComponent>
               }
@@ -75,7 +75,7 @@ const RouteManagement = () => {
             <Route
               path="/company/detail-company/:uuid"
               element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={true}>
                   <DetailCompanyConfiguration />
                 </LayoutComponent>
               }
@@ -83,7 +83,7 @@ const RouteManagement = () => {
             <Route
               path="/company/edit-company/:uuid"
               element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={true}>
                   <EditCompanyConfiguration />
                 </LayoutComponent>
               }
@@ -109,7 +109,7 @@ const RouteManagement = () => {
             <Route
               path="/role/detail-role/:uuid"
               element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={true}>
                   <RoleConfigDetail />
                 </LayoutComponent>
               }
@@ -128,7 +128,7 @@ const RouteManagement = () => {
                 <Route
                   path="/dashboard"
                   element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                    <LayoutComponent isSuperAdmin={false}>
                       <DashboardPage/>
                     </LayoutComponent>
                   }
@@ -138,7 +138,7 @@ const RouteManagement = () => {
                 <Route
                   path="/company"
                   element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                    <LayoutComponent isSuperAdmin={false}>
                       <AdminDetailCompanyConfiguration />
                     </LayoutComponent>
                   }
@@ -146,7 +146,7 @@ const RouteManagement = () => {
                 <Route
                   path="/company/edit-company/:uuid"
                   element={
-                    <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                    <LayoutComponent isSuperAdmin={false}>
                       <AdminEditCompanyConfiguration />
                     </LayoutComponent>
                   }
@@ -165,7 +165,7 @@ const RouteManagement = () => {
                 <Route
                 path="/employee/detail-employee/:uuid"
                 element={
-                  <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                  <LayoutComponent isSuperAdmin={false}>
                     <DetailEmployeeConfiguration />
                   </LayoutComponent>
                 }
@@ -173,7 +173,7 @@ const RouteManagement = () => {
                 <Route
                 path="/employee/add-employee"
                 element={
-                  <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                  <LayoutComponent isSuperAdmin={false}>
                     <AddEmployee />
                   </LayoutComponent>
                 }
@@ -222,7 +222,7 @@ const RouteManagement = () => {
             <Route
               path="/role/detail-role/:uuid"
               element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                <LayoutComponent isSuperAdmin={false}>
                   <AdminRoleConfigDetail />
                 </LayoutComponent>
               }

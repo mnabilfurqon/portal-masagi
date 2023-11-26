@@ -178,14 +178,13 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
     };
   });
 
-  const handleTableChange = (pagination, filters, sorter) => {
+  const handleTableChange = (pagination, sorter) => {
     setTableParams({
       pagination: {
         ...tableParams.pagination,
         current: pagination.current,
         pageSize: countValue,
       },
-      filters,
       ...sorter,
     });
 

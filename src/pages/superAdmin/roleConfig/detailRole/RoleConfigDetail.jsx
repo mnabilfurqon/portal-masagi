@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Modal, Tree } from "antd";
-import { treeData } from "./constans";
+import { Button, Col, Input, Modal, Row, Tree } from "antd";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -14,6 +13,7 @@ const RoleConfigDetail = () => {
   const [loading, setLoading] = useState(false);
   const [detailRole, setDetailRole] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [resource, setResource] = useState([]);
   const [roleName, setRoleName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
@@ -21,7 +21,7 @@ const RoleConfigDetail = () => {
 
   const getSelectedRole = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.get(
         `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
         {
@@ -30,17 +30,19 @@ const RoleConfigDetail = () => {
           },
         }
       );
-      setDetailRole(response.data);
+      setDetailRole(response.data.role);
+      setResource(response.data.resource)
+      console.log(response.data)
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   const putSelectedRole = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.put(
         `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
         {
@@ -57,7 +59,43 @@ const RoleConfigDetail = () => {
     } catch (error) {
       setErrorModalOpen(true);
     } finally {
-      setLoading(false)
+      setLoading(false);
+    }
+  };
+
+  const addPermissionRole = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `https://attendance-1-r8738834.deta.app/api/v1/role/permission/add`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deletePermissionRole = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.delete(
+        `https://attendance-1-r8738834.deta.app/api/v1/role/permission/revoke`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,22 +149,26 @@ const RoleConfigDetail = () => {
 
   return (
     <>
-      <p>Role Name</p>
-      <div className="input-container">
-        <Input
-          className="input-role-name"
-          value={roleName}
-          onChange={(e) => setRoleName(e.target.value)}
-          disabled={!isEditing}
-        />
-        <Button
-          className="button-input"
-          onClick={isEditing ? handleSaveRole : handleEditRole}
-          loading={loading}
-        >
-          {isEditing ? "Save" : "Edit Role"}
-        </Button>
-      </div>
+      <Row gutter={[16, 8]}>
+        <Col xs={24} md={24} lg={24} xl={24} xxl={24}>
+          <p>Role Name</p>
+          <div className="input-container">
+            <Input
+              className="input-role-name"
+              value={roleName}
+              onChange={(e) => setRoleName(e.target.value)}
+              disabled={!isEditing}
+            />
+            <Button
+              className="button-input"
+              onClick={isEditing ? handleSaveRole : handleEditRole}
+              loading={loading}
+            >
+              {isEditing ? "Save" : "Edit Role"}
+            </Button>
+          </div>
+        </Col>
+      </Row>
 
       <Modal
         title={successTitle}
@@ -137,7 +179,11 @@ const RoleConfigDetail = () => {
       >
         <div className="modal-content">
           <p className="success-caption">Data changes successfull!</p>
-          <Button key="editRole" className="save-button" onClick={() => navigate(-1)}>
+          <Button
+            key="editRole"
+            className="save-button"
+            onClick={() => navigate(-1)}
+          >
             Ok
           </Button>
         </div>
@@ -164,15 +210,13 @@ const RoleConfigDetail = () => {
 
       <p className="permission-title">Permissions</p>
       <Tree
-        className="tree-permission"
+        fieldNames={{title:"name",key:"uuid",children:"permission"}}
+        className="permission-data"
         checkable
-        defaultExpandedKeys={["0", "0"]}
-        defaultSelectedKeys={["0", "0"]}
-        defaultCheckedKeys={["0", "0"]}
         onSelect={onSelect}
         onCheck={onCheck}
-        treeData={treeData}
-        disabled={!isEditing}
+        treeData={resource}
+        loadData={loading}
       />
     </>
   );

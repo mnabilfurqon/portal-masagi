@@ -8,48 +8,16 @@ import {
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
-import SearchBox from "../common/searchBox/SearchBox";
-import FilterButton from "../common/filterButton/FilterButton";
-import SortButton from "../common/SortButton/SortButton";
-import CountButton from "../common/countButton/CountButton";
 import { TbDatabasePlus } from "react-icons/tb";
 import Cookies from "js-cookie";
 import "./layoutComponent.css";
 
-const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
-  const token = Cookies.get("token");
-  const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState("");
-  const [filterValue, setFilterValue] = useState("");
-  const [sortValue, setSortValue] = useState("");
-  const [countValue, setCountValue] = useState("10");
+const LayoutComponent = ({ children, isSuperAdmin }) => {
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-  }, [token, navigate]);
-
-  const handleSearch = (value) => {
-    setSearchValue(value);
-  };
-
-  const handleFilter = (value) => {
-    setFilterValue(value);
-  };
-
-  const handleSort = (value) => {
-    setSortValue(value);
-  };
-
-  const handleCount = (value) => {
-    setCountValue(value);
-  };
 
   // Logout Components
   const MyDropdown = () => {
@@ -106,11 +74,11 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/company/add-company") {
     pageTitle = (
-      <Link to="/company" style={{ color: "black" }}>
+      <Link to="/company" className="page-title">
         Company /{" "}
       </Link>
     );
-    pageSubTitle = <span style={{ color: "#17A2B8" }}>Add Company</span>;
+    pageSubTitle = <span className="page-sub-title">Add Company</span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -119,11 +87,11 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     );
   } else if (location.pathname.includes("/company/detail-company/")) {
     pageTitle = (
-      <Link to="/company" style={{ color: "black" }}>
+      <Link to="/company" className="page-title">
         Company /{" "}
       </Link>
     );
-    pageSubTitle = <span style={{ color: "#17A2B8" }}>Detail Company</span>;
+    pageSubTitle = <span className="page-sub-title">Detail Company</span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -132,11 +100,11 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     );
   } else if (location.pathname.includes("/company/edit-company/")) {
     pageTitle = (
-      <Link to="/company" style={{ color: "black" }}>
+      <Link to="/company" className="page-title">
         Company /{" "}
       </Link>
     );
-    pageSubTitle = <span style={{ color: "#17A2B8" }}>Edit Company</span>;
+    pageSubTitle = <span className="page-sub-title">Edit Company</span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -148,11 +116,11 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/user/add-user") {
     pageTitle = (
-      <Link to="/user" style={{ color: "black" }}>
+      <Link to="/user" className="page-title">
         User /{" "}
       </Link>
     );
-    pageSubTitle = <span style={{ color: "#17A2B8" }}>User Configuration</span>;
+    pageSubTitle = <span className="page-sub-title">User Configuration</span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -164,11 +132,11 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     finalPageTitle = pageTitle;
   } else if (location.pathname.includes("/role/detail-role")) {
     pageTitle = (
-      <Link to="/role" style={{ color: "black" }}>
+      <Link to="/role" className="page-title">
         Role /{" "}
       </Link>
     );
-    pageSubTitle = <span style={{ color: "#17A2B8" }}>Detail Role</span>;
+    pageSubTitle = <span className="page-sub-title">Detail Role</span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -183,12 +151,12 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     finalPageTitle = pageTitle;
   } else if (location.pathname.includes("/employee/detail-employee")) {
     pageTitle = (
-      <Link to="/employee" style={{ color: "black" }}>
+      <Link to="/employee" className="page-title">
         Employee /{" "}
       </Link>
     );
     pageSubTitle = (
-      <span style={{ color: "#17A2B8" }}>Employee Configuration</span>
+      <span className="page-sub-title">Employee Configuration</span>
     );
     finalPageTitle = (
       <>
@@ -198,12 +166,12 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
     );
   } else if (location.pathname === "/employee/add-employee") {
     pageTitle = (
-      <Link to="/employee" style={{ color: "black" }}>
+      <Link to="/employee" className="page-title">
         Employee /{" "}
       </Link>
     );
     pageSubTitle = (
-      <span style={{ color: "#17A2B8" }}>Employee Configuration</span>
+      <span className="page-sub-title">Employee Configuration</span>
     );
     finalPageTitle = (
       <>
@@ -222,7 +190,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
       {isSuperAdmin ? (
         // Login sebagai Super Admin
         <Sider
-          breakpoint="lg"
+          breakpoint="md"
           collapsedWidth="0"
           style={{
             background: colorBgContainer,
@@ -260,7 +228,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
       ) : (
         // Login sebagai Admin
         <Sider
-          breakpoint="lg"
+          breakpoint="md"
           collapsedWidth="0"
           style={{
             background: colorBgContainer,
@@ -353,25 +321,7 @@ const LayoutComponent = ({ children, hideButtons, isSuperAdmin }) => {
               margin: "16px 0",
             }}
           >
-            {hideButtons ? null : (
-              <div className="buttons-container">
-                <div className="left-buttons">
-                  <SearchBox className="search-box" onSearch={handleSearch} />
-                  <FilterButton
-                    className="filter-button"
-                    onFilter={handleFilter}
-                  />
-                  <SortButton className="sort-button" onSort={handleSort} />
-                  <CountButton className="count-button" onCount={handleCount} />
-                </div>
-              </div>
-            )}
-            {React.cloneElement(children, {
-              searchValue,
-              filterValue,
-              sortValue,
-              countValue,
-            })}
+            {children}
           </div>
         </Content>
       </Layout>

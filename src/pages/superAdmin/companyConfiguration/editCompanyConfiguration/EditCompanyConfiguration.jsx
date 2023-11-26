@@ -6,16 +6,21 @@ import FormTemplate from '../../../../components/common/formTemplate/FormTemplat
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import dayjs from 'dayjs';
+import { Spin } from 'antd';
 
 const EditCompanyConfiguration = () => {
     const token = Cookies.get("token");
     const navigate = useNavigate();
     const { uuid } = useParams();
     const [editCompanyData, setEditCompanyData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [tip, setTip] = useState("");
 
     const getSelectedCompanyData = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/${uuid}`, {
+            setLoading(true);
+            setTip("Get Selected Data...");
+            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, {
                 headers: {
                   "Authorization": token,
                 },
@@ -23,6 +28,9 @@ const EditCompanyConfiguration = () => {
             setEditCompanyData(response.data);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
+            setTip("");
         }
     }
 
@@ -40,7 +48,9 @@ const EditCompanyConfiguration = () => {
     const onFinish = async (values) => {
         values.date_founded = dayjs(values.date_founded).format("YYYY-MM-DD");
         try {
-            const response = await axios.put(`http://127.0.0.1:5000/api/v1/company/${uuid}`, values, {
+            setLoading(true);
+            setTip("Save Data...");
+            const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, values, {
                 headers: {
                 "Authorization": token,
                 },
@@ -48,6 +58,9 @@ const EditCompanyConfiguration = () => {
             setIsSuccessModalVisible(true);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
+            setTip("");
         }
     };
 
@@ -66,24 +79,25 @@ const EditCompanyConfiguration = () => {
 
     return (
         <>
-        <FormTemplate
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        buttonText="Save Data"
-        editCompanyData={editCompanyData}
-        isSuperAdmin={true}/>
+        <Spin spinning={loading} size='large' tip={tip}>
+            <FormTemplate
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            buttonText="Save Data"
+            editCompanyData={editCompanyData}
+            isSuperAdmin={true}/>
 
-        <SuccessAddDataModal
-        visible={isSuccessModalVisible}
-        onClose={handleSuccessModalClose}
-        textParagraph="Data upload successful!"
-        />
+            <SuccessAddDataModal
+            visible={isSuccessModalVisible}
+            onClose={handleSuccessModalClose}
+            textParagraph="Data upload successful!"
+            />
 
-        <FailedAddDataModal
-        visible={isFailedModalVisible}
-        onClose={handleFailedModalClose}
-        />
-        
+            <FailedAddDataModal
+            visible={isFailedModalVisible}
+            onClose={handleFailedModalClose}
+            />
+        </Spin>
         </>
     )
 }

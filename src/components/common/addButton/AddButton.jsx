@@ -4,8 +4,7 @@ import { Button } from 'antd';
 import './addButton.css';
 
 const addButton = ({ buttonText, handleClick }) => (
-    <Button className="add-button" onClick={handleClick}>
-        <AiOutlinePlus className="add-icon" />
+    <Button icon={<AiOutlinePlus/>} className="add-button" onClick={handleClick}>
         {buttonText}
     </Button>
 );
