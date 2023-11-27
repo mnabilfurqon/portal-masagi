@@ -48,6 +48,10 @@
   border-color: #629093 !important;
 }
 
+:where(.css-dev-only-do-not-override-zcfrx9).ant-tree .ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner:after {
+  background-color: #629093 !important;
+}
+
 .permission-data {
   border: 1px solid #629093;
   border-radius: 5px;
@@ -66,6 +70,7 @@
   color: white;
   width: 100px;
 }
+
 .button-input:hover {
   background-color: #73B3B7;
   color: #ffffff !important;
@@ -83,6 +88,7 @@
   color: white;
   width: 100px;
 }
+
 .save-button:hover {
   background-color: #28A745;
   color: #ffffff !important;
@@ -100,6 +106,7 @@
   color: white;
   width: 100px;
 }
+
 .back-edit-button:hover {
   background-color: #FF7481;
   color: #FFFFFF !important;

@@ -1,17 +1,17 @@
 .filter-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #629093;
-    border: 1px solid #629093;
-    border-radius: 4px;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #629093;
+  border: 1px solid #629093;
+  border-radius: 4px;
+  width: 100%;
 }
 
 .filter-button:hover {
-    background-color: #629093 !important;
-    border-color: #629093 !important;
-    color: #ffffff !important;
+  background-color: #629093 !important;
+  border-color: #629093 !important;
+  color: #ffffff !important;
 }
 
 .tree-filter .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
@@ -24,10 +24,6 @@
 .tree-filter {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
-}
-
-.ant-tree-switcher {
-  display: none !important;
 }
 
 .button-reset {
