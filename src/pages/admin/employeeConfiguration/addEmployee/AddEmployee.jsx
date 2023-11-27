@@ -514,7 +514,7 @@ const AddEmployee = () => {
                 </Form.Item> */}
             </Flex>
             <Form.Item>
-            <Flex gap={10} align='center' justify='end'>
+            <Flex gap={30} align='center' justify='end'>
                 <Link to="/employee" style={{color:"black"}} >Cancel</Link>
                 <SubmitButton buttonText={"Save"} />
             </Flex>

@@ -12,22 +12,79 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const [employeeData, setEmployeeData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleDetailClick = (record) => {
     const value = record.key;
     navigate(`/employee/detail-employee/${value}`);
   }
 
+  // Handlre value filter button
+  const filterArray = Array.isArray(filterValue) ? filterValue : [];
+  const encodedFilterValue = filterArray.map(value => encodeURIComponent(value)).join(',');
+  // End of handler value filter button
+
+  // handle search value for status
+  if (searchValue === 'active') {
+    searchValue = 1;
+  } else if (searchValue === 'not active') {
+    searchValue = 0;
+  }
+  // end of handle search value for status
+
+  const [tableParams, setTableParams] = useState({
+    pagination : {
+      current: 1,
+      pageSize: countValue,
+      showTotal: (total, range) => (
+        <div className='total-data'>
+          {range[0]}-{range[1]} of {total} items
+        </div>
+      ),
+      showLessItems: true,
+    },
+  });
+
+  const [params, setParams] = useState({
+    page: tableParams.pagination.current,
+    per_page: tableParams.pagination.pageSize,
+  });
+
   const getEmployeeData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/api/v1/employee/", {
+      var page;
+      setLoading(true);
+      if (tableParams.pagination.total < countValue) {
+        page = 1;
+      } else {
+        page = tableParams.pagination.current;
+      }
+      const response = await axios.get("https://attendance-1-r8738834.deta.app/api/v1/employee/", {
+        params: {
+          page: page,
+          per_page: countValue,
+          search: searchValue,
+          search_by: encodedFilterValue? encodedFilterValue : 'name',
+          desc: sortValue === 'latestJoinDate' || sortValue === 'zToAEmployee' ? true : false,
+          sort_by: sortValue === 'latestJoinDate' || sortValue === 'oldestJoinDate' ? 'created_date' : 'name',
+        },
         headers: {
           "Authorization": token,
         },
       });
       setEmployeeData(response.data.items);
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          total: response.data._meta.total_items,
+          pageSize: countValue,
+        },
+      });
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -36,14 +93,13 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
       navigate("/login");
     }
     getEmployeeData();
-  }, [token, navigate]);
+  }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
 
     const columns = [
         {
           title: 'Employee Name',
           dataIndex: 'employee_name',
           key: 'employee_name',
-          width: 400,
         },
         {
           title: 'NIP',
@@ -129,50 +185,42 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
         position_id: item.position_id,
         division_id: item.division_id,
         company_id: item.company_id,
-        // nip: item.nip,
-        // roleId: item.role_id,
+        nip: item.nip,
       }
     });
 
-    // Filter data berdasarkan searchValue
-    const filteredData = data.filter(item =>
-      item.employee_name.toLowerCase().includes(searchValue.toLowerCase()) &&
-      // conditional rendering if else untuk filterValue
-      (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true)
-    );
-
-    // Sort data berdasarkan sortValue
-    const sortedData = [...filteredData].sort((a, b) => {
-      if (sortValue === 'aToZ') {
-        return a.employee_name.localeCompare(b.employee_name);
-      } else if (sortValue === 'zToA') {
-        return b.employee_name.localeCompare(a.employee_name);
-      } else if (sortValue === 'latest') {
-        return new Date(b.join_date) - new Date(a.join_date);
-      } else if (sortValue === 'oldest') {
-        return new Date(a.join_date) - new Date(b.join_date);
-      } else {
-        return 0;
+    const handleTableChange = (pagination, filters, sorter) => {
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          current: pagination.current,
+          pageSize: countValue,
+        },
+        filters,
+        ...sorter,
+      });
+  
+      setParams({
+        page: pagination.current,
+        per_page: pagination.pageSize,
+        search: searchValue,
+      });
+  
+      if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+        setEmployeeData([]);
       }
-    });
-
-    const paginationConfig = {
-        pageSize: countValue, // Jumlah item per halaman
-        showTotal: (total, range) => (
-            <span style={{ color: '#556172' }}>
-                Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-            </span>
-        ),
-        showLessItems: true,
     };
 
     return (
       <>
         <Table 
             columns={columns}
-            dataSource={sortedData}
-            pagination={paginationConfig}
-            rowClassName="custom-row"  
+            dataSource={data}
+            pagination={tableParams.pagination}
+            loading={loading}
+            rowClassName="custom-row"
+            onChange={handleTableChange}
+            scroll={{ x: true, y: 650 }}
         />
       </>
     )

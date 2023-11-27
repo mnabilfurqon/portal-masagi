@@ -1,8 +1,3 @@
-.right-buttons {
-    display: flex;
-    justify-content: end;
-    align-items: end;
-    margin-left: 80%;
-    margin-top: -85px;
-    margin-bottom: 50px;
+.division-table-container {
+    margin-top: 24px;
 }

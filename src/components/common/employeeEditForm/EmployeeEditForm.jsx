@@ -3,8 +3,11 @@ import './EmployeeEditForm.css'
 import { Form, Input, DatePicker, Radio, Select, Flex, Checkbox, Button } from 'antd'
 import { Link } from 'react-router-dom'
 import SubmitButton from '../submitButton/SubmitButton'
+import dayjs from 'dayjs'
 
 const EmployeeEditForm = (props) => {
+    const { selectedEmployeeData } = props;
+
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('vertical');
     const formItemLayout =
@@ -21,7 +24,7 @@ const EmployeeEditForm = (props) => {
     const { TextArea } = Input;
     const [componentDisabled, setComponentDisabled] = useState(true);
     const [buttonDisabled, setButtonDisabled] = useState(false);
-    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
+    const dateFormatList = 'YYYY-MM-DD';
     const handleEditButton = (e) => {
         setComponentDisabled(e.target.checked);
         setButtonDisabled(true);
@@ -34,6 +37,45 @@ const EmployeeEditForm = (props) => {
             {label}
         </>
     );
+
+    if (selectedEmployeeData) {
+        form.setFieldsValue({
+            nip: selectedEmployeeData.nip,
+            nik: selectedEmployeeData.nik,
+            name: selectedEmployeeData.name,
+            birth_date: dayjs(selectedEmployeeData.birth_date, dateFormatList),
+            place_of_birth: selectedEmployeeData.place_of_birth,
+            religion: selectedEmployeeData.religion,
+            phone_number: selectedEmployeeData.phone_number,
+            nationality: selectedEmployeeData.nationality,
+            email: selectedEmployeeData.email,
+            office_email: selectedEmployeeData.office_email,
+            address_1: selectedEmployeeData.address_1,
+            address_2: selectedEmployeeData.address_2,
+            gender: selectedEmployeeData.gender,
+            blood_type: selectedEmployeeData.blood_type,
+            marital_status: selectedEmployeeData.marital_status,
+            number_of_child: selectedEmployeeData.number_of_child,
+            company_id: selectedEmployeeData.company_id,
+            role: selectedEmployeeData.role,
+            position: selectedEmployeeData.position,
+            division: selectedEmployeeData.division,
+            bank_name: selectedEmployeeData.bank_name,
+            bank_account: selectedEmployeeData.bank_account,
+            account_bank_number: selectedEmployeeData.account_bank_number,
+            account_holder_name: selectedEmployeeData.account_holder_name,
+            salary: selectedEmployeeData.salary,
+            no_bpjs_tk: selectedEmployeeData.no_bpjs_tk,
+            no_bpjs_kes: selectedEmployeeData.no_bpjs_kes,
+            npwp: selectedEmployeeData.npwp,
+            registry_number: selectedEmployeeData.registery_number,
+            emergency_contact_name: selectedEmployeeData.emergency_contact_name,
+            emergency_contact_number: selectedEmployeeData.emergency_contact_number,
+            join_date: dayjs(selectedEmployeeData.join_date, dateFormatList),
+            separation_date: dayjs(selectedEmployeeData.separation_date, dateFormatList),
+            is_active: selectedEmployeeData.is_active ? "1" : "0",
+        })
+    }
 
     return (
     <>
@@ -324,7 +366,7 @@ const EmployeeEditForm = (props) => {
                     },
                 ]}>
                     <Select>
-                      <Select.Option value="it">IT</Select.Option>
+                      <Select.Option value='it'>IT</Select.Option>
                       <Select.Option value="marketing">Marketing</Select.Option>
                     </Select>
                 </Form.Item>
@@ -349,7 +391,7 @@ const EmployeeEditForm = (props) => {
                 </Form.Item>
                 <Form.Item 
                 label="Account Bank" 
-                name="bank_account"
+                name="account_bank_number"
                 className='column'
                 rules={[
                     {
@@ -365,7 +407,7 @@ const EmployeeEditForm = (props) => {
             className='row'>
                 <Form.Item 
                 label="Account Name" 
-                name="account_name"
+                name="account_holder_name"
                 className='column'
                 rules={[
                     {
@@ -500,7 +542,7 @@ const EmployeeEditForm = (props) => {
                 </Form.Item> */}
             </Flex>
             <Form.Item>
-            <Flex gap={10} align='center' justify='end'>
+            <Flex gap={30} align='center' justify='end'>
                 <Link to="/employee" style={{color:"black"}} >Cancel</Link>
                 <SubmitButton buttonText={"Save"} />
             </Flex>
