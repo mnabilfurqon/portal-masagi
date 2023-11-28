@@ -1,15 +1,17 @@
 import React from 'react'
 import './permitRequestDetailTable.css'
+import { useLocation } from 'react-router-dom'
 
-const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
-    if (officialTravelRequestDetail) {
+const PermitRequestDetailTable = ({data}) => {
+    const location = useLocation();
+    if (location.pathname === '/official-travel-request/detail') {
         return (
             <div className='table-container'>
             <table className='table-content'>
                 <tbody>
                 <tr>
                     <th>Employee Name</th>
-                    <td>{officialTravelRequestDetail.employee_name}</td>
+                    <td>{data.employee_name}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -17,7 +19,7 @@ const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
                 </tr>
                 <tr>
                     <th>Agenda</th>
-                    <td>{officialTravelRequestDetail.agenda}</td>
+                    <td>{data.agenda}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -25,7 +27,7 @@ const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
                 </tr>
                 <tr>
                     <th>Destination</th>
-                    <td>{officialTravelRequestDetail.destination}</td>
+                    <td>{data.destination}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -33,7 +35,7 @@ const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
                 </tr>
                 <tr>
                     <th>Permit Date</th>
-                    <td>{officialTravelRequestDetail.permit_date}</td>
+                    <td>{data.permit_date}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -41,7 +43,7 @@ const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
                 </tr>
                 <tr>
                     <th>End Permit Date</th>
-                    <td>{officialTravelRequestDetail.end_permit_date}</td>
+                    <td>{data.end_permit_date}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -49,7 +51,7 @@ const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
                 </tr>
                 <tr>
                     <th>HR</th>
-                    <td>{officialTravelRequestDetail.hr}</td>
+                    <td>{data.hr}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -57,7 +59,7 @@ const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
                 </tr>
                 <tr>
                     <th>Team Leader</th>
-                    <td>{officialTravelRequestDetail.team_leader}</td>
+                    <td>{data.team_leader}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -65,7 +67,7 @@ const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
                 </tr>
                 <tr>
                     <th>Status</th>
-                    <td>{officialTravelRequestDetail.status}</td>
+                    <td>{data.status}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -76,7 +78,78 @@ const PermitRequestDetailTable = ({officialTravelRequestDetail}) => {
             </div>
         )
     } else {
-        return <p>Detail Official Travel</p>
+        return (
+            <div className='table-container'>
+            <table className='table-content'>
+                <tbody>
+                <tr>
+                    <th>Employee Name</th>
+                    <td>{data.employee_name}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Type Leave</th>
+                    <td>{data.type_leave}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Reason</th>
+                    <td>{data.reason}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Permit Date</th>
+                    <td>{data.permit_date}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>End Permit Date</th>
+                    <td>{data.end_permit_date}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>HR</th>
+                    <td>{data.hr}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Team Leader</th>
+                    <td>{data.team_leader}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{data.status}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        )
     }
 }
 

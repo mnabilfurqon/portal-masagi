@@ -1,9 +1,12 @@
 import React, {useState} from 'react'
 import './permitRequestTable.css'
 import { Table } from 'antd'
+import { useLocation } from 'react-router-dom'
 
 const PermitRequestTable = (props) => {
     const {searchValue, filterValue, sortValue, countValue, columns} = props;
+    const location = useLocation();
+    console.log(location);
 
     const [tableParams, setTableParams] = useState({
         pagination : {
@@ -23,7 +26,7 @@ const PermitRequestTable = (props) => {
         per_page: tableParams.pagination.pageSize,
     });
 
-    const data = [
+    const dataOfficialTravel = [
         {
             key: '1',
             employee_name: 'John Brown',
@@ -59,6 +62,42 @@ const PermitRequestTable = (props) => {
         }
     ];
 
+    const dataLeave = [
+      {
+        key: '1',
+        employee_name: 'John Brown',
+        type_leave: 'Cuti Sakit',
+        reason: 'Masa Pemulihan',
+        permit_date: '2021-08-01',
+        end_permit_date: '2021-08-02',
+        status: 'pending',
+        hr: 'Samuel',
+        team_leader: 'Jackson'
+      },
+      {
+        key: '2',
+        employee_name: 'Jim Green',
+        type_leave: 'Cuti Sakit',
+        reason: 'Masa Pemulihan',
+        permit_date: '2021-08-02',
+        end_permit_date: '2021-08-03',
+        status: 'approved',
+        hr: 'Jacky',
+        team_leader: 'Johnson'
+      },
+      {
+        key: '3',
+        employee_name: 'Joe Black',
+        type_leave: 'Cuti Sakit',
+        reason: 'Masa Pemulihan',
+        permit_date: '2021-08-03',
+        end_permit_date: '2021-08-04',
+        status: 'rejected',
+        hr: 'Samuel',
+        team_leader: 'Jackson'
+      }
+    ];
+
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
           pagination: {
@@ -83,15 +122,26 @@ const PermitRequestTable = (props) => {
 
     return (
         <div>
+          {location.pathname === '/official-travel-request' ? 
             <Table 
                 columns={columns}
-                dataSource={data}
+                dataSource={dataOfficialTravel}
                 pagination={tableParams.pagination}
                 // loading={loading}
                 rowClassName="custom-row"
                 scroll={{ x: true, y: 650 }}
                 onChange={handleTableChange}
             />
+          : <Table 
+                columns={columns}
+                dataSource={dataLeave}
+                pagination={tableParams.pagination}
+                // loading={loading}
+                rowClassName="custom-row"
+                scroll={{ x: true, y: 650 }}
+                onChange={handleTableChange}
+            />
+          }
         </div>
     )
 }

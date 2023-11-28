@@ -89,7 +89,7 @@ const OfficialTravelDetail = () => {
 
   return (
     <>
-      <PermitRequestDetailTable officialTravelRequestDetail={data} />
+      <PermitRequestDetailTable data={data} />
       <Flex justify='flex-end' gap={20} >
       <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
         Approve

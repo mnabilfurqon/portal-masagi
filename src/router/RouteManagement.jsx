@@ -24,6 +24,8 @@ import AdminRoleConfig from "../pages/admin/roleConfig/AdminRoleConfig";
 import AdminRoleConfigDetail from "../pages/admin/roleConfig/detailRole/AdminRoleConfigDetail";
 import OfficialTravelMain from "../pages/employee/schemas/approvalConfiguration/officialTravel/OfficialTravelMain";
 import OfficialTravelDetail from "../pages/employee/schemas/approvalConfiguration/officialTravel/OfficialTravelDetail";
+import LeaveMain from "../pages/employee/schemas/approvalConfiguration/leave/LeaveMain";
+import LeaveDetail from "../pages/employee/schemas/approvalConfiguration/leave/LeaveDetail";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -383,7 +385,16 @@ const RouteManagement = () => {
                   path="/leave-request"
                   element={
                     <LayoutComponent roleNumber={roleNumber}>
-                      <p>Leave Request</p>
+                      <LeaveMain />
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/leave-request/detail"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <LeaveDetail />
                     </LayoutComponent>
                   }
                 />

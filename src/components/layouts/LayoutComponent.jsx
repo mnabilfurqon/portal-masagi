@@ -238,6 +238,19 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === '/leave-request') {
     pageTitle = 'Leave Request';
     finalPageTitle = pageTitle;
+  } else if (location.pathname.includes('/leave-request/detail')) {
+    pageTitle = (
+      <Link to="/leave-request" className="page-title">
+        Leave Request /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
   } else if (location.pathname === '/overtime-request') {
     pageTitle = 'Overtime Request';
     finalPageTitle = pageTitle;
