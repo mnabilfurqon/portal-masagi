@@ -36,8 +36,6 @@ const LoginPage = () => {
       Cookies.set("role_uuid", protectedResponse.data.user.role.uuid);
       Cookies.set("username", protectedResponse.data.user.username);
       Cookies.set("company_uuid", protectedResponse.data.user.company.uuid);
-
-      navigate("../dashboard");
     } catch (error) {
       setLoginError("Invalid username or password");
     } finally {
@@ -47,7 +45,8 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token) {
-      navigate("../dashboard");
+      if (Cookies.get("role_uuid") === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc" || Cookies.get("role_uuid") === "a454bd10-5dfe-48fa-8f4c-ee104334842a") navigate("../dashboard");
+      else navigate("../attendance");
     }
   }, [token, navigate]);
 

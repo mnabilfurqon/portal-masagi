@@ -22,12 +22,14 @@ import Cookies from "js-cookie";
 import DashboardPage from "../pages/superAdmin/dashboardPage/DashboardPage";
 import AdminRoleConfig from "../pages/admin/roleConfig/AdminRoleConfig";
 import AdminRoleConfigDetail from "../pages/admin/roleConfig/detailRole/AdminRoleConfigDetail";
+import OfficialTravelMain from "../pages/employee/schemas/approvalConfiguration/officialTravel/OfficialTravelMain";
+import OfficialTravelDetail from "../pages/employee/schemas/approvalConfiguration/officialTravel/OfficialTravelDetail";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
   const role_uuid = Cookies.get("role_uuid");
   const navigate = useNavigate();
-  let isSuperAdmin = false;
+  let roleNumber = 3;
 
   useEffect(() => {
     if (!token) {
@@ -36,10 +38,15 @@ const RouteManagement = () => {
   }, [token, navigate]);
 
   if (role_uuid === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc") {
-    isSuperAdmin = true;
+    roleNumber = 1;
+  } else if (role_uuid === "a454bd10-5dfe-48fa-8f4c-ee104334842a") {
+    roleNumber = 2;
+  } else {
+    roleNumber = 3;
   }
 
-  if (isSuperAdmin) {
+  console.log(roleNumber);
+  if (roleNumber === 1) {
     // Routing untuk Super Admin
     return (
       <Suspense fallback={<LoadingComponent />}>
@@ -49,7 +56,7 @@ const RouteManagement = () => {
             <Route
               path="/dashboard"
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <DashboardPage />
                 </LayoutComponent>
               }
@@ -59,7 +66,7 @@ const RouteManagement = () => {
             <Route
               path="/company"
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <MainCompanyConfiguration />
                 </LayoutComponent>
               }
@@ -67,7 +74,7 @@ const RouteManagement = () => {
             <Route
               path="/company/add-company"
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <AddCompanyConfiguration />
                 </LayoutComponent>
               }
@@ -75,7 +82,7 @@ const RouteManagement = () => {
             <Route
               path="/company/detail-company/:uuid"
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <DetailCompanyConfiguration />
                 </LayoutComponent>
               }
@@ -83,7 +90,7 @@ const RouteManagement = () => {
             <Route
               path="/company/edit-company/:uuid"
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <EditCompanyConfiguration />
                 </LayoutComponent>
               }
@@ -93,7 +100,7 @@ const RouteManagement = () => {
             <Route
               path="/user"
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <UserConfiguration />
                 </LayoutComponent>
               }
@@ -101,7 +108,7 @@ const RouteManagement = () => {
             <Route
               path="/role"
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <RoleConfig />
                 </LayoutComponent>
               }
@@ -109,7 +116,7 @@ const RouteManagement = () => {
             <Route
               path="/role/detail-role/:uuid"
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <RoleConfigDetail />
                 </LayoutComponent>
               }
@@ -118,7 +125,7 @@ const RouteManagement = () => {
         </Routes>
       </Suspense>
     );
-  } else {
+  } else if (roleNumber === 2) {
     // Routing untuk Admin
     return (
       <Suspense fallback={<LoadingComponent />}>
@@ -128,7 +135,7 @@ const RouteManagement = () => {
                 <Route
                   path="/dashboard"
                   element={
-                    <LayoutComponent isSuperAdmin={false}>
+                    <LayoutComponent roleNumber={roleNumber}>
                       <DashboardPage/>
                     </LayoutComponent>
                   }
@@ -138,7 +145,7 @@ const RouteManagement = () => {
                 <Route
                   path="/company"
                   element={
-                    <LayoutComponent isSuperAdmin={false}>
+                    <LayoutComponent roleNumber={roleNumber}>
                       <AdminDetailCompanyConfiguration />
                     </LayoutComponent>
                   }
@@ -146,7 +153,7 @@ const RouteManagement = () => {
                 <Route
                   path="/company/edit-company/:uuid"
                   element={
-                    <LayoutComponent isSuperAdmin={false}>
+                    <LayoutComponent roleNumber={roleNumber}>
                       <AdminEditCompanyConfiguration />
                     </LayoutComponent>
                   }
@@ -157,7 +164,7 @@ const RouteManagement = () => {
                 <Route
                   path="/employee"
                   element={
-                    <LayoutComponent isSuperAdmin={false}>
+                    <LayoutComponent roleNumber={roleNumber}>
                       <MainEmployeeConfiguration />
                     </LayoutComponent>
                   }
@@ -165,7 +172,7 @@ const RouteManagement = () => {
                 <Route
                 path="/employee/detail-employee/:uuid"
                 element={
-                  <LayoutComponent isSuperAdmin={false}>
+                  <LayoutComponent roleNumber={roleNumber}>
                     <DetailEmployeeConfiguration />
                   </LayoutComponent>
                 }
@@ -173,7 +180,7 @@ const RouteManagement = () => {
                 <Route
                 path="/employee/add-employee"
                 element={
-                  <LayoutComponent isSuperAdmin={false}>
+                  <LayoutComponent roleNumber={roleNumber}>
                     <AddEmployee />
                   </LayoutComponent>
                 }
@@ -184,7 +191,7 @@ const RouteManagement = () => {
             <Route
               path="/user"
               element={
-                <LayoutComponent isSuperAdmin={false}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <UserConfiguration />
                 </LayoutComponent>
               }
@@ -192,7 +199,7 @@ const RouteManagement = () => {
             <Route
               path="/user/add-user"
               element={
-                <LayoutComponent isSuperAdmin={false}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <AddUser />
                 </LayoutComponent>
               }
@@ -203,7 +210,7 @@ const RouteManagement = () => {
             <Route
               path="/division"
               element={
-                <LayoutComponent isSuperAdmin={false}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <DivisionConfiguration />
                 </LayoutComponent>
               }
@@ -214,7 +221,7 @@ const RouteManagement = () => {
             <Route
               path="/role"
               element={
-                <LayoutComponent isSuperAdmin={false}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <AdminRoleConfig />
                 </LayoutComponent>
               }
@@ -222,7 +229,7 @@ const RouteManagement = () => {
             <Route
               path="/role/detail-role/:uuid"
               element={
-                <LayoutComponent isSuperAdmin={false}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <AdminRoleConfigDetail />
                 </LayoutComponent>
               }
@@ -233,12 +240,172 @@ const RouteManagement = () => {
             <Route
               path="/position"
               element={
-                <LayoutComponent isSuperAdmin={false}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <PositionConfiguration />
                 </LayoutComponent>
               }
             />
             {/* End of Position Configuration Route */}
+          </React.Fragment>
+        </Routes>
+      </Suspense>
+    );
+  } else {
+    // Routing untuk Employee
+    return (
+      <Suspense fallback={<LoadingComponent />}>
+        <Routes>
+            <Route path="/login" element={<LoginPage />} />
+              <React.Fragment>
+                {/* Attendance Configuration Route */}
+                <Route
+                  path="/attendance"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>Attendance</p>
+                    </LayoutComponent>
+                  }
+                />
+                
+                {/* History Configuration Route */}
+                <Route
+                  path="/history"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>History</p>
+                    </LayoutComponent>
+                  }
+                />
+
+                {/* Attendance Report Configuration Route */}
+                <Route
+                  path="/attendance-report"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>Attendance Report</p>
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/present"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>Present</p>
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/report"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>Report</p>
+                    </LayoutComponent>
+                  }
+                />
+
+                {/* Permit Configuration Route */}                
+                <Route
+                path="/permit-parent"
+                element={
+                  <LayoutComponent roleNumber={roleNumber}>
+                    <p>Permit</p>
+                  </LayoutComponent>
+                }
+                />
+
+                <Route
+                path="/official-travel"
+                element={
+                  <LayoutComponent roleNumber={roleNumber}>
+                    <p>Official Travel</p>
+                  </LayoutComponent>
+                }
+                />
+
+                <Route
+                path="/leave"
+                element={
+                  <LayoutComponent roleNumber={roleNumber}>
+                    <p>Leave</p>
+                  </LayoutComponent>
+                }
+                />
+
+                <Route
+                path="/overtime"
+                element={
+                  <LayoutComponent roleNumber={roleNumber}>
+                    <p>Overtime</p>
+                  </LayoutComponent>
+                }
+                />
+
+                <Route
+                path="/permit"
+                element={
+                  <LayoutComponent roleNumber={roleNumber}>
+                    <p>Permit</p>
+                  </LayoutComponent>
+                }
+                />
+
+                {/* Permit Request Configuration Route */}
+                <Route
+                  path="/permit-request-parent"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>Permit Request</p>
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/official-travel-request"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <OfficialTravelMain />
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/official-travel-request/detail"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <OfficialTravelDetail />
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/leave-request"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>Leave Request</p>
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/overtime-request"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>Overtime Request</p>
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/permit-request"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <p>Permit Request</p>
+                    </LayoutComponent>
+                  }
+                />
+
           </React.Fragment>
         </Routes>
       </Suspense>

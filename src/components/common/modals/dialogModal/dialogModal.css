@@ -1,0 +1,34 @@
+.no-button {
+    border-width: 0;
+}
+  
+.no-button:hover {
+    color: #629093 !important;
+}
+  
+.yes-button {
+    background: #629093;
+    color: white;
+    margin-left: 10px !important;
+    border-color: #629093 !important;
+}
+  
+.yes-button:hover {
+    background: #ffffff !important;
+    color: #629093 !important;
+    border-color: #629093 !important;
+}
+
+.reject-button {
+    background: #DC3545;
+    color: white;
+    margin-left: 10px !important;
+    border-color: #DC3545 !important;
+}
+
+.reject-button:hover {
+    background: #ffffff !important;
+    color: #DC3545 !important;
+    border-color: #DC3545 !important;
+}
+  
