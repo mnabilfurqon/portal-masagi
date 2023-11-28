@@ -26,14 +26,17 @@ import OfficialTravelMain from "../pages/employee/schemas/approvalConfiguration/
 import OfficialTravelDetail from "../pages/employee/schemas/approvalConfiguration/officialTravel/OfficialTravelDetail";
 
 const RouteManagement = () => {
-  const token = Cookies.get("token");
-  const role_uuid = Cookies.get("role_uuid");
+  const token = Cookies.get('token');
+  const role = Cookies.get('role');
   const navigate = useNavigate();
   let roleNumber = 3;
 
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      navigate('/login');
+    }
+    if (role === 'superadmin') {
+      setIsSuperAdmin(true);
     }
   }, [token, navigate]);
 
@@ -51,10 +54,10 @@ const RouteManagement = () => {
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage />} />
           <React.Fragment>
             <Route
-              path="/dashboard"
+              path='/dashboard'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DashboardPage />
@@ -64,7 +67,7 @@ const RouteManagement = () => {
 
             {/* Super Admin Company Configuration Route */}
             <Route
-              path="/company"
+              path='/company'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <MainCompanyConfiguration />
@@ -72,7 +75,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/company/add-company"
+              path='/company/add-company'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <AddCompanyConfiguration />
@@ -80,7 +83,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/company/detail-company/:uuid"
+              path='/company/detail-company/:uuid'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailCompanyConfiguration />
@@ -88,7 +91,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/company/edit-company/:uuid"
+              path='/company/edit-company/:uuid'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <EditCompanyConfiguration />
@@ -98,7 +101,7 @@ const RouteManagement = () => {
             {/* Super Admin End of Company Configuration Route */}
 
             <Route
-              path="/user"
+              path='/user'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <UserConfiguration />
@@ -106,7 +109,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/role"
+              path='/role'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <RoleConfig />
@@ -114,7 +117,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/role/detail-role/:uuid"
+              path='/role/detail-role/:uuid'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <RoleConfigDetail />
@@ -189,7 +192,7 @@ const RouteManagement = () => {
 
             {/* User Configuration Route */}
             <Route
-              path="/user"
+              path='/user'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <UserConfiguration />
@@ -197,7 +200,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/user/add-user"
+              path='/user/add-user'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <AddUser />
@@ -208,7 +211,7 @@ const RouteManagement = () => {
 
             {/* Division Configuration Route */}
             <Route
-              path="/division"
+              path='/division'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DivisionConfiguration />
@@ -219,7 +222,7 @@ const RouteManagement = () => {
 
             {/* Role Configuration Route */}
             <Route
-              path="/role"
+              path='/role'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <AdminRoleConfig />
@@ -227,7 +230,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/role/detail-role/:uuid"
+              path='/role/detail-role/:uuid'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <AdminRoleConfigDetail />
@@ -238,7 +241,7 @@ const RouteManagement = () => {
 
             {/* Position Configuration Route */}
             <Route
-              path="/position"
+              path='/position'
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <PositionConfiguration />
