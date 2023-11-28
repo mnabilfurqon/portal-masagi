@@ -41,18 +41,22 @@
   margin-top: 40px;
 }
 
-.tree-permission .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
-.tree-permission .ant-tree-checkbox:hover .ant-tree-checkbox-inner,
-.tree-permission .ant-tree-checkbox:active .ant-tree-checkbox-inner {
+.permission-data .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.permission-data .ant-tree-checkbox:hover .ant-tree-checkbox-inner,
+.permission-data .ant-tree-checkbox:active .ant-tree-checkbox-inner {
   background-color: #629093 !important;
   border-color: #629093 !important;
 }
 
-.tree-permission {
+:where(.css-dev-only-do-not-override-zcfrx9).ant-tree .ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner:after {
+  background-color: #629093 !important;
+}
+
+.permission-data {
   border: 1px solid #629093;
   border-radius: 5px;
   padding: 10px;
-  width: 500px;
+  width: 100%;
 }
 
 .button-input {
@@ -66,6 +70,7 @@
   color: white;
   width: 100px;
 }
+
 .button-input:hover {
   background-color: #73B3B7;
   color: #ffffff !important;
@@ -83,6 +88,7 @@
   color: white;
   width: 100px;
 }
+
 .save-button:hover {
   background-color: #28A745;
   color: #ffffff !important;
@@ -100,6 +106,7 @@
   color: white;
   width: 100px;
 }
+
 .back-edit-button:hover {
   background-color: #FF7481;
   color: #FFFFFF !important;
