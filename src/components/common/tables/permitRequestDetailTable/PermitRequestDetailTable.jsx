@@ -77,7 +77,7 @@ const PermitRequestDetailTable = ({data}) => {
             </table>
             </div>
         )
-    } else {
+    } else if (location.pathname === '/leave-request/detail') {
         return (
             <div className='table-container'>
             <table className='table-content'>
@@ -117,6 +117,79 @@ const PermitRequestDetailTable = ({data}) => {
                 <tr>
                     <th>End Permit Date</th>
                     <td>{data.end_permit_date}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>HR</th>
+                    <td>{data.hr}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Team Leader</th>
+                    <td>{data.team_leader}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{data.status}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        )
+    } else if (location.pathname === '/overtime-request/detail') {
+        return (
+            <div className='table-container'>
+            <table className='table-content'>
+                <tbody>
+                <tr>
+                    <th>Employee Name</th>
+                    <td>{data.employee_name}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Type Overtime</th>
+                    <td>{data.type_overtime}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Reason</th>
+                    <td>{data.reason}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Overtime Date</th>
+                    <td>{data.overtime_date}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Duration</th>
+                    <td>{data.duration}</td>
                 </tr>
                 <tr>
                     <th></th>

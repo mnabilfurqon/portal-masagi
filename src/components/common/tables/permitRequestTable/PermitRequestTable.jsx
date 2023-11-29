@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom'
 const PermitRequestTable = (props) => {
     const {searchValue, filterValue, sortValue, countValue, columns} = props;
     const location = useLocation();
-    console.log(location);
 
     const [tableParams, setTableParams] = useState({
         pagination : {
@@ -98,6 +97,78 @@ const PermitRequestTable = (props) => {
       }
     ];
 
+    const dataPermit = [
+      {
+        key: '1',
+        employee_name: 'John Brown',
+        permit_leave: 'Izin Khusus',
+        reason: 'Acara Keagamaan',
+        permit_date: '2021-08-01',
+        end_permit_date: '2021-08-02',
+        status: 'pending',
+        hr: 'Samuel',
+        team_leader: 'Jackson'
+      },
+      {
+        key: '2',
+        employee_name: 'Jim Green',
+        permit_leave: 'Izin Khusus',
+        reason: 'Acara Keagamaan',
+        permit_date: '2021-08-02',
+        end_permit_date: '2021-08-03',
+        status: 'approved',
+        hr: 'Jacky',
+        team_leader: 'Johnson'
+      },
+      {
+        key: '3',
+        employee_name: 'Joe Black',
+        permit_leave: 'Izin Khusus',
+        reason: 'Acara Keagamaan',
+        permit_date: '2021-08-03',
+        end_permit_date: '2021-08-04',
+        status: 'rejected',
+        hr: 'Samuel',
+        team_leader: 'Jackson'
+      }
+    ];
+
+    const dataOvertime = [
+      {
+        key: '1',
+        employee_name: 'John Brown',
+        type_overtime: 'Office Hour',
+        reason: 'Menyelesaikan Tugas',
+        overtime_date: '2021-08-01',
+        duration: '3 Hour',
+        status: 'pending',
+        hr: 'Samuel',
+        team_leader: 'Jackson'
+      },
+      {
+        key: '2',
+        employee_name: 'Jim Green',
+        type_overtime: 'Office Hour',
+        reason: 'Menyelesaikan Tugas',
+        overtime_date: '2021-08-02',
+        duration: '2 Hour',
+        status: 'approved',
+        hr: 'Jacky',
+        team_leader: 'Johnson'
+      },
+      {
+        key: '3',
+        employee_name: 'Joe Black',
+        type_overtime: 'Office Hour',
+        reason: 'Menyelesaikan Tugas',
+        overtime_date: '2021-08-03',
+        duration: '1 Hour',
+        status: 'rejected',
+        hr: 'Samuel',
+        team_leader: 'Jackson'
+      }
+    ]
+
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
           pagination: {
@@ -132,7 +203,8 @@ const PermitRequestTable = (props) => {
                 scroll={{ x: true, y: 650 }}
                 onChange={handleTableChange}
             />
-          : <Table 
+          : location.pathname === '/leave-request' ?  
+            <Table 
                 columns={columns}
                 dataSource={dataLeave}
                 pagination={tableParams.pagination}
@@ -141,7 +213,27 @@ const PermitRequestTable = (props) => {
                 scroll={{ x: true, y: 650 }}
                 onChange={handleTableChange}
             />
-          }
+          : location.pathname === '/permit-request' ?
+            <Table 
+                columns={columns}
+                dataSource={dataPermit}
+                pagination={tableParams.pagination}
+                // loading={loading}
+                rowClassName="custom-row"
+                scroll={{ x: true, y: 650 }}
+                onChange={handleTableChange}
+            />
+          : location.pathname === '/overtime-request' ?
+            <Table 
+                columns={columns}
+                dataSource={dataOvertime}
+                pagination={tableParams.pagination}
+                // loading={loading}
+                rowClassName="custom-row"
+                scroll={{ x: true, y: 650 }}
+                onChange={handleTableChange}
+            />
+          : null }
         </div>
     )
 }

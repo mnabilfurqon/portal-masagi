@@ -255,6 +255,19 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === '/overtime-request') {
     pageTitle = 'Overtime Request';
     finalPageTitle = pageTitle;
+  } else if (location.pathname.includes('/overtime-request/detail')) {
+    pageTitle = (
+      <Link to="/overtime-request" className="page-title">
+        Overtime Request /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
   } else if (location.pathname === '/permit-request') {
     pageTitle = 'Permit Request';
     finalPageTitle = pageTitle;

@@ -26,19 +26,18 @@ import OfficialTravelMain from "../pages/employee/schemas/approvalConfiguration/
 import OfficialTravelDetail from "../pages/employee/schemas/approvalConfiguration/officialTravel/OfficialTravelDetail";
 import LeaveMain from "../pages/employee/schemas/approvalConfiguration/leave/LeaveMain";
 import LeaveDetail from "../pages/employee/schemas/approvalConfiguration/leave/LeaveDetail";
+import OvertimeMain from "../pages/employee/schemas/approvalConfiguration/overtime/OvertimeMain";
+import OvertimeDetail from "../pages/employee/schemas/approvalConfiguration/overtime/OvertimeDetail";
 
 const RouteManagement = () => {
   const token = Cookies.get('token');
-  const role = Cookies.get('role');
+  const role_uuid = Cookies.get('role_uuid');
   const navigate = useNavigate();
   let roleNumber = 3;
 
   useEffect(() => {
     if (!token) {
       navigate('/login');
-    }
-    if (role === 'superadmin') {
-      setIsSuperAdmin(true);
     }
   }, [token, navigate]);
 
@@ -50,7 +49,6 @@ const RouteManagement = () => {
     roleNumber = 3;
   }
 
-  console.log(roleNumber);
   if (roleNumber === 1) {
     // Routing untuk Super Admin
     return (
@@ -406,7 +404,16 @@ const RouteManagement = () => {
                   path="/overtime-request"
                   element={
                     <LayoutComponent roleNumber={roleNumber}>
-                      <p>Overtime Request</p>
+                      <OvertimeMain />
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/overtime-request/detail"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <OvertimeDetail />
                     </LayoutComponent>
                   }
                 />

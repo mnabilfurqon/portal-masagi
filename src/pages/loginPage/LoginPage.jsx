@@ -20,13 +20,13 @@ const LoginPage = () => {
     try {
       setLoading(true);
       const loginResponse = await axios.post(
-        'http://localhost:5000/api/v1/auth/login',
+        'https://attendance-1-r8738834.deta.app/api/v1/auth/login',
         values
       );
       Cookies.set('token', loginResponse.data.token);
 
       const protectedResponse = await axios.get(
-        'http://localhost:5000/api/v1/auth/protected',
+        'https://attendance-1-r8738834.deta.app/api/v1/auth/protected',
         {
           headers: {
             Authorization: loginResponse.data.token,
