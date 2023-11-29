@@ -101,7 +101,7 @@ const PermitRequestTable = (props) => {
       {
         key: '1',
         employee_name: 'John Brown',
-        permit_leave: 'Izin Khusus',
+        type_permit: 'Izin Khusus',
         reason: 'Acara Keagamaan',
         permit_date: '2021-08-01',
         end_permit_date: '2021-08-02',
@@ -112,7 +112,7 @@ const PermitRequestTable = (props) => {
       {
         key: '2',
         employee_name: 'Jim Green',
-        permit_leave: 'Izin Khusus',
+        type_permit: 'Izin Khusus',
         reason: 'Acara Keagamaan',
         permit_date: '2021-08-02',
         end_permit_date: '2021-08-03',
@@ -123,7 +123,7 @@ const PermitRequestTable = (props) => {
       {
         key: '3',
         employee_name: 'Joe Black',
-        permit_leave: 'Izin Khusus',
+        type_permit: 'Izin Khusus',
         reason: 'Acara Keagamaan',
         permit_date: '2021-08-03',
         end_permit_date: '2021-08-04',

@@ -223,6 +223,81 @@ const PermitRequestDetailTable = ({data}) => {
             </table>
             </div>
         )
+    } else if (location.pathname === '/permit-request/detail') {
+        return (
+            <div className='table-container'>
+            <table className='table-content'>
+                <tbody>
+                <tr>
+                    <th>Employee Name</th>
+                    <td>{data.employee_name}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Type Overtime</th>
+                    <td>{data.type_permit}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Reason</th>
+                    <td>{data.reason}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Permit Date</th>
+                    <td>{data.permit_date}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>End Permit Date</th>
+                    <td>{data.end_permit_date}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>HR</th>
+                    <td>{data.hr}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Team Leader</th>
+                    <td>{data.team_leader}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{data.status}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        )
+    } else {
+        return null
     }
 }
 

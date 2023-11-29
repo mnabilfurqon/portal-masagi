@@ -28,6 +28,8 @@ import LeaveMain from "../pages/employee/schemas/approvalConfiguration/leave/Lea
 import LeaveDetail from "../pages/employee/schemas/approvalConfiguration/leave/LeaveDetail";
 import OvertimeMain from "../pages/employee/schemas/approvalConfiguration/overtime/OvertimeMain";
 import OvertimeDetail from "../pages/employee/schemas/approvalConfiguration/overtime/OvertimeDetail";
+import PermitMain from "../pages/employee/schemas/approvalConfiguration/permit/PermitMain";
+import PermitDetail from "../pages/employee/schemas/approvalConfiguration/permit/PermitDetail";
 
 const RouteManagement = () => {
   const token = Cookies.get('token');
@@ -422,7 +424,16 @@ const RouteManagement = () => {
                   path="/permit-request"
                   element={
                     <LayoutComponent roleNumber={roleNumber}>
-                      <p>Permit Request</p>
+                      <PermitMain />
+                    </LayoutComponent>
+                  }
+                />
+
+                <Route
+                  path="/permit-request/detail"
+                  element={
+                    <LayoutComponent roleNumber={roleNumber}>
+                      <PermitDetail />
                     </LayoutComponent>
                   }
                 />
