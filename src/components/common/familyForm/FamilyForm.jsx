@@ -4,16 +4,30 @@ import { Button, Form, Input, DatePicker } from 'antd';
 import SubmitButton from '../submitButton/SubmitButton';
 import './familyForm.css';
 
-const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
+const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editFamilyData}) => {
     // Address Input
     const { TextArea } = Input;
+    const [form] = Form.useForm();
 
     // Date Picker
-    const dateFormatList = 'DD/MM/YYYY';
+    const dateFormatList = 'YYYY-MM-DD';
+
+    if (editFamilyData) {
+        form.setFieldsValue({
+            full_name: editFamilyData.full_name,
+            nik: editFamilyData.nik,
+            birth_date: dayjs(editFamilyData.birth_date, dateFormatList),
+            birth_place: editFamilyData.birth_place,
+            address: editFamilyData.address,
+            relation: editFamilyData.relation,
+            job: editFamilyData.job,
+        })
+    }
 
   return (
     <>
         <Form
+            form={form}
             name="family"
             className='add-family-form'
             labelCol={{
@@ -26,10 +40,13 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            initialValues={{
+                birth_date: dayjs('1970-01-01', dateFormatList),
+            }}
         >
             <Form.Item
             label="Full Name"
-            name="fullName"
+            name="full_name"
             colon={false}
             rules={[
                 {
@@ -50,6 +67,10 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
                 required: true,
                 message: 'Please input NIK!',
                 },
+                {
+                    pattern: /^[0-9]+$/,
+                    message: 'Please enter a valid contact person (numbers and dot(.) only)!',
+                },
             ]}
             >
             <Input placeholder='Enter NIK' className='input-button'/>
@@ -57,7 +78,7 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
 
             <Form.Item
             label="Birth Date"
-            name="birthDate"
+            name="birth_date"
             colon={false}
             rules={[
                 {
@@ -66,12 +87,12 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
                 },
             ]}
             >
-            <DatePicker placeholder='DD/MM/YYYY' defaultValue={dayjs('01/01/2015', dateFormatList)} format={dateFormatList} className='date-picker'/>
+            <DatePicker placeholder='YYYY-MM-DD' format={dateFormatList} className='date-picker'/>
             </Form.Item>
 
             <Form.Item
             label="Birth Place"
-            name="birthPlace"
+            name="birth_place"
             colon={false}
             rules={[
                 {
@@ -131,7 +152,9 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton}) => {
                 <Button type="text" onClick={onCancleEditFormButton}>
                     Cancel
                 </Button>
-                <SubmitButton buttonText="Save"/>
+                {editFamilyData ? <SubmitButton buttonText="Edit"/> :
+                <SubmitButton buttonText="Add"/>
+                }
             </div>
             </Form.Item>
         </Form>

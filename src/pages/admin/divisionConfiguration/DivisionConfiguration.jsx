@@ -10,13 +10,57 @@ import FailedAddDataModal from '../../../components/common/failedModal/FailedAdd
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import LoadingComponent from '../../../components/loadingComponent/LoadingComponent';
+import SearchBox from '../../../components/common/searchBox/SearchBox';
+import SortButton from '../../../components/common/sortButton/SortButton';
+import CountButton from '../../../components/common/countButton/CountButton';
+import { Row, Col } from 'antd';
 
-const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
+const DivisionConfiguration = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const [actionValue, setActionValue] = useState("");
   const [uuid, setUuid] = useState("");
   const [defaultDivisionName, setDefaultDivisionName] = useState("");
+  const [selectedLoading, setSelectedLoading] = useState(false);
+  const [addLoading, setAddLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // search handler
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleSearch = (value) => {
+    setSearchValue(value);
+  };
+  // end of search handler
+
+  // sort handler
+  const [sortValue, setSortValue] = useState("");
+
+  const handleSort = (value) => {
+    setSortValue(value);
+  };
+  // end of sort handler
+
+  // count handler
+  const [countValue, setCountValue] = useState("10");
+
+  const handleCount = (value) => {
+    setCountValue(value);
+  };
+  // end of count handler
+
+  const itemsSort = [
+    {
+      key: 'aToZDivision',
+      label: 'A-Z Division Name'
+    },
+    {
+      key: 'zToADivision',
+      label: 'Z-A Division Name'
+    },
+  ];
 
   // Handler Declaration
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -44,7 +88,7 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
   // POST API for Add Division
   const addDivision = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/v1/division/", {
+      await axios.post("https://attendance-1-r8738834.deta.app/api/v1/division/", {
         "name": actionValue,
       }, {
         headers: {
@@ -56,13 +100,15 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
       setActionValue("");
     } catch (error) {
       console.log(error);
+    } finally {
+      setAddLoading(false);
     }
   }
 
   // GET API for Selected Division
   const getSelectedDivision = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/api/v1/division/${uuid}`, {
+      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
         headers: {
           "Authorization": token,
         },
@@ -70,13 +116,15 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
       setDefaultDivisionName(response.data.name);
     } catch (error) {
       console.log(error);
+    } finally {
+      setSelectedLoading(false);
     }
   }
 
   // PUT API for Edit Division
   const editDivision = async () => {
     try {
-      const response = await axios.put(`http://127.0.0.1:5000/api/v1/division/${uuid}`, {
+      await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
         "name": actionValue,
       }, {
         headers: {
@@ -88,27 +136,30 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
       setActionValue("");
     } catch (error) {
       console.log(error);
-    } 
+    } finally {
+      setEditLoading(false);
+    }
   }
-  
+
   // Delete API for Delete Division
   const deleteDivision = async () => {
     try {
-      const response = await axios.delete(`http://127.0.0.1:5000/api/v1/division/${uuid}`, {
+      await axios.delete(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
         headers: {
           "Authorization": token,
         },
       });
-      console.log(response);
       setIsDeleteModalOpen(false);
       setIsSuccessDeleteModalOpen(true);
     } catch (error) {
       setIsFailedDeleteModalOpen(true);
       console.log(error);
+    } finally {
+      setDeleteLoading(false);
     }
   }
 
-  // Open Delete Modal 
+  // Open Delete Modal
   const isDeleteButtonClicked = (record) => {
     const value = record.key;
     setUuid(value);
@@ -124,6 +175,7 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
   const isEditButtonClicked = (record) => {
     const value = record.key;
     setUuid(value);
+    setSelectedLoading(true);
     setIsEditModalOpen(true);
   };
 
@@ -139,6 +191,7 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
 
   // Delete Modal Handler
   const handleDeleteButtonDeleteModal = () => {
+    setDeleteLoading(true);
     deleteDivision();
   };
 
@@ -155,6 +208,7 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
   // Add Modal Handler
   const handleOkAddModal = () => {
     if (actionValue.trim() !== "") {
+      setAddLoading(true);
       addDivision();
     } else {
       setIsFailedAddDataModalOpen(true);
@@ -174,6 +228,7 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
   // Edit Modal Handler
   const handleOkEditModal = () => {
     if (actionValue.trim() !== "") {
+      setEditLoading(true);
       editDivision();
     } else {
       setIsFailedEditDataModalOpen(true);
@@ -211,84 +266,102 @@ const DivisionConfiguration = ({searchValue, sortValue, countValue}) => {
 
   return (
     <>
-        <div className='right-buttons'>
-            <AddButton buttonText="Add Division" handleClick={isAddButtonClicked}/>
-            <AddEditModal
-            visible={isAddModalOpen}
-            title = "Add Division"
-            handleOk={handleOkAddModal}
-            subtitle="Division"
-            placeholder="Enter Division name"
-            textButton="Add Division"
-            handleCancle={handleCancelAddModal}
-            onFinishFailed={onFinishFailed}
-            actionValue={actionValue}
-            handleActionValue={handleActionValue}
-            />
-        </div>
-        <div className='division-table-container'>
+      <Row gutter={[16, 8]}>
+        <Col xs={24} md={24} lg={10} xl={6} xxl={6}>
+          <SearchBox onSearch={handleSearch} />
+        </Col>
+        <Col xs={14} md={10} lg={10} xl={5} xxl={5}>
+          <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
+        </Col>
+        <Col xs={10} md={4} lg={4} xl={2} xxl={2}>
+          <CountButton className="count-button" onCount={handleCount} />
+        </Col>
+        <Col xs={24} md={10} lg={24} xl={{span: 4, offset: 7}} xxl={{span: 4, offset: 7}}>
+          <AddButton buttonText="Add Division" handleClick={isAddButtonClicked}/>
+        </Col>
+      </Row>
 
-            <DivisionTable
-            isDeleteButtonClicked={isDeleteButtonClicked}
-            isEditButtonClicked={isEditButtonClicked}
-            searchValue={searchValue}
-            sortValue={sortValue}
-            countValue={countValue}
-            isAddModalOpen={isAddModalOpen}
-            isEditModalOpen={isEditModalOpen}
-            isDeleteModalOpen={isDeleteModalOpen}
-            />
+        <AddEditModal
+          visible={isAddModalOpen}
+          title = "Add Division"
+          handleOk={handleOkAddModal}
+          subtitle="Division"
+          placeholder="Enter Division name"
+          textButton="Add Division"
+          handleCancle={handleCancelAddModal}
+          onFinishFailed={onFinishFailed}
+          actionValue={actionValue}
+          handleActionValue={handleActionValue}
+          loading={addLoading}
+        />
 
-            <AddEditModal
-            visible={isEditModalOpen}
-            title = "Edit Name"
-            handleOk={handleOkEditModal}
-            subtitle="Division"
-            textButton="Save"
-            handleCancle={handleCancelEditModal}
-            onFinishFailed={onFinishFailed}
-            defaultDivisionName={defaultDivisionName}
-            actionValue={actionValue}
-            handleActionValue={handleActionValue}
-            />
+      <div className='division-table-container'>
+        <DivisionTable
+          isDeleteButtonClicked={isDeleteButtonClicked}
+          isEditButtonClicked={isEditButtonClicked}
+          searchValue={searchValue}
+          sortValue={sortValue}
+          countValue={countValue}
+          isAddModalOpen={isAddModalOpen}
+          isEditModalOpen={isEditModalOpen}
+          isDeleteModalOpen={isDeleteModalOpen}
+        />
 
-            <DeleteModal
+        {selectedLoading ? <LoadingComponent /> :
+        <AddEditModal
+          visible={isEditModalOpen}
+          title = "Edit Name"
+          handleOk={handleOkEditModal}
+          subtitle="Division"
+          textButton="Save"
+          handleCancle={handleCancelEditModal}
+          onFinishFailed={onFinishFailed}
+          defaultDivisionName={defaultDivisionName}
+          actionValue={actionValue}
+          handleActionValue={handleActionValue}
+          loading={editLoading}
+        />
+        }
+
+        {deleteLoading ? <LoadingComponent /> :
+          <DeleteModal
             visible={isDeleteModalOpen}
             handleDelete={handleDeleteButtonDeleteModal}
             handleCancel={handleCancelButtonDeleteModal}
-            />
+          />
+        }
 
-            <SuccessDeleteModal
-            visible={isSuccessDeleteModalOpen}
-            onClose={handleOkSuccessDeleteModal}
-            />
+        <SuccessDeleteModal
+          visible={isSuccessDeleteModalOpen}
+          onClose={handleOkSuccessDeleteModal}
+        />
 
-            <SuccessAddDataModal
-            visible={isSuccessAddDataModalOpen}
-            onClose={handleOkSuccessAddDataModal}
-            textParagraph="Data upload successful!"
-            />
+        <SuccessAddDataModal
+          visible={isSuccessAddDataModalOpen}
+          onClose={handleOkSuccessAddDataModal}
+          textParagraph="Data upload successful!"
+        />
 
-            <SuccessAddDataModal
-            visible={isSuccessEditDataModalOpen}
-            onClose={handleOkSuccessEditDataModal}
-            textParagraph="Data changes successful!"
-            />
+        <SuccessAddDataModal
+          visible={isSuccessEditDataModalOpen}
+          onClose={handleOkSuccessEditDataModal}
+          textParagraph="Data changes successful!"
+        />
 
-            <FailedAddDataModal
-            visible={isFailedAddDataModalOpen}
-            onClose={handleOkFailedAddDataModal}
-            />
+        <FailedAddDataModal
+          visible={isFailedAddDataModalOpen}
+          onClose={handleOkFailedAddDataModal}
+        />
 
-            <FailedAddDataModal
-            visible={isFailedEditDataModalOpen}
-            onClose={handleOkFailedEditDataModal}
-            />
+        <FailedAddDataModal
+          visible={isFailedEditDataModalOpen}
+          onClose={handleOkFailedEditDataModal}
+        />
 
-            <FailedAddDataModal
-            visible={isFailedDeleteModalOpen}
-            onClose={handleOkFailedDeleteDataModal}
-            />
+        <FailedAddDataModal
+          visible={isFailedDeleteModalOpen}
+          onClose={handleOkFailedDeleteDataModal}
+        />
       </div>
     </>
   )

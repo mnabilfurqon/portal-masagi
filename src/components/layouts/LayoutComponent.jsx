@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   HomeOutlined,
   BellOutlined,
@@ -13,53 +13,46 @@ import Cookies from "js-cookie";
 import "./layoutComponent.css";
 
 const LayoutComponent = ({ children, isSuperAdmin }) => {
-  const token = Cookies.get("token");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
-  }, [token, navigate]);
-
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  // Dropdown Profile
+  // Logout Components
   const MyDropdown = () => {
-    const username = Cookies.get('username');
+    const username = Cookies.get("username");
     const navigate = useNavigate();
-    // the name should be "items"
     const items = [
       {
-        label: 'Logout',
-        key: '0',
+        label: "Logout",
+        key: "0",
       },
     ];
 
     const handlerLogout = () => {
-      Cookies.remove('token');
-      Cookies.remove('role_id');
-      Cookies.remove('username');
-      navigate('/login');
+      Cookies.remove("token");
+      Cookies.remove("role_uuid");
+      Cookies.remove("username");
+      Cookies.remove("company_uuid");
+      navigate("/login");
     };
 
     return (
       <>
-        <Dropdown menu={{ items, onClick: handlerLogout }} trigger={['click']}>
+        <Dropdown menu={{ items, onClick: handlerLogout }} trigger={["click"]}>
           <a
             style={{
-              textDecoration: 'none',
-              color: 'GrayText',
-            }}>
+              textDecoration: "none",
+              color: "GrayText",
+            }}
+          >
             <Space>
               <Avatar
-                style={{ backgroundColor: '#17A2B8', verticalAlign: 'middle' }}
-                size='medium'
-                gap={2}>
+                style={{ backgroundColor: "#17A2B8", verticalAlign: "middle" }}
+                size="medium"
+                gap={2}
+              >
                 <UserOutlined />
               </Avatar>
               {username}
@@ -72,14 +65,14 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
   };
 
   // Ganti Judul Tiap Ganti Halaman
-  let pageTitle = 'Dashboard';
-  let pageSubTitle = '';
-  let finalPageTitle = 'Dashboard';
+  let pageTitle = "Dashboard";
+  let pageSubTitle = "";
+  let finalPageTitle = "Dashboard";
 
-  if (location.pathname === '/company') {
-    pageTitle = 'Company';
+  if (location.pathname === "/company") {
+    pageTitle = "Company";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/company/add-company') {
+  } else if (location.pathname === "/company/add-company") {
     pageTitle = (
       <Link to="/company" className="page-title">
         Company /{" "}
@@ -92,7 +85,7 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname.includes('/company/detail-company/')) {
+  } else if (location.pathname.includes("/company/detail-company/")) {
     pageTitle = (
       <Link to="/company" className="page-title">
         Company /{" "}
@@ -105,7 +98,7 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname.includes('/company/edit-company/')) {
+  } else if (location.pathname.includes("/company/edit-company/")) {
     pageTitle = (
       <Link to="/company" className="page-title">
         Company /{" "}
@@ -124,7 +117,7 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
   } else if (location.pathname === '/user') {
     pageTitle = 'User';
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/user/add-user') {
+  } else if (location.pathname === "/user/add-user") {
     pageTitle = (
       <Link to="/user" className="page-title">
         User /{" "}
@@ -137,10 +130,10 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === '/role') {
-    pageTitle = 'Role';
+  } else if (location.pathname === "/role") {
+    pageTitle = "Role";
     finalPageTitle = pageTitle;
-  } else if (location.pathname.includes('/role/detail-role')) {
+  } else if (location.pathname.includes("/role/detail-role")) {
     pageTitle = (
       <Link to="/role" className="page-title">
         Role /{" "}
@@ -153,11 +146,11 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === '/position') {
-    pageTitle = 'Position';
+  } else if (location.pathname === "/position") {
+    pageTitle = "Position";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/employee') {
-    pageTitle = 'Employee';
+  } else if (location.pathname === "/employee") {
+    pageTitle = "Employee";
     finalPageTitle = pageTitle;
   } else if (location.pathname.includes("/employee/detail-employee")) {
     pageTitle = (
@@ -174,7 +167,7 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === '/employee/add-employee') {
+  } else if (location.pathname === "/employee/add-employee") {
     pageTitle = (
       <Link to="/employee" className="page-title">
         Employee /{" "}
@@ -195,79 +188,89 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
   }
 
   return (
-    <Layout className='layout-container'>
+    <Layout className="layout-container">
       {/* Sider */}
       {isSuperAdmin ? (
-        // Conditional Rendering ketika user adalah Super Admin
+        // Login sebagai Super Admin
         <Sider
           breakpoint="md"
           collapsedWidth="0"
           style={{
             background: colorBgContainer,
-            backgroundColor: 'rgba(248, 249, 250, 1)',
-          }}>
-          <img src={LogoMasagi} alt='Logo Masagi' className='logo-masagi' />
+            backgroundColor: "rgba(248, 249, 250, 1)",
+          }}
+        >
+          <Link to="/dashboard">
+            <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
+          </Link>
           <Menu
             defaultSelectedKeys={[location.pathname]}
-            mode='inline'
-            style={{ backgroundColor: 'rgba(248, 249, 250, 1)' }}>
-            <Menu.Item key='/dashboard' icon={<HomeOutlined />}>
-              <Link to='/dashboard'>Dashboard</Link>
+            mode="inline"
+            style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          >
+            <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+              <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
             <SubMenu
-              key='masterData'
+              key="masterData"
               icon={<TbDatabasePlus />}
-              title='Master Data'>
-              <Menu.Item key='/company'>
-                <Link to='/company'>Company</Link>
+              title="Master Data"
+            >
+              <Menu.Item key="/company">
+                <Link to="/company">Company</Link>
               </Menu.Item>
-              <Menu.Item key='/user'>
-                <Link to='/user'>User</Link>
+              <Menu.Item key="/user">
+                <Link to="/user">User</Link>
               </Menu.Item>
-              <Menu.Item key='/role'>
-                <Link to='/role'>Role</Link>
+              <Menu.Item key="/role">
+                <Link to="/role">Role</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
       ) : (
-        // Conditional Rendering ketika user adalah Admin
+        // Login sebagai Admin
         <Sider
           breakpoint="md"
           collapsedWidth="0"
           style={{
             background: colorBgContainer,
-            backgroundColor: 'rgba(248, 249, 250, 1)',
-          }}>
-          <img src={LogoMasagi} alt='Logo Masagi' className='logo-masagi' />
+            backgroundColor: "rgba(248, 249, 250, 1)",
+          }}
+        >
+          <Link to="/dashboard">
+            <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
+          </Link>
           <Menu
             defaultSelectedKeys={[location.pathname]}
-            mode='inline'
-            style={{ backgroundColor: 'rgba(248, 249, 250, 1)' }}>
-            <Menu.Item key='/dashboard' icon={<HomeOutlined />}>
-              <Link to='/dashboard'>Dashboard</Link>
+            mode="inline"
+            style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          >
+            <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+              <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
             <SubMenu
-              key='masterData'
+              key="masterData"
               icon={<TbDatabasePlus />}
-              title='Master Data'>
-              <Menu.Item key='/company'>
-                <Link to='/company'>Company</Link>
+              title="Master Data"
+            >
+              <Menu.Item key="/company">
+                <Link to="/company">Company</Link>
               </Menu.Item>
-              <Menu.Item key='/employee'>
-                <Link to='/employee'>Employee</Link>
+              <Menu.Item key="/employee">
+                <Link to="/employee">Employee</Link>
               </Menu.Item>
-              <Menu.Item key='/user'>
-                <Link to='/user'>User</Link>
+              <Menu.Item key="/user">
+                <Link to="/user">User</Link>
               </Menu.Item>
-              <Menu.Item key='/role'>
-                <Link to='/role'>Role</Link>
+              <Menu.Item key="/role">
+                <Link to="/role">Role</Link>
               </Menu.Item>
-              <Menu.Item key='/division'>
-                <Link to='/division'>Division</Link>
+              <Menu.Item key="/division">
+                <Link to="/division">Division</Link>
               </Menu.Item>
-              <Menu.Item key='/position'>
-                <Link to='/position'>Position</Link>
+              <Menu.Item key="/position">
+                <Link to="/position">Position</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>
@@ -280,24 +283,26 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
           style={{
             padding: 0,
             background: colorBgContainer,
-            backgroundColor: 'rgba(248, 249, 250, 1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
+            backgroundColor: "rgba(248, 249, 250, 1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <Flex
-            gap={'middle'}
-            justify='space-between'
+            gap={"middle"}
+            justify="space-between"
             style={{
-              width: '100%',
-              padding: '2rem',
-            }}>
-            <div className='brand'>
+              width: "100%",
+              padding: "2rem",
+            }}
+          >
+            <div className="brand">
               <p>{finalPageTitle}</p>
             </div>
 
             <Flex>
-              <Space style={{ padding: '10px' }}>
+              <Space style={{ padding: "10px" }}>
                 <BellOutlined />
                 <MyDropdown />
               </Space>
@@ -308,8 +313,9 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
         {/* Content */}
         <Content
           style={{
-            margin: '0 16px',
-          }}>
+            margin: "0 16px",
+          }}
+        >
           <div
             style={{
               padding: 24,

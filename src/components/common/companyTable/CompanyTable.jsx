@@ -10,7 +10,6 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
 const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
-  console.log(searchValue);
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState([]);
@@ -82,7 +81,6 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
           "Authorization": token,
         },
       });
-      console.log(response);
       setCompanyData(response.data.items);
       setTableParams({
         ...tableParams,
