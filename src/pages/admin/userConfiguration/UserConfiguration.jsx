@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 // import { Input } from 'antd'
 // import { Button, Dropdown } from 'antd'
 // import { InputNumber } from 'antd'
-import { Table, Tag, Space, Button, Row, Col } from 'antd'
+import { SearchOutlined } from '@ant-design/icons';
+import { Table, Tag, Space, Button, Row, Col, Input } from 'antd'
 import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
 import { SuccessUpdateModal } from '../../../components/common/successModal/SuccessModal'
 import { useNavigate, useParams, Link } from 'react-router-dom'
@@ -26,8 +27,11 @@ const UserConfiguration = () => {
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
-  const {showModal} = useParams();
   const [isActive, setIsActive] = useState();
+  const [searchText, setSearchText] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const {showModal} = useParams();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -44,6 +48,7 @@ const UserConfiguration = () => {
   // API GET Users Data
   const getUsersData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/users/', {
         headers: {
           Authorization: token,
@@ -53,6 +58,8 @@ const UserConfiguration = () => {
       console.log(response.data[0]);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -62,6 +69,10 @@ const UserConfiguration = () => {
       title: 'Username',
       dataIndex: 'username',
       key: 'username',
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return String(record.username).toLowerCase().includes(value.toLowerCase());
+      },
     },
     // {
     //   title: 'Password',
@@ -195,26 +206,28 @@ const UserConfiguration = () => {
 
   const itemsSort = [
     {
-      key: 'aToZUser',
+      key: 'aToZ',
       label: 'A-Z Username'
     },
     {
-      key: 'zToAUser',
+      key: 'zToA',
       label: 'Z-A Username'
-    },
-    {
-      key: 'latestJoinDate',
-      label: 'Latest Join Date'
-    },
-    {
-      key: 'oldestJoinDate',
-      label: 'Oldest Join Date'
     },
   ];
 
+  // Sort data berdasarkan sortValue
+  const sortedData = [...data].sort((a, b) => {
+    if (sortValue === 'aToZ') {
+      return a.username.localeCompare(b.username);
+    } else if (sortValue === 'zToA') {
+      return b.username.localeCompare(a.username);
+    } else {
+      return 0;
+    }
+  });
+
   return (
   <>
-    <div>
       {/* <Row gutter={[16, 8]}>
         <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
           <SearchBox onSearch={handleSearch} /> 
@@ -230,23 +243,54 @@ const UserConfiguration = () => {
         </Col>
         <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 4}} xxl={{span: 4, offset: 6}}>
           <Link to='/company/add-company'>
-          <AddButton buttonText="Add Company"/>
+            <AddButton buttonText="Add Company"/> 
           </Link>
         </Col>
       </Row>
       <br /> */}
 
-      <Table 
-      columns={columns} 
-      dataSource={data}
-      // dataSource={sortedData} 
-      // pagination={paginationConfig}
-      searchValue={searchValue} 
-      filterValue={filterValue} 
-      sortValue={sortValue} 
-      countValue={countValue}
-      />
-    </div>
+    <Row gutter="10" justify="start">
+      <Col>
+        <Input 
+        className='search-box'
+        prefix={<SearchOutlined/>} 
+        placeholder='Search' 
+        onSearch={(value)=>{ 
+          setSearchText(value)
+        }}
+        onChange={(e) => {
+          setSearchText(e.target.value);
+        }}
+        allowClear
+        />
+      </Col>
+      <Col>
+        <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
+      </Col>
+      <Col>
+        <CountButton className="count-button" onCount={handleCount} />
+      </Col>
+      <Col>
+        {/* <AddPosition /> */}
+      </Col>
+    </Row>
+    <br />
+
+    <Table 
+    columns={columns} 
+    // dataSource={data}
+    pagination={{
+      pageSize: countValue,
+    }} 
+    // onChange={sortedData} 
+    // onChange={sortValue} 
+    dataSource={sortedData} 
+    loading={loading}
+    // pagination={paginationConfig}
+    // searchValue={searchValue} 
+    // filterValue={filterValue} 
+    // countValue={countValue}
+    />
 
     {/* <div>
       <SuccessModal action="Delete"/>

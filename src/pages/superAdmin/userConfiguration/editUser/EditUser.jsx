@@ -53,8 +53,8 @@ const editUser = (props) => {
       setIsActive(response.data.is_active)
       setRole(response.data.role_id)
       console.log(username, isActive, role);
-      // setUser(response.data);
-      // console.log(user);
+      setUser(response.data);
+      console.log(user);
     } catch (error) {
       console.log(error);
     }
@@ -179,14 +179,15 @@ const editUser = (props) => {
           form={form}
           initialValues={{
             layout: formLayout,
+            username: user.username,
           }}
         >
           <Form.Item label="Username">
-            <Input placeholder={username} value={username} onChange={(e) => setUsername(e.target.value)} />
+            <Input placeholder="Username" />
           </Form.Item>
-          {/* <Form.Item label="Password">
+          <Form.Item label="Password">
             <Input placeholder="Password" value={password} onChange={(e) => setUser.password(e.target.value)} />
-          </Form.Item> */}
+          </Form.Item>
           <Form.Item label="Role">
             <Select defaultValue={role} value={role} onChange={handleChangeRole}>
               {roles?.map(role => {

@@ -22,12 +22,13 @@ const AddUser = () => {
     
     const [roles, setRoles] = useState();
     const [users, setUsers] = useState([]);
+    const [employee, setEmployee] = useState();
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [status, setStatus] = useState(true);
-    // const [company, setCompany] = useState("");
+    const [companies, setCompanies] = useState();
     // const company_uuid = Cookies.get("company_uuid");
 
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
@@ -39,6 +40,8 @@ const AddUser = () => {
           navigate("/login");
         }
         getRoles();
+        getEmployees();
+        getCompanies();
         console.log(token)
         console.log(company)
         // setCompany(company_uuid)
@@ -78,6 +81,7 @@ const AddUser = () => {
     // GET API Roles
     const getRoles = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
                 headers: { Authorization: token },
             }
@@ -85,19 +89,40 @@ const AddUser = () => {
         setRoles(response.data[0].items);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // GET API Employee
+    const getEmployees = async () => {
+        try {
+            setLoading(true)
+            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
+                headers: { Authorization: token },
+            }
+        );
+        setEmployee(response.data.items);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
         }
     }
 
     // GET API Company
-    const getCompany = async () => {
+    const getCompanies = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
-        setCompany(response.data[0].items);
+        setCompanies(response.data.items);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -147,12 +172,14 @@ const AddUser = () => {
           requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
           initialValues={{
             layout: formLayout,
+            company_uuid: company.uuid,
             // username: username,
             // password: password,
             // is_active: status,
             // role_id: role,
           }}
           autoComplete='off'
+          loading={loading}
         >
             <Form.Item
             label="Username"
@@ -200,7 +227,7 @@ const AddUser = () => {
             ]}>
                 <Select>
                   {roles?.map(role => 
-                    <Select.Option key={(role.uuid)} value={(role.uuid)}>{(role.name)}</Select.Option>)
+                    <Select.Option key={(role.uuid)} value={(role.uuid)} loading={loading} >{(role.name)}</Select.Option>)
                   }
                 </Select>
             </Form.Item>
@@ -227,8 +254,37 @@ const AddUser = () => {
             name="company_uuid"
             colon={false}
             disabled
+            rules={[
+                {
+                required: true,
+                message: 'Please select your company!',
+                },
+            ]}
             >
-                <Input value={company.uuid} disabled bordered={true} />
+                <Select disabled>
+                  {companies?.map(item => 
+                    <Select.Option key={(item.uuid)} value={(item.uuid)} loading={loading} >{(item.name)}</Select.Option>)
+                  }
+                </Select>
+            </Form.Item>
+            <Form.Item
+            label="Employee"
+            labelAlign='left'
+            name="employee_uuid"
+            colon={false}
+            disabled
+            rules={[
+                {
+                required: true,
+                message: 'Please select your employee!',
+                },
+            ]}
+            >
+                <Select>
+                  {employee?.map(item => 
+                    <Select.Option key={(item.uuid)} value={(item.uuid)} loading={loading} >{(item.name)}</Select.Option>)
+                  }
+                </Select>
             </Form.Item>
             <Flex justify='end' className='action'>
             <Form.Item>

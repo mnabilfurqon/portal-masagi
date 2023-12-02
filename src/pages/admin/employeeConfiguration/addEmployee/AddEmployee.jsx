@@ -169,7 +169,7 @@ const AddEmployee = () => {
 
     return (
     <>
-        <Flex gap={15}>
+        <Flex gap={15} align='center'>
             {/* <Avatar size={128} icon={<UserOutlined />} /> */}
             <div>
                 <Upload
@@ -195,8 +195,8 @@ const AddEmployee = () => {
                 </Upload>
             </div>
             <div>
-                <h2 className='profile-name'>Full Name</h2>
-                <p className='profile-role'>Position</p>
+                <h2>Full Name</h2>
+                <p>Position</p>
             </div>
         </Flex>
         <Divider className='profile-divider'/> <br />

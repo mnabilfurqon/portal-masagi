@@ -4,16 +4,20 @@ import axios from 'axios'
 import "./positionConfiguration.css"
 // import { BiEdit } from "react-icons/bi";
 // import { MdOutlineDelete } from "react-icons/md";
-import { Table, Space, Button} from "antd"
+import { SearchOutlined } from '@ant-design/icons'
+import { Table, Space, Button, Row, Col, Input} from "antd"
 import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
 import { useNavigate } from 'react-router-dom'
 import EditPosition from './editPosition/EditPosition'
 import AddPosition from './addPosition/AddPosition'
 import SuccessModal from '../../../components/common/successModal/SuccessModal'
 import FailedModal from '../../../components/common/failedModal/FailedModal'
+import SearchBox from '../../../components/common/searchBox/SearchBox'
+import CountButton from '../../../components/common/countButton/CountButton'
+import SortButton from '../../../components/common/sortButton/SortButton'
 
-const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
-  // Declaration
+const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
+  // Declaration 
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -24,6 +28,7 @@ const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [value, setValue] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [open, setOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
@@ -32,6 +37,7 @@ const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
   // API GET Position Data
   const getPositionData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/position/', {
         headers: {
           Authorization: token,
@@ -40,6 +46,8 @@ const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
       setPositionData(response.data.items);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -57,6 +65,10 @@ const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
       dataIndex: 'name',
       key: 'name',
       width: '88%',
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return String(record.name).toLowerCase().includes(value.toLowerCase());
+      },
     },
     {
       title: 'Action',
@@ -145,20 +157,84 @@ const PositionConfiguration = ({searchValue, sortValue, countValue}) => {
   //   showLessItems: true,
   // };
 
+  // Count Handler
+  const [countValue, setCountValue] = useState("10");
+
+  const handleCount = (value) => {
+    setCountValue(value);
+  };
+
+  // Sort Handler
+  const [sortValue, setSortValue] = useState("");
+
+  const handleSort = (value) => {
+    setSortValue(value);
+  };
+
+  const itemsSort = [
+    {
+      key: 'aToZ',
+      label: 'A-Z Name'
+    },
+    {
+      key: 'zToA',
+      label: 'Z-A Name'
+    },
+  ];
+
+  // Sort data berdasarkan sortValue
+  const sortedData = [...data].sort((a, b) => {
+    if (sortValue === 'aToZ') {
+      return a.name.localeCompare(b.name);
+    } else if (sortValue === 'zToA') {
+      return b.name.localeCompare(a.name);
+    } else {
+      return 0;
+    }
+  });
+
   return (
-  <>
-    <div>
-      <AddPosition />
-    </div>
+    <>
+    <Row justify="space-between">
+      <Row gutter="10" justify="start">
+        <Col>
+          {/* <SearchBox /> */}
+          <Input 
+          className='search-box'
+          placeholder='Search' 
+          prefix={<SearchOutlined/>} 
+          onSearch={(value)=>{ 
+            setSearchText(value)
+          }}
+          onChange={(e) => {
+            setSearchText(e.target.value);
+          }}
+          allowClear
+          />
+        </Col>
+        <Col>
+          <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
+        </Col>
+        <Col>
+          <CountButton className="count-button" onCount={handleCount} />
+        </Col>
+      </Row>
+      
+      <Row justify="end">
+          <AddPosition />
+      </Row>
+    </Row>
     <br />
 
     <div>
       <Table 
       columns={columns} 
-      dataSource={data} 
+      // dataSource={data} 
       loading={loading}
-      // dataSource={sortedData} 
-      // pagination={paginationConfig} 
+      dataSource={sortedData} 
+      pagination={{
+        pageSize: countValue,
+      }} 
       />
     </div>
 
