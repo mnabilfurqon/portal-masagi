@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { Modal, Input, Button } from 'antd'
 import "./addEditModal.css"
 
-const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeholder, textButton, onFinishFailed, actionValue, handleActionValue, defaultDivisionName}) => {
+const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeholder, textButton, onFinishFailed, actionValue, handleActionValue, defaultDivisionName, loading}) => {
     const addTitle = <div className="add-title">{title}</div>
 
     if (defaultDivisionName) {
@@ -22,6 +22,7 @@ const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeho
                 <Button
                     className="submit-button-modal"
                     onClick={handleOk}
+                    loading={loading}
                 >
                     {textButton}
                 </Button>
@@ -45,6 +46,7 @@ const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeho
                 <Button
                     className="submit-button-modal"
                     onClick={handleOk}
+                    loading={loading}
                 >
                     {textButton}
                 </Button>

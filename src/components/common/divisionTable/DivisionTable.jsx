@@ -11,18 +11,62 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
   const navigate = useNavigate();
   const token = Cookies.get('token');
   const [divisionData, setDivisionData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [tableParams, setTableParams] = useState({
+    pagination : {
+      current: 1,
+      pageSize: countValue,
+      showTotal: (total, range) => (
+        <div className='total-data'>
+          {range[0]}-{range[1]} of {total} items
+        </div>
+      ),
+      showLessItems: true,
+    },
+  });
+
+  const [params, setParams] = useState({
+    page: tableParams.pagination.current,
+    per_page: tableParams.pagination.pageSize,
+  });
 
   // API GET Division Data
   const getDivisionData = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/api/v1/division/', {
+      var page;
+      setLoading(true);
+      if (tableParams.pagination.total < countValue) {
+        page = 1;
+      } else {
+        page = tableParams.pagination.current;
+      }
+      const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/division/', {
+        params: {
+          page: page,
+          per_page: countValue,
+          search: searchValue,
+          search_by: 'name',
+          desc: sortValue === 'zToADivision' ? 'true' : 'false',
+          sort_by: 'name',
+        },
         headers: {
           Authorization: token,
         }
       });
       setDivisionData(response.data.items);
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          total: response.data._meta.total_items,
+          pageSize: countValue,
+        },
+      });
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -31,7 +75,7 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
       navigate('/login');
     }
     getDivisionData();
-  }, [token, navigate, isAddModalOpen, isEditModalOpen, isDeleteModalOpen]);
+  }, [token, navigate, params, countValue, searchValue, sortValue, isAddModalOpen, isEditModalOpen, isDeleteModalOpen]);
 
     const columns = [
         {
@@ -66,39 +110,38 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
       }
     });
 
-    // Filter data berdasarkan searchValue
-    const filteredData = data.filter(item =>
-      item.division.toLowerCase().includes(searchValue.toLowerCase())
-    );
-
-    // Sort data berdasarkan sortValue
-    const sortedData = [...filteredData].sort((a, b) => {
-      if (sortValue === 'aToZ') {
-        return a.division.localeCompare(b.division);
-      } else if (sortValue === 'zToA') {
-        return b.division.localeCompare(a.division);
-      } else {
-        return 0;
+    const handleTableChange = (pagination, filters, sorter) => {
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          current: pagination.current,
+          pageSize: countValue,
+        },
+        filters,
+        ...sorter,
+      });
+  
+      setParams({
+        page: pagination.current,
+        per_page: pagination.pageSize,
+        search: searchValue,
+      });
+  
+      if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+        setDivisionData([]);
       }
-    });
-
-    const paginationConfig = {
-        pageSize: countValue, // Jumlah item per halaman
-        showTotal: (total, range) => (
-            <span style={{ color: '#556172' }}>
-                Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-            </span>
-        ),
-        showLessItems: true,
     };
 
     return (
       <>
         <Table 
             columns={columns}
-            dataSource={sortedData}
-            pagination={paginationConfig}
+            dataSource={data}
+            pagination={tableParams.pagination}
+            loading={loading}
             rowClassName="custom-row"  
+            onChange={handleTableChange}
+            scroll={{ x: true, y: 650 }}
         />
       </>
     )

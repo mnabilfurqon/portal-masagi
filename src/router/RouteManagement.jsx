@@ -25,32 +25,31 @@ import AdminRoleConfig from "../pages/admin/roleConfig/AdminRoleConfig";
 import AdminRoleConfigDetail from "../pages/admin/roleConfig/detailRole/AdminRoleConfigDetail";
 
 const RouteManagement = () => {
-  const token = Cookies.get("token");
-  const role_uuid = Cookies.get("role_uuid");
+  const token = Cookies.get('token');
+  const role = Cookies.get('role');
   const navigate = useNavigate();
-  let isSuperAdmin = false;
+  const [isSuperAdmin, setIsSuperAdmin] = React.useState(false);
 
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      navigate('/login');
+    }
+    if (role === 'superadmin') {
+      setIsSuperAdmin(true);
     }
   }, [token, navigate]);
-
-  if (role_uuid === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc") {
-    isSuperAdmin = true;
-  }
 
   if (isSuperAdmin) {
     // Routing untuk Super Admin
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage />} />
           <React.Fragment>
             <Route
-              path="/dashboard"
+              path='/dashboard'
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={isSuperAdmin}>
                   <DashboardPage />
                 </LayoutComponent>
               }
@@ -58,33 +57,33 @@ const RouteManagement = () => {
 
             {/* Super Admin Company Configuration Route */}
             <Route
-              path="/company"
+              path='/company'
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={isSuperAdmin}>
                   <MainCompanyConfiguration />
                 </LayoutComponent>
               }
             />
             <Route
-              path="/company/add-company"
+              path='/company/add-company'
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={isSuperAdmin}>
                   <AddCompanyConfiguration />
                 </LayoutComponent>
               }
             />
             <Route
-              path="/company/detail-company/:uuid"
+              path='/company/detail-company/:uuid'
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={isSuperAdmin}>
                   <DetailCompanyConfiguration />
                 </LayoutComponent>
               }
             />
             <Route
-              path="/company/edit-company/:uuid"
+              path='/company/edit-company/:uuid'
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={isSuperAdmin}>
                   <EditCompanyConfiguration />
                 </LayoutComponent>
               }
@@ -92,9 +91,9 @@ const RouteManagement = () => {
             {/* Super Admin End of Company Configuration Route */}
 
             <Route
-              path="/user"
+              path='/user'
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={isSuperAdmin}>
                   <UserConfiguration />
                 </LayoutComponent>
               }
@@ -108,17 +107,17 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/role"
+              path='/role'
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={isSuperAdmin}>
                   <RoleConfig />
                 </LayoutComponent>
               }
             />
             <Route
-              path="/role/detail-role/:uuid"
+              path='/role/detail-role/:uuid'
               element={
-                <LayoutComponent isSuperAdmin={true}>
+                <LayoutComponent isSuperAdmin={isSuperAdmin}>
                   <RoleConfigDetail />
                 </LayoutComponent>
               }
@@ -132,66 +131,66 @@ const RouteManagement = () => {
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
-            <Route path="/login" element={<LoginPage />} />
-              <React.Fragment>
-                <Route
-                  path="/dashboard"
-                  element={
-                    <LayoutComponent isSuperAdmin={false}>
-                      <DashboardPage/>
-                    </LayoutComponent>
-                  }
-                />
-                
-                {/* Company Configuration Route */}
-                <Route
-                  path="/company"
-                  element={
-                    <LayoutComponent isSuperAdmin={false}>
-                      <AdminDetailCompanyConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                <Route
-                  path="/company/edit-company/:uuid"
-                  element={
-                    <LayoutComponent isSuperAdmin={false}>
-                      <AdminEditCompanyConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                {/* End of Company Configuration Route */}
-              
-                {/* Employee Configuration Route */}
-                <Route
-                  path="/employee"
-                  element={
-                    <LayoutComponent isSuperAdmin={false}>
-                      <MainEmployeeConfiguration />
-                    </LayoutComponent>
-                  }
-                />
-                <Route
-                path="/employee/detail-employee/:uuid"
-                element={
-                  <LayoutComponent isSuperAdmin={false}>
-                    <DetailEmployeeConfiguration />
-                  </LayoutComponent>
-                }
-                />
-                <Route
-                path="/employee/add-employee"
-                element={
-                  <LayoutComponent isSuperAdmin={false}>
-                    <AddEmployee />
-                  </LayoutComponent>
-                }
-                />
-                {/* End of Employee Configuration Route */}
+          <Route path='/login' element={<LoginPage />} />
+          <React.Fragment>
+            <Route
+              path='/dashboard'
+              element={
+                <LayoutComponent isSuperAdmin={false}>
+                  <DashboardPage />
+                </LayoutComponent>
+              }
+            />
+
+            {/* Company Configuration Route */}
+            <Route
+              path='/company'
+              element={
+                <LayoutComponent isSuperAdmin={false}>
+                  <AdminDetailCompanyConfiguration />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path='/company/edit-company/:uuid'
+              element={
+                <LayoutComponent isSuperAdmin={false}>
+                  <AdminEditCompanyConfiguration />
+                </LayoutComponent>
+              }
+            />
+            {/* End of Company Configuration Route */}
+
+            {/* Employee Configuration Route */}
+            <Route
+              path='/employee'
+              element={
+                <LayoutComponent isSuperAdmin={false}>
+                  <MainEmployeeConfiguration />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path='/employee/detail-employee/:uuid'
+              element={
+                <LayoutComponent isSuperAdmin={false}>
+                  <DetailEmployeeConfiguration />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path='/employee/add-employee'
+              element={
+                <LayoutComponent isSuperAdmin={false}>
+                  <AddEmployee />
+                </LayoutComponent>
+              }
+            />
+            {/* End of Employee Configuration Route */}
 
             {/* User Configuration Route */}
             <Route
-              path="/user"
+              path='/user'
               element={
                 <LayoutComponent isSuperAdmin={false}>
                   <UserConfiguration />
@@ -199,7 +198,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/user/add-user"
+              path='/user/add-user'
               element={
                 <LayoutComponent hideButtons={true} isSuperAdmin={false}>
                   <AddUser />
@@ -210,7 +209,7 @@ const RouteManagement = () => {
 
             {/* Division Configuration Route */}
             <Route
-              path="/division"
+              path='/division'
               element={
                 <LayoutComponent isSuperAdmin={false}>
                   <DivisionConfiguration />
@@ -221,7 +220,7 @@ const RouteManagement = () => {
 
             {/* Role Configuration Route */}
             <Route
-              path="/role"
+              path='/role'
               element={
                 <LayoutComponent isSuperAdmin={false}>
                   <AdminRoleConfig />
@@ -229,7 +228,7 @@ const RouteManagement = () => {
               }
             />
             <Route
-              path="/role/detail-role/:uuid"
+              path='/role/detail-role/:uuid'
               element={
                 <LayoutComponent isSuperAdmin={false}>
                   <AdminRoleConfigDetail />
@@ -240,7 +239,7 @@ const RouteManagement = () => {
 
             {/* Position Configuration Route */}
             <Route
-              path="/position"
+              path='/position'
               element={
                 <LayoutComponent isSuperAdmin={false}>
                   <PositionConfiguration />

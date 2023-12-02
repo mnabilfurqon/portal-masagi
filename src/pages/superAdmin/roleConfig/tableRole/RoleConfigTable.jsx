@@ -13,8 +13,10 @@ import Cookies from 'js-cookie';
 const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
+  const [uuid, setUuid] = useState(null);
   const [roleData, setRoleData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
   const [tableParams, setTableParams] = useState({
@@ -44,7 +46,7 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
         page = tableParams.pagination.current;
       }
       console.log(sortValue);
-      const response = await axios.get('http://127.0.0.1:5000/api/v1/role/', {
+      const response = await axios.get('http://localhost:5000/api/v1/role/', {
         params: {
           page: page,
           per_page: countValue,
@@ -71,6 +73,26 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
     }
   };
 
+  const deleteRoleData = async () => {
+    try {
+      setDeleting(true);
+      const response = await axios.delete(
+        `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setDeleting(false);
+      setDeleteModalOpen(false);
+      setDeleteSuccessModalOpen(true);
+    }
+  };
+
   useEffect(() => {
     if (!token) {
       navigate('/login');
@@ -81,6 +103,11 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
   const handleDetailClick = record => {
     const value = record.key;
     navigate(`/role/detail-role/${value}`);
+  };
+
+  const handleDeleteButton = record => {
+    setDeleteModalOpen(true);
+    setUuid(record.key);
   };
 
   const successTitle = (
@@ -97,17 +124,12 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
     </div>
   );
 
-  const handleDeleteButton = () => {
-    setDeleteModalOpen(false);
-    setDeleteSuccessModalOpen(true);
+  const reloadTableData = () => {
+    getRoleData();
   };
 
   const handleCancelButton = () => {
     setDeleteModalOpen(false);
-  };
-
-  const showDeleteModal = () => {
-    setDeleteModalOpen(true);
   };
 
   const title = [
@@ -133,9 +155,9 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
             className='delete-button'
             type='primary'
             size='small'
-            onClick={showDeleteModal}
+            onClick={() => handleDeleteButton(record)}
             ghost>
-            <BiTrash className='delete-icon' />
+            <BiTrash className='delete-role-icon' />
           </Button>
         </div>
       ),
@@ -151,14 +173,13 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
     };
   });
 
-  const handleTableChange = (pagination, filters, sorter) => {
+  const handleTableChange = (pagination, sorter) => {
     setTableParams({
       pagination: {
         ...tableParams.pagination,
         current: pagination.current,
         pageSize: countValue,
       },
-      filters,
       ...sorter,
     });
 
@@ -197,7 +218,8 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
           <Button
             key='deleteButton'
             className='delete-role'
-            onClick={handleDeleteButton}>
+            onClick={deleteRoleData}
+            loading={deleting}>
             DELETE
           </Button>,
         ]}>
@@ -215,7 +237,10 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
           <Button
             key='successDeleteRole'
             className='save-button'
-            onClick={() => setDeleteSuccessModalOpen(false)}>
+            onClick={() => {
+              setDeleteSuccessModalOpen(false);
+              reloadTableData();
+            }}>
             Ok
           </Button>
         </div>

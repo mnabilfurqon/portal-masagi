@@ -1,13 +1,18 @@
 import React from 'react'
 import './detailFamilyTable.css'
 
-const DetailFamilyTable = () => {
-  return (
-        <table className='table-container'>
+const DetailFamilyTable = ({detailFamilyData}) => {
+    if (!detailFamilyData) {
+        return null;
+    }
+
+    return (
+        <div className='table-container'>
             <table className='table-content'>
+                <tbody>
                 <tr>
                     <th>Full Name</th>
-                    <td>Maria Doe</td>
+                    <td>{detailFamilyData.full_name}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -15,7 +20,7 @@ const DetailFamilyTable = () => {
                 </tr>
                 <tr>
                     <th>NIK</th>
-                    <td>3123124124123412</td>
+                    <td>{detailFamilyData.nik}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -23,7 +28,7 @@ const DetailFamilyTable = () => {
                 </tr>
                 <tr>
                     <th>Birth Date</th>
-                    <td>12/02/1996</td>
+                    <td>{detailFamilyData.birth_date}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -31,7 +36,7 @@ const DetailFamilyTable = () => {
                 </tr>
                 <tr>
                     <th>Birth Place</th>
-                    <td>Berlin, Germany</td>
+                    <td>{detailFamilyData.birth_place}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -39,7 +44,7 @@ const DetailFamilyTable = () => {
                 </tr>
                 <tr>
                     <th>Address</th>
-                    <td>Jalan Seokarno Hatta No. 12, RT 05 / RW 12, Antapani, Kota Bandung, Jawa Barat</td>
+                    <td>{detailFamilyData.address}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -47,7 +52,7 @@ const DetailFamilyTable = () => {
                 </tr>
                 <tr>
                     <th>Relation</th>
-                    <td>Istri</td>
+                    <td>{detailFamilyData.relation}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -55,10 +60,11 @@ const DetailFamilyTable = () => {
                 </tr>
                 <tr>
                     <th>Job</th>
-                    <td>Ibu Rumah Tangga</td>
+                    <td>{detailFamilyData.job}</td>
                 </tr>
+                </tbody>
             </table>
-        </table>
+        </div>
   )
 }
 
