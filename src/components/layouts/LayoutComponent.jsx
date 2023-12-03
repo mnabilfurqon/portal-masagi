@@ -23,7 +23,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [token, navigate]);
 
@@ -45,11 +45,11 @@ const LayoutComponent = ({ children, roleNumber }) => {
     ];
 
     const handlerLogout = () => {
-      Cookies.remove('token');
-      Cookies.remove('role_uuid');
-      Cookies.remove('username');
-      Cookies.remove('company_uuid');
-      navigate('/login');
+      Cookies.remove("token");
+      Cookies.remove("role_uuid");
+      Cookies.remove("username");
+      Cookies.remove("company_uuid");
+      navigate("/login");
     };
 
     return (
@@ -196,34 +196,154 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === "/division") {
     pageTitle = "Division";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/attendance') {
-    pageTitle = 'Attendance';
+  } else if (location.pathname === "/attendance") {
+    pageTitle = "Attendance";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/history') {
-    pageTitle = 'History';
+  } else if (location.pathname === "/history") {
+    pageTitle = "History";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/present') {
-    pageTitle = 'Present';
+  } else if (location.pathname === "/present") {
+    pageTitle = "Present";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/report') {
-    pageTitle = 'Report';
+  } else if (location.pathname === "/report") {
+    pageTitle = "Report";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/permit') {
-    pageTitle = 'Permit';
+  } else if (location.pathname === "/official-travel") {
+    pageTitle = "Official Travel";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/official-travel') {
-    pageTitle = 'Official Travel';
+  } else if (location.pathname === "/official-travel/official-travel-requested") {
+    pageTitle = (
+      <Link to={"/official-travel"} className="page-title">
+        Official Travel /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title">Official Travel Requested</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/official-travel/detail")) {
+    pageTitle = (
+      <Link to={"/official-travel"} className="page-title">
+        Official Travel /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title">Official Travel Requested Detail</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/leave") {
+    pageTitle = "Leave";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/leave') {
-    pageTitle = 'Leave';
+  } else if (location.pathname === "/leave/leave-requested") {
+    pageTitle = (
+      <Link to={"/leave"} className="page-title">
+        Leave /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title">Leave Requested</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/leave/detail")) {
+    pageTitle = (
+      <Link to={"/leave"} className="page-title">
+        Leave /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title">Leave Requested Detail</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/overtime") {
+    pageTitle = "Overtime";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/overtime') {
-    pageTitle = 'Overtime';
+  } else if (location.pathname === "/overtime/overtime-requested") {
+    pageTitle = (
+      <Link to={"/overtime"} className="page-title">
+        Overtime /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title">Overtime Requested</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/overtime/detail")) {
+    pageTitle = (
+      <Link to={"/overtime"} className="page-title">
+        Overtime /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title">Overtime Requested Detail</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/permit") {
+    pageTitle = "Permit";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/official-travel-request') {
-    pageTitle = 'Official Travel Request';
+  } else if (location.pathname === "/permit/permit-requested") {
+    pageTitle = (
+      <Link to={"/permit"} className="page-title">
+        Permit /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title">Permit Requested</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/permit/detail")) {
+    pageTitle = (
+      <Link to={"/permit"} className="page-title">
+        Permit /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title">Permit Requested Detail</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/official-travel-request") {
+    pageTitle = "Official Travel Request";
     finalPageTitle = pageTitle;
-  } else if (location.pathname.includes('/official-travel-request/detail')) {
+  } else if (location.pathname.includes("/official-travel-request/detail")) {
     pageTitle = (
       <Link to="/official-travel-request" className="page-title">
         Official Travel Request /{" "}
@@ -236,10 +356,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === '/leave-request') {
-    pageTitle = 'Leave Request';
+  } else if (location.pathname === "/leave-request") {
+    pageTitle = "Leave Request";
     finalPageTitle = pageTitle;
-  } else if (location.pathname.includes('/leave-request/detail')) {
+  } else if (location.pathname.includes("/leave-request/detail")) {
     pageTitle = (
       <Link to="/leave-request" className="page-title">
         Leave Request /{" "}
@@ -252,10 +372,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === '/overtime-request') {
-    pageTitle = 'Overtime Request';
+  } else if (location.pathname === "/overtime-request") {
+    pageTitle = "Overtime Request";
     finalPageTitle = pageTitle;
-  } else if (location.pathname.includes('/overtime-request/detail')) {
+  } else if (location.pathname.includes("/overtime-request/detail")) {
     pageTitle = (
       <Link to="/overtime-request" className="page-title">
         Overtime Request /{" "}
@@ -268,10 +388,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === '/permit-request') {
-    pageTitle = 'Permit Request';
+  } else if (location.pathname === "/permit-request") {
+    pageTitle = "Permit Request";
     finalPageTitle = pageTitle;
-  } else if (location.pathname.includes('/permit-request/detail')) {
+  } else if (location.pathname.includes("/permit-request/detail")) {
     pageTitle = (
       <Link to="/permit-request" className="page-title">
         Permit Request /{" "}
@@ -285,6 +405,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
       </>
     );
   }
+
+
+
 
   return (
     <Layout className="layout-container">
@@ -381,63 +504,68 @@ const LayoutComponent = ({ children, roleNumber }) => {
           collapsedWidth="0"
           style={{
             background: colorBgContainer,
-            backgroundColor: 'rgba(248, 249, 250, 1)',
-          }}>
-          <img src={LogoMasagi} alt='Logo Masagi' className='logo-masagi' />
+            backgroundColor: "rgba(248, 249, 250, 1)",
+          }}
+        >
+          <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
           <Menu
             defaultSelectedKeys={[location.pathname]}
-            mode='inline'
-            style={{ backgroundColor: 'rgba(248, 249, 250, 1)' }}>
-            <Menu.Item key='/attendance' icon={<IdcardOutlined />}>
-              <Link to='/attendance'>Attendance</Link>
+            mode="inline"
+            style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          >
+            <Menu.Item key="/attendance" icon={<IdcardOutlined />}>
+              <Link to="/attendance">Attendance</Link>
             </Menu.Item>
-            <Menu.Item key='/history' icon={<HistoryOutlined />}>
-              <Link to='/history'>History</Link>
+            <Menu.Item key="/history" icon={<HistoryOutlined />}>
+              <Link to="/history">History</Link>
             </Menu.Item>
             <SubMenu
-              key='attendance-report'
+              key="attendance-report"
               icon={<RiTeamLine />}
-              title='Attendance Report'>
-              <Menu.Item key='/present'>
-                <Link to='/present'>Present</Link>
+              title="Attendance Report"
+            >
+              <Menu.Item key="/present">
+                <Link to="/present">Present</Link>
               </Menu.Item>
-              <Menu.Item key='/report'>
-                <Link to='/report'>Report</Link>
+              <Menu.Item key="/report">
+                <Link to="/report">Report</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu
-              key='permit-parent'
+              key="permit-employee"
               icon={<LuClipboardSignature />}
-              title='Permit'>
-              <Menu.Item key='official-travel'>
-                <Link to='/official-travel'>Official Travel</Link>
+              title="Permit"
+            >
+              <Menu.Item key="official-travel">
+                <Link to="/official-travel">Official Travel</Link>
               </Menu.Item>
-              <Menu.Item key='leave'>
-                <Link to='/leave'>Leave</Link>
+              <Menu.Item key="leave">
+                <Link to="/leave">Leave</Link>
               </Menu.Item>
-              <Menu.Item key='overtime'>
-                <Link to='/overtime'>Overtime</Link>
+              <Menu.Item key="overtime">
+                <Link to="/overtime">Overtime</Link>
               </Menu.Item>
-              <Menu.Item key='permit'>
-                <Link to='/permit'>Permit</Link>
+              <Menu.Item key="permit">
+                <Link to="/permit">Permit</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu
-              key='permit-request-parent'
+              key="permit-request-leaders"
               icon={<HiOutlineClipboardList />}
-              title='Permit Request'>
-                <Menu.Item key='/official-travel-request'>
-                  <Link to='/official-travel-request'>Official Travel</Link>
-                </Menu.Item>
-                <Menu.Item key='/leave-request'>
-                  <Link to='/leave-request'>Leave</Link>
-                </Menu.Item>
-                <Menu.Item key='/overtime-request'>
-                  <Link to='/overtime-request'>Overtime</Link>
-                </Menu.Item>
-                <Menu.Item key='/permit-request'>
-                  <Link to='/permit-request'>Permit</Link>
-                </Menu.Item>
+              title="Permit Request"
+            >
+              <Menu.Item key="/official-travel-request">
+                <Link to="/official-travel-request">Official Travel</Link>
+              </Menu.Item>
+              <Menu.Item key="/leave-request">
+                <Link to="/leave-request">Leave</Link>
+              </Menu.Item>
+              <Menu.Item key="/overtime-request">
+                <Link to="/overtime-request">Overtime</Link>
+              </Menu.Item>
+              <Menu.Item key="/permit-request">
+                <Link to="/permit-request">Permit</Link>
+              </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
