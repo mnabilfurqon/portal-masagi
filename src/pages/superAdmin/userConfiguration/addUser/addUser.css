@@ -1,0 +1,11 @@
+@media screen and (min-width: 600px) {
+  .action {
+    margin-right: 6%;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .action {
+    margin-right: 12%;
+  }
+}

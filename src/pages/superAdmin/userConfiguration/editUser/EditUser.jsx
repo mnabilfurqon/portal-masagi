@@ -7,12 +7,10 @@ import { Button, Modal, Form, Input, Select, Radio } from 'antd'
 import { BiEdit } from "react-icons/bi"
 import SuccessModal from '../../../../components/common/successModal/SuccessModal'
 import FailedModal from '../../../../components/common/failedModal/FailedModal'
-import SubmitButton from '../../../../components/common/submitButton/SubmitButton'
 
 const editUser = (props) => {
   // Declaration
   const token = Cookies.get("token");
-  const company_uuid = Cookies.get("company_uuid");
   const navigate = useNavigate();
   
   const [uuid, setUuid] = useState('');
@@ -21,7 +19,7 @@ const editUser = (props) => {
 
   const [role, setRole] = useState();
   const [username, setUsername] = useState();
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState();
   
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,45 +31,32 @@ const editUser = (props) => {
 
   // Modal Edit Handler
   const showModal = () => {
+    setUuid(props.uuid.key);
+    console.log("1. update on ", key);
+    console.log("2. update on ", uuid);
+
     setOpen(true);
     getUser();
-
-    form.setFieldsValue({
-      username: user.username,
-      password: user.password,
-      role_uuid: user.role.uuid,
-      is_active: user.is_active,
-    })
-
-    console.log("key", key);
   };
 
   const key = props.uuid.key;
-  useEffect(() => {
-    getUser()
-  }, [key]);
 
   // GET API User by Id
   const getUser = async () => {
     try {
-      // console.log("uuid: ", key)
-      // console.log("company_uuid: ", company_uuid)
-      setLoading(true)
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, {
+      console.log("uuid: ", key)
+      const response = await axios.get(`http://127.0.0.1:5000/api/v1/users/${key}`, {
           headers: { Authorization: token },
         }
       );
-      // setUsername(response.data.username)
-      // setIsActive(response.data.is_active)
-      // setRole(response.data.role_id)
-      // console.log(username, isActive, role);
+      setUsername(response.data.username)
+      setIsActive(response.data.is_active)
+      setRole(response.data.role_id)
+      console.log(username, isActive, role);
       setUser(response.data);
-      console.log("data user", user);
-      // console.log("data respons", response.data);
+      console.log(user);
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -98,32 +83,27 @@ const editUser = (props) => {
   // GET API Roles
   const getRoles = async () => {
     try {
-      setLoading(true)
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
+      const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
           headers: { Authorization: token },
         }
       );
       setRoles(response.data[0].items);
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false)
     }
   }
 
   // PUT API to Update User
-  const updateUser = async ( values) => {
+  const updateUser = async (event, values) => {
     try {
-      // event.preventDefault();
-      console.log("values ", values);
-      // console.log("Updated data ", values.username, values.role.uuid, values.is_active);
-      const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, values,
-        // {
-        //   "username": username,
-        //   "role_uuid": role,
-        //   "is_active": isActive,
-        //   "company_uuid": company_uuid,
-        // }, 
+      event.preventDefault();
+      console.log(values);
+      const response = await axios.put(`http://127.0.0.1:5000/api/v1/users/${uuid}`, 
+        {
+          "username": username,
+          "role_id": role,
+          "is_active": isActive,
+        }, 
         {
           headers: { Authorization: token },
         }
@@ -158,6 +138,11 @@ const editUser = (props) => {
     setIsFailedModalOpen(false);
   };
 
+  const handleChangeRole = (value) => {
+    console.log("selected ", value);
+    setRole(value);
+  }
+
   // Form Layout
   const formItemLayout =
     formLayout === 'horizontal'
@@ -182,47 +167,42 @@ const editUser = (props) => {
         title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Edit User</h2>}
         onOk={handleOk}
         onCancel={handleCancel}
-        // footer={[
-        //   <Button key="submit" type="none" loading={loading} htmlType='submit' className="update-button">
-        //     Update
-        //   </Button>,
-        // ]}
+        footer={[
+          <Button key="submit" type="none" loading={loading} onClick={updateUser} className="update-button">
+            Update
+          </Button>,
+        ]}
       >
         <Form
           {...formItemLayout}
           layout={formLayout}
           form={form}
-          name='editUser'
-          onFinish={updateUser}
-          // onFinishFailed={}
           initialValues={{
             layout: formLayout,
+            username: user.username,
           }}
         >
-          <Form.Item label="Username" name="username">
-            <Input placeholder="Username"/>
+          <Form.Item label="Username">
+            <Input placeholder="Username" />
           </Form.Item>
-          <Form.Item label="Password" name="password">
-            <Input placeholder="Password" />
+          <Form.Item label="Password">
+            <Input placeholder="Password" value={password} onChange={(e) => setUser.password(e.target.value)} />
           </Form.Item>
-          <Form.Item label="Role" name="role_uuid">
-            <Select>
+          <Form.Item label="Role">
+            <Select defaultValue={role} value={role} onChange={handleChangeRole}>
               {roles?.map(role => {
                 return (
-                  <Select.Option key={(role.uuid)} value={(role.uuid)} loading={loading}>{(role.name)}</Select.Option>
+                  <Select.Option key={(role.uuid)} value={(role.id)}>{(role.name)}</Select.Option>
                 );
               })}
             </Select>
           </Form.Item>
-          <Form.Item label="Status" name="is_active">
+          <Form.Item label="Status">
             <Radio.Group value={isActive} onChange={(e) => setIsActive(e.target.value)}>
               <Radio value={true}>Actice</Radio>
               <Radio value={false}>Not Active</Radio>
             </Radio.Group>
           </Form.Item>
-          <div>
-            <SubmitButton buttonText="Update"/>
-          </div>
         </Form>
       </Modal>
 
