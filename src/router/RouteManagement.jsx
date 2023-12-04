@@ -18,6 +18,7 @@ import MainEmployeeConfiguration from "../pages/admin/employeeConfiguration/main
 import DetailEmployeeConfiguration from "../pages/admin/employeeConfiguration/detailEmployeeConfiguration/DetailEmployeeConfiguration";
 import AddEmployee from "../pages/admin/employeeConfiguration/addEmployee/AddEmployee";
 import AddUser from "../pages/admin/userConfiguration/addUser/AddUser";
+import SuperAdminAddUser from "../pages/superAdmin/userConfiguration/addUser/AddUser";
 import Cookies from "js-cookie";
 import DashboardPage from "../pages/superAdmin/dashboardPage/DashboardPage";
 import AdminRoleConfig from "../pages/admin/roleConfig/AdminRoleConfig";
@@ -123,6 +124,14 @@ const RouteManagement = () => {
               }
             />
             <Route
+              path="/company/add-user/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <SuperAdminAddUser />
+                </LayoutComponent>
+              }
+            />
+            <Route
               path="/role"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
@@ -216,7 +225,7 @@ const RouteManagement = () => {
             <Route
               path="/user/add-user"
               element={
-                <LayoutComponent roleNumber={roleNumber}>
+                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
                   <AddUser />
                 </LayoutComponent>
               }

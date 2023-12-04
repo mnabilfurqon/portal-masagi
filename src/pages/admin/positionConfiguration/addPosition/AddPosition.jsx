@@ -1,53 +1,100 @@
 import React, { useState } from 'react'
-import "./addPosition.css"
-import { Button, Modal, Form, Input, } from 'antd'
-import { AiOutlinePlus } from "react-icons/ai"
+import './addPosition.css'
+import { Button, Modal, Form, Input } from 'antd'
 import AddButton from '../../../../components/common/addButton/AddButton'
+import SuccessModal from '../../../../components/common/successModal/SuccessModal'
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 
 
 const AddPosition = () => {
-    const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-    const showModal = () => {
-      setOpen(true);
-    };
-    const handleOk = () => {
+  // Declaration
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+  
+  const [form] = Form.useForm();
+  const [formLayout, setFormLayout] = useState('vertical');
+  const [value, setValue] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  // Modal Handler
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSave = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setIsModalOpen(false);
+      setIsSuccessModalOpen(true);
+    }, 3000);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  // Success Modal Handle
+  const handleSuccessModalOk = () => {
+    setIsSuccessModalOpen(false);
+  };
+
+  const handleSuccessModalCancel = () => {
+    setIsSuccessModalOpen(false);
+  };
+
+  const handleValue = (e) => {
+    setValue(e.target.value)
+  }
+    
+  const formItemLayout =
+    formLayout === 'horizontal'
+      ? {
+          labelCol: {
+            span: 4,
+          },
+          wrapperCol: {
+            span: 14,
+          },
+        }
+      : null;
+  
+  // Add Position to API
+  const addPosition = async () => {
+    try {
+      const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/position/", {
+        'name': value,
+      });
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        setOpen(false);
+        setIsModalOpen(false);
+        setIsSuccessModalOpen(true);
+        setValue("");
+        console.log("New position added!");
       }, 3000);
-    };
-    const handleCancel = () => {
-      setOpen(false);
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
-    const [form] = Form.useForm();
-    const [formLayout, setFormLayout] = useState('vertical');
-    const formItemLayout =
-      formLayout === 'horizontal'
-        ? {
-            labelCol: {
-              span: 4,
-            },
-            wrapperCol: {
-              span: 14,
-            },
-          }
-        : null;
-  
-    return (
-    <>
+  return (
+  <>
     <AddButton handleClick={showModal} buttonText="Add Position" />
 
     <Modal
         centered
-        open={open}
+        open={isModalOpen}
         title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Add Position</h2>}
-        onOk={handleOk}
         onCancel={handleCancel}
         footer={[
-          <Button key="submit" type="none" loading={loading} onClick={handleOk} className="update-button">
+          <Button key="submit" type="none" loading={loading} onClick={addPosition} className="update-button">
             Save
           </Button>,
         ]}
@@ -61,16 +108,13 @@ const AddPosition = () => {
             }}
         >
             <Form.Item label="Name">
-                <Input placeholder="Enter Position Name" />
+                <Input placeholder="Enter Position Name" name="name" value={value} onChange={handleValue}/>
             </Form.Item>
-            {/* <Form.Item>
-                <Button key="submit" type="submit" loading={loading} onClick={handleOk} className="update-button">
-                    Save
-                </Button>
-            </Form.Item> */}
         </Form>
     </Modal>
-    </>
+
+    <SuccessModal action="Add" handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} isModalOpen={isSuccessModalOpen} />
+  </>
   )
 }
 

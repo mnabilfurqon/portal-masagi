@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './addUser.css'
 import { Form, Input, Radio, Select, Flex, Button } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import SubmitButton from '../../../../components/common/submitButton/SubmitButton'
 import SuccessAddDataModal from '../../../../components/common/successModal/SuccessAddDataModal'
 import FailedAddDataModal from '../../../../components/common/failedModal/FailedAddDataModal'
@@ -12,9 +12,9 @@ import axios from 'axios'
 const AddUser = () => {
     // Declaration
     const token = Cookies.get("token");
-    const cookies = Cookies.get();
+    const company = useParams();
     const navigate = useNavigate();
-
+    
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('horizontal');
     const [requiredMark, setRequiredMarkType] = useState('optional');
@@ -22,13 +22,14 @@ const AddUser = () => {
     
     const [roles, setRoles] = useState();
     const [users, setUsers] = useState([]);
+    const [employee, setEmployee] = useState();
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [status, setStatus] = useState(true);
-    const [company, setCompany] = useState("");
-    const company_uuid = Cookies.get("company_uuid");
+    const [companies, setCompanies] = useState();
+    // const company_uuid = Cookies.get("company_uuid");
 
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
     const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
@@ -39,10 +40,11 @@ const AddUser = () => {
           navigate("/login");
         }
         getRoles();
+        getEmployees();
+        getCompanies();
         console.log(token)
-        console.log(company_uuid)
-        setCompany(company_uuid)
-        console.log(cookies)
+        console.log(company)
+        // setCompany(company_uuid)
         // console.log(company)
     }, [token, navigate]);
 
@@ -79,6 +81,7 @@ const AddUser = () => {
     // GET API Roles
     const getRoles = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
                 headers: { Authorization: token },
             }
@@ -86,19 +89,40 @@ const AddUser = () => {
         setRoles(response.data[0].items);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // GET API Employee
+    const getEmployees = async () => {
+        try {
+            setLoading(true)
+            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
+                headers: { Authorization: token },
+            }
+        );
+        setEmployee(response.data.items);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
         }
     }
 
     // GET API Company
-    const getCompany = async () => {
+    const getCompanies = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
-        setCompany(response.data[0].items);
+        setCompanies(response.data.items);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -112,7 +136,7 @@ const AddUser = () => {
                 'password': values.password,
                 'role_uuid': values.role_uuid,
                 'is_active': values.is_active,
-                'company_uuid': company_uuid,
+                'company_uuid': company.uuid,
             }, 
             {
                 headers: { Authorization: token, },
@@ -148,12 +172,14 @@ const AddUser = () => {
           requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
           initialValues={{
             layout: formLayout,
+            company_uuid: company.uuid,
             // username: username,
             // password: password,
             // is_active: status,
             // role_id: role,
           }}
-          autoComplete="off"
+          autoComplete='off'
+          loading={loading}
         >
             <Form.Item
             label="Username"
@@ -201,7 +227,7 @@ const AddUser = () => {
             ]}>
                 <Select>
                   {roles?.map(role => 
-                    <Select.Option key={(role.uuid)} value={(role.uuid)}>{(role.name)}</Select.Option>)
+                    <Select.Option key={(role.uuid)} value={(role.uuid)} loading={loading} >{(role.name)}</Select.Option>)
                   }
                 </Select>
             </Form.Item>
@@ -223,13 +249,42 @@ const AddUser = () => {
                 </Radio.Group>
             </Form.Item>
             <Form.Item
-            // label="Company"
+            label="Company"
             labelAlign='left'
             name="company_uuid"
             colon={false}
             disabled
+            rules={[
+                {
+                required: true,
+                message: 'Please select your company!',
+                },
+            ]}
             >
-                <Input value={company} disabled bordered={false} />
+                <Select disabled>
+                  {companies?.map(item => 
+                    <Select.Option key={(item.uuid)} value={(item.uuid)} loading={loading} >{(item.name)}</Select.Option>)
+                  }
+                </Select>
+            </Form.Item>
+            <Form.Item
+            label="Employee"
+            labelAlign='left'
+            name="employee_uuid"
+            colon={false}
+            disabled
+            rules={[
+                {
+                required: true,
+                message: 'Please select your employee!',
+                },
+            ]}
+            >
+                <Select>
+                  {employee?.map(item => 
+                    <Select.Option key={(item.uuid)} value={(item.uuid)} loading={loading} >{(item.name)}</Select.Option>)
+                  }
+                </Select>
             </Form.Item>
             <Flex justify='end' className='action'>
             <Form.Item>
