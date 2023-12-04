@@ -20,24 +20,22 @@ const LoginPage = () => {
     try {
       setLoading(true);
       const loginResponse = await axios.post(
-        'http://localhost:5000/api/v1/auth/login',
+        'https://attendance-1-r8738834.deta.app/api/v1/auth/login',
         values
       );
       Cookies.set('token', loginResponse.data.token);
 
       const protectedResponse = await axios.get(
-        'http://localhost:5000/api/v1/auth/protected',
+        'https://attendance-1-r8738834.deta.app/api/v1/auth/protected',
         {
           headers: {
             Authorization: loginResponse.data.token,
           },
         }
       );
-      Cookies.set('role', protectedResponse.data.user.role.name);
-      Cookies.set('username', protectedResponse.data.user.username);
-      Cookies.set('company_uuid', protectedResponse.data.user.company.uuid);
-
-      navigate('../dashboard');
+      Cookies.set("role_uuid", protectedResponse.data.user.role.uuid);
+      Cookies.set("username", protectedResponse.data.user.username);
+      Cookies.set("company_uuid", protectedResponse.data.user.company.uuid);
     } catch (error) {
       setLoginError('Invalid username or password');
     } finally {
@@ -47,7 +45,8 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token) {
-      navigate('../dashboard');
+      if (Cookies.get("role_uuid") === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc" || Cookies.get("role_uuid") === "a454bd10-5dfe-48fa-8f4c-ee104334842a") navigate("../dashboard");
+      else navigate("../attendance");
     }
   }, [token, navigate]);
 
