@@ -1,0 +1,59 @@
+.approved-button {
+    background-color: #ffffff !important;
+    border-color: #28A745 !important;; 
+    color: #28A745 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.approved-button button {
+    pointer-events: none;
+}
+
+.pending-button {
+    background-color: #ffffff !important;
+    border-color: #F9B700 !important;; 
+    color: #F9B700 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.pending-button button {
+    pointer-events: none;
+}
+
+.rejected-button {
+    background-color: #ffffff !important;
+    border-color: #DC3545 !important;; 
+    color: #DC3545 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.rejected-button button {
+    pointer-events: none;
+}
+
+.accept-icon {
+    color: #007BFF;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.accept-icon:hover {
+    color: #ffffff;
+    border-radius: 2px;
+    background-color: #007BFF;
+}
+
+.reject-icon {
+    color: #DC3545;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.reject-icon:hover {
+    color: #ffffff;
+    border-radius: 2px;
+    background-color: #DC3545;
+}

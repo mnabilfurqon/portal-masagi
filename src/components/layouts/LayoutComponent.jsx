@@ -4,15 +4,29 @@ import {
   BellOutlined,
   DownOutlined,
   UserOutlined,
+  IdcardOutlined,
+  HistoryOutlined,
 } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
 import { TbDatabasePlus } from "react-icons/tb";
+import { RiTeamLine } from "react-icons/ri";
+import { LuClipboardSignature } from "react-icons/lu";
+import { HiOutlineClipboardList } from "react-icons/hi";
 import Cookies from "js-cookie";
 import "./layoutComponent.css";
 
-const LayoutComponent = ({ children, isSuperAdmin }) => {
+const LayoutComponent = ({ children, roleNumber }) => {
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+  }, [token, navigate]);
+
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
   const {
@@ -31,11 +45,11 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
     ];
 
     const handlerLogout = () => {
-      Cookies.remove("token");
-      Cookies.remove("role_uuid");
-      Cookies.remove("username");
-      Cookies.remove("company_uuid");
-      navigate("/login");
+      Cookies.remove('token');
+      Cookies.remove('role_uuid');
+      Cookies.remove('username');
+      Cookies.remove('company_uuid');
+      navigate('/login');
     };
 
     return (
@@ -182,12 +196,100 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
   } else if (location.pathname === "/division") {
     pageTitle = "Division";
     finalPageTitle = pageTitle;
+  } else if (location.pathname === '/attendance') {
+    pageTitle = 'Attendance';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === '/history') {
+    pageTitle = 'History';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === '/present') {
+    pageTitle = 'Present';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === '/report') {
+    pageTitle = 'Report';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === '/permit') {
+    pageTitle = 'Permit';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === '/official-travel') {
+    pageTitle = 'Official Travel';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === '/leave') {
+    pageTitle = 'Leave';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === '/overtime') {
+    pageTitle = 'Overtime';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === '/official-travel-request') {
+    pageTitle = 'Official Travel Request';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes('/official-travel-request/detail')) {
+    pageTitle = (
+      <Link to="/official-travel-request" className="page-title">
+        Official Travel Request /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === '/leave-request') {
+    pageTitle = 'Leave Request';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes('/leave-request/detail')) {
+    pageTitle = (
+      <Link to="/leave-request" className="page-title">
+        Leave Request /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === '/overtime-request') {
+    pageTitle = 'Overtime Request';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes('/overtime-request/detail')) {
+    pageTitle = (
+      <Link to="/overtime-request" className="page-title">
+        Overtime Request /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === '/permit-request') {
+    pageTitle = 'Permit Request';
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes('/permit-request/detail')) {
+    pageTitle = (
+      <Link to="/permit-request" className="page-title">
+        Permit Request /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
   }
 
   return (
     <Layout className="layout-container">
       {/* Sider */}
-      {isSuperAdmin ? (
+      {roleNumber === 1 ? (
         // Login sebagai Super Admin
         <Sider
           breakpoint="md"
@@ -225,7 +327,7 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
             </SubMenu>
           </Menu>
         </Sider>
-      ) : (
+      ) : roleNumber === 2 ? (
         // Login sebagai Admin
         <Sider
           breakpoint="md"
@@ -269,6 +371,73 @@ const LayoutComponent = ({ children, isSuperAdmin }) => {
               <Menu.Item key="/position">
                 <Link to="/position">Position</Link>
               </Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+      ) : (
+        // Login sebagai Employee
+        <Sider
+          breakpoint="md"
+          collapsedWidth="0"
+          style={{
+            background: colorBgContainer,
+            backgroundColor: 'rgba(248, 249, 250, 1)',
+          }}>
+          <img src={LogoMasagi} alt='Logo Masagi' className='logo-masagi' />
+          <Menu
+            defaultSelectedKeys={[location.pathname]}
+            mode='inline'
+            style={{ backgroundColor: 'rgba(248, 249, 250, 1)' }}>
+            <Menu.Item key='/attendance' icon={<IdcardOutlined />}>
+              <Link to='/attendance'>Attendance</Link>
+            </Menu.Item>
+            <Menu.Item key='/history' icon={<HistoryOutlined />}>
+              <Link to='/history'>History</Link>
+            </Menu.Item>
+            <SubMenu
+              key='attendance-report'
+              icon={<RiTeamLine />}
+              title='Attendance Report'>
+              <Menu.Item key='/present'>
+                <Link to='/present'>Present</Link>
+              </Menu.Item>
+              <Menu.Item key='/report'>
+                <Link to='/report'>Report</Link>
+              </Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key='permit-parent'
+              icon={<LuClipboardSignature />}
+              title='Permit'>
+              <Menu.Item key='official-travel'>
+                <Link to='/official-travel'>Official Travel</Link>
+              </Menu.Item>
+              <Menu.Item key='leave'>
+                <Link to='/leave'>Leave</Link>
+              </Menu.Item>
+              <Menu.Item key='overtime'>
+                <Link to='/overtime'>Overtime</Link>
+              </Menu.Item>
+              <Menu.Item key='permit'>
+                <Link to='/permit'>Permit</Link>
+              </Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key='permit-request-parent'
+              icon={<HiOutlineClipboardList />}
+              title='Permit Request'>
+                <Menu.Item key='/official-travel-request'>
+                  <Link to='/official-travel-request'>Official Travel</Link>
+                </Menu.Item>
+                <Menu.Item key='/leave-request'>
+                  <Link to='/leave-request'>Leave</Link>
+                </Menu.Item>
+                <Menu.Item key='/overtime-request'>
+                  <Link to='/overtime-request'>Overtime</Link>
+                </Menu.Item>
+                <Menu.Item key='/permit-request'>
+                  <Link to='/permit-request'>Permit</Link>
+                </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
