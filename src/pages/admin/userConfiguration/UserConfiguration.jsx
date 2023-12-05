@@ -6,10 +6,10 @@ import React from 'react'
 import { Table, Tag, Space, Button } from 'antd'
 import './userConfiguration.css'
 import EditUser from './editUser/EditUser'
-import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
-import SuccessModal from '../../../components/common/successModal/SuccessModal'
-import FailedModal from '../../../components/common/failedModal/FailedModal'
-import { SuccessUpdateModal } from '../../../components/common/successModal/SuccessModal'
+import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
+import SuccessModal from '@common/successModal/SuccessModal'
+import FailedModal from '@common/failedModal/FailedModal'
+import { SuccessUpdateModal } from '@common/successModal/SuccessModal'
 
 const UserConfiguration = ({searchValue, filterValue, sortValue, countValue }) => {
     // // Search

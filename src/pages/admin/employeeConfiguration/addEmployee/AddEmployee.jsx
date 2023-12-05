@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import './addEmployee.css'
 import { Space, Tabs, Button, Form, Input, DatePicker, Radio, Select, Flex } from 'antd'
 import { Link } from 'react-router-dom'
-import SubmitButton from '../../../../components/common/submitButton/SubmitButton'
-import SuccessAddDataModal from '../../../../components/common/successModal/SuccessAddDataModal'
-import FailedAddDataModal from '../../../../components/common/failedModal/FailedAddDataModal'
+import SubmitButton from '@common/submitButton/SubmitButton'
+import SuccessAddDataModal from '@common/successModal/SuccessAddDataModal'
+import FailedAddDataModal from '@common/failedModal/FailedAddDataModal'
 
 const AddEmployee = () => {
     const [form] = Form.useForm();

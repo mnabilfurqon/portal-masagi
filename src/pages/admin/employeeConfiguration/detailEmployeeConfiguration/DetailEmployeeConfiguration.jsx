@@ -1,6 +1,6 @@
 import React from 'react'
 import "./detailEmployeeConfiguration.css"
-import EmployeeTabs from '../../../../components/common/employeeTabs/EmployeeTabs';
+import EmployeeTabs from '@common/employeeTabs/EmployeeTabs';
 
 const DetailEmployeeConfiguration = () => {
   return (

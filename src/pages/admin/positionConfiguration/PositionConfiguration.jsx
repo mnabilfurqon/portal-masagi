@@ -2,7 +2,7 @@ import React from 'react'
 import "./positionConfiguration.css"
 import EditPosition from './editPosition/EditPosition'
 import { Table, Space, } from "antd"
-import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
+import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
 import AddPosition from './addPosition/AddPosition'
 
 const PositionConfiguration = ({searchValue, sortValue, countValue}) => {

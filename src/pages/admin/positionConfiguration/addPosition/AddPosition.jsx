@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import "./addPosition.css"
 import { Button, Modal, Form, Input, } from 'antd'
 import { AiOutlinePlus } from "react-icons/ai"
-import AddButton from '../../../../components/common/addButton/AddButton'
+import AddButton from '@common/addButton/AddButton'
 
 
 const AddPosition = () => {
