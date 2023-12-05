@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
+import axios from 'axios'
+import { PiWarningCircleBold } from "react-icons/pi"
+import { MdOutlineDelete } from 'react-icons/md'
+import { Button, Modal, Space } from 'antd'
 import "./deleteConfirmation.css"
-import { PiWarningCircleBold } from "react-icons/pi";
-import { MdOutlineDelete } from 'react-icons/md';
-import { Button, Modal, Space } from 'antd';
+import SuccessModal from '../successModal/SuccessModal'
+import FailedModal from '../failedModal/FailedModal'
 
 const DeleteConfirmation = () => {
     const { confirm } = Modal;
@@ -36,16 +39,77 @@ const DeleteConfirmation = () => {
 }
 
 export const DeleteConfirmationDialog = (props) => {
+  // Declaration
+  const [uuid, setUuid] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
+
+  // Confirmastion Dialog Handler
   const showModal = () => {
+    setUuid(props.uuid);
     setIsModalOpen(true);
+    // console.log(uuid);
   };
-  const handleOk = () => {
-    console.log('Deleted');
-    setIsModalOpen(false);
+
+  const handleOk = (event) => {
+    if (props.data === "Position") {
+      try {
+        const response = axios.delete(`https://attendance-1-r8738834.deta.app/api/v1/position/${uuid}`);
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          setIsModalOpen(false);
+          setIsSuccessModalOpen(true);
+          setUuid("");
+          event.preventDefault();
+          console.log("Position deleted!");
+        }, 3000);
+      } catch (error) {
+        console.log(error);
+        setIsFailedModalOpen(true);
+      }
+    } 
+    // else if (props.data === "User") {
+    //   try {
+    //     const response = axios.delete(`http://127.0.0.1:5000/api/v1/users/${uuid}`);
+    //     setIsModalOpen(false);
+    //     setIsSuccessModalOpen(true);
+    //     event.preventDefault();
+    //     setUuid("");
+    //     console.log("Deleted");
+    //   } catch (error) {
+    //     console.log(error);
+    //     setIsFailedModalOpen(true);
+    //   }
+    // }
+    
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  // Success Modal Handle
+  const handleSuccessModalOk = (event) => {
+    setIsSuccessModalOpen(false);
+    event.preventDefault();
+  };
+
+  const handleSuccessModalCancel = () => {
+    setIsSuccessModalOpen(false);
+  };
+
+
+  // Failed Modal Handle
+  const handleFailedModalOk = () => {
+    setIsFailedModalOpen(false);
+  };
+
+  const handleFailedModalCancel = () => {
+    setIsFailedModalOpen(false);
   };
 
   return (
@@ -71,6 +135,9 @@ export const DeleteConfirmationDialog = (props) => {
           <p>Are you sure delete this {props.data}?</p>
         </div>
       </Modal>
+
+      <SuccessModal action="Delete" isModalOpen={isSuccessModalOpen} handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} />
+      <FailedModal isModalOpen={isFailedModalOpen} handleOk={handleFailedModalOk} handleCancel={handleFailedModalCancel} />
     </>
   )
 }
