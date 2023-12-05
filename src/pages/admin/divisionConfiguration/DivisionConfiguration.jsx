@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import LoadingComponent from '../../../components/loadingComponent/LoadingComponent';
-import SearchBox from '@common/searchBox/SearchBox';
+import SearchBox from '@common/SearchBox/SearchBox';
 import SortButton from '@common/sortButton/SortButton';
 import CountButton from '@common/countButton/CountButton';
 import { Row, Col } from 'antd';
