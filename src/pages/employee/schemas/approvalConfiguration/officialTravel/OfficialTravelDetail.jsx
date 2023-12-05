@@ -2,9 +2,9 @@ import React, {useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Flex } from 'antd'
 import './officialTravel.css'
-import PermitRequestDetailTable from '../../../../../components/common/tables/permitRequestDetailTable/PermitRequestDetailTable'
-import DialogModal from '../../../../../components/common/modals/dialogModal/DialogModal'
-import RespondLeftModal from '../../../../../components/common/modals/respondLeftModal/RespondLeftModal'
+import PermitRequestDetailTable from '@common/tables/permitRequestDetailTable/PermitRequestDetailTable'
+import DialogModal from '@common/modals/dialogModal/DialogModal'
+import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
 
 const OfficialTravelDetail = () => {
   const location = useLocation();

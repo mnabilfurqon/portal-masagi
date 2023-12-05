@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import "./divisionConfiguration.css"
-import AddButton from '../../../components/common/addButton/AddButton'
-import DivisionTable from '../../../components/common/divisionTable/DivisionTable'
-import DeleteModal from '../../../components/common/deleteModal/DeleteModal'
-import SuccessDeleteModal from '../../../components/common/successModal/SuccessDeleteModal'
-import AddEditModal from '../../../components/common/addEditModal/AddEditModal'
-import SuccessAddDataModal from '../../../components/common/successModal/SuccessAddDataModal'
-import FailedAddDataModal from '../../../components/common/failedModal/FailedAddDataModal'
+import AddButton from '@common/addButton/AddButton'
+import DivisionTable from '@common/divisionTable/DivisionTable'
+import DeleteModal from '@common/deleteModal/DeleteModal'
+import SuccessDeleteModal from '@common/successModal/SuccessDeleteModal'
+import AddEditModal from '@common/addEditModal/AddEditModal'
+import SuccessAddDataModal from '@common/successModal/SuccessAddDataModal'
+import FailedAddDataModal from '@common/failedModal/FailedAddDataModal'
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import LoadingComponent from '../../../components/loadingComponent/LoadingComponent';
-import SearchBox from '../../../components/common/searchBox/SearchBox';
-import SortButton from '../../../components/common/sortButton/SortButton';
-import CountButton from '../../../components/common/countButton/CountButton';
+import SearchBox from '@common/searchBox/SearchBox';
+import SortButton from '@common/sortButton/SortButton';
+import CountButton from '@common/countButton/CountButton';
 import { Row, Col } from 'antd';
 
 const DivisionConfiguration = () => {

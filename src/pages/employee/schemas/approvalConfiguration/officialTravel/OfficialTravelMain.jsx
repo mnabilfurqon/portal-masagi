@@ -1,15 +1,15 @@
 import React, {useState} from 'react'
 import { Col, DatePicker, Row, Space, Button } from 'antd'
-import SearchBox from '../../../../../components/common/searchBox/SearchBox'
-import FilterButton from '../../../../../components/common/filterButton/FilterButton'
-import SortButton from '../../../../../components/common/sortButton/SortButton'
-import PermitRequestTable from '../../../../../components/common/tables/permitRequestTable/permitRequestTable'
-import CountButton from '../../../../../components/common/countButton/CountButton'
+import SearchBox from '@common/searchBox/SearchBox'
+import FilterButton from '@common/filterButton/FilterButton'
+import SortButton from '@common/sortButton/SortButton'
+import PermitRequestTable from '@common/tables/permitRequestTable/permitRequestTable'
+import CountButton from '@common/countButton/CountButton'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
-import DialogModal from '../../../../../components/common/modals/dialogModal/DialogModal'
+import DialogModal from '@common/modals/dialogModal/DialogModal'
 import './officialTravel.css'
-import RespondLeftModal from '../../../../../components/common/modals/respondLeftModal/RespondLeftModal'
+import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
 import { useNavigate } from 'react-router-dom'
 
 const OfficialTravelMain = () => {

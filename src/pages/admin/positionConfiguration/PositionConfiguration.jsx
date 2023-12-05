@@ -6,7 +6,7 @@ import "./positionConfiguration.css"
 // import { MdOutlineDelete } from "react-icons/md";
 import { SearchOutlined } from '@ant-design/icons'
 import { Table, Space, Button, Row, Col, Input} from "antd"
-import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
+import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
 import { useNavigate } from 'react-router-dom'
 import EditPosition from './editPosition/EditPosition'
 import AddPosition from './addPosition/AddPosition'

@@ -13,4 +13,9 @@ export default defineConfig({
   build: {
     minify: false,
   },
+  resolve: {
+    alias: {
+      '@common': '/src/components/common',
+    },
+  },
 });
