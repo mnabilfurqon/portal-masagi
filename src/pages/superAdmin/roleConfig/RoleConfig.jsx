@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import SearchBox from "@common/searchBox/SearchBox";
+import SearchBox from "@common/SearchBox/SearchBox";
 import SortButton from "@common/sortButton/SortButton";
 import CountButton from "@common/countButton/CountButton";
 import { sortData } from "./constans";
