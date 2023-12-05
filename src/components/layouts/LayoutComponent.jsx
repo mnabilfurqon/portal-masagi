@@ -321,11 +321,11 @@ const LayoutComponent = ({ children, roleNumber }) => {
               <Menu.Item key="/company">
                 <Link to="/company">Company</Link>
               </Menu.Item>
-              <Menu.Item key="/user">
-                <Link to="/user">User</Link>
-              </Menu.Item>
               <Menu.Item key="/role">
                 <Link to="/role">Role</Link>
+              </Menu.Item>
+              <Menu.Item key="/user">
+                <Link to="/user">User</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>
@@ -359,20 +359,20 @@ const LayoutComponent = ({ children, roleNumber }) => {
               <Menu.Item key="/company">
                 <Link to="/company">Company</Link>
               </Menu.Item>
+              <Menu.Item key="/division">
+                <Link to="/division">Division</Link>
+              </Menu.Item>
               <Menu.Item key="/employee">
                 <Link to="/employee">Employee</Link>
               </Menu.Item>
-              <Menu.Item key="/user">
-                <Link to="/user">User</Link>
+              <Menu.Item key="/position">
+                <Link to="/position">Position</Link>
               </Menu.Item>
               <Menu.Item key="/role">
                 <Link to="/role">Role</Link>
               </Menu.Item>
-              <Menu.Item key="/division">
-                <Link to="/division">Division</Link>
-              </Menu.Item>
-              <Menu.Item key="/position">
-                <Link to="/position">Position</Link>
+              <Menu.Item key="/user">
+                <Link to="/user">User</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>
@@ -382,6 +382,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
         <Sider
           breakpoint="md"
           collapsedWidth="0"
+          width={230}
           style={{
             background: colorBgContainer,
             backgroundColor: 'rgba(248, 249, 250, 1)',
@@ -394,9 +395,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <Menu.Item key='/attendance' icon={<IdcardOutlined />}>
               <Link to='/attendance'>Attendance</Link>
             </Menu.Item>
-            <Menu.Item key='/history' icon={<HistoryOutlined />}>
-              <Link to='/history'>History</Link>
-            </Menu.Item>
             <SubMenu
               key='attendance-report'
               icon={<RiTeamLine />}
@@ -408,15 +406,18 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Link to='/report'>Report</Link>
               </Menu.Item>
             </SubMenu>
+            <Menu.Item key='/history' icon={<HistoryOutlined />}>
+              <Link to='/history'>History</Link>
+            </Menu.Item>
             <SubMenu
               key='permit-parent'
               icon={<LuClipboardSignature />}
               title='Permit'>
-              <Menu.Item key='official-travel'>
-                <Link to='/official-travel'>Official Travel</Link>
-              </Menu.Item>
               <Menu.Item key='leave'>
                 <Link to='/leave'>Leave</Link>
+              </Menu.Item>
+              <Menu.Item key='official-travel'>
+                <Link to='/official-travel'>Official Travel</Link>
               </Menu.Item>
               <Menu.Item key='overtime'>
                 <Link to='/overtime'>Overtime</Link>
@@ -429,11 +430,11 @@ const LayoutComponent = ({ children, roleNumber }) => {
               key='permit-request-parent'
               icon={<HiOutlineClipboardList />}
               title='Permit Request'>
-                <Menu.Item key='/official-travel-request'>
-                  <Link to='/official-travel-request'>Official Travel</Link>
-                </Menu.Item>
                 <Menu.Item key='/leave-request'>
                   <Link to='/leave-request'>Leave</Link>
+                </Menu.Item>
+                <Menu.Item key='/official-travel-request'>
+                  <Link to='/official-travel-request'>Official Travel</Link>
                 </Menu.Item>
                 <Menu.Item key='/overtime-request'>
                   <Link to='/overtime-request'>Overtime</Link>
