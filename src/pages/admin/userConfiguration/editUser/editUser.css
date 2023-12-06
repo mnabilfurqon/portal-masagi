@@ -8,10 +8,13 @@
 
 .update-button {
   width: 100%;
-  background: #629093;
   color: white;
+  background-color: #629093;
+  border-color: #629093;
+  border-radius: 4px;
 }
 
 .update-button:hover {
-  background: #73b3b7;
+  background-color: #ffffff !important;
+  color: #629093 !important;
 }

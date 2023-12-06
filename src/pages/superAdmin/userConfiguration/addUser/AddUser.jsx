@@ -21,15 +21,8 @@ const AddUser = () => {
     const [loading, setLoading] = useState(false);
     
     const [roles, setRoles] = useState();
-    const [users, setUsers] = useState([]);
     const [employee, setEmployee] = useState();
-    
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [role, setRole] = useState("");
-    const [status, setStatus] = useState(true);
     const [companies, setCompanies] = useState();
-    // const company_uuid = Cookies.get("company_uuid");
 
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
     const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
@@ -42,10 +35,8 @@ const AddUser = () => {
         getRoles();
         getEmployees();
         getCompanies();
-        console.log(token)
-        console.log(company)
-        // setCompany(company_uuid)
-        // console.log(company)
+        // console.log("token", token);
+        // console.log("company", company);
     }, [token, navigate]);
 
     // Handle Modal
@@ -82,11 +73,13 @@ const AddUser = () => {
     const getRoles = async () => {
         try {
             setLoading(true)
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
                 headers: { Authorization: token },
             }
         );
         setRoles(response.data[0].items);
+        // console.log("roles", response.data[0].items);
         } catch (error) {
             console.log(error);
         } finally {
@@ -98,7 +91,8 @@ const AddUser = () => {
     const getEmployees = async () => {
         try {
             setLoading(true)
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/`, {
                 headers: { Authorization: token },
             }
         );
@@ -114,7 +108,8 @@ const AddUser = () => {
     const getCompanies = async () => {
         try {
             setLoading(true)
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
@@ -129,34 +124,23 @@ const AddUser = () => {
     // POST API to Insert New User - Form Handler
     const onFinish = async (values) => {
         try {
-            console.log(values);
-            // console.log(values.username);
-            const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/users/", {
-                'username': values.username,
-                'password': values.password,
-                'role_uuid': values.role_uuid,
-                'is_active': values.is_active,
-                'company_uuid': company.uuid,
-            }, 
+            // console.log("values", values);
+            // const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/users/", values,
+            const response = await axios.post("http://127.0.0.1:5000/api/v1/users/", values,
             {
                 headers: { Authorization: token, },
             });
-            setLoading(true);
-            setTimeout(() => {
-                setLoading(false);
-                setIsSuccessModalVisible(true);
-                console.log("New user added!");
-                // window.location.reload(false);
-            }, 3000);
+            setIsSuccessModalVisible(true);
+            console.log("New user added!");
           } catch (error) {
             console.log(error);
             setIsFailedModalVisible(true);
         }
     };
 
-    const onFinishFailed = (errorInfo) => {
+    const onFinishFailed = (error, values) => {
         setIsFailedModalVisible(true);
-        console.log('Failed:', errorInfo);
+        console.log('Failed:', error, values);
     };
 
 
@@ -173,13 +157,9 @@ const AddUser = () => {
           initialValues={{
             layout: formLayout,
             company_uuid: company.uuid,
-            // username: username,
-            // password: password,
-            // is_active: status,
-            // role_id: role,
           }}
           autoComplete='off'
-          loading={loading}
+          onLoadedData={loading}
         >
             <Form.Item
             label="Username"
@@ -192,10 +172,7 @@ const AddUser = () => {
                 message: 'Please input your username!',
                 },
             ]}>
-                <Input 
-                placeholder="Username" 
-                onChange={(e) => setUsername(e.target.value)}
-                />
+                <Input autoComplete='off' placeholder="Username" />
             </Form.Item>
             <Form.Item
             label="Password"
@@ -208,10 +185,7 @@ const AddUser = () => {
                 message: 'Please input your password!',
                 },
             ]}>
-                <Input.Password
-                placeholder="Password" 
-                onChange={(e) => setPassword(e.target.value)}
-                />
+                <Input.Password autoComplete='off' placeholder="Password" />
             </Form.Item>
             <Form.Item 
             label="Role" 
@@ -262,8 +236,8 @@ const AddUser = () => {
             ]}
             >
                 <Select disabled>
-                  {companies?.map(item => 
-                    <Select.Option key={(item.uuid)} value={(item.uuid)} loading={loading} >{(item.name)}</Select.Option>)
+                  {companies?.map(company => 
+                    <Select.Option key={(company.uuid)} value={(company.uuid)} >{(company.company_name)}</Select.Option>)
                   }
                 </Select>
             </Form.Item>
@@ -290,8 +264,7 @@ const AddUser = () => {
             <Form.Item>
                 <Flex gap={10} align='center' justify='end' >
                     <Link to="/user" style={{color:"black"}} >Cancel</Link>
-                    {/* <SubmitButton buttonText={"Save"} /> */}
-                    <Button key="submit" htmlType='submit' type="none" onClick={onFinish} className="update-button">
+                    <Button key="submit" htmlType='submit' type="none" className="update-button">
                         Save
                     </Button>
                 </Flex>

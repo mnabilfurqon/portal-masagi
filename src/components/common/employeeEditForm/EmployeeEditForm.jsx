@@ -1,15 +1,51 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './EmployeeEditForm.css'
 import { Form, Input, DatePicker, Radio, Select, Flex, Checkbox, Button } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import SubmitButton from '../submitButton/SubmitButton'
 import dayjs from 'dayjs'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 
 const EmployeeEditForm = (props) => {
     const { selectedEmployeeData } = props;
+    const { TextArea } = Input;
+
+    const token = Cookies.get("token");
+    const cookies = Cookies.get();
+    const navigate = useNavigate();
+    const employee_uuid = useParams();
 
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('vertical');
+    const [componentDisabled, setComponentDisabled] = useState(true);
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+    const dateFormatList = 'YYYY-MM-DD';
+
+    const [positions, setPositions] = useState();
+    const [divisions, setDivisions] = useState();
+    const [companies, setCompanies] = useState();
+
+    const [employee, setEmployee] = useState();
+    const [position, setPosition] = useState();
+    const [division, setDivision] = useState();
+    const [company, setCompany] = useState();
+
+    useEffect(() => {
+        if (!token) {
+          navigate("/login");
+        }
+        getDivisions();
+        getPositions();
+        getCompanies();
+        getEmployee();
+        document.getElementById('save').style.display = "none";
+        document.getElementById('edit').style.display = "flex";
+        // console.log(token)
+        // console.log("cookies", cookies);
+        // console.log("data employee", selectedEmployeeData);
+    }, [token, navigate]);
+
     const formItemLayout =
       formLayout === 'horizontal'
         ? {
@@ -21,13 +57,23 @@ const EmployeeEditForm = (props) => {
             },
           }
         : null;
-    const { TextArea } = Input;
-    const [componentDisabled, setComponentDisabled] = useState(true);
-    const [buttonDisabled, setButtonDisabled] = useState(false);
-    const dateFormatList = 'YYYY-MM-DD';
+        
     const handleEditButton = (e) => {
         setComponentDisabled(e.target.checked);
         setButtonDisabled(true);
+        document.getElementById('edit').style.display = "none";
+        document.getElementById('save').style.display = "flex";
+        // setIsSaveHidden(false);
+        // setIsEditHidden(true);
+    };
+
+    const handleCancleButton = (e) => {
+        setComponentDisabled(true);
+        setButtonDisabled(false);
+        document.getElementById('save').style.display = "none";
+        document.getElementById('edit').style.display = "flex";
+        // setIsSaveHidden(true);
+        // setIsEditHidden(false);
     };
 
     const [requiredMark, setRequiredMarkType] = useState(false);
@@ -56,10 +102,12 @@ const EmployeeEditForm = (props) => {
             blood_type: selectedEmployeeData.blood_type,
             marital_status: selectedEmployeeData.marital_status,
             number_of_child: selectedEmployeeData.number_of_child,
-            company_id: selectedEmployeeData.company_id,
-            role: selectedEmployeeData.role,
-            position: selectedEmployeeData.position,
-            division: selectedEmployeeData.division,
+            // company_uuid: selectedEmployeeData.company,
+            // position_uuid: selectedEmployeeData.position,
+            // division_uuid: selectedEmployeeData.division,
+            company_uuid: company,
+            position_uuid: position,
+            division_uuid: division,
             bank_name: selectedEmployeeData.bank_name,
             bank_account: selectedEmployeeData.bank_account,
             account_bank_number: selectedEmployeeData.account_bank_number,
@@ -68,13 +116,80 @@ const EmployeeEditForm = (props) => {
             no_bpjs_tk: selectedEmployeeData.no_bpjs_tk,
             no_bpjs_kes: selectedEmployeeData.no_bpjs_kes,
             npwp: selectedEmployeeData.npwp,
-            registry_number: selectedEmployeeData.registery_number,
+            registery_number: selectedEmployeeData.registery_number,
             emergency_contact_name: selectedEmployeeData.emergency_contact_name,
             emergency_contact_number: selectedEmployeeData.emergency_contact_number,
             join_date: dayjs(selectedEmployeeData.join_date, dateFormatList),
             separation_date: dayjs(selectedEmployeeData.separation_date, dateFormatList),
-            is_active: selectedEmployeeData.is_active ? "1" : "0",
+            is_active: selectedEmployeeData.is_active,
         })
+    }
+
+    // GET API Employee
+    const getEmployee = async () => {
+        try {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/${selectedEmployeeData.uuid}`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/${employee_uuid.uuid}`, {
+                headers: { Authorization: token },
+            }
+        );
+        setEmployee(response.data);
+        setCompany(response.data.company.uuid);
+        setPosition(response.data.position.uuid);
+        setDivision(response.data.division.uuid);
+        // console.log("employee:", response.data);
+        // console.log("com", company, "div", division, "pos", position);
+    } catch (error) {
+            console.log(error);
+        }
+    }
+    
+    // GET API Position
+    const getPositions = async () => {
+        try {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/position/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/position/`, {
+                headers: { Authorization: token },
+            }
+        );
+        setPositions(response.data.items);
+        // console.log("position: ", position);
+        // console.log("position", response.data.items);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // GET API Company
+    const getCompanies = async () => {
+        try {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
+                headers: { Authorization: token },
+            }
+        );
+        setCompanies(response.data.items);
+        // console.log("company: ", companies);
+        // console.log("company", response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // GET API Division
+    const getDivisions = async () => {
+        try {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/division/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/division/`, {
+                headers: { Authorization: token },
+            }
+        );
+        setDivisions(response.data.items);
+        // console.log("division: ", division);
+        // console.log("division", response.data.items);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -146,7 +261,7 @@ const EmployeeEditForm = (props) => {
                     },
                 ]}>
                     {/* <DatePicker defaultValue={('01/01/2015', dateFormatList[0])} format={dateFormatList}/> */}
-                    <DatePicker style={{width:"100%"}}/>
+                    <DatePicker style={{width:"100%"}} placeholder='YYYY-MM-DD'/>
                 </Form.Item>
             </Flex>
             <Flex 
@@ -265,10 +380,13 @@ const EmployeeEditForm = (props) => {
                 rules={[
                     {
                     required: true,
-                    message: 'Please input your gender!',
+                    message: 'Please select your gender!',
                     },
                 ]}>
-                    <Input placeholder="Enter Gender" />
+                    <Select>
+                        <Select.Option value="male">Male</Select.Option>
+                        <Select.Option value="female">Female</Select.Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item 
                 label="Blood Type" 
@@ -277,10 +395,15 @@ const EmployeeEditForm = (props) => {
                 rules={[
                     {
                     required: true,
-                    message: 'Please input your blood type!',
+                    message: 'Please select your blood type!',
                     },
                 ]}>
-                    <Input placeholder="Enter Blood Type" />
+                    <Select>
+                        <Select.Option value="a">A</Select.Option>
+                        <Select.Option value="b">B</Select.Option>
+                        <Select.Option value="o">O</Select.Option>
+                        <Select.Option value="ab">AB</Select.Option>
+                    </Select>
                 </Form.Item>
             </Flex>
             <Flex 
@@ -293,10 +416,15 @@ const EmployeeEditForm = (props) => {
                 rules={[
                     {
                     required: true,
-                    message: 'Please input your marital status!',
+                    message: 'Please select your marital status!',
                     },
                 ]}>
-                    <Input placeholder="Enter Marital Status" />
+                    {/* <Input placeholder="Enter Marital Status" /> */}
+                    <Select>
+                        <Select.Option value="not married">Not Married</Select.Option>
+                        <Select.Option value="married">Married</Select.Option>
+                        <Select.Option value="divorce">Divorce</Select.Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item 
                 label="Number of Child" 
@@ -316,11 +444,17 @@ const EmployeeEditForm = (props) => {
             className='row'>
                 <Form.Item 
                 label="Company ID" 
-                name="company_id"
+                name="company_uuid"
                 className='column'>
-                    <Input placeholder="Enter Company ID" />
+                    <Select disabled>
+                        {companies?.map(company => {
+                            return (
+                                <Select.Option key={company.uuid} value={company.uuid}>{(company.company_name)}</Select.Option>
+                            )
+                        })}
+                    </Select>
                 </Form.Item>
-                <Form.Item 
+                {/* <Form.Item 
                 label="Role" 
                 name="role"
                 className='column'
@@ -335,14 +469,10 @@ const EmployeeEditForm = (props) => {
                       <Select.Option value="admin">Admin</Select.Option>
                       <Select.Option value="super admin">Super Admin</Select.Option>
                     </Select>
-                </Form.Item>
-            </Flex>
-            <Flex 
-            justify='space-between'
-            className='row'>
+                </Form.Item> */}
                 <Form.Item 
                 label="Position" 
-                name="position"
+                name="position_uuid"
                 className='column'
                 rules={[
                     {
@@ -351,13 +481,20 @@ const EmployeeEditForm = (props) => {
                     },
                 ]}>
                     <Select>
-                      <Select.Option value="general manager">General Manager</Select.Option>
-                      <Select.Option value="usual employee">Usual Employee</Select.Option>
+                        {positions?.map(item => {
+                            return (
+                                <Select.Option key={(item.uuid)} value={(item.uuid)}>{(item.name)}</Select.Option>
+                            )
+                        })}
                     </Select>
                 </Form.Item>
+            </Flex>
+            <Flex 
+            justify='space-between'
+            className='row'>
                 <Form.Item 
                 label="Division" 
-                name="division"
+                name="division_uuid"
                 className='column'
                 rules={[
                     {
@@ -366,14 +503,13 @@ const EmployeeEditForm = (props) => {
                     },
                 ]}>
                     <Select>
-                      <Select.Option value='it'>IT</Select.Option>
-                      <Select.Option value="marketing">Marketing</Select.Option>
+                        {divisions?.map(item => {
+                            return (
+                                <Select.Option key={(item.uuid)} value={(item.uuid)}>{(item.name)}</Select.Option>
+                            )
+                        })}
                     </Select>
                 </Form.Item>
-            </Flex>
-            <Flex 
-            justify='space-between'
-            className='row'>
                 <Form.Item 
                 label="BANK" 
                 name="bank_name"
@@ -389,6 +525,10 @@ const EmployeeEditForm = (props) => {
                       <Select.Option value="bni">BNI</Select.Option>
                     </Select>
                 </Form.Item>
+            </Flex>
+            <Flex 
+            justify='space-between'
+            className='row'>
                 <Form.Item 
                 label="Account Bank" 
                 name="account_bank_number"
@@ -401,10 +541,6 @@ const EmployeeEditForm = (props) => {
                 ]}>
                     <Input placeholder="Enter Account Bank" />
                 </Form.Item>
-            </Flex>
-            <Flex 
-            justify='space-between'
-            className='row'>
                 <Form.Item 
                 label="Account Name" 
                 name="account_holder_name"
@@ -417,16 +553,16 @@ const EmployeeEditForm = (props) => {
                 ]}>
                     <Input placeholder="Enter Account Name" />
                 </Form.Item>
+            </Flex>
+            <Flex 
+            justify='space-between'
+            className='row'>
                 <Form.Item 
                 label="Salary" 
                 name="salary"
                 className='column'>
                     <Input placeholder="Enter Salary" />
                 </Form.Item>
-            </Flex>
-            <Flex 
-            justify='space-between'
-            className='row'>
                 <Form.Item 
                 label="BPJS Ketenagakerjaan Number" 
                 name="no_bpjs_tk"
@@ -439,6 +575,10 @@ const EmployeeEditForm = (props) => {
                 ]}>
                     <Input placeholder="Enter BPJS Ketenagakerjaan Number" />
                 </Form.Item>
+            </Flex>
+            <Flex 
+            justify='space-between'
+            className='row'>
                 <Form.Item 
                 label="BPJS Kesehatan Number" 
                 name="no_bpjs_kes"
@@ -451,10 +591,6 @@ const EmployeeEditForm = (props) => {
                 ]}>
                     <Input placeholder="Enter BPJS Kesehatan Number" />
                 </Form.Item>
-            </Flex>
-            <Flex 
-            justify='space-between'
-            className='row'>
                 <Form.Item
                 label="NPWP" 
                 name="npwp"
@@ -467,22 +603,22 @@ const EmployeeEditForm = (props) => {
                 ]}>
                     <Input placeholder="Enter NPWP" />
                 </Form.Item>
-                <Form.Item 
-                label="Registry Number" 
-                name="registry_number"
-                className='column'
-                rules={[
-                    {
-                    required: true,
-                    message: 'Please input your registry number!',
-                    },
-                ]}>
-                    <Input placeholder="Enter Registry Number" />
-                </Form.Item>
             </Flex>
             <Flex 
             justify='space-between'
             className='row'>
+                <Form.Item 
+                label="Registery Number" 
+                name="registery_number"
+                className='column'
+                rules={[
+                    {
+                    required: true,
+                    message: 'Please input your registery number!',
+                    },
+                ]}>
+                    <Input placeholder="Enter Registery Number" />
+                </Form.Item>
                 <Form.Item 
                 label="Emergency Contact Name" 
                 name="emergency_contact_name"
@@ -495,6 +631,10 @@ const EmployeeEditForm = (props) => {
                 ]}>
                     <Input placeholder="Enter Emergency Contact Name" />
                 </Form.Item>
+            </Flex>
+            <Flex 
+            justify='space-between'
+            className='row'>
                 <Form.Item 
                 label="Emergency Contact Number" 
                 name="emergency_contact_number"
@@ -507,56 +647,56 @@ const EmployeeEditForm = (props) => {
                 ]}>
                     <Input placeholder="Enter Emergency Contact Number" />
                 </Form.Item>
+                <Form.Item 
+                label="Join Date" 
+                name="join_date"
+                className='column'>
+                    <DatePicker style={{width:"100%"}} placeholder='YYYY-MM-DD'/>
+                </Form.Item>
             </Flex>
             <Flex 
             justify='space-between'
             className='row'>
                 <Form.Item 
-                label="Join Date" 
-                name="join_date"
-                className='column'>
-                    <DatePicker style={{width:"100%"}}/>
-                </Form.Item>
-                <Form.Item 
                 label="Separation Date" 
                 name="separation_date"
                 className='column'>
-                    <DatePicker style={{width:"100%"}}/>
+                    <DatePicker style={{width:"100%"}} placeholder='YYYY-MM-DD'/>
+                </Form.Item>
+                <Form.Item 
+                label="Status" 
+                name="is_active"
+                className='column'>
+                    <Radio.Group>
+                        <Radio value={true}>Actice</Radio>
+                        <Radio value={false}>Not Active</Radio>
+                    </Radio.Group>
                 </Form.Item>
             </Flex>
             <Flex 
             wrap="wrap"
             justify='space-between'
             className='row'>
-                <Form.Item 
-                label="Status" 
-                name="is_active"
-                className='column'>
-                    <Radio.Group>
-                        <Radio value="1">Actice</Radio>
-                        <Radio value="0">Not Active</Radio>
-                    </Radio.Group>
-                </Form.Item>
                 {/* <Form.Item label="Avatar" className='column'>
                     Upload
                 </Form.Item> */}
             </Flex>
             <Form.Item>
-            <Flex gap={30} align='center' justify='end'>
-                <Link to="/employee" style={{color:"black"}} >Cancel</Link>
+            <Flex gap={10} align='center' justify='end' id="save">
+                <Button onClick={handleCancleButton} type='link' style={{color:"black"}} >Cancel</Button>
                 <SubmitButton buttonText={"Save"} />
+            </Flex>
+            <Flex justify='end' id="edit">
+                <Button
+                disabled={buttonDisabled}
+                onClick={handleEditButton}
+                className='edit-employee-button'>
+                   Edit Data
+                </Button>
             </Flex>
             </Form.Item>
         </Form>
 
-        <Flex justify='end'>
-            <Button
-            disabled={buttonDisabled}
-            onClick={handleEditButton}
-            className='edit-employee-button'>
-               Edit Data
-            </Button>
-        </Flex>
         
     </>
     )

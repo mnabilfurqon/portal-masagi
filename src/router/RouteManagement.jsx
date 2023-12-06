@@ -197,8 +197,16 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
-            <Route
+            {/* <Route
               path='/user/add-user'
+              element={
+                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                  <AddUser />
+                </LayoutComponent>
+              }
+            /> */}
+            <Route
+              path='/user/add-user/:uuid'
               element={
                 <LayoutComponent hideButtons={true} isSuperAdmin={false}>
                   <AddUser />

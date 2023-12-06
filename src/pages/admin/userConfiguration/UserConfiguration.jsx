@@ -42,20 +42,20 @@ const UserConfiguration = () => {
       navigate('/login');
     }
     getUsersData();
-    // setInterval(getUsersData, 1000);
   }, [token, navigate, isAddModalOpen, isEditModalOpen, isDeleteModalOpen]);
 
   // API GET Users Data
   const getUsersData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/users/', {
+      // const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/users/', {
+      const response = await axios.get('http://127.0.0.1:5000/api/v1/users/', {
         headers: {
           Authorization: token,
         }
       });
       setUsers(response.data[0].items);
-      console.log(response.data[0]);
+      // console.log(response.data[0]);
     } catch (error) {
       console.log(error);
     } finally {
@@ -74,12 +74,6 @@ const UserConfiguration = () => {
         return String(record.username).toLowerCase().includes(value.toLowerCase());
       },
     },
-    // {
-    //   title: 'Password',
-    //   dataIndex: 'password',
-    //   key: 'password',
-    //   responsive: ["sm"],
-    // },
     {
       title: 'Role',
       dataIndex: 'role',
@@ -92,7 +86,6 @@ const UserConfiguration = () => {
       dataIndex: 'status',
       responsive: ["md"],
       render: (record) => {
-        // console.log("Status: ", record)
         if (record) {
           return (
             <Button key={record.uuid} className="active-button" type="primary" size="small" value="active" ghost>
@@ -114,7 +107,6 @@ const UserConfiguration = () => {
       render: (record) => (
         <Space size="small">
           <EditUser uuid={(record)} onClick={setIsEditModalOpen(true)}/>
-          {/* <DeleteConfirmationDialog data="User" uuid={(record.key)}/> */}
         </Space>
       ),
     },
@@ -126,10 +118,6 @@ const UserConfiguration = () => {
       username: item.username,
       status: item.is_active,
       role: item.role.name,
-      // password: item.password,
-      // company: item.company.company_name,
-      // created_date: item.created_date,
-      // updated_date: item.updated_date,
     }
   });
 
@@ -265,6 +253,9 @@ const UserConfiguration = () => {
         />
       </Col>
       <Col>
+        <FilterButton onFilter={handleFilter} treeData={treeData} />
+      </Col>
+      <Col>
         <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
       </Col>
       <Col>
@@ -278,25 +269,19 @@ const UserConfiguration = () => {
 
     <Table 
     columns={columns} 
-    // dataSource={data}
     pagination={{
       pageSize: countValue,
     }} 
-    // onChange={sortedData} 
-    // onChange={sortValue} 
     dataSource={sortedData} 
     loading={loading}
+    // dataSource={data}
+    // onChange={sortedData} 
+    // onChange={sortValue} 
     // pagination={paginationConfig}
     // searchValue={searchValue} 
     // filterValue={filterValue} 
     // countValue={countValue}
     />
-
-    {/* <div>
-      <SuccessModal action="Delete"/>
-      <FailedModal />
-      <SuccessUpdateModal />
-    </div> */}
   </>
   )
 }

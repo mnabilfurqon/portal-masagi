@@ -19,6 +19,12 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
     navigate(`/employee/detail-employee/${value}`);
   }
 
+  const handleAddUserClick = (record) => {
+    const value = record.key;
+    navigate(`/user/add-user/${value}`);
+    // navigate(`/user/add-user`);
+  }
+
   // Handlre value filter button
   const filterArray = Array.isArray(filterValue) ? filterValue : [];
   const encodedFilterValue = filterArray.map(value => encodeURIComponent(value)).join(',');
@@ -59,7 +65,8 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get("https://attendance-1-r8738834.deta.app/api/v1/employee/", {
+      // const response = await axios.get("https://attendance-1-r8738834.deta.app/api/v1/employee/", {
+      const response = await axios.get("http://127.0.0.1:5000/api/v1/employee/", {
         params: {
           page: page,
           per_page: countValue,
@@ -139,11 +146,9 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
                     <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                  <Link to='/user/add-user'>
-                    <Button className="action-button" type="primary" size="small" ghost>
+                    <Button className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost>
                         <BsPersonAdd className="action-icon" />
                     </Button>
-                  </Link>
                 </Space>
             ),
         },

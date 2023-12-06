@@ -5,15 +5,17 @@ import { Link } from 'react-router-dom'
 import SubmitButton from '../../../../components/common/submitButton/SubmitButton'
 import SuccessAddDataModal from '../../../../components/common/successModal/SuccessAddDataModal'
 import FailedAddDataModal from '../../../../components/common/failedModal/FailedAddDataModal'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 
 const AddUser = () => {
     // Declaration
-    const token = Cookies.get("token");
     const cookies = Cookies.get();
+    const token = Cookies.get("token");
+    const company = Cookies.get("company_uuid");
     const navigate = useNavigate();
+    const employee = useParams();
 
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('horizontal');
@@ -21,14 +23,8 @@ const AddUser = () => {
     const [loading, setLoading] = useState(false);
     
     const [roles, setRoles] = useState();
-    const [users, setUsers] = useState([]);
-    
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [role, setRole] = useState("");
-    const [status, setStatus] = useState(true);
-    const [company, setCompany] = useState("");
-    const company_uuid = Cookies.get("company_uuid");
+    const [companies, setCompanies] = useState();
+    const [employees, setEmployees] = useState();
 
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
     const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
@@ -39,11 +35,18 @@ const AddUser = () => {
           navigate("/login");
         }
         getRoles();
-        console.log(token)
-        console.log(company_uuid)
-        setCompany(company_uuid)
-        console.log(cookies)
+        getCompanies();
+        getEmployees();
+        console.log("Token: ", token)
+        console.log("Company_uuid: ", company)
+        console.log("Emplyee_uuid: ", employee)
+        // console.log("Cookies: ", cookies)
         // console.log(company)
+
+        // form.setFieldsValue({
+        //     company_uuid: company,
+        //     employee_uuid: employee.uuid,
+        // })
     }, [token, navigate]);
 
     // Handle Modal
@@ -79,26 +82,53 @@ const AddUser = () => {
     // GET API Roles
     const getRoles = async () => {
         try {
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
+            setLoading(true);
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
                 headers: { Authorization: token },
             }
         );
         setRoles(response.data[0].items);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     }
 
     // GET API Company
-    const getCompany = async () => {
+    const getCompanies = async () => {
         try {
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+            setLoading(true);
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
-        setCompany(response.data[0].items);
+        setCompanies(response.data.items);
+        console.log("Companies", companies);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // GET API Employee
+    const getEmployees = async () => {
+        try {
+            setLoading(true);
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/`, {
+                headers: { Authorization: token },
+            }
+        );
+        setEmployees(response.data.items);
+        console.log("Employees", employees);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -107,23 +137,13 @@ const AddUser = () => {
         try {
             console.log(values);
             // console.log(values.username);
-            const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/users/", {
-                'username': values.username,
-                'password': values.password,
-                'role_uuid': values.role_uuid,
-                'is_active': values.is_active,
-                'company_uuid': company_uuid,
-            }, 
+            // const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/users/", values, 
+            const response = await axios.post("http://127.0.0.1:5000/api/v1/users/", values, 
             {
                 headers: { Authorization: token, },
             });
-            setLoading(true);
-            setTimeout(() => {
-                setLoading(false);
-                setIsSuccessModalVisible(true);
-                console.log("New user added!");
-                // window.location.reload(false);
-            }, 3000);
+            setIsSuccessModalVisible(true);
+            console.log("New user added!");
           } catch (error) {
             console.log(error);
             setIsFailedModalVisible(true);
@@ -148,10 +168,8 @@ const AddUser = () => {
           requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
           initialValues={{
             layout: formLayout,
-            // username: username,
-            // password: password,
-            // is_active: status,
-            // role_id: role,
+            company_uuid: company,
+            employee_uuid: employee.uuid,
           }}
           autoComplete="off"
         >
@@ -167,8 +185,7 @@ const AddUser = () => {
                 },
             ]}>
                 <Input 
-                placeholder="Username" 
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
                 />
             </Form.Item>
             <Form.Item
@@ -184,7 +201,6 @@ const AddUser = () => {
             ]}>
                 <Input.Password
                 placeholder="Password" 
-                onChange={(e) => setPassword(e.target.value)}
                 />
             </Form.Item>
             <Form.Item 
@@ -223,14 +239,42 @@ const AddUser = () => {
                 </Radio.Group>
             </Form.Item>
             <Form.Item
-            // label="Company"
+            label="Company"
             labelAlign='left'
             name="company_uuid"
             colon={false}
-            disabled
+            rules={[
+                {
+                required: true,
+                message: 'Please select your company!',
+                },
+            ]}
             >
-                <Input value={company} disabled bordered={false} />
+                <Select disabled>
+                  {companies?.map(company => 
+                    <Select.Option key={(company.uuid)} value={(company.uuid)}>{(company.company_name)}</Select.Option>)
+                  }
+                </Select>
             </Form.Item>
+            <Form.Item
+            label="Employee"
+            labelAlign='left'
+            name="employee_uuid"
+            colon={false}
+            rules={[
+                {
+                required: true,
+                message: 'Please select your employee!',
+                },
+            ]}
+            >
+                <Select disabled>
+                  {employees?.map(employee => 
+                    <Select.Option key={(employee.uuid)} value={(employee.uuid)}>{(employee.name)}</Select.Option>)
+                  }
+                </Select>
+            </Form.Item>
+
             <Flex justify='end' className='action'>
             <Form.Item>
                 <Flex gap={10} align='center' justify='end' >
