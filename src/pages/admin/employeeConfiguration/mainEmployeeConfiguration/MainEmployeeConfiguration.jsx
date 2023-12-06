@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 import "./mainEmployeeConfiguration.css"
-import AddButton from '../../../../components/common/addButton/AddButton'
-import EmployeeTable from '../../../../components/common/employeeTable/EmployeeTable'
+import AddButton from '@common/addButton/AddButton'
+import EmployeeTable from '@common/employeeTable/EmployeeTable'
 import { Link } from 'react-router-dom'
 import { Row, Col } from 'antd'
-import SearchBox from '../../../../components/common/searchBox/SearchBox'
-import FilterButton from '../../../../components/common/filterButton/FilterButton'
-import SortButton from '../../../../components/common/sortButton/SortButton'
-import CountButton from '../../../../components/common/countButton/CountButton'
+import SearchBox from '@common/SearchBox/SearchBox'
+import FilterButton from '@common/FilterButton/FilterButton'
+import SortButton from '@common/sortButton/SortButton'
+import CountButton from '@common/countButton/CountButton'
 
 const MainEmployeeConfiguration = () => {
 

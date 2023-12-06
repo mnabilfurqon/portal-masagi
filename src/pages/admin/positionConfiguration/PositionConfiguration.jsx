@@ -6,15 +6,15 @@ import "./positionConfiguration.css"
 // import { MdOutlineDelete } from "react-icons/md";
 import { SearchOutlined } from '@ant-design/icons'
 import { Table, Space, Button, Row, Col, Input} from "antd"
-import { DeleteConfirmationDialog } from '../../../components/common/deleteConfirmation/DeleteConfirmation'
+import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
 import { useNavigate } from 'react-router-dom'
 import EditPosition from './editPosition/EditPosition'
 import AddPosition from './addPosition/AddPosition'
-import SuccessModal from '../../../components/common/successModal/SuccessModal'
-import FailedModal from '../../../components/common/failedModal/FailedModal'
-import SearchBox from '../../../components/common/searchBox/SearchBox'
-import CountButton from '../../../components/common/countButton/CountButton'
-import SortButton from '../../../components/common/sortButton/SortButton'
+import SuccessModal from '@common/successModal/SuccessModal'
+import FailedModal from '@common/failedModal/FailedModal'
+import SearchBox from '@common/SearchBox/SearchBox'
+import CountButton from '@common/countButton/CountButton'
+import SortButton from '@common/sortButton/SortButton'
 
 const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   // Declaration 

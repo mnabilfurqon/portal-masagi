@@ -10,9 +10,9 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import SearchBox from "../../../components/common/searchBox/SearchBox";
-import SortButton from "../../../components/common/sortButton/SortButton";
-import CountButton from "../../../components/common/countButton/CountButton";
+import SearchBox from "@common/SearchBox/SearchBox";
+import SortButton from "@common/sortButton/SortButton";
+import CountButton from "@common/countButton/CountButton";
 import { sortData } from "./constans";
 
 const RoleConfig = () => {
