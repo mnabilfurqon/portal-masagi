@@ -1,39 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Flex, Input, Modal, Row, Tree, Alert } from 'antd';
-import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai';
-import { useNavigate, useParams } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import './roleConfigDetail.css';
-
-const changeMethodToName = resource => {
-  const res = resource.map(item => {
-    item.permission = item.permission.map(x => {
-      return {
-        uuid: x.uuid,
-        name: x.method,
-      };
-    });
-    return item;
-  });
-  return res;
-};
-
-const getDifferece = (arr1, arr2) => {
-  const result = arr1.filter(item => {
-    return !arr2.includes(item);
-  });
-  return result;
-};
+import React, { useEffect, useState } from "react";
+import { Button, Col, Flex, Input, Modal, Row, Tree, Alert } from "antd";
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import { useNavigate, useParams } from "react-router-dom";
+import Cookies from "js-cookie";
+import axios from "axios";
+import "./roleConfigDetail.css";
 
 const RoleConfigDetail = () => {
-  const token = Cookies.get('token');
+  const token = Cookies.get("token");
   const navigate = useNavigate();
   const { uuid } = useParams();
   const [loading, setLoading] = useState(false);
   const [detailRole, setDetailRole] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [roleName, setRoleName] = useState('');
+  const [roleName, setRoleName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
@@ -46,7 +26,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/v1/role/${uuid}`,
+        `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
         {
           headers: {
             Authorization: token,
@@ -57,10 +37,10 @@ const RoleConfigDetail = () => {
       setDetailRole(response.data.role);
       setResource(changeMethodToName(response.data.resource));
       setCheckedKeys([
-        ...response.data.role.permission.map(item => item.permission.uuid),
+        ...response.data.role.permission.map((item) => item.permission.uuid),
       ]);
       setRolePermission([
-        ...response.data.role.permission.map(item => item.permission.uuid),
+        ...response.data.role.permission.map((item) => item.permission.uuid),
       ]);
     } catch (error) {
       console.log(error);
@@ -92,11 +72,11 @@ const RoleConfigDetail = () => {
     }
   };
 
-  const addPermissionRole = async permissions => {
+  const addPermissionRole = async (permissions) => {
     try {
       setLoading(true);
       await axios.post(
-        `http://localhost:5000/api/v1/role/permission/add`,
+        `https://attendance-1-r8738834.deta.app/api/v1/role/permission/add`,
         {
           role_uuid: uuid,
           permission_uuids: permissions,
@@ -119,11 +99,11 @@ const RoleConfigDetail = () => {
     }
   };
 
-  const deletePermissionRole = async permissions => {
+  const deletePermissionRole = async (permissions) => {
     try {
       setLoading(true);
       await axios.delete(
-        `http://localhost:5000/api/v1/role/permission/revoke`,
+        `https://attendance-1-r8738834.deta.app/api/v1/role/permission/revoke`,
         {
           headers: {
             Authorization: token,
@@ -148,7 +128,7 @@ const RoleConfigDetail = () => {
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
     getSelectedRole();
   }, [token, navigate]);
@@ -159,17 +139,37 @@ const RoleConfigDetail = () => {
     }
   }, [detailRole]);
 
+  const changeMethodToName = (resource) => {
+    const res = resource.map((item) => {
+      item.permission = item.permission.map((x) => {
+        return {
+          uuid: x.uuid,
+          name: x.method,
+        };
+      });
+      return item;
+    });
+    return res;
+  };
+
+  const getDifferece = (arr1, arr2) => {
+    const result = arr1.filter((item) => {
+      return !arr2.includes(item);
+    });
+    return result;
+  };
+
   const successTitle = (
-    <div className='success-title'>
-      <AiOutlineCheckCircle size={80} className='success-logo' />
-      <p className='success-text'>Success</p>
+    <div className="success-title">
+      <AiOutlineCheckCircle size={80} className="success-logo" />
+      <p className="success-text">Success</p>
     </div>
   );
 
   const failedTitle = (
-    <div className='failed-title'>
-      <AiOutlineCloseCircle size={70} className='failed-logo' />
-      <p className='failed-text'>Failed</p>
+    <div className="failed-title">
+      <AiOutlineCloseCircle size={70} className="failed-logo" />
+      <p className="failed-text">Failed</p>
     </div>
   );
 
@@ -188,13 +188,13 @@ const RoleConfigDetail = () => {
   };
 
   const onSelect = (selectedKeys, info) => {
-    console.log('selected', selectedKeys, info);
+    console.log("selected", selectedKeys, info);
   };
   const onCheck = (key, info) => {
-    const value = info.checkedNodesPositions.filter(item => {
+    const value = info.checkedNodesPositions.filter((item) => {
       if (item.pos.length > 4) return item;
     });
-    setCheckedKeys([...value.map(item => item.node.uuid)]);
+    setCheckedKeys([...value.map((item) => item.node.uuid)]);
   };
 
   const handleUpdatePermission = async () => {
@@ -213,36 +213,38 @@ const RoleConfigDetail = () => {
       <Row
         gutter={[16, 8]}
         style={{
-          position: 'relative',
-        }}>
+          position: "relative",
+        }}
+      >
         {notify && (
           <Alert
-            message='Permission Updated'
-            type='success'
+            message="Permission Updated"
+            type="success"
             style={{
-              textAlign: 'center',
-              left: '50%',
-              position: 'absolute',
-              width: '24rem',
+              textAlign: "center",
+              left: "50%",
+              position: "absolute",
+              width: "24rem",
               zIndex: 100,
-              transform: 'translate(-50%, 0)',
+              transform: "translate(-50%, 0)",
             }}
           />
         )}
         <Col xs={24} md={24} lg={24} xl={24} xxl={24}>
           <p>Role Name</p>
-          <div className='input-container'>
+          <div className="input-container">
             <Input
-              className='input-role-name'
+              className="input-role-name"
               value={roleName}
-              onChange={e => setRoleName(e.target.value)}
+              onChange={(e) => setRoleName(e.target.value)}
               disabled={!isEditing}
             />
             <Button
-              className='button-input'
+              className="button-input"
               onClick={isEditing ? handleSaveRole : handleEditRole}
-              loading={loading}>
-              {isEditing ? 'Save' : 'Edit Role'}
+              loading={loading}
+            >
+              {isEditing ? "Save" : "Edit Role"}
             </Button>
           </div>
         </Col>
@@ -253,13 +255,15 @@ const RoleConfigDetail = () => {
         centered
         visible={successModalOpen}
         onCancel={() => setSuccessModalOpen(false)}
-        footer={null}>
-        <div className='modal-content'>
-          <p className='success-caption'>Data changes successfull!</p>
+        footer={null}
+      >
+        <div className="modal-content">
+          <p className="success-caption">Data changes successfull!</p>
           <Button
-            key='editRole'
-            className='save-button'
-            onClick={() => navigate(-1)}>
+            key="editRole"
+            className="save-button"
+            onClick={() => navigate(-1)}
+          >
             Ok
           </Button>
         </div>
@@ -270,41 +274,45 @@ const RoleConfigDetail = () => {
         centered
         visible={errorModalOpen}
         onCancel={() => setErrorModalOpen(false)}
-        footer={null}>
-        <div className='modal-content'>
-          <p className='failed-caption'>Something went wrong!</p>
+        footer={null}
+      >
+        <div className="modal-content">
+          <p className="failed-caption">Something went wrong!</p>
           <Button
-            key='backEdit'
-            className='back-edit-button'
-            onClick={handleBackRole}>
+            key="backEdit"
+            className="back-edit-button"
+            onClick={handleBackRole}
+          >
             Back
           </Button>
         </div>
       </Modal>
 
       <Flex
-        justify='space-between'
-        align='end'
+        justify="space-between"
+        align="end"
         style={{
-          padding: '5px',
-        }}>
-        <p className='permission-title'>Permissions</p>
+          padding: "5px",
+        }}
+      >
+        <p className="permission-title">Permissions</p>
         <Button
-          className='button-input'
+          className="button-input"
           style={{
-            width: '150px',
+            width: "150px",
           }}
-          onClick={handleUpdatePermission}>
+          onClick={handleUpdatePermission}
+        >
           Update Permission
         </Button>
       </Flex>
       <Tree
         fieldNames={{
-          title: 'name',
-          key: 'uuid',
-          children: 'permission',
+          title: "name",
+          key: "uuid",
+          children: "permission",
         }}
-        className='permission-data'
+        className="permission-data"
         checkable
         checkedKeys={checkedKeys}
         onSelect={onSelect}
