@@ -1,4 +1,4 @@
-export const treeData = [
+export const permissionData = [
   {
     title: "Users",
     key: "users",

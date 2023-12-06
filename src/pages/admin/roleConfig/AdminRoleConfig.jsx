@@ -5,25 +5,33 @@ import {
   AiOutlinePlus,
 } from "react-icons/ai";
 import RoleConfigTable from "./tableRole/AdminRoleConfigTable";
-import { Button, Input, Modal } from "antd";
+import { Button, Col, Input, Modal, Row } from "antd";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AdminRoleConfigTable from "./tableRole/AdminRoleConfigTable";
+import SearchBox from "../../../components/common/searchBox/SearchBox";
+import SortButton from "../../../components/common/sortButton/SortButton";
+import CountButton from "../../../components/common/countButton/CountButton";
+import { sortData } from "./constans";
 
-const AdminRoleConfig = ({ searchValue, sortValue, countValue }) => {
+const AdminRoleConfig = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const [roleName, setRoleName] = useState("");
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [sortValue, setSortValue] = useState("");
+  const [countValue, setCountValue] = useState("10");
 
   const addRole = async () => {
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:5000/api/v1/role/",
+      setLoading(true);
+      await axios.post(
+        "https://attendance-1-r8738834.deta.app/api/v1/role/",
         {
           name: roleName,
         },
@@ -38,6 +46,8 @@ const AdminRoleConfig = ({ searchValue, sortValue, countValue }) => {
       setRoleName("");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,8 +72,8 @@ const AdminRoleConfig = ({ searchValue, sortValue, countValue }) => {
 
   const failedTitle = (
     <div className="failed-title">
-      <AiOutlineCloseCircle size={70} className="failed-icon" />
-      <p className="failed-header">Failed</p>
+      <AiOutlineCloseCircle size={70} className="failed-role-icon" />
+      <p className="failed-role-header">Failed</p>
     </div>
   );
 
@@ -85,13 +95,47 @@ const AdminRoleConfig = ({ searchValue, sortValue, countValue }) => {
     setModalOpen(false);
   };
 
+  const handleSearch = (value) => {
+    setSearchValue(value);
+  };
+
+  const handleSort = (value) => {
+    setSortValue(value);
+  };
+
+  const handleCount = (value) => {
+    setCountValue(value);
+  };
+
   return (
     <>
-      <div className="right-buttons">
-        <Button onClick={() => setModalOpen(true)} className="add-button">
-          <AiOutlinePlus />
-          Add Role
-        </Button>
+      <Row gutter={[16, 8]}>
+        <Col xs={24} md={7} lg={8} xl={6} xxl={6}>
+          <SearchBox onSearch={handleSearch} />
+        </Col>
+        <Col xs={12} md={5} lg={4} xl={4} xxl={3}>
+          <SortButton
+            className="sort-button"
+            onSort={handleSort}
+            items={sortData}
+          />
+        </Col>
+        <Col xs={12} md={4} lg={3} xl={2} xxl={2}>
+          <CountButton className="count-button" onCount={handleCount} />
+        </Col>
+        <Col
+          xs={24}
+          md={8}
+          lg={{ span: 5, offset: 4 }}
+          xl={{ span: 4, offset: 8 }}
+          xxl={{ span: 4, offset: 6 }}
+        >
+          <Button onClick={() => setModalOpen(true)} className="add-button">
+            <AiOutlinePlus />
+            Add Role
+          </Button>
+        </Col>
+
         <Modal
           title={addRoleTitle}
           centered
@@ -109,8 +153,9 @@ const AdminRoleConfig = ({ searchValue, sortValue, countValue }) => {
             />
             <Button
               key="addRole"
-              className="add-role-button"
+              className="add-role-buttons"
               onClick={handleAddRole}
+              loading={loading}
             >
               Add Role
             </Button>
@@ -154,10 +199,10 @@ const AdminRoleConfig = ({ searchValue, sortValue, countValue }) => {
             </Button>
           </div>
         </Modal>
-      </div>
+      </Row>
 
       <div className="role-table-container">
-        <AdminRoleConfigTable
+        <RoleConfigTable
           searchValue={searchValue}
           sortValue={sortValue}
           countValue={countValue}

@@ -1,8 +1,5 @@
-.right-buttons {
-  display: flex;
-  margin-left: 830px;
-  margin-top: -85px;
-  margin-bottom: 50px;
+.role-table-container {
+  margin-top: 24px;
 }
 
 .modal-container, .modal-success, .modal-failed {
@@ -32,7 +29,7 @@
   border: 1px solid #73B3B7 !important;
 }
 
-.add-role-button {
+.add-role-buttons {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -41,11 +38,11 @@
   border-radius: 4px;
   background-color: #629093;
   color: white;
-  width: 472px;
   margin-top: 15px;
   margin-bottom: 10px;
+  width: 100%;
 }
-.add-role-button:hover {
+.add-role-buttons:hover {
   background-color: #73B3B7;
   color: #ffffff !important;
   border: 1px solid #73B3B7 !important;
@@ -106,15 +103,15 @@
   text-align: center;
 }
 
-.failed-icon {
+.failed-role-icon {
   color: red;
-  margin-left: 200px;
+  width: 100%;
 }
 
-.failed-header {
-  margin-left: 195px;
+.failed-role-header {
   margin-top: 20px;
   font-size: 30px;
+  text-align: center;
 }
 
 .success-header {
