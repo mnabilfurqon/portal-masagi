@@ -1,0 +1,21 @@
+.table-container-detail {
+  width: 100%;
+  border: #556172 1px solid;
+  margin-bottom: 40px;
+}
+
+.table-content-detail {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: none; 
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  width: 15%;
+  background-color: #F3F6F9;
+}

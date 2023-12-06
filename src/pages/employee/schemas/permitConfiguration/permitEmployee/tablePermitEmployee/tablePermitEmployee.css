@@ -1,0 +1,18 @@
+.table-permit-empolyee {
+  margin-top: 24px;
+}
+
+.detail-button-permit-employee {
+  border: none;
+}
+
+.detail-icon-permit-employee {
+  color: #629093;
+  font-size: 25px;
+  cursor: pointer;
+}
+.detail-icon-permit-employee:hover {
+  color: #F9B700;
+  font-size: 25px;
+  cursor: pointer;
+}

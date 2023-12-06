@@ -1,0 +1,118 @@
+.add-official-travel-form {
+  width: 100%;
+  flex-direction: column;
+}
+
+.request-button-official-travel {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+}
+.request-button-official-travel:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.save-add-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #28A745;
+  color: white;
+  width: 100px;
+}
+
+.save-add-button:hover {
+  background-color: #28A745;
+  color: #ffffff !important;
+  border: 1px solid #28A745 !important;
+}
+
+.back-add-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #DC3545;
+  color: white;
+  width: 100px;
+}
+
+.back-add-button:hover {
+  background-color: #FF7481;
+  color: #FFFFFF !important;
+  border: 1px solid #DC3545 !important;
+}
+
+.cancel-button-official-travel {
+  color: #000000;
+}
+.cancel-button-official-travel:hover {
+  color: #73B3B7 !important;
+}
+
+.add-official-travel-form .add-official-travel-label {
+  text-align: left;
+}
+
+.agenda-input:hover,
+.destination-input:hover,
+.permit-input:hover,
+.end-permit-input:hover,
+.agenda-input:focus,
+.destination-input:focus,
+.permit-input:focus,
+.end-permit-input:focus {
+  border: 1px solid #73B3B7 !important;
+}
+
+.modal-content-official-travel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.failed-title-official-travel, .success-title-official-travel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.success-logo-official-travel {
+  color: #28A745;
+}
+
+.success-text-official-travel {
+  margin-top: 20px;
+  font-size: 30px;
+}
+
+.success-caption-official-travel {
+  margin-top: -30px;
+}
+
+.failed-logo-official-travel {
+  color: red;
+}
+
+.failed-text-official-travel {
+  margin-top: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.failed-caption-official-travel {
+  margin-top: -30px;
+}
