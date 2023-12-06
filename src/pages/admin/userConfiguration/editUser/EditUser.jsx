@@ -7,21 +7,18 @@ import { Button, Modal, Form, Input, Select, Radio } from 'antd'
 import { BiEdit } from "react-icons/bi"
 import SuccessModal from '../../../../components/common/successModal/SuccessModal'
 import FailedModal from '../../../../components/common/failedModal/FailedModal'
-import SubmitButton from '../../../../components/common/submitButton/SubmitButton'
 
 const editUser = (props) => {
   // Declaration
+  const key = props.uuid.key;
   const token = Cookies.get("token");
-  const company_uuid = Cookies.get("company_uuid");
+  const company = Cookies.get("company_uuid");
   const navigate = useNavigate();
   
-  const [uuid, setUuid] = useState('');
   const [user, setUser] = useState();
   const [roles, setRoles] = useState();
-
-  const [role, setRole] = useState();
-  const [username, setUsername] = useState();
-  const [isActive, setIsActive] = useState(true);
+  // const [companies, setCompanies] = useState();
+  // const [employees, setEmployees] = useState();
   
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,130 +31,32 @@ const editUser = (props) => {
   // Modal Edit Handler
   const showModal = () => {
     setOpen(true);
-    getUser();
-
     form.setFieldsValue({
       username: user.username,
-      password: user.password,
       role_uuid: user.role.uuid,
       is_active: user.is_active,
     })
-
-    console.log("key", key);
+    // console.log("key", key);
   };
-
-  const key = props.uuid.key;
-  useEffect(() => {
-    getUser()
-  }, [key]);
-
-  // GET API User by Id
-  const getUser = async () => {
-    try {
-      // console.log("uuid: ", key)
-      // console.log("company_uuid: ", company_uuid)
-      setLoading(true)
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, {
-          headers: { Authorization: token },
-        }
-      );
-      // setUsername(response.data.username)
-      // setIsActive(response.data.is_active)
-      // setRole(response.data.role_id)
-      // console.log(username, isActive, role);
-      setUser(response.data);
-      console.log("data user", user);
-      // console.log("data respons", response.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
-  // Header
-  useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    };
-    getRoles();
-  }, [token, navigate, showModal]);
-
-  // GET API Roles
-  const getRoles = async () => {
-    try {
-      setLoading(true)
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
-          headers: { Authorization: token },
-        }
-      );
-      setRoles(response.data[0].items);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // PUT API to Update User
-  const updateUser = async ( values) => {
-    try {
-      // event.preventDefault();
-      console.log("values ", values);
-      // console.log("Updated data ", values.username, values.role.uuid, values.is_active);
-      const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, values,
-        // {
-        //   "username": username,
-        //   "role_uuid": role,
-        //   "is_active": isActive,
-        //   "company_uuid": company_uuid,
-        // }, 
-        {
-          headers: { Authorization: token },
-        }
-      );
-      setOpen(false);
-      setIsSuccessModalOpen(true);
-      console.log(response);
-      // window.location.reload(false);
-    } catch (error) {
-      console.log(error);
-      setOpen(false);
-      setIsFailedModalOpen(true);
-    }
-  }
 
   // Success Modal Handle
   const handleSuccessModalOk = () => {
     setIsSuccessModalOpen(false);
   };
-
+  
   const handleSuccessModalCancel = () => {
     setIsSuccessModalOpen(false);
   };
-
-
+  
   // Failed Modal Handle
   const handleFailedModalOk = () => {
     setIsFailedModalOpen(false);
   };
-
+  
   const handleFailedModalCancel = () => {
     setIsFailedModalOpen(false);
   };
-
+  
   // Form Layout
   const formItemLayout =
     formLayout === 'horizontal'
@@ -171,22 +70,134 @@ const editUser = (props) => {
         }
       : null;
 
+  // Modal Handler
+  const handleOk = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpen(false);
+    }, 3000);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  // Header
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate('/login');
+  //   };
+  //   // getRoles();
+  // }, [token, navigate, showModal]);
+
+  useEffect(() => {
+    getUser()
+    getRoles()
+  }, [key]);
+
+  // GET API User by Id
+  const getUser = async () => {
+    try {
+      setLoading(true)
+      // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, {
+      const response = await axios.get(`http://127.0.0.1:5000/api/v1/users/${key}`, {
+          headers: { Authorization: token },
+        }
+      );
+      setUser(response.data);
+      // console.log("data user", user);
+      // console.log("data respons", response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // GET API Roles
+  const getRoles = async () => {
+    try {
+      setLoading(true)
+      // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
+      const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
+          headers: { Authorization: token },
+        }
+      );
+      setRoles(response.data[0].items);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+  }
+
+//   // GET API Company
+//   const getCompanies = async () => {
+//     try {
+//         const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+//             headers: { Authorization: token },
+//         }
+//     );
+//     setCompanies(response.data.items);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
+// // GET API Employee
+// const getEmployees = async () => {
+//     try {
+//         const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
+//             headers: { Authorization: token },
+//         }
+//     );
+//     setEmployees(response.data.items);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
+  // PUT API to Update User
+  const updateUser = async (values) => {
+    try {
+      setLoading(true);
+      // console.log("values", values);
+      // const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, values,
+      const response = await axios.put(`http://127.0.0.1:5000/api/v1/users/${key}`, values,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setOpen(false);
+      setIsSuccessModalOpen(true);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      setOpen(false);
+      setIsFailedModalOpen(true);
+    }
+  }
+
+  const failedUpdateUser = (error) => {
+    console.log(error);
+    setOpen(false);
+    setIsFailedModalOpen(true);
+  };
+
   return (
     <>
       <Button type="none" style={{margin:0, padding:0}} onClick={showModal}>
         <BiEdit className="edit-icon" size="25" />
       </Button>
       <Modal
-        // centered
+        centered
         open={open}
         title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Edit User</h2>}
         onOk={handleOk}
         onCancel={handleCancel}
-        // footer={[
-        //   <Button key="submit" type="none" loading={loading} htmlType='submit' className="update-button">
-        //     Update
-        //   </Button>,
-        // ]}
+        footer={ <div></div> }
       >
         <Form
           {...formItemLayout}
@@ -194,7 +205,7 @@ const editUser = (props) => {
           form={form}
           name='editUser'
           onFinish={updateUser}
-          // onFinishFailed={}
+          onFinishFailed={failedUpdateUser}
           initialValues={{
             layout: formLayout,
           }}
@@ -215,13 +226,30 @@ const editUser = (props) => {
             </Select>
           </Form.Item>
           <Form.Item label="Status" name="is_active">
-            <Radio.Group value={isActive} onChange={(e) => setIsActive(e.target.value)}>
+            <Radio.Group>
               <Radio value={true}>Actice</Radio>
               <Radio value={false}>Not Active</Radio>
             </Radio.Group>
           </Form.Item>
+          {/* <Form.Item label="Company" name="company_uuid" >
+            <Select disabled>
+              {companies?.map(company => 
+                <Select.Option key={(company.uuid)} value={(company.uuid)}>{(company.name)}</Select.Option>)
+              }
+            </Select>
+          </Form.Item>
+          <Form.Item label="Employee" name="employee_uuid" >
+            <Select disabled>
+              {employees?.map(employee => 
+                <Select.Option key={(employee.uuid)} value={(employee.uuid)}>{(employee.name)}</Select.Option>)
+              }
+            </Select>
+          </Form.Item> */}
+            
           <div>
-            <SubmitButton buttonText="Update"/>
+            <Button type="primary" htmlType="submit" className='update-button'>
+              Update
+            </Button>
           </div>
         </Form>
       </Modal>

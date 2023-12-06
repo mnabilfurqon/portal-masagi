@@ -68,7 +68,8 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get("https://attendance-1-r8738834.deta.app/api/v1/company/", {
+      // const response = await axios.get("https://attendance-1-r8738834.deta.app/api/v1/company/", {
+      const response = await axios.get("http://127.0.0.1:5000/api/v1/company/", {
         params: {
           page: page,
           per_page: countValue,

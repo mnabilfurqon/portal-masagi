@@ -4,31 +4,55 @@ import { Link, useNavigate } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, message, Upload, Row } from 'antd'
-import { Space, Tabs, Button, Form, Input, DatePicker, Radio, Select, Flex, Avatar, Divider } from 'antd'
+import { Space, Tabs, Button, Form, Input, InputNumber, DatePicker, Radio, Select, Flex, Avatar, Divider } from 'antd'
 import SubmitButton from '@common/submitButton/SubmitButton'
-import SuccessAddDataModal from '@common/successModal/SuccessAddDataModal'
-import FailedAddDataModal from '@common/failedModal/FailedAddDataModal'
+import SuccessModal from '@common/successModal/SuccessModal';
+import FailedModal from '@common/failedModal/FailedModal';
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import dayjs from 'dayjs';
 
 const AddEmployee = () => {
     // Declaration
     const token = Cookies.get("token");
     const cookies = Cookies.get();
+    const company = Cookies.get("company_uuid");
     const navigate = useNavigate();
 
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('vertical');
 
-    const [division, setDivision] = useState();
+    const [division, setDivision] = useState([]);
     const [position, setPosition] = useState();
-    const [company, setCompany] = useState();
+    const [employee, setEmployee] = useState();
+    const [companies, setCompanies] = useState();
 
-    const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
-    const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);const { TextArea } = Input;
+    const { TextArea } = Input;
     const [requiredMark, setRequiredMarkType] = useState(false);
     const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
+
+    // Success Modal Handle
+    const handleSuccessModalOk = () => {
+        setIsSuccessModalOpen(false);
+        navigate("/employee");
+    };
+  
+    const handleSuccessModalCancel = () => {
+        setIsSuccessModalOpen(false);
+    };
+  
+    // Failed Modal Handle
+    const handleFailedModalOk = () => {
+        setIsFailedModalOpen(false);
+    };
+  
+    const handleFailedModalCancel = () => {
+        setIsFailedModalOpen(false);
+    };
+  
     // Header 
     useEffect(() => {
         if (!token) {
@@ -36,22 +60,24 @@ const AddEmployee = () => {
         }
         getDivision();
         getPosition();
-        getCompany();
+        getCompanies();
         console.log(token)
         console.log(cookies)
-        // console.log(company)
+        console.log(company)
     }, [token, navigate]);
 
     // GET API Division
     const getDivision = async () => {
         try {
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/division/`, {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/division/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/division/`, {
                 headers: { Authorization: token },
             }
         );
         // console.log(response.data);
         setDivision(response.data.items);
-        console.log("division: ", division)
+        // console.log("division: ", division)
+        // console.log("division: ", response.data);
         } catch (error) {
             console.log(error);
         }
@@ -60,45 +86,71 @@ const AddEmployee = () => {
     // GET API Position
     const getPosition = async () => {
         try {
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/position/`, {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/position/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/position/`, {
                 headers: { Authorization: token },
             }
         );
         setPosition(response.data.items);
-        console.log("position: ", position)
+        // console.log("position: ", position)
+        // console.log("position: ", response.data);
         } catch (error) {
             console.log(error);
         }
     }
 
     // GET API Company
-    const getCompany = async () => {
+    const getCompanies = async () => {
         try {
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
-        setCompany(response.data.items);
-        console.log("company: ", company);
+        setCompanies(response.data.items);
+        // console.log("company: ", company);
+        // console.log("company: ", response.data);
         } catch (error) {
             console.log(error);
         }
     }
 
-    const onFinish = (values) => {
-        setIsSuccessModalVisible(true);
+    const onFinish = async (values) => {
+        try {
+            values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
+            values.join_date = dayjs(values.join_date, "YYYY-MM-DD").format("YYYY-MM-DD");
+            if (values.separation_date) {
+                values.separation_date = dayjs(values.separation_date, "YYYY-MM-DD").format("YYYY-MM-DD");
+            } else {
+                values.separation_date = values.join_date;
+            }
+            // const response = await axios.post(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, values, {
+            const response = await axios.post(`http://127.0.0.1:5000/api/v1/employee/`, values, {
+                headers: { Authorization: token },
+            }
+        );
+        setIsSuccessModalOpen(true);
+        // setEmployee(response.data.items);
+        // console.log("Employee: ", employee);
         console.log('Success:', values);
+        } catch (error) {
+            console.log('Failed:', error, values);
+            setIsFailedModalOpen(true);
+        }
     };
+
     const onFinishFailed = (errorInfo) => {
-        setIsFailedModalVisible(true);
+        setIsFailedModalOpen(true);
         console.log('Failed:', errorInfo);
     };
+
     const handleSuccessModalClose = () => {
-        setIsSuccessModalVisible(false);
+        navigate("/employee");
+        setIsSuccessModalOpen(false);
     };
 
     const handleFailedModalClose = () => {
-        setIsFailedModalVisible(false);
+        setIsFailedModalOpen(false);
     };
 
     const formItemLayout =
@@ -211,6 +263,7 @@ const AddEmployee = () => {
           requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
           initialValues={{
             layout: formLayout,
+            company_uuid: company,
           }}
         >
             <Flex 
@@ -238,7 +291,7 @@ const AddEmployee = () => {
                     message: 'Please input your nik!',
                     },
                 ]}>
-                    <Input placeholder="Enter NIK" />
+                    <Input placeholder="Enter NIK" style={{ width:"100%" }}/>
                 </Form.Item>
             </Flex>
             <Flex 
@@ -267,7 +320,7 @@ const AddEmployee = () => {
                     },
                 ]}>
                     {/* <DatePicker defaultValue={('01/01/2015', dateFormatList[0])} format={dateFormatList}/> */}
-                    <DatePicker style={{width:"100%"}}/>
+                    <DatePicker style={{width:"100%"}} placeholder='YYYY-MM-DD'/>
                 </Form.Item>
             </Flex>
             <Flex 
@@ -387,10 +440,14 @@ const AddEmployee = () => {
                 rules={[
                     {
                     required: true,
-                    message: 'Please input your gender!',
+                    message: 'Please select your gender!',
                     },
                 ]}>
-                    <Input placeholder="Enter Gender" />
+                    {/* <Input placeholder="Enter Gender" /> */}
+                    <Select>
+                        <Select.Option value="male">Male</Select.Option>
+                        <Select.Option value="female">Female</Select.Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item 
                 label="Blood Type" 
@@ -399,10 +456,16 @@ const AddEmployee = () => {
                 rules={[
                     {
                     required: true,
-                    message: 'Please input your blood type!',
+                    message: 'Please select your blood type!',
                     },
                 ]}>
-                    <Input placeholder="Enter Blood Type" />
+                    {/* <Input placeholder="Enter Blood Type" /> */}
+                    <Select>
+                        <Select.Option value="a">A</Select.Option>
+                        <Select.Option value="b">B</Select.Option>
+                        <Select.Option value="ab">AB</Select.Option>
+                        <Select.Option value="o">O</Select.Option>
+                    </Select>
                 </Form.Item>
             </Flex>
             <Flex 
@@ -415,10 +478,15 @@ const AddEmployee = () => {
                 rules={[
                     {
                     required: true,
-                    message: 'Please input your marital status!',
+                    message: 'Please select your marital status!',
                     },
                 ]}>
-                    <Input placeholder="Enter Marital Status" />
+                    {/* <Input placeholder="Enter Marital Status" /> */}
+                    <Select>
+                        <Select.Option value="not married">Not Married</Select.Option>
+                        <Select.Option value="married">Married</Select.Option>
+                        <Select.Option value="divorce">Divorce</Select.Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item 
                 label="Number of Child" 
@@ -430,17 +498,28 @@ const AddEmployee = () => {
                     message: 'Please input your number of child!',
                     },
                 ]}>
-                    <Input placeholder="Enter Number of Child" />
+                    <InputNumber placeholder="Enter Number of Child" style={{ width:"100%" }}/>
                 </Form.Item>
             </Flex>
             <Flex 
             justify='space-between'
             className='row'>
                 <Form.Item 
-                label="Company ID" 
+                label="Company" 
                 name="company_uuid"
-                className='column'>
-                    <Input placeholder="Enter Company ID" />
+                className='column'
+                rules={[
+                    {
+                    required: true,
+                    message: 'Please input your company!',
+                    },
+                ]}>
+                    {/* <Input value={company} disabled/> */}
+                    <Select disabled>
+                        {companies?.map(item => 
+                            <Select.Option key={(item.uuid)} value={(item.uuid)}>{(item.company_name)}</Select.Option>)
+                        }
+                    </Select>
                 </Form.Item>
                 {/* <Form.Item 
                 label="Role" 
@@ -472,8 +551,6 @@ const AddEmployee = () => {
                         {position?.map(item => 
                             <Select.Option key={item.uuid} value={item.uuid}>{item.name}</Select.Option>)
                         }
-                        {/* <Select.Option value="general manager">General Manager</Select.Option>
-                        <Select.Option value="usual employee">Usual Employee</Select.Option> */}
                     </Select>
                 </Form.Item>
             </Flex>
@@ -555,7 +632,7 @@ const AddEmployee = () => {
                     message: 'Please input your salary!',
                     },
                 ]}>
-                    <Input placeholder="Enter Salary" />
+                    <InputNumber placeholder="Enter Salary" style={{ width:"100%" }}/>
                 </Form.Item>
                 <Form.Item 
                 label="BPJS Ketenagakerjaan Number" 
@@ -602,8 +679,8 @@ const AddEmployee = () => {
             justify='space-between'
             className='row'>
                 <Form.Item 
-                label="Registry Number" 
-                name="registry_number"
+                label="Registery Number" 
+                name="registery_number"
                 className='column'
                 rules={[
                     {
@@ -650,7 +727,7 @@ const AddEmployee = () => {
                     message: 'Please input your join data!',
                     },
                 ]}>
-                    <DatePicker style={{width:"100%"}}/>
+                    <DatePicker style={{width:"100%"}} placeholder='YYYY-MM-DD'/>
                 </Form.Item>
             </Flex>
             <Flex 
@@ -660,7 +737,7 @@ const AddEmployee = () => {
                 label="Separation Date" 
                 name="separation_date"
                 className='column'>
-                    <DatePicker style={{width:"100%"}}/>
+                    <DatePicker style={{width:"100%"}} placeholder='YYYY-MM-DD'/>
                 </Form.Item>
                 <Form.Item 
                 label="Status" 
@@ -688,15 +765,16 @@ const AddEmployee = () => {
           </Form.Item>
         </Form>
 
-        <SuccessAddDataModal
-            visible={isSuccessModalVisible}
-            onClose={handleSuccessModalClose}
-            textParagraph="Data upload successful!"
+        <SuccessModal 
+            action="Update" 
+            handleOk={handleSuccessModalOk} 
+            handleCancel={handleSuccessModalCancel} 
+            isModalOpen={isSuccessModalOpen} 
         />
-
-        <FailedAddDataModal
-            visible={isFailedModalVisible}
-            onClose={handleFailedModalClose}
+        <FailedModal 
+            handleOk={handleFailedModalOk} 
+            handleCancel={handleFailedModalCancel} 
+            isModalOpen={isFailedModalOpen} 
         />
     </>
     )

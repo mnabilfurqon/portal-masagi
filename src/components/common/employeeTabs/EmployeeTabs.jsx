@@ -36,6 +36,43 @@ const EmployeeTabs = () => {
     const [addFamilyLoading, setAddFamilyLoading] = useState(false);
     const [editFamilyLoading, setEditFamilyLoading] = useState(false);
 
+    // hanlder employee data tabs
+    const editEmployeeData = async (values) => {
+        try {
+            setSelectedEmployeeLoading(true);
+            values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
+            // await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/employee/${selectedEmployeeData.key}`, values, {
+            await axios.put(`http://127.0.0.1:5000/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setIsSuccessModalVisible(true);
+        } catch (error) {
+            setIsFailedModalVisible(true);
+            console.log(error, values);
+        } finally {
+            setSelectedEmployeeLoading(false);
+        }
+    }
+
+    const handleEmployeeSuccessAddForm = (values) => {
+        editEmployeeData(values);
+    }
+
+    const handleEmployeeFailedAddForm = (error) => {
+        setIsFailedModalVisible(true);
+        console.log(error)
+    }
+
+    const handleEmployeeSuccessModalClose = () => {
+        setIsSuccessModalVisible(false);
+    };
+
+    const handleEmployeeFailedModalClose = () => {
+        setIsFailedModalVisible(false);
+    };
+
     // handler education data tabs
     const [activeEducationTab, setActiveEducationTab] = useState('education-data');
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
@@ -240,12 +277,14 @@ const EmployeeTabs = () => {
     const getSelectedEmployeeData = async () => {
         try {
             setSelectedEmployeeLoading(true);
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/${uuid}`, {
+            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/${uuid}`, {
+            const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/${uuid}`, {
             headers: {
               "Authorization": token,
             },
             });
             setSelectedEmployeeData(response.data);
+            console.log(response.data);
         } catch (error) {
             console.log(error);
         } finally {
@@ -262,7 +301,7 @@ const EmployeeTabs = () => {
           navigate("/login");
         }
         getSelectedEmployeeData();
-    }, [token, navigate]);
+    }, [token, navigate, isSuccessModalVisible]);
 
     return (
         <>
@@ -272,8 +311,8 @@ const EmployeeTabs = () => {
             </Col>
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
-                <h4 className='profile-name'>{selectedEmployeeData.name}</h4>
-                <p className='profile-role'>{selectedEmployeeData.position_id}</p>
+                {/* <h4 className='profile-name'>{selectedEmployeeData.name}</h4>
+                <p className='profile-role'>{selectedEmployeeData.position.name}</p> */}
                 </div>
             </Col>
             </Row>
@@ -281,7 +320,23 @@ const EmployeeTabs = () => {
         <Tabs defaultActiveKey="employeeData" onChange={onChange}>
             <TabPane tab="Employee Data" key="employeeData"> <br />
             {selectedEmployeeLoading ? <LoadingComponent /> :
-                <EmployeeEditForm selectedEmployeeData={selectedEmployeeData} />
+                <Spin spinning={editEducationLoading} size='large' tip="Edit Data...">
+                <EmployeeEditForm 
+                selectedEmployeeData={selectedEmployeeData} 
+                onFinish={handleEmployeeSuccessAddForm}
+                onFinishFailed={handleEmployeeFailedAddForm}/>
+
+                <SuccessAddDataModal
+                visible={isSuccessModalVisible}
+                onClose={handleEmployeeSuccessModalClose}
+                textParagraph="Data update successful!"
+                />
+
+                <FailedAddDataModal
+                visible={isFailedModalVisible}
+                onClose={handleEmployeeFailedModalClose}
+                />
+                </Spin>
             }
             </TabPane>
             <TabPane tab="Education Data" key="educationData">
