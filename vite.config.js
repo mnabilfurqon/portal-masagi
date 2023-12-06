@@ -15,7 +15,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@common': '/home/masagi/internal-attendance-frontend/src/components/common',
+      // '@common': '/home/masagi/internal-attendance-frontend/src/components/common',
+      '@common': '/src/components/common',
     },
   },
 });

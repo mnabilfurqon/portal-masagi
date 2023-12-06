@@ -47,7 +47,8 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token) {
-      if (Cookies.get("role_uuid") === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc" || Cookies.get("role_uuid") === "a454bd10-5dfe-48fa-8f4c-ee104334842a") navigate("../dashboard");
+      // if (Cookies.get("role_uuid") === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc" || Cookies.get("role_uuid") === "a454bd10-5dfe-48fa-8f4c-ee104334842a") navigate("../dashboard"); // (uuid berdasarkan deta)
+      if (Cookies.get("role_uuid") === "8908ff3f-3dd6-4793-991b-7e0d182c92ea" || Cookies.get("role_uuid") === "fc2f53d9-57d2-43d2-a9f2-348d8201bf3f") navigate("../dashboard");
       else navigate("../attendance");
     }
   }, [token, navigate]);

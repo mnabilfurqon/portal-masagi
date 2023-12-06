@@ -6,8 +6,8 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, message, Upload, Row } from 'antd'
 import { Space, Tabs, Button, Form, Input, InputNumber, DatePicker, Radio, Select, Flex, Avatar, Divider } from 'antd'
 import SubmitButton from '@common/submitButton/SubmitButton'
-import SuccessAddDataModal from '@common/successModal/SuccessAddDataModal'
-import FailedAddDataModal from '@common/failedModal/FailedAddDataModal'
+import SuccessModal from '@common/successModal/SuccessModal';
+import FailedModal from '@common/failedModal/FailedModal';
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import dayjs from 'dayjs';
@@ -27,11 +27,32 @@ const AddEmployee = () => {
     const [employee, setEmployee] = useState();
     const [companies, setCompanies] = useState();
 
-    const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
-    const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);const { TextArea } = Input;
+    const { TextArea } = Input;
     const [requiredMark, setRequiredMarkType] = useState(false);
     const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
+
+    // Success Modal Handle
+    const handleSuccessModalOk = () => {
+        setIsSuccessModalOpen(false);
+        navigate("/employee");
+    };
+  
+    const handleSuccessModalCancel = () => {
+        setIsSuccessModalOpen(false);
+    };
+  
+    // Failed Modal Handle
+    const handleFailedModalOk = () => {
+        setIsFailedModalOpen(false);
+    };
+  
+    const handleFailedModalCancel = () => {
+        setIsFailedModalOpen(false);
+    };
+  
     // Header 
     useEffect(() => {
         if (!token) {
@@ -108,28 +129,28 @@ const AddEmployee = () => {
                 headers: { Authorization: token },
             }
         );
-        setIsSuccessModalVisible(true);
+        setIsSuccessModalOpen(true);
         // setEmployee(response.data.items);
         // console.log("Employee: ", employee);
         console.log('Success:', values);
         } catch (error) {
             console.log('Failed:', error, values);
-            setIsFailedModalVisible(true);
+            setIsFailedModalOpen(true);
         }
     };
 
     const onFinishFailed = (errorInfo) => {
-        setIsFailedModalVisible(true);
+        setIsFailedModalOpen(true);
         console.log('Failed:', errorInfo);
     };
 
     const handleSuccessModalClose = () => {
         navigate("/employee");
-        setIsSuccessModalVisible(false);
+        setIsSuccessModalOpen(false);
     };
 
     const handleFailedModalClose = () => {
-        setIsFailedModalVisible(false);
+        setIsFailedModalOpen(false);
     };
 
     const formItemLayout =
@@ -270,7 +291,7 @@ const AddEmployee = () => {
                     message: 'Please input your nik!',
                     },
                 ]}>
-                    <InputNumber placeholder="Enter NIK" style={{ width:"100%" }}/>
+                    <Input placeholder="Enter NIK" style={{ width:"100%" }}/>
                 </Form.Item>
             </Flex>
             <Flex 
@@ -744,15 +765,16 @@ const AddEmployee = () => {
           </Form.Item>
         </Form>
 
-        <SuccessAddDataModal
-            visible={isSuccessModalVisible}
-            onClose={handleSuccessModalClose}
-            textParagraph="Data upload successful!"
+        <SuccessModal 
+            action="Update" 
+            handleOk={handleSuccessModalOk} 
+            handleCancel={handleSuccessModalCancel} 
+            isModalOpen={isSuccessModalOpen} 
         />
-
-        <FailedAddDataModal
-            visible={isFailedModalVisible}
-            onClose={handleFailedModalClose}
+        <FailedModal 
+            handleOk={handleFailedModalOk} 
+            handleCancel={handleFailedModalCancel} 
+            isModalOpen={isFailedModalOpen} 
         />
     </>
     )
