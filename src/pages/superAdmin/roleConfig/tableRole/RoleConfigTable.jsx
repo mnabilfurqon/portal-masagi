@@ -46,7 +46,7 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
         page = tableParams.pagination.current;
       }
       console.log(sortValue);
-      const response = await axios.get('http://localhost:5000/api/v1/role/', {
+      const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/role/', {
         params: {
           page: page,
           per_page: countValue,
@@ -201,6 +201,7 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
         pagination={tableParams.pagination}
         loading={loading}
         onChange={handleTableChange}
+        scroll={{ x: true, y: 650 }}
       />
       <Modal
         title={deleteTitle}

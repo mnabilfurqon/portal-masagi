@@ -1,0 +1,15 @@
+.add-button-leave-employee {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+}
+.add-button-leave-employee:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}

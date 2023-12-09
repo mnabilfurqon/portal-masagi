@@ -78,13 +78,13 @@
   cursor: pointer;
 }
 
-.delete-icon {
+.delete-role-icon {
   color: #DC3545;
   font-size: 25px;
   cursor: pointer;
-  margin-top: -4px;
+  margin-top: -2px;
 }
-.delete-icon:hover {
+.delete-role-icon:hover {
   color: #F9B700;
   font-size: 25px;
   cursor: pointer;
