@@ -11,7 +11,7 @@ const HistoryButton = (props) => {
             <span
                 style={{
                     fontSize: 14,
-                    marginTop: 0,
+                    marginTop: 10,
                     paddingBottom: 0
                 }}
             >

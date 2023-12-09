@@ -206,7 +206,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
     pageTitle = "History";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/present") {
-    pageTitle = "Present";
+    pageTitle = "Present Report";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/report") {
     pageTitle = "Report";
@@ -401,6 +401,32 @@ const LayoutComponent = ({ children, roleNumber }) => {
       </Link>
     );
     pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/report/detail")) {
+    pageTitle = (
+      <Link to="/report" className="page-title">
+        Attendance Report /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Attendance </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/present/detail")) {
+    pageTitle = (
+      <Link to="/present" className="page-title">
+        Attendance Report /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Attendance </span>;
     finalPageTitle = (
       <>
         {pageTitle}

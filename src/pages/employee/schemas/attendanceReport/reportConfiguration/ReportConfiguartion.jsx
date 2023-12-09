@@ -1,111 +1,233 @@
-import React from 'react'
-import './historyConfiguration.css'
-import { Flex, DatePicker, Row, Col, Table } from 'antd'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import './reportConfiguartion.css'
+import { Col, Row, Table, DatePicker, Input, Button } from 'antd'
+import { SearchOutlined } from '@ant-design/icons'
+import { AiOutlineFileSearch } from 'react-icons/ai'
 import HistoryButton from '@common/historyButton/HistoryButton'
+import CountButton from '@common/countButton/CountButton'
+import FilterDropdown from '@common/FilterButton/FilterDropdown'
 
-const HistoryConfiguration = () => {
-    const columns = [
-        {
-            title: 'Date',
-            dataIndex: 'date',
-            key: 'date',
-        },
-        {
-            title: 'In-Time',
-            dataIndex: 'in_time',
-            key: 'in_time',
-        },
-        {
-            title: 'Out-Time',
-            dataIndex: 'out_time',
-            key: 'out_time',
-        },
-        {
-            title: 'Total Hours',
-            dataIndex: 'total_hours',
-            key: 'total_hours',
-        },
-        {
-            title: 'Lateness',
-            dataIndex: 'lateness',
-            key: 'lateness',
-            className: 'lateness',
-        },
-    ]
+const ReportConfiguartion = () => {
+// Declaration
+const navigate = useNavigate();
 
-    const data = [
-        {
-            key: "1",
-            date: "01-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "2",
-            date: "03-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "3",
-            date: "03-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "4",
-            date: "04-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "5",
-            date: "05-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "6",
-            date: "06-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "7",
-            date: "07-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-    ]
+// Sort Handler
+const [sortValue, setSortValue] = useState("");
 
-    const onChange = () => {
+const handleSort = (value) => {
+    setSortValue(value);
+};
 
-    }
+const itemsSort = [
+    {
+      key: 'week',
+      label: 'This Week'
+    },
+    {
+      key: 'month',
+      label: 'This Month'
+    },
+];
 
-    return (
+const onChange = () => {}
+
+// Search Handler
+const [searchValue, setSearchValue] = useState("");
+
+// Count Handler
+const [countValue, setCountValue] = useState("10");
+
+const handleCount = (value) => {
+  setCountValue(value);
+};
+
+// Table
+const columns = [
+    {
+        title: "Employee",
+        dataIndex: "employee",
+        key: "employee",
+        // defaultSortOrder: "ascend",
+        sorter: (a, b) => {
+            return a.employee.length - b.employee.lenght
+        },
+        // sortDirections: ["descend", "ascend"],
+    },
+    {
+        title: "Presents",
+        dataIndex: "presents",
+        key: "presents",
+    },
+    {
+        title: "Absents",
+        dataIndex: "absents",
+        key: "absents",
+    },
+    {
+        title: "Official Travels",
+        dataIndex: "official_travels",
+        key: "official_travels",
+    },
+    {
+        title: "Overtimes",
+        dataIndex: "overtimes",
+        key: "overtimes",
+    },
+    {
+        title: "Leaves",
+        dataIndex: "leaves",
+        key: "leaves",
+    },
+    {
+        title: "Permits",
+        dataIndex: "permits",
+        key: "permits",
+    },
+    {
+        title: "Action",
+        key: "action",
+        render: (record) => (
+            <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+                <AiOutlineFileSearch className="action-icon" />
+            </Button>
+          ),
+    },
+]
+
+const onChangeTable = (pagination, filter, sorter, extra) => {
+    //
+}
+
+const handleDetailClick = (record) => {
+    navigate('/report/detail', { state: { data: record } });
+    // navigate('/report/detail');
+};
+
+const data = [
+    {
+        key: "1",
+        employee: "Albert",
+        presents: "7",
+        absents: "0",
+        official_travels: "0",
+        overtimes: "1",
+        leaves: "0",
+        permits: "0",
+    },
+    {
+        key: "2",
+        employee: "Banny",
+        presents: "7",
+        absents: "0",
+        official_travels: "0",
+        overtimes: "1",
+        leaves: "0",
+        permits: "0",
+    },
+    {
+        key: "3",
+        employee: "Flauny",
+        presents: "7",
+        absents: "0",
+        official_travels: "0",
+        overtimes: "1",
+        leaves: "0",
+        permits: "0",
+    },
+    {
+        key: "4",
+        employee: "Harry",
+        presents: "7",
+        absents: "0",
+        official_travels: "0",
+        overtimes: "1",
+        leaves: "0",
+        permits: "0",
+    },
+    {
+        key: "5",
+        employee: "Klaust",
+        presents: "7",
+        absents: "0",
+        official_travels: "0",
+        overtimes: "1",
+        leaves: "0",
+        permits: "0",
+    },
+    {
+        key: "6",
+        employee: "Ian",
+        presents: "7",
+        absents: "0",
+        official_travels: "0",
+        overtimes: "1",
+        leaves: "0",
+        permits: "0",
+    },
+    {
+        key: "7",
+        employee: "Zack",
+        presents: "7",
+        absents: "0",
+        official_travels: "0",
+        overtimes: "1",
+        leaves: "0",
+        permits: "0",
+    },
+]
+
+const times = [
+    {
+        key: "week",
+        label: "This Week",
+    },
+    {
+        key: "month",
+        label: "This Month",
+    },
+]
+
+const division = [
+    {
+        key: "all",
+        label: "All Division",
+    },
+    {
+        key: "it",
+        label: "IT",
+    },
+    {
+        key: "marketing",
+        label: "Marketing",
+    },
+    {
+        key: "finance",
+        label: "Finance",
+    },
+    {
+        key: "hr",
+        label: "Human Resource",
+    },
+]
+
+return (
     <>
-        <Flex align='center' justify='space-between'>
-            <p className='title'>History</p>
-            <DatePicker onChange={onChange} picker="month" />
-        </Flex>
+        <Row gutter={16}>
+            <Col xs={24} sm={24} md={12} lg={16} xl={16} xxl={16}>
+                <p className='week'>Week 1</p>
+            </Col>
+            <Col xs={12} sm={12} md={6} lg={4} xl={4} xxl={4}>
+                <FilterDropdown className="sort-button" text="This Week" items={times} />
+            </Col>
+            <Col xs={12} sm={12} md={6} lg={4} xl={4} xxl={4}>
+                <DatePicker onChange={onChange} picker="month" placeholder='Filter By' style={{ width: "100%", background: "#629093",}} />
+            </Col>
+        </Row>
         <br />
 
         <Row gutter={[16, 16]}>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -115,7 +237,7 @@ const HistoryConfiguration = () => {
                     value="21"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -125,7 +247,7 @@ const HistoryConfiguration = () => {
                     value="1"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -135,7 +257,7 @@ const HistoryConfiguration = () => {
                     value="1"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -145,7 +267,7 @@ const HistoryConfiguration = () => {
                     value="3"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -155,7 +277,7 @@ const HistoryConfiguration = () => {
                     value="2"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,14 +290,41 @@ const HistoryConfiguration = () => {
         </Row>
         <br /> <br />
 
+        <Row gutter={[16, 8]}>
+            <Col xs={24} sm={24} md={14} lg={18} xl={18} xxl={18}>
+            <Input 
+                className='search-box'
+                prefix={<SearchOutlined/>} 
+                placeholder='Search for employee name' 
+                onSearch={(value)=>{ 
+                  setSearchValue(value)
+                }}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
+                allowClear
+            />
+            </Col>
+            <Col xs={6} sm={6} md={4} lg={2} xl={2} xxl={2}>
+                <CountButton className="count-button" onCount={handleCount} />
+            </Col>
+            <Col xs={18} sm={18} md={6} lg={4} xl={4} xxl={4}>
+                <FilterDropdown className="sort-button" text="All Division" items={division} />
+            </Col>
+        </Row>
+        <br /> <br />
+
         <div className='table'>
-            <p className='sub-title'>Presents</p>
+            <p className='sub-title'>Attendance Report</p>
             <Table 
                 dataSource={data}
                 columns={columns}
-                pagination={false}
+                onChange={onChangeTable}
                 scroll={{
                     x: 200,
+                }}
+                pagination={{
+                    pageSize: countValue,
                 }}
             />
         </div>
@@ -183,4 +332,4 @@ const HistoryConfiguration = () => {
   )
 }
 
-export default HistoryConfiguration
+export default ReportConfiguartion

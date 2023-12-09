@@ -1,111 +1,127 @@
 import React from 'react'
-import './historyConfiguration.css'
-import { Flex, DatePicker, Row, Col, Table } from 'antd'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Row, Col, Avatar, Flex, DatePicker, Table, } from 'antd'
+import { UserOutlined } from '@ant-design/icons';
 import HistoryButton from '@common/historyButton/HistoryButton'
 
-const HistoryConfiguration = () => {
-    const columns = [
-        {
-            title: 'Date',
-            dataIndex: 'date',
-            key: 'date',
-        },
-        {
-            title: 'In-Time',
-            dataIndex: 'in_time',
-            key: 'in_time',
-        },
-        {
-            title: 'Out-Time',
-            dataIndex: 'out_time',
-            key: 'out_time',
-        },
-        {
-            title: 'Total Hours',
-            dataIndex: 'total_hours',
-            key: 'total_hours',
-        },
-        {
-            title: 'Lateness',
-            dataIndex: 'lateness',
-            key: 'lateness',
-            className: 'lateness',
-        },
-    ]
+const AttendanceDetails = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { data } = location.state || {};
+  console.log("data record", data)
 
-    const data = [
-        {
-            key: "1",
-            date: "01-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "2",
-            date: "03-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "3",
-            date: "03-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "4",
-            date: "04-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "5",
-            date: "05-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "6",
-            date: "06-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-        {
-            key: "7",
-            date: "07-10-2023",
-            in_time: "08:00 AM",
-            out_time: "05:00 PM",
-            total_hours: "09:00:00",
-            lateness: "00:00:00",
-        },
-    ]
+  const columns = [
+    {
+        title: 'Date',
+        dataIndex: 'date',
+        key: 'date',
+    },
+    {
+        title: 'In-Time',
+        dataIndex: 'in_time',
+        key: 'in_time',
+    },
+    {
+        title: 'Out-Time',
+        dataIndex: 'out_time',
+        key: 'out_time',
+    },
+    {
+        title: 'Total Hours',
+        dataIndex: 'total_hours',
+        key: 'total_hours',
+    },
+    {
+        title: 'Lateness',
+        dataIndex: 'lateness',
+        key: 'lateness',
+        className: 'lateness',
+    },
+  ]
 
-    const onChange = () => {
+  const dataSource = [
+    {
+        key: "1",
+        date: "01-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "2",
+        date: "03-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "3",
+        date: "03-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "4",
+        date: "04-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "5",
+        date: "05-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "6",
+        date: "06-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "7",
+        date: "07-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+  ]
 
-    }
-
-    return (
+  return (
     <>
-        <Flex align='center' justify='space-between'>
-            <p className='title'>History</p>
-            <DatePicker onChange={onChange} picker="month" />
+        <Row align='middle' gutter={[56, 8]}>
+            <Col xs={8} sm={6} md={6} lg={4} xl={3} xxl={2}>
+                <Avatar size={120} icon={<UserOutlined />} />
+            </Col>
+            <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
+                <div className='profile-info'>
+                    <h4 style={{ fontSize: 24, fontWeight: 600, margin: 0, }} >Robert Pattinson</h4>
+                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >Informastion Technology | Team Leader</p>
+                    <h3 style={{ fontSize: 16, fontWeight: 400, margin: 0, }} >19950812023091007</h3>
+                </div>
+            </Col>
+        </Row>
+        <br /> <hr /> <br />
+
+        <Flex justify='space-between' align='center'>
+            <p style={{ fontSize: 20, fontWeight: 500, margin: 0, }} >History</p>
+            <DatePicker picker='month' />
         </Flex>
-        <br />
+        <br /> <br />
 
         <Row gutter={[16, 16]}>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -115,7 +131,7 @@ const HistoryConfiguration = () => {
                     value="21"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -125,7 +141,7 @@ const HistoryConfiguration = () => {
                     value="1"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -135,7 +151,7 @@ const HistoryConfiguration = () => {
                     value="1"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -145,7 +161,7 @@ const HistoryConfiguration = () => {
                     value="3"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -155,7 +171,7 @@ const HistoryConfiguration = () => {
                     value="2"
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -171,7 +187,7 @@ const HistoryConfiguration = () => {
         <div className='table'>
             <p className='sub-title'>Presents</p>
             <Table 
-                dataSource={data}
+                dataSource={dataSource}
                 columns={columns}
                 pagination={false}
                 scroll={{
@@ -183,4 +199,4 @@ const HistoryConfiguration = () => {
   )
 }
 
-export default HistoryConfiguration
+export default AttendanceDetails
