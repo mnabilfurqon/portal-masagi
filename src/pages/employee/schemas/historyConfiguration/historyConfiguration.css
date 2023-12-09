@@ -1,0 +1,29 @@
+body {
+  background: #fafafa;
+}
+
+.title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.sub-title {
+  margin: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #556172;
+}
+
+.table {
+  margin-top: 20px;
+  padding: 30px;
+  border: 1px solid #e0e6ed;
+  border-radius: 10px;
+  box-shadow: 0 10px 10px 0 #e0e6ed;
+}
+
+.lateness {
+  color: red;
+}

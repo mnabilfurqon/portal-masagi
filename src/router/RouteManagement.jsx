@@ -43,6 +43,7 @@ import DetailPermitEmployee from "../pages/employee/schemas/permitConfiguration/
 import OvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/OvertimeEmployee";
 import AddOvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/addOvertimeEmployee/AddOvertimeEmployee";
 import DetailOvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/detailOvertimeEmployee/DetailOvertimeEmployee";
+import HistoryConfiguration from "../pages/employee/schemas/historyConfiguration/HistoryConfiguration";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -308,7 +309,8 @@ const RouteManagement = () => {
               path="/history"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>History</p>
+                  {/* <p>History</p> */}
+                  <HistoryConfiguration />
                 </LayoutComponent>
               }
             />
