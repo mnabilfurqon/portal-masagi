@@ -224,7 +224,7 @@ const AddEmployee = () => {
         <Flex gap={15} align='center'>
             {/* <Avatar size={128} icon={<UserOutlined />} /> */}
             <div>
-                <Upload
+                {/* <Upload
                 name="avatar"
                 listType="picture-circle"
                 className="avatar-uploader"
@@ -244,7 +244,8 @@ const AddEmployee = () => {
                     ) : (
                         uploadButton
                     )}
-                </Upload>
+                </Upload> */}
+                <Avatar size={100} icon={<UserOutlined />} />
             </div>
             <div>
                 <h2>Full Name</h2>

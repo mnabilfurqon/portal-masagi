@@ -280,7 +280,7 @@ const AddUser = () => {
                 <Flex gap={10} align='center' justify='end' >
                     <Link to="/user" style={{color:"black"}} >Cancel</Link>
                     {/* <SubmitButton buttonText={"Save"} /> */}
-                    <Button key="submit" htmlType='submit' type="none" onClick={onFinish} className="update-button">
+                    <Button key="submit" htmlType='submit' type="none" className="update-button">
                         Save
                     </Button>
                 </Flex>

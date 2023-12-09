@@ -17,8 +17,8 @@ const editUser = (props) => {
   
   const [user, setUser] = useState();
   const [roles, setRoles] = useState();
+  const [employees, setEmployees] = useState();
   // const [companies, setCompanies] = useState();
-  // const [employees, setEmployees] = useState();
   
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,6 +36,7 @@ const editUser = (props) => {
       role_uuid: user.role.uuid,
       is_active: user.is_active,
     })
+    console.log("user", user);
     // console.log("key", key);
   };
 
@@ -94,6 +95,7 @@ const editUser = (props) => {
   useEffect(() => {
     getUser()
     getRoles()
+    getEmployees()
   }, [key]);
 
   // GET API User by Id
@@ -106,7 +108,7 @@ const editUser = (props) => {
         }
       );
       setUser(response.data);
-      // console.log("data user", user);
+      console.log("data user", user);
       // console.log("data respons", response.data);
     } catch (error) {
       console.log(error);
@@ -145,18 +147,20 @@ const editUser = (props) => {
 //     }
 // }
 
-// // GET API Employee
-// const getEmployees = async () => {
-//     try {
-//         const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
-//             headers: { Authorization: token },
-//         }
-//     );
-//     setEmployees(response.data.items);
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+// GET API Employee
+const getEmployees = async () => {
+    try {
+        // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
+        const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/`, {
+            headers: { Authorization: token },
+        }
+    );
+    setEmployees(response.data.items);
+    console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
   // PUT API to Update User
   const updateUser = async (values) => {
@@ -237,9 +241,9 @@ const editUser = (props) => {
                 <Select.Option key={(company.uuid)} value={(company.uuid)}>{(company.name)}</Select.Option>)
               }
             </Select>
-          </Form.Item>
-          <Form.Item label="Employee" name="employee_uuid" >
-            <Select disabled>
+          </Form.Item> */}
+          {/* <Form.Item label="Employee" name="employee_uuid" >
+            <Select>
               {employees?.map(employee => 
                 <Select.Option key={(employee.uuid)} value={(employee.uuid)}>{(employee.name)}</Select.Option>)
               }
@@ -254,8 +258,18 @@ const editUser = (props) => {
         </Form>
       </Modal>
 
-      <SuccessModal action="Update" handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} isModalOpen={isSuccessModalOpen} />
-      <FailedModal handleOk={handleFailedModalOk} handleCancel={handleFailedModalCancel} isModalOpen={isFailedModalOpen} />
+      <SuccessModal 
+      action="Update" 
+      handleOk={handleSuccessModalOk} 
+      handleCancel={handleSuccessModalCancel} 
+      isModalOpen={isSuccessModalOpen} 
+      />
+
+      <FailedModal 
+      handleOk={handleFailedModalOk} 
+      handleCancel={handleFailedModalCancel} 
+      isModalOpen={isFailedModalOpen} 
+      />
     </>
   );
 };

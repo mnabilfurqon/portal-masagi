@@ -42,7 +42,7 @@ const AddUser = () => {
     // Handle Modal
     const handleSuccessModalClose = () => {
         setIsSuccessModalVisible(false);
-        navigate("/user");
+        navigate("/company");
     };
 
     const handleFailedModalClose = () => {
@@ -241,7 +241,7 @@ const AddUser = () => {
                   }
                 </Select>
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
             label="Employee"
             labelAlign='left'
             name="employee_uuid"
@@ -259,7 +259,7 @@ const AddUser = () => {
                     <Select.Option key={(item.uuid)} value={(item.uuid)} loading={loading} >{(item.name)}</Select.Option>)
                   }
                 </Select>
-            </Form.Item>
+            </Form.Item> */}
             <Flex justify='end' className='action'>
             <Form.Item>
                 <Flex gap={10} align='center' justify='end' >
