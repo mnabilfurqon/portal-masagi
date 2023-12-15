@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import SuccessAddDataModal from '@common/successModal/SuccessAddDataModal';
-import FailedAddDataModal from '@common/failedModal/FailedAddDataModal';
-import FormTemplate from '@common/formTemplate/FormTemplate';
+import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal';
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal';
+import FormTemplate from '@common/forms/formTemplate/FormTemplate';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';

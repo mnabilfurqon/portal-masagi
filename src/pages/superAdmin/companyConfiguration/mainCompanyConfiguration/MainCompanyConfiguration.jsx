@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import "./mainCompanyConfiguration.css"
-import AddButton from '@common/addButton/AddButton'
-import CompanyTable from '@common/companyTable/CompanyTable'
+import AddButton from '@common/buttons/addButton/AddButton'
+import CompanyTable from '@common/tables/companyTable/CompanyTable'
 import { Link } from 'react-router-dom'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/FilterButton/FilterButton'
-import SortButton from '@common/sortButton/SortButton'
-import CountButton from '@common/countButton/CountButton'
+import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import SortButton from '@common/buttons/sortButton/SortButton'
+import CountButton from '@common/buttons/countButton/CountButton'
 import { Button, Col, Row } from 'antd';
 
 const MainCompanyConfiguration = () => {

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import "./divisionConfiguration.css"
-import AddButton from '@common/addButton/AddButton'
-import DivisionTable from '@common/divisionTable/DivisionTable'
-import DeleteModal from '@common/deleteModal/DeleteModal'
-import SuccessDeleteModal from '@common/successModal/SuccessDeleteModal'
-import AddEditModal from '@common/addEditModal/AddEditModal'
-import SuccessAddDataModal from '@common/successModal/SuccessAddDataModal'
-import FailedAddDataModal from '@common/failedModal/FailedAddDataModal'
+import AddButton from '@common/buttons/addButton/AddButton'
+import DivisionTable from '@common/tables/divisionTable/DivisionTable'
+import DeleteModal from '@common/modals/deleteModal/DeleteModal'
+import SuccessDeleteModal from '@common/modals/successModal/SuccessDeleteModal'
+import AddEditModal from '@common/modals/addEditModal/AddEditModal'
+import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal'
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import LoadingComponent from '../../../components/loadingComponent/LoadingComponent';
 import SearchBox from '@common/SearchBox/SearchBox';
-import SortButton from '@common/sortButton/SortButton';
-import CountButton from '@common/countButton/CountButton';
+import SortButton from '@common/buttons/sortButton/SortButton';
+import CountButton from '@common/buttons/countButton/CountButton';
 import { Row, Col } from 'antd';
 
 const DivisionConfiguration = () => {

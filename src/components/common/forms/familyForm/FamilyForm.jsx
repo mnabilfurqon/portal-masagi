@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import dayjs from 'dayjs';
 import { Button, Form, Input, DatePicker } from 'antd';
-import SubmitButton from '../submitButton/SubmitButton';
+import SubmitButton from '../../buttons/submitButton/SubmitButton';
 import './familyForm.css';
 
 const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editFamilyData}) => {

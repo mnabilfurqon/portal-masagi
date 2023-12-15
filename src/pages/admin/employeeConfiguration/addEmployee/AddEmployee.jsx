@@ -5,9 +5,9 @@ import { UserOutlined } from '@ant-design/icons';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, message, Upload, Row } from 'antd'
 import { Space, Tabs, Button, Form, Input, InputNumber, DatePicker, Radio, Select, Flex, Avatar, Divider } from 'antd'
-import SubmitButton from '@common/submitButton/SubmitButton'
-import SuccessModal from '@common/successModal/SuccessModal';
-import FailedModal from '@common/failedModal/FailedModal';
+import SubmitButton from '@common/buttons/submitButton/SubmitButton'
+import SuccessModal from '@common/modals/successModal/SuccessModal';
+import FailedModal from '@common/modals/failedModal/FailedModal';
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import dayjs from 'dayjs';

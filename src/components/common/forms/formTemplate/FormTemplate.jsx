@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import dayjs from 'dayjs';
 import { Button, Form, Input, DatePicker, Radio } from 'antd';
-import SubmitButton from '../submitButton/SubmitButton';
+import SubmitButton from '../../buttons/submitButton/SubmitButton';
 import './formTemplate.css';
 import { Link } from 'react-router-dom';
 

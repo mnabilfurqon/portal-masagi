@@ -20,15 +20,13 @@ const LoginPage = () => {
     try {
       setLoading(true);
       const loginResponse = await axios.post(
-        // 'https://attendance-1-r8738834.deta.app/api/v1/auth/login',
-        'http://127.0.0.1:5000/api/v1/auth/login',
+        'http://103.82.93.38/api/v1/auth/login',
         values
       );
       Cookies.set('token', loginResponse.data.token);
 
       const protectedResponse = await axios.get(
-        // 'https://attendance-1-r8738834.deta.app/api/v1/auth/protected',
-        'http://127.0.0.1:5000/api/v1/auth/protected',
+        'http://103.82.93.38/api/v1/auth/protected',
         {
           headers: {
             Authorization: loginResponse.data.token,
@@ -47,8 +45,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token) {
-      // if (Cookies.get("role_uuid") === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc" || Cookies.get("role_uuid") === "a454bd10-5dfe-48fa-8f4c-ee104334842a") navigate("../dashboard"); // (uuid berdasarkan deta)
-      if (Cookies.get("role_uuid") === "8908ff3f-3dd6-4793-991b-7e0d182c92ea" || Cookies.get("role_uuid") === "fc2f53d9-57d2-43d2-a9f2-348d8201bf3f") navigate("../dashboard");
+      if (Cookies.get("role_uuid") === "8ab999f6-ad6d-48e7-943a-aa400007223f" || Cookies.get("role_uuid") === "4386da8b-fa01-4414-96e9-d1db09de66ff") navigate("../dashboard");
       else navigate("../attendance");
     }
   }, [token, navigate]);

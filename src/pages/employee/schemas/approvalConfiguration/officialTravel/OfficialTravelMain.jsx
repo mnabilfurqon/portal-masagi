@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import { Col, DatePicker, Row, Space, Button } from 'antd'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/FilterButton/FilterButton'
-import SortButton from '@common/sortButton/SortButton'
+import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import SortButton from '@common/buttons/sortButton/SortButton'
 import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
-import CountButton from '@common/countButton/CountButton'
+import CountButton from '@common/buttons/countButton/CountButton'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
 import DialogModal from '@common/modals/dialogModal/DialogModal'
