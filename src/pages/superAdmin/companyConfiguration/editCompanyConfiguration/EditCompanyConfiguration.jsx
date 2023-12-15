@@ -20,7 +20,7 @@ const EditCompanyConfiguration = () => {
         try {
             setLoading(true);
             setTip("Get Selected Data...");
-            const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/company/${uuid}`, {
                 headers: {
                   "Authorization": token,
                 },
@@ -50,7 +50,7 @@ const EditCompanyConfiguration = () => {
         try {
             setLoading(true);
             setTip("Save Data...");
-            const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, values, {
+            await axios.put(`http://103.82.93.38/api/v1/company/${uuid}`, values, {
                 headers: {
                 "Authorization": token,
                 },

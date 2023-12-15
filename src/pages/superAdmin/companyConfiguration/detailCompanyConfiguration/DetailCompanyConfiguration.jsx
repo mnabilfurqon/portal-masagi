@@ -16,7 +16,7 @@ const DetailCompanyConfiguration = () => {
   const getSelectedCompanyData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, {
+      const response = await axios.get(`http://103.82.93.38/api/v1/company/${uuid}`, {
         headers: {
           "Authorization": token,
         },
