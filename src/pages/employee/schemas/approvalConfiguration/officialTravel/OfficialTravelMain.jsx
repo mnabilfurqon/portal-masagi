@@ -55,12 +55,16 @@ const OfficialTravelMain = () => {
 
   const treeData = [
     {
-      title: 'Status',
-      key: 'status',
+      title: 'Approved',
+      key: 'approved',
     },
     {
-      title: 'Employee Name',
-      key: 'employee_name',
+      title: 'Pending',
+      key: 'pending',
+    },
+    {
+      title: 'Rejected',
+      key: 'rejected',
     },
   ];
 
