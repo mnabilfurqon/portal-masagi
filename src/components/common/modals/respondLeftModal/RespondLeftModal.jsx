@@ -12,7 +12,7 @@ const RespondLeftModal = (props) => {
         centered={true}
         footer={
             <div>
-                <Button className="ok-button" type="danger" onClick={handleOk}>{textButton}</Button>
+                <Button className="ok-button-respond" type="danger" onClick={handleOk}>{textButton}</Button>
             </div>
         }
         width={400}

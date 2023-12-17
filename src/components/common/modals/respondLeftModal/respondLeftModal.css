@@ -1,10 +1,10 @@
-.ok-button {
+.ok-button-respond {
     background: #629093;
     color: white;
     width: 100%;
 }
   
-.ok-button:hover {
+.ok-button-respond:hover {
     background: #ffffff !important;
     color: #629093 !important;
     border-color: #629093 !important;
