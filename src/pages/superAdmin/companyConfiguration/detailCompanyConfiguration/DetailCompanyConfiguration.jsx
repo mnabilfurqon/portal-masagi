@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Button, Spin } from 'antd'
-import DetailCompanyTable from '@common/detailCompanyTable/DetailCompanyTable'
+import DetailCompanyTable from '@common/tables/detailCompanyTable/DetailCompanyTable'
 import './detailCompanyConfiguration.css'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'

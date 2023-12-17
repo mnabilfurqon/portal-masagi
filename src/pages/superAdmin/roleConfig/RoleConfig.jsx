@@ -11,8 +11,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SearchBox from "@common/SearchBox/SearchBox";
-import SortButton from "@common/sortButton/SortButton";
-import CountButton from "@common/countButton/CountButton";
+import SortButton from "@common/buttons/sortButton/SortButton";
+import CountButton from "@common/buttons/countButton/CountButton";
 import { sortData } from "./constans";
 
 const RoleConfig = () => {

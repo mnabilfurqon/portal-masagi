@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Button, Form, Input, DatePicker } from 'antd';
-import SubmitButton from '../submitButton/SubmitButton';
+import SubmitButton from '../../buttons/submitButton/SubmitButton';
 import './educationForm.css';
 import dayjs from 'dayjs';
 

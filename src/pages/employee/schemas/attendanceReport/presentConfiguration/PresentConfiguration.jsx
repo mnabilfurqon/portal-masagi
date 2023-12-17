@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { Row, Col, DatePicker, Progress, Input, Table, Button } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { AiOutlineFileSearch } from 'react-icons/ai'
-import FilterDropdown from '@common/FilterButton/FilterDropdown'
-import CountButton from '@common/countButton/CountButton'
-import HistoryButton from '@common/historyButton/HistoryButton'
+import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
+import CountButton from '@common/buttons/countButton/CountButton'
+import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 
 const PresentConfiguration = () => {
   // Declaration
