@@ -21,7 +21,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
 
   const handleAddUserClick = (record) => {
     const value = record.key;
-    navigate(`/user/add-user/${value}`);
+    navigate(`/employee/add-user/${value}`);
     // navigate(`/user/add-user`);
   }
 

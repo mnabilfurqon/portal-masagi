@@ -131,7 +131,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === '/user') {
     pageTitle = 'User';
     finalPageTitle = pageTitle;
-  } else if (location.pathname === "/user/add-user") {
+  } else if (location.pathname.includes("/employee/add-user")) {
     pageTitle = (
       <Link to="/user" className="page-title">
         User /{" "}
