@@ -58,8 +58,24 @@ const PermitRequestDetailTable = ({data}) => {
                     <td></td>
                 </tr>
                 <tr>
+                    <th>Status by HR</th>
+                    <td>{data.status_by_hr}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
                     <th>Team Leader</th>
                     <td>{data.team_leader}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Status by Team Leader</th>
+                    <td>{data.status_by_team_leader}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -131,8 +147,24 @@ const PermitRequestDetailTable = ({data}) => {
                     <td></td>
                 </tr>
                 <tr>
+                    <th>Status by HR</th>
+                    <td>{data.status_by_hr}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
                     <th>Team Leader</th>
                     <td>{data.team_leader}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Status by Team Leader</th>
+                    <td>{data.status_by_team_leader}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -188,6 +220,22 @@ const PermitRequestDetailTable = ({data}) => {
                     <td></td>
                 </tr>
                 <tr>
+                    <th>Start Overtime</th>
+                    <td>{data.start_overtime}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>End Overtime</th>
+                    <td>{data.end_overtime}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
                     <th>Duration</th>
                     <td>{data.duration}</td>
                 </tr>
@@ -204,8 +252,24 @@ const PermitRequestDetailTable = ({data}) => {
                     <td></td>
                 </tr>
                 <tr>
+                    <th>Status by HR</th>
+                    <td>{data.status_by_hr}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
                     <th>Team Leader</th>
                     <td>{data.team_leader}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Status by Team Leader</th>
+                    <td>{data.status_by_team_leader}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -277,8 +341,24 @@ const PermitRequestDetailTable = ({data}) => {
                     <td></td>
                 </tr>
                 <tr>
+                    <th>Status by HR</th>
+                    <td>{data.status_by_hr}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
                     <th>Team Leader</th>
                     <td>{data.team_leader}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Status by Team Leader</th>
+                    <td>{data.status_by_team_leader}</td>
                 </tr>
                 <tr>
                     <th></th>

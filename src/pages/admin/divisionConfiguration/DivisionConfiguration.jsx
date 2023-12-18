@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import "./divisionConfiguration.css"
-import AddButton from '@common/addButton/AddButton'
-import DivisionTable from '@common/divisionTable/DivisionTable'
-import DeleteModal from '@common/deleteModal/DeleteModal'
-import SuccessDeleteModal from '@common/successModal/SuccessDeleteModal'
-import AddEditModal from '@common/addEditModal/AddEditModal'
-import SuccessAddDataModal from '@common/successModal/SuccessAddDataModal'
-import FailedAddDataModal from '@common/failedModal/FailedAddDataModal'
+import AddButton from '@common/buttons/addButton/AddButton'
+import DivisionTable from '@common/tables/divisionTable/DivisionTable'
+import DeleteModal from '@common/modals/deleteModal/DeleteModal'
+import SuccessDeleteModal from '@common/modals/successModal/SuccessDeleteModal'
+import AddEditModal from '@common/modals/addEditModal/AddEditModal'
+import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal'
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import LoadingComponent from '../../../components/loadingComponent/LoadingComponent';
 import SearchBox from '@common/SearchBox/SearchBox';
-import SortButton from '@common/sortButton/SortButton';
-import CountButton from '@common/countButton/CountButton';
+import SortButton from '@common/buttons/sortButton/SortButton';
+import CountButton from '@common/buttons/countButton/CountButton';
 import { Row, Col } from 'antd';
 
 const DivisionConfiguration = () => {
@@ -88,7 +88,7 @@ const DivisionConfiguration = () => {
   // POST API for Add Division
   const addDivision = async () => {
     try {
-      await axios.post("https://attendance-1-r8738834.deta.app/api/v1/division/", {
+      await axios.post("http://103.82.93.38/api/v1/division/", {
         "name": actionValue,
       }, {
         headers: {
@@ -108,7 +108,7 @@ const DivisionConfiguration = () => {
   // GET API for Selected Division
   const getSelectedDivision = async () => {
     try {
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
+      const response = await axios.get(`http://103.82.93.38/api/v1/division/${uuid}`, {
         headers: {
           "Authorization": token,
         },
@@ -124,7 +124,7 @@ const DivisionConfiguration = () => {
   // PUT API for Edit Division
   const editDivision = async () => {
     try {
-      await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
+      await axios.put(`http://103.82.93.38/api/v1/division/${uuid}`, {
         "name": actionValue,
       }, {
         headers: {
@@ -144,7 +144,7 @@ const DivisionConfiguration = () => {
   // Delete API for Delete Division
   const deleteDivision = async () => {
     try {
-      await axios.delete(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
+      await axios.delete(`http://103.82.93.38/api/v1/division/${uuid}`, {
         headers: {
           "Authorization": token,
         },

@@ -4,8 +4,8 @@ import { PiWarningCircleBold } from "react-icons/pi"
 import { MdOutlineDelete } from 'react-icons/md'
 import { Button, Modal, Space } from 'antd'
 import "./deleteConfirmation.css"
-import SuccessModal from '../successModal/SuccessModal'
-import FailedModal from '../failedModal/FailedModal'
+import SuccessModal from '../modals/successModal/SuccessModal'
+import FailedModal from '../modals/failedModal/FailedModal'
 
 const DeleteConfirmation = () => {
     const { confirm } = Modal;

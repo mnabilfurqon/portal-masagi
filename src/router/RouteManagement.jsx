@@ -61,11 +61,9 @@ const RouteManagement = () => {
     }
   }, [token, navigate]);
 
-  // if (role_uuid === "1e5c6bc1-f3fb-4ed4-863b-09e6af49c0fc") { // uuid from deta
-  if (role_uuid === "8908ff3f-3dd6-4793-991b-7e0d182c92ea") {
+  if (role_uuid === "8ab999f6-ad6d-48e7-943a-aa400007223f") {
     roleNumber = 1;
-  // } else if (role_uuid === "a454bd10-5dfe-48fa-8f4c-ee104334842a") { // uuid from deta
-  } else if (role_uuid === "fc2f53d9-57d2-43d2-a9f2-348d8201bf3f") {
+  } else if (role_uuid === "4386da8b-fa01-4414-96e9-d1db09de66ff") {
     roleNumber = 2;
   } else {
     roleNumber = 3;

@@ -34,7 +34,9 @@ const PermitRequestTable = (props) => {
             permit_date: '2021-08-01',
             end_permit_date: '2021-08-02',
             hr: 'Samuel',
+            status_by_hr: 'approved',
             team_leader: 'Jackson',
+            status_by_team_leader: 'pending',
             status: 'pending'
         },
         {
@@ -45,7 +47,9 @@ const PermitRequestTable = (props) => {
             permit_date: '2021-08-02',
             end_permit_date: '2021-08-03',
             hr: 'Jacky',
+            status_by_hr: 'approved',
             team_leader: 'Johnson',
+            status_by_team_leader: 'approved',
             status: 'approved'
         },
         {
@@ -56,7 +60,9 @@ const PermitRequestTable = (props) => {
             permit_date: '2021-08-03',
             end_permit_date: '2021-08-04',
             hr: 'Samuel',
+            status_by_hr: 'rejected',
             team_leader: 'Jackson',
+            status_by_team_leader: 'rejected',
             status: 'rejected'
         }
     ];
@@ -71,7 +77,9 @@ const PermitRequestTable = (props) => {
         end_permit_date: '2021-08-02',
         status: 'pending',
         hr: 'Samuel',
-        team_leader: 'Jackson'
+        status_by_hr: 'approved',
+        team_leader: 'Jackson',
+        status_by_team_leader: 'pending',
       },
       {
         key: '2',
@@ -82,7 +90,9 @@ const PermitRequestTable = (props) => {
         end_permit_date: '2021-08-03',
         status: 'approved',
         hr: 'Jacky',
-        team_leader: 'Johnson'
+        status_by_hr: 'approved',
+        team_leader: 'Johnson',
+        status_by_team_leader: 'approved',
       },
       {
         key: '3',
@@ -93,7 +103,9 @@ const PermitRequestTable = (props) => {
         end_permit_date: '2021-08-04',
         status: 'rejected',
         hr: 'Samuel',
-        team_leader: 'Jackson'
+        status_by_hr: 'rejected',
+        team_leader: 'Jackson',
+        status_by_team_leader: 'rejected',
       }
     ];
 
@@ -107,7 +119,9 @@ const PermitRequestTable = (props) => {
         end_permit_date: '2021-08-02',
         status: 'pending',
         hr: 'Samuel',
-        team_leader: 'Jackson'
+        status_by_hr: 'approved',
+        team_leader: 'Jackson',
+        status_by_team_leader: 'pending',
       },
       {
         key: '2',
@@ -118,7 +132,9 @@ const PermitRequestTable = (props) => {
         end_permit_date: '2021-08-03',
         status: 'approved',
         hr: 'Jacky',
-        team_leader: 'Johnson'
+        status_by_hr: 'approved',
+        team_leader: 'Johnson',
+        status_by_team_leader: 'approved',
       },
       {
         key: '3',
@@ -129,7 +145,9 @@ const PermitRequestTable = (props) => {
         end_permit_date: '2021-08-04',
         status: 'rejected',
         hr: 'Samuel',
-        team_leader: 'Jackson'
+        status_by_hr: 'rejected',
+        team_leader: 'Jackson',
+        status_by_team_leader: 'rejected',
       }
     ];
 
@@ -140,10 +158,14 @@ const PermitRequestTable = (props) => {
         type_overtime: 'Office Hour',
         reason: 'Menyelesaikan Tugas',
         overtime_date: '2021-08-01',
+        start_overtime: '08:00',
+        end_overtime: '11:00',
         duration: '3 Hour',
         status: 'pending',
         hr: 'Samuel',
-        team_leader: 'Jackson'
+        status_by_hr: 'approved',
+        team_leader: 'Jackson',
+        status_by_team_leader: 'pending',
       },
       {
         key: '2',
@@ -151,10 +173,14 @@ const PermitRequestTable = (props) => {
         type_overtime: 'Office Hour',
         reason: 'Menyelesaikan Tugas',
         overtime_date: '2021-08-02',
+        start_overtime: '09:00',
+        end_overtime: '11:00',
         duration: '2 Hour',
         status: 'approved',
         hr: 'Jacky',
-        team_leader: 'Johnson'
+        status_by_hr: 'approved',
+        team_leader: 'Johnson',
+        status_by_team_leader: 'approved',
       },
       {
         key: '3',
@@ -162,10 +188,14 @@ const PermitRequestTable = (props) => {
         type_overtime: 'Office Hour',
         reason: 'Menyelesaikan Tugas',
         overtime_date: '2021-08-03',
+        start_overtime: '09:00',
+        end_overtime: '10:00',
         duration: '1 Hour',
         status: 'rejected',
         hr: 'Samuel',
-        team_leader: 'Jackson'
+        status_by_hr: 'rejected',
+        team_leader: 'Jackson',
+        status_by_team_leader: 'rejected',
       }
     ]
 

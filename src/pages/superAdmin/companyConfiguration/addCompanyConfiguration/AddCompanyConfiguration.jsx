@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import SuccessAddDataModal from '@common/successModal/SuccessAddDataModal';
-import FailedAddDataModal from '@common/failedModal/FailedAddDataModal';
-import FormTemplate from '@common/formTemplate/FormTemplate';
+import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal';
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal';
+import FormTemplate from '@common/forms/formTemplate/FormTemplate';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -27,7 +27,7 @@ const AddCompanyConfiguration = () => {
         try {
             setLoading(true);
             values.date_founded = dayjs(values.date_founded, "DD/MM/YYYY").format("YYYY-MM-DD");
-            const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/company/", values, {
+            const response = await axios.post("http://103.82.93.38/api/v1/company/", values, {
                 headers: {
                 "Authorization": token,
                 },

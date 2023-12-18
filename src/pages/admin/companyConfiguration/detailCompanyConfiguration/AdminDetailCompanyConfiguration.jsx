@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Spin } from 'antd'
-import DetailCompanyTable from '@common/detailCompanyTable/DetailCompanyTable'
+import DetailCompanyTable from '@common/tables/detailCompanyTable/DetailCompanyTable'
 import './adminDetailCompanyConfiguration.css'
 import axios from 'axios'
 import Cookies from 'js-cookie';
@@ -16,7 +16,7 @@ const AdminDetailCompanyConfiguration = () => {
   const getCompanyProfile = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("https://attendance-1-r8738834.deta.app/api/v1/company/profile", {
+      const response = await axios.get("http://103.82.93.38/api/v1/company/profile", {
         headers: {
           Authorization: token,
         },

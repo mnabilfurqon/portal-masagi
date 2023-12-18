@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Button, Spin } from 'antd'
-import DetailCompanyTable from '@common/detailCompanyTable/DetailCompanyTable'
+import DetailCompanyTable from '@common/tables/detailCompanyTable/DetailCompanyTable'
 import './detailCompanyConfiguration.css'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -16,7 +16,7 @@ const DetailCompanyConfiguration = () => {
   const getSelectedCompanyData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/${uuid}`, {
+      const response = await axios.get(`http://103.82.93.38/api/v1/company/${uuid}`, {
         headers: {
           "Authorization": token,
         },

@@ -10,11 +10,11 @@ import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfi
 import { useNavigate } from 'react-router-dom'
 import EditPosition from './editPosition/EditPosition'
 import AddPosition from './addPosition/AddPosition'
-import SuccessModal from '@common/successModal/SuccessModal'
-import FailedModal from '@common/failedModal/FailedModal'
+import SuccessModal from '@common/modals/successModal/SuccessModal'
+import FailedModal from '@common/modals/failedModal/FailedModal'
 import SearchBox from '@common/SearchBox/SearchBox'
-import CountButton from '@common/countButton/CountButton'
-import SortButton from '@common/sortButton/SortButton'
+import CountButton from '@common/buttons/countButton/CountButton'
+import SortButton from '@common/buttons/sortButton/SortButton'
 
 const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   // Declaration 

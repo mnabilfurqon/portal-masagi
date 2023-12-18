@@ -1,7 +1,7 @@
 import React from 'react'
 import './historyConfiguration.css'
 import { Flex, DatePicker, Row, Col, Table } from 'antd'
-import HistoryButton from '@common/historyButton/HistoryButton'
+import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 
 const HistoryConfiguration = () => {
     const columns = [

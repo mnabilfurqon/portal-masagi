@@ -4,9 +4,9 @@ import './reportConfiguartion.css'
 import { Col, Row, Table, DatePicker, Input, Button } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { AiOutlineFileSearch } from 'react-icons/ai'
-import HistoryButton from '@common/historyButton/HistoryButton'
-import CountButton from '@common/countButton/CountButton'
-import FilterDropdown from '@common/FilterButton/FilterDropdown'
+import HistoryButton from '@common/buttons/historyButton/HistoryButton'
+import CountButton from '@common/buttons/countButton/CountButton'
+import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 
 const ReportConfiguartion = () => {
 // Declaration

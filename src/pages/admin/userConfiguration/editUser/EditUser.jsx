@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import "./editUser.css"
 import { Button, Modal, Form, Input, Select, Radio } from 'antd'
 import { BiEdit } from "react-icons/bi"
-import SuccessModal from '../../../../components/common/successModal/SuccessModal'
-import FailedModal from '../../../../components/common/failedModal/FailedModal'
+import SuccessModal from '../../../../components/common/modals/successModal/SuccessModal'
+import FailedModal from '../../../../components/common/modals/failedModal/FailedModal'
 
 const editUser = (props) => {
   // Declaration
