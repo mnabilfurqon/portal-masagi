@@ -57,8 +57,26 @@ const DetailLeaveEmployee = () => {
               <td></td>
             </tr>
             <tr>
+              <th>Status by HR</th>
+              <td>pending</td>
+              {/* <td>{detailCompanyData.website}</td> */}
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
               <th>Team Leader</th>
               <td>Joanna</td>
+              {/* <td>{detailCompanyData.website}</td> */}
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Status by Team Leader</th>
+              <td>pending</td>
               {/* <td>{detailCompanyData.website}</td> */}
             </tr>
             <tr>

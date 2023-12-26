@@ -12,15 +12,18 @@ const AddOvertimeEmployee = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { TextArea } = Input;
+  const [selectedDate, setSelectedDate] = useState(dayjs());
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const dateFormatList = "YYYY-MM-DD";
 
-  const addovertime = async (values) => {
+  const addOvertime = async (values) => {
     try {
       setLoading(true);
-      values.date = dayjs(values.date, "DD/MM/YYYY").format("YYYY-MM-DD");
+      values.overtime_date = dayjs(values.overtime_date, "DD/MM/YYYY").format(
+        "YYYY-MM-DD"
+      );
       await axios.post("", values, {
         headers: {
           Authorization: token,
@@ -43,6 +46,10 @@ const AddOvertimeEmployee = () => {
   const handleBackAdd = () => {
     setErrorModalOpen(false);
     setModalOpen(false);
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   const successTitle = (
@@ -84,7 +91,13 @@ const AddOvertimeEmployee = () => {
           name="setOvertimeDate"
           rules={[{ required: true, message: "Please input overtime date!" }]}
         >
-          <DatePicker placeholder="YYYY/MM/DD" className="overtime-input" />
+          <DatePicker
+            placeholder="YYYY-MM-DD"
+            className="overtime-input"
+            defaultValue={selectedDate}
+            onChange={handleDateChange}
+            disabled
+          />
         </Form.Item>
         <Form.Item
           label="Start Overtime"
@@ -129,6 +142,7 @@ const AddOvertimeEmployee = () => {
             className="duration-input"
             format="HH:mm:ss"
             placeholder="00:00:00"
+            disabled
           />
         </Form.Item>
         <Form.Item
@@ -159,7 +173,7 @@ const AddOvertimeEmployee = () => {
           <Button
             className="request-button-overtime"
             htmlType="submit"
-            onClick={addovertime}
+            onClick={addOvertime}
             loading={loading}
           >
             Request

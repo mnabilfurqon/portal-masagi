@@ -12,17 +12,18 @@ const AddOfficialTravelEmployee = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const dateFormatList = "YYYY-MM-DD";
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dateFormatList = "YYYY-MM-DD";
 
   const addOfficialTravel = async (values) => {
     try {
       setLoading(true);
-      values.permit_date = dayjs(values.permit_date, "DD/MM/YYYY").format(
-        "YYYY-MM-DD"
-      );
+      values.official_travel_date = dayjs(
+        values.official_travel_date,
+        "DD/MM/YYYY"
+      ).format("YYYY-MM-DD");
       await axios.post("", values, {
         headers: {
           Authorization: token,
@@ -41,6 +42,10 @@ const AddOfficialTravelEmployee = () => {
       navigate("/login");
     }
   }, [token, navigate]);
+
+  const disabledDate = (current) => {
+    return current && current < dayjs().startOf("day");
+  };
 
   const successTitle = (
     <div className="success-title-official-travel">
@@ -111,7 +116,11 @@ const AddOfficialTravelEmployee = () => {
             { required: true, message: "Please input your permit date!" },
           ]}
         >
-          <DatePicker placeholder="YYYY/MM/DD" className="permit-input" />
+          <DatePicker
+            placeholder="YYYY-MM-DD"
+            className="permit-input"
+            disabledDate={disabledDate}
+          />
         </Form.Item>
         <Form.Item
           label="End Permit Date"
@@ -123,7 +132,11 @@ const AddOfficialTravelEmployee = () => {
             },
           ]}
         >
-          <DatePicker placeholder="YYYY/MM/DD" className="end-permit-input" />
+          <DatePicker
+            placeholder="YYYY-MM-DD"
+            className="end-permit-input"
+            disabledDate={disabledDate}
+          />
         </Form.Item>
         <Form.Item label="HR" name="hr">
           <Input disabled />

@@ -22,10 +22,10 @@ const AddPermitEmployee = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const dateFormatList = "YYYY-MM-DD";
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dateFormatList = "YYYY-MM-DD";
 
   const addPermit = async (values) => {
     try {
@@ -51,6 +51,10 @@ const AddPermitEmployee = () => {
       navigate("/login");
     }
   }, [token, navigate]);
+
+  const disabledDate = (current) => {
+    return current && current < dayjs().startOf("day");
+  };
 
   const beforeUpload = (file) => {
     const isPDF = file.type === "application/pdf";
@@ -140,7 +144,11 @@ const AddPermitEmployee = () => {
             { required: true, message: "Please input your permit date!" },
           ]}
         >
-          <DatePicker placeholder="YYYY/MM/DD" className="permit-input" />
+          <DatePicker
+            placeholder="YYYY-MM-DD"
+            className="permit-input"
+            disabledDate={disabledDate}
+          />
         </Form.Item>
         <Form.Item
           label="End Permit Date"
@@ -152,7 +160,11 @@ const AddPermitEmployee = () => {
             },
           ]}
         >
-          <DatePicker placeholder="YYYY/MM/DD" className="end-permit-input" />
+          <DatePicker
+            placeholder="YYYY-MM-DD"
+            className="end-permit-input"
+            disabledDate={disabledDate}
+          />
         </Form.Item>
         <Form.Item
           label="Upload File"

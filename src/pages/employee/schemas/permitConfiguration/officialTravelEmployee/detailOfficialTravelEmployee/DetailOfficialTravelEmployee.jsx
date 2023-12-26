@@ -50,7 +50,16 @@ const DetailOfficialTravelEmployee = () => {
             <tr>
               <th>HR</th>
               <td>Megawati</td>
-              {/* <td>{detailCompanyData.email_address}</td> */}
+              {/* <td>{detailCompanyData.website}</td> */}
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Status by HR</th>
+              <td>pending</td>
+              {/* <td>{detailCompanyData.website}</td> */}
             </tr>
             <tr>
               <th></th>
@@ -66,8 +75,17 @@ const DetailOfficialTravelEmployee = () => {
               <td></td>
             </tr>
             <tr>
+              <th>Status by Team Leader</th>
+              <td>pending</td>
+              {/* <td>{detailCompanyData.website}</td> */}
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
               <th>Status</th>
-              <td>Pending</td>
+              <td>pending</td>
               {/* <td>{detailCompanyData.is_active ? 'Active' : 'Not Active'}</td> */}
             </tr>
           </tbody>

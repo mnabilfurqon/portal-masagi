@@ -66,6 +66,15 @@ const DetailOvertimeEmployee = () => {
               <td></td>
             </tr>
             <tr>
+              <th>Status by HR</th>
+              <td>approved</td>
+              {/* <td>{detailCompanyData.website}</td> */}
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
               <th>Team Leader</th>
               <td>Joanna</td>
               {/* <td>{detailCompanyData.website}</td> */}
@@ -75,8 +84,17 @@ const DetailOvertimeEmployee = () => {
               <td></td>
             </tr>
             <tr>
+              <th>Status by Team Leader</th>
+              <td>approved</td>
+              {/* <td>{detailCompanyData.website}</td> */}
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
               <th>Status</th>
-              <td>Approved</td>
+              <td>approved</td>
               {/* <td>{detailCompanyData.is_active ? 'Active' : 'Not Active'}</td> */}
             </tr>
           </tbody>
