@@ -41,7 +41,7 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/division/', {
+      const response = await axios.get('http://103.82.93.38/api/v1/division/', {
         params: {
           page: page,
           per_page: countValue,

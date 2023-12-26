@@ -4,15 +4,15 @@ import {
   AiOutlineCloseCircle,
   AiOutlinePlus,
 } from "react-icons/ai";
-import RoleConfigTable from "./tableRole/AdminRoleConfigTable";
+import RoleConfigTable from "./tableRole/RoleConfigTable";
 import { Button, Col, Input, Modal, Row } from "antd";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import SearchBox from "../../../components/common/searchBox/SearchBox";
-import SortButton from "../../../components/common/buttons/sortButton/SortButton";
-import CountButton from "../../../components/common/buttons/countButton/CountButton";
+import SearchBox from "@common/SearchBox/SearchBox";
+import SortButton from "@common/buttons/sortButton/SortButton";
+import CountButton from "@common/buttons/countButton/CountButton";
 import { sortData } from "./constans";
 
 const AdminRoleConfig = () => {
@@ -31,7 +31,7 @@ const AdminRoleConfig = () => {
     try {
       setLoading(true);
       await axios.post(
-        "https://attendance-1-r8738834.deta.app/api/v1/role/",
+        "http://103.82.93.38/api/v1/role/",
         {
           name: roleName,
         },

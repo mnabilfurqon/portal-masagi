@@ -46,7 +46,7 @@ const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen })
         page = tableParams.pagination.current;
       }
       console.log(sortValue);
-      const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/role/', {
+      const response = await axios.get('http://103.82.93.38/api/v1/role/', {
         params: {
           page: page,
           per_page: countValue,
@@ -77,7 +77,7 @@ const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen })
     try {
       setDeleting(true);
       const response = await axios.delete(
-        `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
+        `http://103.82.93.38/api/v1/role/${uuid}`,
         {
           headers: {
             Authorization: token,
@@ -201,6 +201,7 @@ const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen })
         pagination={tableParams.pagination}
         loading={loading}
         onChange={handleTableChange}
+        scroll={{ x: true, y: 650 }}
       />
       <Modal
         title={deleteTitle}

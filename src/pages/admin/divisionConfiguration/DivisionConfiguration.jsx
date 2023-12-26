@@ -88,7 +88,7 @@ const DivisionConfiguration = () => {
   // POST API for Add Division
   const addDivision = async () => {
     try {
-      await axios.post("https://attendance-1-r8738834.deta.app/api/v1/division/", {
+      await axios.post("http://103.82.93.38/api/v1/division/", {
         "name": actionValue,
       }, {
         headers: {
@@ -108,7 +108,7 @@ const DivisionConfiguration = () => {
   // GET API for Selected Division
   const getSelectedDivision = async () => {
     try {
-      const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
+      const response = await axios.get(`http://103.82.93.38/api/v1/division/${uuid}`, {
         headers: {
           "Authorization": token,
         },
@@ -124,7 +124,7 @@ const DivisionConfiguration = () => {
   // PUT API for Edit Division
   const editDivision = async () => {
     try {
-      await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
+      await axios.put(`http://103.82.93.38/api/v1/division/${uuid}`, {
         "name": actionValue,
       }, {
         headers: {
@@ -144,7 +144,7 @@ const DivisionConfiguration = () => {
   // Delete API for Delete Division
   const deleteDivision = async () => {
     try {
-      await axios.delete(`https://attendance-1-r8738834.deta.app/api/v1/division/${uuid}`, {
+      await axios.delete(`http://103.82.93.38/api/v1/division/${uuid}`, {
         headers: {
           "Authorization": token,
         },
