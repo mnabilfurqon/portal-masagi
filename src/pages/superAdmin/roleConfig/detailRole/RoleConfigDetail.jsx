@@ -26,7 +26,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
+        `http://103.82.93.38/api/v1/role/${uuid}`,
         {
           headers: {
             Authorization: token,
@@ -53,7 +53,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       const response = await axios.put(
-        `https://attendance-1-r8738834.deta.app/api/v1/role/${uuid}`,
+        `http://103.82.93.38/api/v1/role/${uuid}`,
         {
           name: roleName,
         },
@@ -76,7 +76,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       await axios.post(
-        `https://attendance-1-r8738834.deta.app/api/v1/role/permission/add`,
+        `http://103.82.93.38/api/v1/role/permission/add`,
         {
           role_uuid: uuid,
           permission_uuids: permissions,
@@ -103,7 +103,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       await axios.delete(
-        `https://attendance-1-r8738834.deta.app/api/v1/role/permission/revoke`,
+        `http://103.82.93.38/api/v1/role/permission/revoke`,
         {
           headers: {
             Authorization: token,
