@@ -31,7 +31,7 @@ const RoleConfig = () => {
     try {
       setLoading(true);
       await axios.post(
-        "https://attendance-1-r8738834.deta.app/api/v1/role/",
+        "http://103.82.93.38/api/v1/role/",
         {
           name: roleName,
         },
