@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-// import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import pkg from '@ant-design/icons';
-import { Button, Card, Form, Input } from 'antd';
-import { LogoMasagi } from '../../assets';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Button, Card, Form, Input } from 'antd';
+import { LogoMasagi } from '../../assets';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
 import './loginPage.css';
-const { UserOutlined, LockOutlined } = pkg;
 
 const LoginPage = () => {
   const [form] = Form.useForm();
@@ -72,7 +70,7 @@ const LoginPage = () => {
                 },
               ]}>
               <Input
-                prefix={<UserOutlined />}
+                prefix={<AiOutlineUser />}
                 placeholder='Enter username'
                 className='custom-input'
               />
@@ -87,7 +85,7 @@ const LoginPage = () => {
                 },
               ]}>
               <Input.Password
-                prefix={<LockOutlined />}
+                prefix={<AiOutlineLock />}
                 type='password'
                 placeholder='Enter password'
                 className='custom-input'

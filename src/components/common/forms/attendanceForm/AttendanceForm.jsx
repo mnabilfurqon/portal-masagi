@@ -1,6 +1,6 @@
 import React from 'react'
 import './attendanceForm.css'
-import locationImage from '../../../assets/images/locationImage.png'
+import locationImage from '../../../../assets/images/locationImage.png'
 import { Avatar, Button, Flex, Form, Image, Input, Modal, } from 'antd'
 import { GrLocation } from 'react-icons/gr'
 
@@ -51,6 +51,7 @@ const AttendanceForm = (props) => {
             <center>
               <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=4' shape='circle' size={100} />
               <Input placeholder='Input your location' suffix={<GrLocation />} style={{ marginTop: 20, marginBottom: 20, }} />
+              <img src={`http://maps.google.com/?q=[${props.lat}],[${props.long}]`} alt="location" />
               <Button className='attendance-button' htmlType='submit' style={{ width: "100%", }} onClick={props.onOkSubmitAttendance}>
                 Submit
               </Button>

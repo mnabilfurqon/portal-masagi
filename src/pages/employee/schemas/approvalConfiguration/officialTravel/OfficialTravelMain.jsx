@@ -5,8 +5,8 @@ import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
 import CountButton from '@common/buttons/countButton/CountButton'
-import { AiOutlineFileSearch } from "react-icons/ai";
-import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
+import { AiOutlineFileSearch, AiOutlineCheckSquare, AiOutlineCloseSquare } from 'react-icons/ai'
+// import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
 import DialogModal from '@common/modals/dialogModal/DialogModal'
 import './officialTravel.css'
 import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
@@ -153,10 +153,10 @@ const OfficialTravelMain = () => {
                     <AiOutlineFileSearch className="action-icon" />
                 </Button>
                 <Button className="action-button" type="primary" size="small" onClick={handleApproveModalOpen} ghost>
-                    <CheckSquareOutlined className="accept-icon" />
+                    <AiOutlineCheckSquare className="accept-icon" />
                 </Button>
                 <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
-                    <CloseSquareOutlined className="reject-icon" />
+                    <AiOutlineCloseSquare className="reject-icon" />
                 </Button>
             </Space>
         ),

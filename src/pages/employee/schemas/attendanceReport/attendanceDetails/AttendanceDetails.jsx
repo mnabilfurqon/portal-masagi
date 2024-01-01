@@ -1,7 +1,9 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Row, Col, Avatar, Flex, DatePicker, Table, } from 'antd'
-import { UserOutlined } from '@ant-design/icons';
+import pkg from '@ant-design/icons'
+const { UserOutlined } = pkg
+// import { UserOutlined } from '@ant-design/icons';
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 
 const AttendanceDetails = () => {

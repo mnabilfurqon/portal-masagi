@@ -8,8 +8,8 @@ import DialogModal from '@common/modals/dialogModal/DialogModal'
 import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
 import { Row, Col, DatePicker, Space, Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { AiOutlineFileSearch } from 'react-icons/ai'
-import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
+import { AiOutlineFileSearch, AiOutlineCheckSquare, AiOutlineCloseSquare } from 'react-icons/ai'
+// import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
 
 const OvertimeMain = () => {
 
@@ -152,10 +152,10 @@ const OvertimeMain = () => {
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" onClick={handleApproveModalOpen} ghost>
-                        <CheckSquareOutlined className="accept-icon" />
+                        <AiOutlineCheckSquare className="accept-icon" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
-                        <CloseSquareOutlined className="reject-icon" />
+                        <AiOutlineCloseSquare className="reject-icon" />
                     </Button>
                 </Space>
             ),

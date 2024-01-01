@@ -2,8 +2,10 @@ import React, { useState, } from 'react'
 import './attendanceConfiguration.css'
 import StartAttendance from '../../../../assets/images/StartAttendance.png'
 import { Button, Flex, Image, } from 'antd'
-import AttendanceForm from '@common/attendanceForm/AttendanceForm'
-import SuccessModal from '@common/successModal/SuccessModal'
+import AttendanceForm from '@common/forms/attendanceForm/AttendanceForm'
+import SuccessModal from '@common/modals/successModal/SuccessModal'
+import axios from 'axios'
+import { fromLatLng, geocode } from 'react-geocode'
 
 const AttendanceConfiguration = () => {
   const [openEnableLocation, setOpenEnableLocation] = useState(false); 
@@ -11,8 +13,7 @@ const AttendanceConfiguration = () => {
   const [openSubmitAttendance, setOpenSubmitAttendance] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
-  let today = new Date();
-
+  // let today = new Date();
   let currentDate = () => {
     let today = new Date();
     let date = today.getDate();
@@ -49,7 +50,46 @@ const AttendanceConfiguration = () => {
   }
 
   const [now, setNow] = useState(currentDate());
-  console.log(now);
+  // console.log(now);
+
+  // Geolocation
+  const [userLocation, setUserLocation] = useState(null);
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ latitude, longitude });
+          getUsersCurrentAddress();
+
+          // geocode lat and lng to address
+          fromLatLng({latitude}, {longitude})
+            .then(({ results }) => {
+              const { lat, lng } = results[0].geomentry.location;
+              console.log(lat, lng);
+            })
+            .catch(console.log);
+        },
+        (error) => {
+          console.log("Error getting user location:", error);
+        }
+      )
+    } else {
+      console.log('Geolocation is not supported by this browser!')
+    }
+  }
+
+  // const getUsersCurrentAddress = async () => {
+  //   try {
+  //     const response = await axios.get(`http://maps.googleapis.com/maps/api/geocode/json?latlng=${userLocation.latitude},${userLocation.longitude}&sensor=true`);
+  //     // setUsers(response.data[0].items);
+  //     console.log("User Current Address", response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   const startAttendance = () => {
     setOpenEnableLocation(true);
@@ -57,6 +97,10 @@ const AttendanceConfiguration = () => {
   
   const onOkEnableLocation = () => {
     setOpenEnableLocation(false);
+    getUserLocation();
+    console.log("User location: ", userLocation);
+    console.log("Latitude: ", userLocation.latitude);
+    console.log("Longitude: ", userLocation.longitude);
     setOpenAddPhoto(true);
   }
 
@@ -96,8 +140,8 @@ const AttendanceConfiguration = () => {
 
       <center>
         <div className="date-bar">
-          {today.toDateString()}
-          {/* 15 December 2023 */}
+          {now}
+          {/* {today.toDateString()} */}
         </div>
 
           <div className='attendance'>
@@ -178,9 +222,13 @@ const AttendanceConfiguration = () => {
         openEnableLocation={openEnableLocation}
         onOkEnableLocation={onOkEnableLocation}
         onCancleEnableLocation={onCancleEnableLocation}
+        lat={userLocation.latitude}
+        long={userLocation.longitude}
+
         openAddPhoto={openAddPhoto}
         onOkAddPhoto={onOkAddPhoto}
         onCancleAddPhoto={onCancleAddPhoto}
+
         openSubmitAttendance={openSubmitAttendance}
         onOkSubmitAttendance={onOkSubmitAttendance}
         onCancleSumbitAttendance={onCancleSubmitAttendance}
