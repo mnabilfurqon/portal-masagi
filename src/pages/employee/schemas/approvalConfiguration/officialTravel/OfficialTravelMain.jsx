@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom'
 const OfficialTravelMain = () => {
 
   const monthFormat = 'MMMM YYYY';
+  const monthPickerFormat = 'MM/YYYY';
   const navigate = useNavigate();
   const [approveModalVisible, setApproveModalVisible] = useState(false);
   const [respondApproveModalVisible, setRespondApproveModalVisible] = useState(false);
@@ -53,6 +54,21 @@ const OfficialTravelMain = () => {
   };
   // end of count handler
 
+  // date picker handler
+  const [datePickerValue, setDatePickerValue] = useState("");
+
+  const handleDatePicker = (value) => {
+      // convert value to MMMM YYYY format
+      if (value !== null) {
+        value = value.format(monthPickerFormat);
+        setDatePickerValue(value);
+      } else {
+        setDatePickerValue("");
+      }
+  };
+  // end of date picker handler
+
+
   const treeData = [
     {
       title: 'Approved',
@@ -69,14 +85,6 @@ const OfficialTravelMain = () => {
   ];
 
   const itemsSort = [
-    {
-      key: 'aToZEmployee',
-      label: 'A-Z Employee Name'
-    },
-    {
-      key: 'zToAEmployee',
-      label: 'Z-A Employee Name'
-    },
     {
       key: 'latestEndPermitDate',
       label: 'Latest End Permit Date'
@@ -123,10 +131,10 @@ const OfficialTravelMain = () => {
       key: 'status',
       dataIndex: 'status',
       render: (text) => {
-        if (text === 'pending') {
+        if (text === 'rejected') {
             return (
-                <Button className="pending-button" type="primary" size="small" value="pending" ghost>
-                pending
+                <Button className="rejected-button" type="primary" size="small" value="rejected" ghost>
+                rejected
                 </Button>
             );
         } else if (text === 'approved') {
@@ -137,8 +145,8 @@ const OfficialTravelMain = () => {
             );
         } else {
             return (
-                <Button className="rejected-button" type="primary" size="small" value="rejected" ghost>
-                rejected
+                <Button className="pending-button" type="primary" size="small" value="pending" ghost>
+                pending
                 </Button>
             );
         }
@@ -206,6 +214,7 @@ const OfficialTravelMain = () => {
     filterValue,
     sortValue,
     countValue,
+    datePickerValue,
     columns,
   };
 
@@ -261,7 +270,7 @@ const OfficialTravelMain = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 2}} xxl={{span: 4, offset: 6}}>
-          <DatePicker picker="month" format={monthFormat} className='date-picker-month' />
+          <DatePicker picker="month" format={monthFormat} className='date-picker-month' onChange={handleDatePicker}/>
         </Col>
       </Row>
       <div style={{marginTop: 24}}>

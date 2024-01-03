@@ -1,11 +1,44 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './permitRequestTable.css'
 import { Table } from 'antd'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import moment from 'moment'
+
+function parseMonthYearString(monthYearString) {
+  const [month, year] = monthYearString.split("/");
+  return new Date(`${year}-${month}-1`);
+}
+
+function isDateInRange(itemDate, selectedMonthYear) {
+  const itemDateObj = new Date(itemDate);
+  const selectedDate = parseMonthYearString(selectedMonthYear);
+
+  // Mengatur startDate ke tanggal 1 (awal bulan)
+  const startDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+
+  // Mengatur endDate ke tanggal terakhir bulan
+  const endDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+
+  // Memeriksa apakah itemDate berada dalam rentang
+  return itemDateObj >= startDate && itemDateObj <= endDate;
+}
 
 const PermitRequestTable = (props) => {
-    const {searchValue, filterValue, sortValue, countValue, columns} = props;
-    const location = useLocation();
+  const token = Cookies.get('token');
+  const [permitData, setPermitData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const {searchValue, filterValue, sortValue, countValue, datePickerValue, columns} = props;
+  const location = useLocation();
+  const formatDate = (dateString) => {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
+  const formatOvertimeHours = (hoursString) => {
+    const hours = hoursString.split(":")[0];
+    return `${hours} hours`;
+  }
 
     const [tableParams, setTableParams] = useState({
         pagination : {
@@ -25,179 +58,301 @@ const PermitRequestTable = (props) => {
         per_page: tableParams.pagination.pageSize,
     });
 
-    const dataOfficialTravel = [
-        {
-            key: '1',
-            employee_name: 'John Brown',
-            agenda: 'Perjalanan Dinas Dalam Kota',
-            destination: 'Bandung',
-            permit_date: '2021-08-01',
-            end_permit_date: '2021-08-02',
-            hr: 'Samuel',
-            status_by_hr: 'approved',
-            team_leader: 'Jackson',
-            status_by_team_leader: 'pending',
-            status: 'pending'
-        },
-        {
-            key: '2',
-            employee_name: 'Jim Green',
-            agenda: 'Perjalanan Dinas Luar Kota',
-            destination: 'Jakarta',
-            permit_date: '2021-08-02',
-            end_permit_date: '2021-08-03',
-            hr: 'Jacky',
-            status_by_hr: 'approved',
-            team_leader: 'Johnson',
-            status_by_team_leader: 'approved',
-            status: 'approved'
-        },
-        {
-            key: '3',
-            employee_name: 'Joe Black',
-            agenda: 'Perjalanan Dinas Dalam Kota',
-            destination: 'Bandung',
-            permit_date: '2021-08-03',
-            end_permit_date: '2021-08-04',
-            hr: 'Samuel',
-            status_by_hr: 'rejected',
-            team_leader: 'Jackson',
-            status_by_team_leader: 'rejected',
-            status: 'rejected'
+    const getPermitData = async () => {
+      try {
+        var page;
+        setLoading(true);
+        if (tableParams.pagination.total < countValue) {
+          page = 1;
+        } else {
+          page = tableParams.pagination.current;
         }
+        const response = await axios.get("http://127.0.0.1:5000/api/v1/permit/", {
+          params: {
+            page: page,
+            per_page: countValue,
+            search: searchValue,
+            filter: filterValue,
+            desc: sortValue === 'latestEndPermitDate' ? true : false,
+            sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
+          },
+          headers: {
+            Authorization: token,
+          },
+        });
+        setPermitData(response.data[0].items);
+        setTableParams({
+          ...tableParams,
+          pagination: {
+            ...tableParams.pagination,
+            total: response.data[0]._meta.total_items,
+            pageSize: countValue,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    useEffect(() => {
+      if (!token) {
+        navigate("/login");
+      }
+      getPermitData();
+    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
+
+    const dataOfficialTravelRaw = permitData
+    .filter(item => item.type.uuid === "8a155999-b14f-4104-9b7d-bed8564a0985")
+    .map(item => {
+      let status;
+      let statusByHr;
+      let statusByTeamLeader;
+
+      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
+        status = 'approved';
+      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
+        status = 'rejected';
+      } else {
+        status = 'pending';
+      }
+
+      if (item.approved_by_hr === true) {
+        statusByHr = 'approved';
+      } else if (item.approved_by_hr === false) {
+        statusByHr = 'rejected';
+      } else {
+        statusByHr = 'pending';
+      }
+
+      if (item.approved_by_team_lead === true) {
+        statusByTeamLeader = 'approved';
+      } else if (item.approved_by_team_lead === false) {
+        statusByTeamLeader = 'rejected';
+      } else {
+        statusByTeamLeader = 'pending';
+      }
+
+      return {
+        key: item.uuid,
+        employee_name: item.attendance.employee.name,
+        agenda: item.type.name,
+        destination: item.destination,
+        permit_date: formatDate(item.date_permit),
+        end_permit_date: formatDate(item.end_date_permit),
+        status: status,
+        hr: item.hr_employee,
+        status_by_hr: statusByHr,
+        team_leader: item.team_lead_employee,
+        status_by_team_leader: statusByTeamLeader,
+      }
+    });
+
+    const dataOfficialTravel = dataOfficialTravelRaw.filter(item => {
+      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+      ? filterValue.includes(item.status)
+      : true
+
+      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
+      const dateItem = item.permit_date.split("/").reverse().join("/");
+      const isDateMatch = datePickerValue
+      ? isDateInRange(dateItem, datePickerValue)
+      : true
+
+      console.log(dateItem)
+      console.log(datePickerValue)
+      console.log(isDateMatch)
+
+      return isStatusMatch && isDateMatch;
+    });
+
+    const leaveExcludedTypePermit = [
+      "7bce22f2-f7d8-4823-b0e3-f6cf1bfa2dc0", 
+      "934ced73-5a80-4f8e-be38-e7b7ed62261d",
+      "18db53e6-79b2-44a2-84d8-4f005d3c6a4f",
+      "8a155999-b14f-4104-9b7d-bed8564a0985"
     ];
 
-    const dataLeave = [
-      {
-        key: '1',
-        employee_name: 'John Brown',
-        type_leave: 'Cuti Sakit',
-        reason: 'Masa Pemulihan',
-        permit_date: '2021-08-01',
-        end_permit_date: '2021-08-02',
-        status: 'pending',
-        hr: 'Samuel',
-        status_by_hr: 'approved',
-        team_leader: 'Jackson',
-        status_by_team_leader: 'pending',
-      },
-      {
-        key: '2',
-        employee_name: 'Jim Green',
-        type_leave: 'Cuti Sakit',
-        reason: 'Masa Pemulihan',
-        permit_date: '2021-08-02',
-        end_permit_date: '2021-08-03',
-        status: 'approved',
-        hr: 'Jacky',
-        status_by_hr: 'approved',
-        team_leader: 'Johnson',
-        status_by_team_leader: 'approved',
-      },
-      {
-        key: '3',
-        employee_name: 'Joe Black',
-        type_leave: 'Cuti Sakit',
-        reason: 'Masa Pemulihan',
-        permit_date: '2021-08-03',
-        end_permit_date: '2021-08-04',
-        status: 'rejected',
-        hr: 'Samuel',
-        status_by_hr: 'rejected',
-        team_leader: 'Jackson',
-        status_by_team_leader: 'rejected',
-      }
-    ];
+    const dataLeaveRaw = permitData
+    .filter(item => !leaveExcludedTypePermit.includes(item.type.uuid))
+    .map(item => {
+      let status;
+      let statusByHr;
+      let statusByTeamLeader;
 
-    const dataPermit = [
-      {
-        key: '1',
-        employee_name: 'John Brown',
-        type_permit: 'Izin Khusus',
-        reason: 'Acara Keagamaan',
-        permit_date: '2021-08-01',
-        end_permit_date: '2021-08-02',
-        status: 'pending',
-        hr: 'Samuel',
-        status_by_hr: 'approved',
-        team_leader: 'Jackson',
-        status_by_team_leader: 'pending',
-      },
-      {
-        key: '2',
-        employee_name: 'Jim Green',
-        type_permit: 'Izin Khusus',
-        reason: 'Acara Keagamaan',
-        permit_date: '2021-08-02',
-        end_permit_date: '2021-08-03',
-        status: 'approved',
-        hr: 'Jacky',
-        status_by_hr: 'approved',
-        team_leader: 'Johnson',
-        status_by_team_leader: 'approved',
-      },
-      {
-        key: '3',
-        employee_name: 'Joe Black',
-        type_permit: 'Izin Khusus',
-        reason: 'Acara Keagamaan',
-        permit_date: '2021-08-03',
-        end_permit_date: '2021-08-04',
-        status: 'rejected',
-        hr: 'Samuel',
-        status_by_hr: 'rejected',
-        team_leader: 'Jackson',
-        status_by_team_leader: 'rejected',
+      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
+        status = 'approved';
+      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
+        status = 'rejected';
+      } else {
+        status = 'pending';
       }
-    ];
 
-    const dataOvertime = [
-      {
-        key: '1',
-        employee_name: 'John Brown',
-        type_overtime: 'Office Hour',
-        reason: 'Menyelesaikan Tugas',
-        overtime_date: '2021-08-01',
-        start_overtime: '08:00',
-        end_overtime: '11:00',
-        duration: '3 Hour',
-        status: 'pending',
-        hr: 'Samuel',
-        status_by_hr: 'approved',
-        team_leader: 'Jackson',
-        status_by_team_leader: 'pending',
-      },
-      {
-        key: '2',
-        employee_name: 'Jim Green',
-        type_overtime: 'Office Hour',
-        reason: 'Menyelesaikan Tugas',
-        overtime_date: '2021-08-02',
-        start_overtime: '09:00',
-        end_overtime: '11:00',
-        duration: '2 Hour',
-        status: 'approved',
-        hr: 'Jacky',
-        status_by_hr: 'approved',
-        team_leader: 'Johnson',
-        status_by_team_leader: 'approved',
-      },
-      {
-        key: '3',
-        employee_name: 'Joe Black',
-        type_overtime: 'Office Hour',
-        reason: 'Menyelesaikan Tugas',
-        overtime_date: '2021-08-03',
-        start_overtime: '09:00',
-        end_overtime: '10:00',
-        duration: '1 Hour',
-        status: 'rejected',
-        hr: 'Samuel',
-        status_by_hr: 'rejected',
-        team_leader: 'Jackson',
-        status_by_team_leader: 'rejected',
+      if (item.approved_by_hr === true) {
+        statusByHr = 'approved';
+      } else if (item.approved_by_hr === false) {
+        statusByHr = 'rejected';
+      } else {
+        statusByHr = 'pending';
       }
-    ]
+
+      if (item.approved_by_team_lead === true) {
+        statusByTeamLeader = 'approved';
+      } else if (item.approved_by_team_lead === false) {
+        statusByTeamLeader = 'rejected';
+      } else {
+        statusByTeamLeader = 'pending';
+      }
+
+      return {
+        key: item.uuid,
+        employee_name: item.attendance.employee.name,
+        type_leave: item.type.name,
+        reason: item.reason,
+        permit_date: formatDate(item.date_permit),
+        end_permit_date: formatDate(item.end_date_permit),
+        status: status,
+        hr: item.hr_employee,
+        status_by_hr: statusByHr,
+        team_leader: item.team_lead_employee,
+        status_by_team_leader: statusByTeamLeader,
+      }
+    });
+
+    const dataLeave = dataLeaveRaw.filter(item => { 
+      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+      ? filterValue.includes(item.status)
+      : true
+
+      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
+      const dateItem = item.permit_date.split("/").reverse().join("/");
+      const isDateMatch = datePickerValue 
+      ? isDateInRange(dateItem, datePickerValue)
+      : true
+      
+      return isStatusMatch && isDateMatch;
+    });
+
+    const dataPermitRaw = permitData
+    .filter(item => item.type.uuid === "7bce22f2-f7d8-4823-b0e3-f6cf1bfa2dc0" || item.type.uuid === "934ced73-5a80-4f8e-be38-e7b7ed62261d")
+    .map(item => {
+      let status;
+      let statusByHr;
+      let statusByTeamLeader;
+
+      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
+        status = 'approved';
+      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
+        status = 'rejected';
+      } else {
+        status = 'pending';
+      }
+
+      if (item.approved_by_hr === true) {
+        statusByHr = 'approved';
+      } else if (item.approved_by_hr === false) {
+        statusByHr = 'rejected';
+      } else {
+        statusByHr = 'pending';
+      }
+
+      if (item.approved_by_team_lead === true) {
+        statusByTeamLeader = 'approved';
+      } else if (item.approved_by_team_lead === false) {
+        statusByTeamLeader = 'rejected';
+      } else {
+        statusByTeamLeader = 'pending';
+      }
+
+      return {
+        key: item.uuid,
+        employee_name: item.attendance.employee.name,
+        type_permit: item.type.name,
+        reason: item.reason,
+        permit_date: formatDate(item.date_permit),
+        end_permit_date: formatDate(item.end_date_permit),
+        status: status,
+        hr: item.hr_employee,
+        status_by_hr: statusByHr,
+        team_leader: item.team_lead_employee,
+        status_by_team_leader: statusByTeamLeader,
+      }
+    });
+
+    const dataPermit = dataPermitRaw.filter(item => {
+      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+      ? filterValue.includes(item.status)
+      : true
+
+      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
+      const dateItem = item.permit_date.split("/").reverse().join("/");
+      const isDateMatch = datePickerValue
+      ? isDateInRange(dateItem, datePickerValue)
+      : true
+
+      return isStatusMatch && isDateMatch;
+    });
+
+    const dataOvertimeRaw = permitData
+    .filter(item => item.type.uuid === "18db53e6-79b2-44a2-84d8-4f005d3c6a4f")
+    .map(item => {
+      let status;
+      let statusByHr;
+      let statusByTeamLeader;
+
+      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
+        status = 'approved';
+      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
+        status = 'rejected';
+      } else {
+        status = 'pending';
+      }
+
+      if (item.approved_by_hr === true) {
+        statusByHr = 'approved';
+      } else if (item.approved_by_hr === false) {
+        statusByHr = 'rejected';
+      } else {
+        statusByHr = 'pending';
+      }
+
+      if (item.approved_by_team_lead === true) {
+        statusByTeamLeader = 'approved';
+      } else if (item.approved_by_team_lead === false) {
+        statusByTeamLeader = 'rejected';
+      } else {
+        statusByTeamLeader = 'pending';
+      }
+
+      return {
+        key: item.uuid,
+        employee_name: item.attendance.employee.name,
+        type_overtime: item.type.name,
+        reason: item.reason,
+        overtime_date: "belum ada",
+        duration: formatOvertimeHours(item.hours_overtime),
+        status: status,
+        hr: item.hr_employee,
+        status_by_hr: statusByHr,
+        team_leader: item.team_lead_employee,
+        status_by_team_leader: statusByTeamLeader,
+      }
+    });
+
+    const dataOvertime = dataOvertimeRaw.filter(item => {
+      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+      ? filterValue.includes(item.status)
+      : true
+
+      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
+      const dateItem = item.overtime_date.split("/").reverse().join("/");
+      const isDateMatch = datePickerValue
+      ? isDateInRange(dateItem, datePickerValue)
+      : true
+
+      return isStatusMatch && isDateMatch;
+    });
 
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
@@ -217,7 +372,7 @@ const PermitRequestTable = (props) => {
         });
     
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-        //   setEmployeeData([]);
+          setPermitData([]);
         }
     };
 
@@ -228,7 +383,7 @@ const PermitRequestTable = (props) => {
                 columns={columns}
                 dataSource={dataOfficialTravel}
                 pagination={tableParams.pagination}
-                // loading={loading}
+                loading={loading}
                 rowClassName="custom-row"
                 scroll={{ x: true, y: 650 }}
                 onChange={handleTableChange}
@@ -238,7 +393,7 @@ const PermitRequestTable = (props) => {
                 columns={columns}
                 dataSource={dataLeave}
                 pagination={tableParams.pagination}
-                // loading={loading}
+                loading={loading}
                 rowClassName="custom-row"
                 scroll={{ x: true, y: 650 }}
                 onChange={handleTableChange}
@@ -248,7 +403,7 @@ const PermitRequestTable = (props) => {
                 columns={columns}
                 dataSource={dataPermit}
                 pagination={tableParams.pagination}
-                // loading={loading}
+                loading={loading}
                 rowClassName="custom-row"
                 scroll={{ x: true, y: 650 }}
                 onChange={handleTableChange}
@@ -258,7 +413,7 @@ const PermitRequestTable = (props) => {
                 columns={columns}
                 dataSource={dataOvertime}
                 pagination={tableParams.pagination}
-                // loading={loading}
+                loading={loading}
                 rowClassName="custom-row"
                 scroll={{ x: true, y: 650 }}
                 onChange={handleTableChange}

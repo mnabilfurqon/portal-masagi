@@ -14,6 +14,7 @@ import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
 const OvertimeMain = () => {
 
     const monthFormat = 'MMMM YYYY';
+    const monthPickerFormat = 'MM/YYYY';
     const navigate = useNavigate();
     const [approveModalVisible, setApproveModalVisible] = useState(false);
     const [respondApproveModalVisible, setRespondApproveModalVisible] = useState(false);
@@ -52,6 +53,20 @@ const OvertimeMain = () => {
     };
     // end of count handler
 
+    // date picker handler
+    const [datePickerValue, setDatePickerValue] = useState("");
+
+    const handleDatePicker = (value) => {
+        // convert value to MMMM YYYY format
+        if (value !== null) {
+            value = value.format(monthPickerFormat);
+            setDatePickerValue(value);
+        } else {
+            setDatePickerValue("");
+        }
+    };
+    // end of date picker handler
+
     const treeData = [
         {
             title: 'Approved',
@@ -68,14 +83,6 @@ const OvertimeMain = () => {
     ];
 
     const itemsSort = [
-        {
-          key: 'aToZEmployee',
-          label: 'A-Z Employee Name'
-        },
-        {
-          key: 'zToAEmployee',
-          label: 'Z-A Employee Name'
-        },
         {
           key: 'latestOvertimeDate',
           label: 'Latest Overtime Date'
@@ -122,10 +129,10 @@ const OvertimeMain = () => {
           key: 'status',
           dataIndex: 'status',
           render: (text) => {
-            if (text === 'pending') {
+            if (text === 'rejected') {
                 return (
-                    <Button className="pending-button" type="primary" size="small" value="pending" ghost>
-                    pending
+                    <Button className="rejected-button" type="primary" size="small" value="rejected" ghost>
+                    rejected
                     </Button>
                 );
             } else if (text === 'approved') {
@@ -136,8 +143,8 @@ const OvertimeMain = () => {
                 );
             } else {
                 return (
-                    <Button className="rejected-button" type="primary" size="small" value="rejected" ghost>
-                    rejected
+                    <Button className="pending-button" type="primary" size="small" value="pending" ghost>
+                    pending
                     </Button>
                 );
             }
@@ -205,6 +212,7 @@ const OvertimeMain = () => {
         filterValue,
         sortValue,
         countValue,
+        datePickerValue,
         columns,
     };
     
@@ -260,7 +268,7 @@ const OvertimeMain = () => {
             <CountButton className="count-button" onCount={handleCount} />
             </Col>
             <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 2}} xxl={{span: 4, offset: 6}}>
-            <DatePicker picker="month" format={monthFormat} className='date-picker-month' />
+            <DatePicker picker="month" format={monthFormat} className='date-picker-month' onChange={handleDatePicker} />
             </Col>
         </Row>
             <div style={{marginTop: 24}}>

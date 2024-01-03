@@ -17,6 +17,8 @@ const SortButton = ({onSort, items}) => {
     zToAEmployee: 'Z-A Employee Name',
     latestOvertimeDate: 'Latest Overtime Date',
     oldestOvertimeDate: 'Oldest OverTime Date',
+    latestEndPermitDate: 'Latest End Permit Date',
+    oldestEndPermitDate: 'Oldest End Permit Date',
   };
 
   const handlerSort = e => {
