@@ -4,7 +4,7 @@ import {
   AiOutlineCloseCircle,
   AiOutlinePlus,
 } from "react-icons/ai";
-import RoleConfigTable from "./tableRole/RoleConfigTable";
+import RoleConfigTable from "./tableRole/AdminRoleConfigTable";
 import { Button, Col, Input, Modal, Row } from "antd";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";

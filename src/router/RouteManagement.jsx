@@ -60,11 +60,11 @@ const RouteManagement = () => {
     }
   }, [token, navigate]);
 
-  if (role_uuid === "0c6e6fc5-01f5-43c4-8aae-2d8e38129593") {
+  if (role_uuid === "8ab999f6-ad6d-48e7-943a-aa400007223f") {
     roleNumber = 1;
-  } else if (role_uuid === "3bf79ce2-903a-4147-98d8-325be7df7f29") {
+  } else if (role_uuid === "4386da8b-fa01-4414-96e9-d1db09de66ff") {
     roleNumber = 2;
-  } else if (role_uuid === "127e1979-a587-416d-a451-f2db1f176837" || role_uuid === "bfbc1648-9651-4529-9ba6-b22576f61017") {
+  } else if (role_uuid === "df0502d2-ab6f-455b-a360-49aebc14894d" || role_uuid === "7424b423-5b4d-44a9-9b03-990ae45c59f0") {
     roleNumber = 3;
   } else {
     roleNumber = 4;
