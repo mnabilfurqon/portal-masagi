@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Tabs, Button, Avatar, Divider, Row, Col, Spin } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { AiOutlineUser } from "react-icons/ai";
 import { useParams, useNavigate } from 'react-router-dom';
 import AddButton from '../buttons/addButton/AddButton';
 import './employeeTabs.css';
@@ -21,6 +21,7 @@ import LoadingComponent from '../../loadingComponent/LoadingComponent';
 const { TabPane } = Tabs;
 
 const EmployeeTabs = () => {
+    const { UserOutlined } = pkg
 
     const { uuid } = useParams();
     const token = Cookies.get("token");
@@ -307,7 +308,7 @@ const EmployeeTabs = () => {
         <>
             <Row align='middle' gutter={[56, 8]}>
             <Col xs={8} sm={6} md={6} lg={4} xl={3} xxl={2}>
-                <Avatar size={100} icon={<UserOutlined />} />
+                <Avatar size={100} icon={<AiOutlineUser />} />
             </Col>
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>

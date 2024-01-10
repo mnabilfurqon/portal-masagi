@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { AiOutlineUser } from "react-icons/ai";
+import { SlLock } from "react-icons/sl";
 import { Button, Card, Form, Input } from 'antd';
 import { LogoMasagi } from '../../assets';
 import axios from 'axios';
@@ -70,7 +71,7 @@ const LoginPage = () => {
                 },
               ]}>
               <Input
-                prefix={<UserOutlined />}
+                prefix={<AiOutlineUser />}
                 placeholder='Enter username'
                 className='custom-input'
               />
@@ -85,7 +86,7 @@ const LoginPage = () => {
                 },
               ]}>
               <Input.Password
-                prefix={<LockOutlined />}
+                prefix={<SlLock />}
                 type='password'
                 placeholder='Enter password'
                 className='custom-input'

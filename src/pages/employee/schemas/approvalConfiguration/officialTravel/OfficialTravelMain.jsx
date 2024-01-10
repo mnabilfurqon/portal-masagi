@@ -6,14 +6,14 @@ import SortButton from '@common/buttons/sortButton/SortButton'
 import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
 import CountButton from '@common/buttons/countButton/CountButton'
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
 import DialogModal from '@common/modals/dialogModal/DialogModal'
 import './officialTravel.css'
 import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
 import { useNavigate } from 'react-router-dom'
+import { FaRegCheckSquare } from "react-icons/fa";
+import { CgCloseR } from "react-icons/cg";
 
 const OfficialTravelMain = () => {
-
   const monthFormat = 'MMMM YYYY';
   const navigate = useNavigate();
   const [approveModalVisible, setApproveModalVisible] = useState(false);
@@ -153,10 +153,10 @@ const OfficialTravelMain = () => {
                     <AiOutlineFileSearch className="action-icon" />
                 </Button>
                 <Button className="action-button" type="primary" size="small" onClick={handleApproveModalOpen} ghost>
-                    <CheckSquareOutlined className="accept-icon" />
+                    <FaRegCheckSquare className="accept-icon"/>
                 </Button>
                 <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
-                    <CloseSquareOutlined className="reject-icon" />
+                    <CgCloseR className="reject-icon"/>
                 </Button>
             </Space>
         ),

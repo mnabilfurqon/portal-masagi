@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './presentConfiguration.css'
 import { useNavigate } from 'react-router-dom'
 import { Row, Col, DatePicker, Progress, Input, Table, Button } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import { IoIosSearch } from "react-icons/io";
 import { AiOutlineFileSearch } from 'react-icons/ai'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 import CountButton from '@common/buttons/countButton/CountButton'
@@ -266,7 +266,7 @@ const PresentConfiguration = () => {
         <Col xs={24} sm={24} md={14} lg={18} xl={18} xxl={18}>
           <Input 
             className='search-box'
-            prefix={<SearchOutlined/>} 
+            prefix={<IoIosSearch />} 
             placeholder='Search for employee name' 
             onSearch={(value)=>{ 
               setSearchValue(value)

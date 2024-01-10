@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Row, Col, Avatar, Flex, DatePicker, Table, } from 'antd'
-import { UserOutlined } from '@ant-design/icons';
+import { AiOutlineUser } from "react-icons/ai";
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 
 const AttendanceDetails = () => {
@@ -102,7 +102,7 @@ const AttendanceDetails = () => {
     <>
         <Row align='middle' gutter={[56, 8]}>
             <Col xs={8} sm={6} md={6} lg={4} xl={3} xxl={2}>
-                <Avatar size={120} icon={<UserOutlined />} />
+                <Avatar size={120} icon={<AiOutlineUser />} />
             </Col>
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>

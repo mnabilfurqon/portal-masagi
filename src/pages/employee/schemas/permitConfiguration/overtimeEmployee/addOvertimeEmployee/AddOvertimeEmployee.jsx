@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import moment from "moment";
 import "./addOvertimeEmployee.css";
 
 const AddOvertimeEmployee = () => {
@@ -89,7 +90,6 @@ const AddOvertimeEmployee = () => {
         <Form.Item
           label="Overtime Date"
           name="setOvertimeDate"
-          rules={[{ required: true, message: "Please input overtime date!" }]}
         >
           <DatePicker
             placeholder="YYYY-MM-DD"
@@ -131,18 +131,11 @@ const AddOvertimeEmployee = () => {
         <Form.Item
           label="Duration"
           name="duration"
-          rules={[
-            {
-              required: true,
-              message: "Please input duration!",
-            },
-          ]}
         >
           <TimePicker
             className="duration-input"
             format="HH:mm:ss"
             placeholder="00:00:00"
-            disabled
           />
         </Form.Item>
         <Form.Item

@@ -1,12 +1,4 @@
-import React, { useState, useEffect } from "react";
-import {
-  HomeOutlined,
-  BellOutlined,
-  DownOutlined,
-  UserOutlined,
-  IdcardOutlined,
-  HistoryOutlined,
-} from "@ant-design/icons";
+import React, { useEffect } from "react";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,6 +6,9 @@ import { TbDatabasePlus } from "react-icons/tb";
 import { RiTeamLine } from "react-icons/ri";
 import { LuClipboardSignature } from "react-icons/lu";
 import { HiOutlineClipboardList } from "react-icons/hi";
+import { AiOutlineHome, AiOutlineUser, AiOutlineIdcard, AiOutlineHistory } from "react-icons/ai";
+import { FaRegBell } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa6";
 import Cookies from "js-cookie";
 import "./layoutComponent.css";
 
@@ -67,10 +62,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 size="medium"
                 gap={2}
               >
-                <UserOutlined />
+                <AiOutlineUser />
               </Avatar>
               {username}
-              <DownOutlined />
+              <FaChevronDown />
             </Space>
           </a>
         </Dropdown>
@@ -125,11 +120,11 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname.includes('/company/add-user/')) {
-    pageTitle = 'User Configuration';
+  } else if (location.pathname.includes("/company/add-user/")) {
+    pageTitle = "User Configuration";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === '/user') {
-    pageTitle = 'User';
+  } else if (location.pathname === "/user") {
+    pageTitle = "User";
     finalPageTitle = pageTitle;
   } else if (location.pathname === "/user/add-user") {
     pageTitle = (
@@ -214,7 +209,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === "/official-travel") {
     pageTitle = "Official Travel";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === "/official-travel/official-travel-requested") {
+  } else if (
+    location.pathname === "/official-travel/official-travel-requested"
+  ) {
     pageTitle = (
       <Link to={"/official-travel"} className="page-title">
         Official Travel /{" "}
@@ -253,9 +250,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Leave /{" "}
       </Link>
     );
-    pageSubTitle = (
-      <span className="page-sub-title">Leave Requested</span>
-    );
+    pageSubTitle = <span className="page-sub-title">Leave Requested</span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -286,9 +281,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Overtime /{" "}
       </Link>
     );
-    pageSubTitle = (
-      <span className="page-sub-title">Overtime Requested</span>
-    );
+    pageSubTitle = <span className="page-sub-title">Overtime Requested</span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -319,9 +312,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Permit /{" "}
       </Link>
     );
-    pageSubTitle = (
-      <span className="page-sub-title">Permit Requested</span>
-    );
+    pageSubTitle = <span className="page-sub-title">Permit Requested</span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -435,9 +426,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
     );
   }
 
-
-
-
   return (
     <Layout className="layout-container">
       {/* Sider */}
@@ -459,7 +447,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
             mode="inline"
             style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
           >
-            <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+            <Menu.Item key="/dashboard" icon={<AiOutlineHome />}>
               <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
             <SubMenu
@@ -497,7 +485,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
             mode="inline"
             style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
           >
-            <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+            <Menu.Item key="/dashboard" icon={<AiOutlineHome />}>
               <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
             <SubMenu
@@ -543,7 +531,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
             mode="inline"
             style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
           >
-            <Menu.Item key="/attendance" icon={<IdcardOutlined />}>
+            <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
             </Menu.Item>
             <SubMenu
@@ -558,21 +546,22 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Link to="/report">Report</Link>
               </Menu.Item>
             </SubMenu>
-            <Menu.Item key='/history' icon={<HistoryOutlined />}>
-              <Link to='/history'>History</Link>
+            <Menu.Item key="/history" icon={<AiOutlineHistory />}>
+              <Link to="/history">History</Link>
             </Menu.Item>
             <SubMenu
               key="permit-employee"
               icon={<LuClipboardSignature />}
-              title='Permit'>
-              <Menu.Item key='leave'>
-                <Link to='/leave'>Leave</Link>
+              title="Permit"
+            >
+              <Menu.Item key="leave">
+                <Link to="/leave">Leave</Link>
               </Menu.Item>
-              <Menu.Item key='official-travel'>
-                <Link to='/official-travel'>Official Travel</Link>
+              <Menu.Item key="official-travel">
+                <Link to="/official-travel">Official Travel</Link>
               </Menu.Item>
-              <Menu.Item key='overtime'>
-                <Link to='/overtime'>Overtime</Link>
+              <Menu.Item key="overtime">
+                <Link to="/overtime">Overtime</Link>
               </Menu.Item>
               <Menu.Item key="permit">
                 <Link to="/permit">Permit</Link>
@@ -581,19 +570,20 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <SubMenu
               key="permit-request-leaders"
               icon={<HiOutlineClipboardList />}
-              title='Permit Request'>
-                <Menu.Item key='/leave-request'>
-                  <Link to='/leave-request'>Leave</Link>
-                </Menu.Item>
-                <Menu.Item key='/official-travel-request'>
-                  <Link to='/official-travel-request'>Official Travel</Link>
-                </Menu.Item>
-                <Menu.Item key='/overtime-request'>
-                  <Link to='/overtime-request'>Overtime</Link>
-                </Menu.Item>
-                <Menu.Item key='/permit-request'>
-                  <Link to='/permit-request'>Permit</Link>
-                </Menu.Item>
+              title="Permit Request"
+            >
+              <Menu.Item key="/leave-request">
+                <Link to="/leave-request">Leave</Link>
+              </Menu.Item>
+              <Menu.Item key="/official-travel-request">
+                <Link to="/official-travel-request">Official Travel</Link>
+              </Menu.Item>
+              <Menu.Item key="/overtime-request">
+                <Link to="/overtime-request">Overtime</Link>
+              </Menu.Item>
+              <Menu.Item key="/permit-request">
+                <Link to="/permit-request">Permit</Link>
+              </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
@@ -625,7 +615,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
 
             <Flex>
               <Space style={{ padding: "10px" }}>
-                <BellOutlined />
+                <FaRegBell />
                 <MyDropdown />
               </Space>
             </Flex>
