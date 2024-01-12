@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import "./detailOvertimeEmployee.css"
 
-const DetailOvertimeEmployee = () => {
+const DetailOvertimeEmployee = ({detailOvertimeData}) => {
   const navigate = useNavigate();
 
   return (
@@ -13,8 +13,7 @@ const DetailOvertimeEmployee = () => {
           <tbody>
             <tr>
               <th>Reason</th>
-              <td>Menyelesaikan Projek</td>
-              {/* <td>{detailCompanyData.company_name}</td> */}
+              <td>{detailOvertimeData.reason}</td>
             </tr>
             <tr>
               <th></th>
@@ -22,8 +21,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>Date</th>
-              <td>01/10/2023</td>
-              {/* <td>{detailCompanyData.address}</td> */}
+              <td>{detailOvertimeData.date}</td>
             </tr>
             <tr>
               <th></th>
@@ -31,8 +29,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>Start Overtime</th>
-              <td>05:00 PM</td>
-              {/* <td>{detailCompanyData.phone_number}</td> */}
+              <td>{detailOvertimeData.start_overtime}</td>
             </tr>
             <tr>
               <th></th>
@@ -40,8 +37,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>End Overtime</th>
-              <td>06:00 PM</td>
-              {/* <td>{detailCompanyData.date_founded}</td> */}
+              <td>{detailOvertimeData.end_overtime}</td>
             </tr>
             <tr>
               <th></th>
@@ -49,8 +45,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>Duration</th>
-              <td>01:00:00</td>
-              {/* <td>{detailCompanyData.email_address}</td> */}
+              <td>{detailOvertimeData.duration}</td>
             </tr>
             <tr>
               <th></th>
@@ -58,8 +53,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>HR</th>
-              <td>Megawati</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{detailOvertimeData.hr}</td>
             </tr>
             <tr>
               <th></th>
@@ -67,8 +61,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>Status by HR</th>
-              <td>approved</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{detailOvertimeData.status_by_hr}</td>
             </tr>
             <tr>
               <th></th>
@@ -76,8 +69,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>Team Leader</th>
-              <td>Joanna</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{detailOvertimeData.team_leader}</td>
             </tr>
             <tr>
               <th></th>
@@ -85,8 +77,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>Status by Team Leader</th>
-              <td>approved</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{detailOvertimeData.status_by_team_leader}</td>
             </tr>
             <tr>
               <th></th>
@@ -94,8 +85,7 @@ const DetailOvertimeEmployee = () => {
             </tr>
             <tr>
               <th>Status</th>
-              <td>approved</td>
-              {/* <td>{detailCompanyData.is_active ? 'Active' : 'Not Active'}</td> */}
+              <td>{detailOvertimeData.status}</td>
             </tr>
           </tbody>
         </table>

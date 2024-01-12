@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import "./detailPermitEmployee.css"
 
-const DetailPermitEmployee = () => {
+const DetailPermitEmployee = ({detailPermitData}) => {
   const navigate = useNavigate();
 
   return (
@@ -13,8 +13,7 @@ const DetailPermitEmployee = () => {
           <tbody>
             <tr>
               <th>Type Permit</th>
-              <td>Izin Tidak Masuk</td>
-              {/* <td>{detailCompanyData.company_name}</td> */}
+              <td>{detailPermitData.type_permit}</td>
             </tr>
             <tr>
               <th></th>
@@ -22,8 +21,7 @@ const DetailPermitEmployee = () => {
             </tr>
             <tr>
               <th>Reason</th>
-              <td>Izin Sakit</td>
-              {/* <td>{detailCompanyData.address}</td> */}
+              <td>{detailPermitData.reason}</td>
             </tr>
             <tr>
               <th></th>
@@ -31,8 +29,7 @@ const DetailPermitEmployee = () => {
             </tr>
             <tr>
               <th>Permit Date</th>
-              <td>31/10/2023</td>
-              {/* <td>{detailCompanyData.phone_number}</td> */}
+              <td>{detailPermitData.permit_date}</td>
             </tr>
             <tr>
               <th></th>
@@ -40,8 +37,7 @@ const DetailPermitEmployee = () => {
             </tr>
             <tr>
               <th>End Permit Date</th>
-              <td>03/11/2023</td>
-              {/* <td>{detailCompanyData.date_founded}</td> */}
+              <td>{detailPermitData.end_permit_date}</td>
             </tr>
             <tr>
               <th></th>
@@ -49,8 +45,7 @@ const DetailPermitEmployee = () => {
             </tr>
             <tr>
               <th>HR</th>
-              <td>Megawati</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{detailPermitData.hr}</td>
             </tr>
             <tr>
               <th></th>
@@ -58,8 +53,7 @@ const DetailPermitEmployee = () => {
             </tr>
             <tr>
               <th>Status by HR</th>
-              <td>pending</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{detailPermitData.status_by_hr}</td>
             </tr>
             <tr>
               <th></th>
@@ -67,8 +61,7 @@ const DetailPermitEmployee = () => {
             </tr>
             <tr>
               <th>Team Leader</th>
-              <td>Joanna</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{detailPermitData.team_leader}</td>
             </tr>
             <tr>
               <th></th>
@@ -76,8 +69,7 @@ const DetailPermitEmployee = () => {
             </tr>
             <tr>
               <th>Status by Team Leader</th>
-              <td>pending</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{detailPermitData.status_by_team_leader}</td>
             </tr>
             <tr>
               <th></th>
@@ -85,8 +77,7 @@ const DetailPermitEmployee = () => {
             </tr>
             <tr>
               <th>Status</th>
-              <td>pending</td>
-              {/* <td>{detailCompanyData.is_active ? 'Active' : 'Not Active'}</td> */}
+              <td>{detailPermitData.status}</td>
             </tr>
           </tbody>
         </table>

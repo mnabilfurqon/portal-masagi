@@ -1,16 +1,21 @@
 import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { TABLE_DATA } from "./constans";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from "axios";
+import moment from "moment";
 import "./tableOfficialTravelEmployee.css";
 
 const TableOfficialTravelEmployee = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
-  const {searchValue, filterValue, sortValue, countValue, columns} = props;
+  const {searchValue, filterValue, sortValue, countValue} = props;
+  const [officialTravelData, setOfficialTravelData] = useState([])
   const [loading, setLoading] = useState(false);
+  const formatDate = (dateString) => {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -37,18 +42,19 @@ const TableOfficialTravelEmployee = (props) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get('', {
+      const response = await axios.get('http://103.82.93.38/api/v1/permit/', {
         params: {
           page: page,
           per_page: countValue,
           search: searchValue,
-          desc: sortValue === 'latest' ? true : false,
+          desc: sortValue === 'latestEndPermitDate' ? true : false,
+          sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
         },
         headers: {
           Authorization: token,
         },
       });
-      // setOfficialTravelData(response.data.items);
+      setOfficialTravelData(response.data[0].items);
       setTableParams({
         ...tableParams,
         pagination: {
@@ -64,38 +70,97 @@ const TableOfficialTravelEmployee = (props) => {
     }
   };
 
+  const dataOfficialTravelRaw = officialTravelData
+    .filter(item => item.type.uuid === "490cef45-7966-46a8-8108-ae613a1c6ad1")
+    .map(item => {
+      let status;
+      let statusByHr;
+      let statusByTeamLeader;
+
+      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
+        status = 'approved';
+      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
+        status = 'rejected';
+      } else {
+        status = 'pending';
+      }
+
+      if (item.approved_by_hr === true) {
+        statusByHr = 'approved';
+      } else if (item.approved_by_hr === false) {
+        statusByHr = 'rejected';
+      } else {
+        statusByHr = 'pending';
+      }
+
+      if (item.approved_by_team_lead === true) {
+        statusByTeamLeader = 'approved';
+      } else if (item.approved_by_team_lead === false) {
+        statusByTeamLeader = 'rejected';
+      } else {
+        statusByTeamLeader = 'pending';
+      }
+
+      return {
+        key: item.uuid,
+        employee_name: item.attendance.employee.name,
+        agenda: item.type.name,
+        destination: item.destination,
+        permit_date: formatDate(item.date_permit),
+        end_permit_date: formatDate(item.end_date_permit),
+        status: status,
+        hr: item.hr_employee,
+        status_by_hr: statusByHr,
+        team_leader: item.team_lead_employee,
+        status_by_team_leader: statusByTeamLeader,
+      }
+    });
+
+    const dataOfficialTravel = dataOfficialTravelRaw.filter(item => {
+      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+      ? filterValue.includes(item.status)
+      : true
+
+      return isStatusMatch;
+    });
+
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
-    // getOfficialTravelData();
-  }, [token, navigate]);
+    getOfficialTravelData();
+  }, [token, navigate, params]);
 
   const title = [
     {
       key: "agenda",
       title: "Agenda",
       dataIndex: "agenda",
+      ellipsis: true,
     },
     {
       key: "destination",
       title: "Destination",
       dataIndex: "destination",
+      ellipsis: true,
     },
     {
-      key: "permitDate",
+      key: "permit_date",
       title: "Permit Date",
-      dataIndex: "permitDate",
+      dataIndex: "permit_date",
+      ellipsis: true,
     },
     {
-      key: "endPermitDate",
+      key: "end_permit_date",
       title: "End Permit Date",
-      dataIndex: "endPermitDate",
+      dataIndex: "end_permit_date",
+      ellipsis: true,
     },
     {
       key: "status",
       title: "Status",
       dataIndex: "status",
+      ellipsis: true,
       render: (text) => {
         if (text === "pending") {
           return (
@@ -139,6 +204,7 @@ const TableOfficialTravelEmployee = (props) => {
     {
       key: "action",
       title: "Action",
+      ellipsis: true,
       render: (record) => (
         <Button
           className="detail-button-official-travel-employee"
@@ -154,27 +220,29 @@ const TableOfficialTravelEmployee = (props) => {
   ];
 
   const handleDetailClick = record => {
-    // const value = record.key;
-    navigate(`/official-travel/detail`);
+    const value = record.key;
+    navigate(`/official-travel/detail/${value}`);
   };
 
-  const handleTableChange = (pagination, sorter) => {
+  const handleTableChange = (pagination,filters, sorter) => {
     setTableParams({
       pagination: {
         ...tableParams.pagination,
         current: pagination.current,
         pageSize: countValue,
       },
+      filters,
       ...sorter,
     });
 
     setParams({
       page: pagination.current,
       per_page: pagination.pageSize,
+      search: searchValue,
     });
 
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setRoleData([]);
+      setOfficialTravelData([]);
     }
   };
 
@@ -183,7 +251,7 @@ const TableOfficialTravelEmployee = (props) => {
       <Table
         className="table-official-travel-empolyee"
         columns={title}
-        dataSource={TABLE_DATA}
+        dataSource={dataOfficialTravel}
         pagination={tableParams.pagination}
         onChange={handleTableChange}
         loading={loading}

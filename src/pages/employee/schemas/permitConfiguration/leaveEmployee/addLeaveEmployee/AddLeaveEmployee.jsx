@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -10,20 +10,22 @@ import "./addLeaveEmployee.css";
 const AddLeaveEmployee = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  const { uuid } = useParams();
   const [form] = Form.useForm();
   const { TextArea } = Input;
+  const [employeeData, setEmployeeData] = useState("");
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dateFormatList = "YYYY-MM-DD";
+  const dateFormatList = "DD/MM/YYYY";
 
   const addLeave = async (values) => {
     try {
       setLoading(true);
       values.leave_date = dayjs(values.leave_date, "DD/MM/YYYY").format(
-        "YYYY-MM-DD"
+        "YYYY-MM-DDTHH:mm:ss.SSSZ"
       );
-      await axios.post("", values, {
+      await axios.post("http://103.82.93.38/api/v1/permit/", values, {
         headers: {
           Authorization: token,
         },
@@ -36,10 +38,27 @@ const AddLeaveEmployee = () => {
     }
   };
 
+  const getSelectedLeave = async () => {
+    try {
+      setLoading(true);
+      const response =  await axios.get(`http://103.82.93.38/api/v1/permit/${uuid}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setEmployeeData(response.data[0].items);
+    } catch (error) {
+      console.error("Error fetching selected leave:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
+    getSelectedLeave()
   }, [token, navigate]);
 
   const disabledDate = (current) => {
@@ -60,11 +79,6 @@ const AddLeaveEmployee = () => {
     </div>
   );
 
-  const handleBackAdd = () => {
-    setErrorModalOpen(false);
-    setModalOpen(false);
-  };
-
   return (
     <>
       <Form
@@ -81,13 +95,10 @@ const AddLeaveEmployee = () => {
         }}
         wrapperCol={{ span: 15 }}
         layout="horizontal"
-        initialValues={{
-          permit_date: dayjs("1970-01-01", dateFormatList),
-        }}
       >
         <Form.Item
           label="Type Leave"
-          name="typeLeave"
+          name="type_leave"
           rules={[
             { required: true, message: "Please choose your type leave!" },
           ]}
@@ -120,20 +131,21 @@ const AddLeaveEmployee = () => {
         </Form.Item>
         <Form.Item
           label="Permit Date"
-          name="permit-date"
+          name="permit_date"
           rules={[
             { required: true, message: "Please input your permit date!" },
           ]}
         >
           <DatePicker
-            placeholder="YYYY-MM-DD"
+            placeholder="DD/MM/YYYY"
             className="permit-input"
+            format={dateFormatList}
             disabledDate={disabledDate}
           />
         </Form.Item>
         <Form.Item
           label="End Permit Date"
-          name="end-permit-date"
+          name="end_permit_date"
           rules={[
             {
               required: true,
@@ -142,16 +154,17 @@ const AddLeaveEmployee = () => {
           ]}
         >
           <DatePicker
-            placeholder="YYYY-MM-DD"
+            placeholder="DD/MM/YYYY"
             className="end-permit-input"
+            format={dateFormatList}
             disabledDate={disabledDate}
           />
         </Form.Item>
         <Form.Item label="HR" name="hr">
-          <Input disabled />
+          <Input value={employeeData.hr_employee} disabled />
         </Form.Item>
-        <Form.Item label="Team Leader" name="team-leader">
-          <Input disabled />
+        <Form.Item label="Team Leader" name="team_leader">
+          <Input value={employeeData.team_lead_employee} disabled />
         </Form.Item>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
@@ -203,7 +216,7 @@ const AddLeaveEmployee = () => {
           <Button
             key="backLeave"
             className="back-add-button"
-            onClick={handleBackAdd}
+            onClick={() => setErrorModalOpen(false)}
           >
             Back
           </Button>

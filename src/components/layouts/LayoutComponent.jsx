@@ -514,8 +514,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
             </SubMenu>
           </Menu>
         </Sider>
-      ) : (
-        // Login sebagai Employee
+      ) : roleNumber === 3 ? (
+        // Login sebagai HR atau Team Leder
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -534,6 +534,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
             </Menu.Item>
+            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
+              <Link to='/history'>Attendance History</Link>
+            </Menu.Item>
             <SubMenu
               key="attendance-report"
               icon={<RiTeamLine />}
@@ -546,9 +549,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Link to="/report">Report</Link>
               </Menu.Item>
             </SubMenu>
-            <Menu.Item key="/history" icon={<AiOutlineHistory />}>
-              <Link to="/history">History</Link>
-            </Menu.Item>
             <SubMenu
               key="permit-employee"
               icon={<LuClipboardSignature />}
@@ -570,19 +570,60 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <SubMenu
               key="permit-request-leaders"
               icon={<HiOutlineClipboardList />}
-              title="Permit Request"
-            >
-              <Menu.Item key="/leave-request">
-                <Link to="/leave-request">Leave</Link>
+              title='Permit Request'>
+                <Menu.Item key='/leave-request'>
+                  <Link to='/leave-request'>Leave</Link>
+                </Menu.Item>
+                <Menu.Item key='/official-travel-request'>
+                  <Link to='/official-travel-request'>Official Travel</Link>
+                </Menu.Item>
+                <Menu.Item key='/overtime-request'>
+                  <Link to='/overtime-request'>Overtime</Link>
+                </Menu.Item>
+                <Menu.Item key='/permit-request'>
+                  <Link to='/permit-request'>Permit</Link>
+                </Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+      ) : (
+        // Login sebagai Employee
+        <Sider
+          breakpoint="md"
+          collapsedWidth="0"
+          width={230}
+          style={{
+            background: colorBgContainer,
+            backgroundColor: "rgba(248, 249, 250, 1)",
+          }}
+        >
+          <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
+          <Menu
+            defaultSelectedKeys={[location.pathname]}
+            mode="inline"
+            style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          >
+            <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
+              <Link to="/attendance">Attendance</Link>
+            </Menu.Item>
+            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
+              <Link to='/history'>Attendance History</Link>
+            </Menu.Item>
+            <SubMenu
+              key="permit-employee"
+              icon={<LuClipboardSignature />}
+              title='Permit'>
+              <Menu.Item key='leave'>
+                <Link to='/leave'>Leave</Link>
               </Menu.Item>
-              <Menu.Item key="/official-travel-request">
-                <Link to="/official-travel-request">Official Travel</Link>
+              <Menu.Item key='official-travel'>
+                <Link to='/official-travel'>Official Travel</Link>
               </Menu.Item>
-              <Menu.Item key="/overtime-request">
-                <Link to="/overtime-request">Overtime</Link>
+              <Menu.Item key='overtime'>
+                <Link to='/overtime'>Overtime</Link>
               </Menu.Item>
-              <Menu.Item key="/permit-request">
-                <Link to="/permit-request">Permit</Link>
+              <Menu.Item key="permit">
+                <Link to="/permit">Permit</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>

@@ -17,15 +17,36 @@ const AddOvertimeEmployee = () => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dateFormatList = "YYYY-MM-DD";
+  const dateFormatList = "DD/MM/YYYY";
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [duration, setDuration] = useState(null);
+
+  const handleStartTimeChange = (time) => {
+    setStartTime(time);
+    calculateDuration(time, endTime);
+  };
+
+  const handleEndTimeChange = (time) => {
+    setEndTime(time);
+    calculateDuration(startTime, time);
+  };
+
+  const calculateDuration = (start, end) => {
+    if (start && end) {
+      const duration = moment.duration(end.diff(start));
+      const durationString = `${duration.hours()} hours ${duration.minutes()} minutes ${duration.seconds()} seconds`;
+      setDuration(durationString);
+    }
+  };
 
   const addOvertime = async (values) => {
     try {
       setLoading(true);
       values.overtime_date = dayjs(values.overtime_date, "DD/MM/YYYY").format(
-        "YYYY-MM-DD"
+        "YYYY-MM-DDTHH:mm:ss.SSSZ"
       );
-      await axios.post("", values, {
+      await axios.post("http://103.82.93.38/api/v1/permit/", values, {
         headers: {
           Authorization: token,
         },
@@ -84,16 +105,14 @@ const AddOvertimeEmployee = () => {
         wrapperCol={{ span: 15 }}
         layout="horizontal"
         initialValues={{
-          date: dayjs("1970-01-01", dateFormatList),
+          date: dayjs("01/01/1970", dateFormatList),
         }}
       >
-        <Form.Item
-          label="Overtime Date"
-          name="setOvertimeDate"
-        >
+        <Form.Item label="Overtime Date" name="setOvertimeDate">
           <DatePicker
-            placeholder="YYYY-MM-DD"
+            placeholder="DD/MM/YYYY"
             className="overtime-input"
+            format={dateFormatList}
             defaultValue={selectedDate}
             onChange={handleDateChange}
             disabled
@@ -106,8 +125,8 @@ const AddOvertimeEmployee = () => {
         >
           <TimePicker
             className="start-overtime-input"
-            format="hh:mm A"
-            use12Hours
+            format="HH:mm"
+            onChange={handleStartTimeChange}
             placeholder="00:00"
           />
         </Form.Item>
@@ -123,20 +142,13 @@ const AddOvertimeEmployee = () => {
         >
           <TimePicker
             className="end-overtime-input"
-            format="hh:mm A"
-            use12Hours
+            format="HH:mm"
+            onChange={handleEndTimeChange}
             placeholder="00:00"
           />
         </Form.Item>
-        <Form.Item
-          label="Duration"
-          name="duration"
-        >
-          <TimePicker
-            className="duration-input"
-            format="HH:mm:ss"
-            placeholder="00:00:00"
-          />
+        <Form.Item label="Duration" name="duration">
+          <div>{duration}</div>
         </Form.Item>
         <Form.Item
           label="Reason"

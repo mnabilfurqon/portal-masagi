@@ -15,7 +15,7 @@ const AddOfficialTravelEmployee = () => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dateFormatList = "YYYY-MM-DD";
+  const dateFormatList = "DD/MM/YYYY";
 
   const addOfficialTravel = async (values) => {
     try {
@@ -23,8 +23,8 @@ const AddOfficialTravelEmployee = () => {
       values.official_travel_date = dayjs(
         values.official_travel_date,
         "DD/MM/YYYY"
-      ).format("YYYY-MM-DD");
-      await axios.post("", values, {
+      ).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+      await axios.post("http://103.82.93.38/api/v1/permit/", values, {
         headers: {
           Authorization: token,
         },
@@ -86,7 +86,7 @@ const AddOfficialTravelEmployee = () => {
         wrapperCol={{ span: 15 }}
         layout="horizontal"
         initialValues={{
-          permit_date: dayjs("1970-01-01", dateFormatList),
+          permit_date: dayjs("01/01/1970", dateFormatList),
         }}
       >
         <Form.Item
@@ -117,8 +117,9 @@ const AddOfficialTravelEmployee = () => {
           ]}
         >
           <DatePicker
-            placeholder="YYYY-MM-DD"
+            placeholder="DD/MM/YYYY"
             className="permit-input"
+            format={dateFormatList}
             disabledDate={disabledDate}
           />
         </Form.Item>
@@ -133,8 +134,9 @@ const AddOfficialTravelEmployee = () => {
           ]}
         >
           <DatePicker
-            placeholder="YYYY-MM-DD"
+            placeholder="DD/MM/YYYY"
             className="end-permit-input"
+            format={dateFormatList}
             disabledDate={disabledDate}
           />
         </Form.Item>

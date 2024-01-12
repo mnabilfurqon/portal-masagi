@@ -1,16 +1,21 @@
 import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { TABLE_DATA } from "./constans";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from "axios";
+import moment from "moment";
 import "./tableOvertimeEmployee.css";
 
 const TableOvertimeEmployee = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
-  const {searchValue, filterValue, sortValue, countValue, columns} = props;
+  const {searchValue, filterValue, sortValue, countValue} = props;
+  const [overtimeData, setOvertimeData] = useState([])
   const [loading, setLoading] = useState(false);
+  const formatDate = (dateString) => {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -37,18 +42,20 @@ const TableOvertimeEmployee = (props) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get('', {
+      const response = await axios.get('http://103.82.93.38/api/v1/permit/', {
         params: {
           page: page,
           per_page: countValue,
           search: searchValue,
-          desc: sortValue === 'latest' ? true : false,
+          filter: filterValue,
+          desc: sortValue === 'latestEndPermitDate' ? true : false,
+          sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
         },
         headers: {
           Authorization: token,
         },
       });
-      // setOvertimeData(response.data.items);
+      setOvertimeData(response.data[0].items);
       setTableParams({
         ...tableParams,
         pagination: {
@@ -64,38 +71,99 @@ const TableOvertimeEmployee = (props) => {
     }
   };
 
+  const dataOvertimeRaw = overtimeData
+    .filter(item => item.type.uuid === "02b2ff41-9739-4a39-bf51-cab52656f7d2")
+    .map(item => {
+      let status;
+      let statusByHr;
+      let statusByTeamLeader;
+
+      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
+        status = 'approved';
+      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
+        status = 'rejected';
+      } else {
+        status = 'pending';
+      }
+
+      if (item.approved_by_hr === true) {
+        statusByHr = 'approved';
+      } else if (item.approved_by_hr === false) {
+        statusByHr = 'rejected';
+      } else {
+        statusByHr = 'pending';
+      }
+
+      if (item.approved_by_team_lead === true) {
+        statusByTeamLeader = 'approved';
+      } else if (item.approved_by_team_lead === false) {
+        statusByTeamLeader = 'rejected';
+      } else {
+        statusByTeamLeader = 'pending';
+      }
+
+      return {
+        key: item.uuid,
+        employee_name: item.attendance.employee.name,
+        type_overtime: item.type.name,
+        reason: item.reason,
+        overtime_date: formatDate(item.date_permit),
+        start_overtime: item.start_overtime_time,
+        end_overtime: item.end_overtime_time,
+        duration: item.hours_overtime,
+        status: status,
+        hr: item.hr_employee,
+        status_by_hr: statusByHr,
+        team_leader: item.team_lead_employee,
+        status_by_team_leader: statusByTeamLeader,
+      }
+    });
+
+    const dataOvertime = dataOvertimeRaw.filter(item => {
+      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+      ? filterValue.includes(item.status)
+      : true
+
+      return isStatusMatch;
+    });
+
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
-    // getOvertimeData();
-  }, [token, navigate]);
+    getOvertimeData();
+  }, [token, navigate, params]);
 
   const title = [
     {
-      key: "date",
+      key: "overtime_date",
       title: "Date",
-      dataIndex: "date",
+      dataIndex: "overtime_date",
+      ellipsis: true,
     },
     {
-      key: "startOverTime",
+      key: "start_overtime",
       title: "Start Overtime",
-      dataIndex: "startOverTime",
+      dataIndex: "start_overtime",
+      ellipsis: true,
     },
     {
-      key: "endOverTime",
+      key: "end_overtime",
       title: "End Overtime",
-      dataIndex: "endOverTime",
+      dataIndex: "end_overtime",
+      ellipsis: true,
     },
     {
       key: "duration",
       title: "Duration",
       dataIndex: "duration",
+      ellipsis: true,
     },
     {
       key: "status",
       title: "Status",
       dataIndex: "status",
+      ellipsis: true,
       render: (text) => {
         if (text === "pending") {
           return (
@@ -139,6 +207,7 @@ const TableOvertimeEmployee = (props) => {
     {
       key: "action",
       title: "Action",
+      ellipsis: true,
       render: (record) => (
         <Button
           className="detail-button-overtime-employee"
@@ -154,27 +223,29 @@ const TableOvertimeEmployee = (props) => {
   ];
 
   const handleDetailClick = record => {
-    // const value = record.key;
-    navigate(`/overtime/detail`);
+    const value = record.key;
+    navigate(`/overtime/detail/${value}`);
   };
 
-  const handleTableChange = (pagination, sorter) => {
+  const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination: {
         ...tableParams.pagination,
         current: pagination.current,
         pageSize: countValue,
       },
+      filters,
       ...sorter,
     });
 
     setParams({
       page: pagination.current,
       per_page: pagination.pageSize,
+      search: searchValue,
     });
 
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setRoleData([]);
+      setOvertimeData([]);
     }
   };
 
@@ -183,7 +254,7 @@ const TableOvertimeEmployee = (props) => {
       <Table
         className="table-overtime-empolyee"
         columns={title}
-        dataSource={TABLE_DATA}
+        dataSource={dataOvertime}
         pagination={tableParams.pagination}
         onChange={handleTableChange}
         loading={loading}

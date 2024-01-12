@@ -25,15 +25,15 @@ const AddPermitEmployee = () => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dateFormatList = "YYYY-MM-DD";
+  const dateFormatList = "DD/MM/YYYY";
 
   const addPermit = async (values) => {
     try {
       setLoading(true);
       values.permit_date = dayjs(values.permit_date, "DD/MM/YYYY").format(
-        "YYYY-MM-DD"
+        "YYYY-MM-DDTHH:mm:ss.SSSZ"
       );
-      await axios.post("", values, {
+      await axios.post("http://103.82.93.38/api/v1/permit/", values, {
         headers: {
           Authorization: token,
         },
@@ -106,7 +106,7 @@ const AddPermitEmployee = () => {
         wrapperCol={{ span: 15 }}
         layout="horizontal"
         initialValues={{
-          permit_date: dayjs("1970-01-01", dateFormatList),
+          permit_date: dayjs("01/01/1970", dateFormatList),
         }}
       >
         <Form.Item
@@ -145,8 +145,9 @@ const AddPermitEmployee = () => {
           ]}
         >
           <DatePicker
-            placeholder="YYYY-MM-DD"
+            placeholder="DD/MM/YYYY"
             className="permit-input"
+            format={dateFormatList}
             disabledDate={disabledDate}
           />
         </Form.Item>
@@ -161,8 +162,9 @@ const AddPermitEmployee = () => {
           ]}
         >
           <DatePicker
-            placeholder="YYYY-MM-DD"
+            placeholder="DD/MM/YYYY"
             className="end-permit-input"
+            format={dateFormatList}
             disabledDate={disabledDate}
           />
         </Form.Item>

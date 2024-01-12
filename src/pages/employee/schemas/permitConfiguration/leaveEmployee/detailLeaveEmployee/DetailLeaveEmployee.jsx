@@ -1,10 +1,48 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "antd";
-import "./detailLeaveEmployee.css"
+import dayjs from "dayjs";
+import "./detailLeaveEmployee.css";
 
-const DetailLeaveEmployee = () => {
-  const navigate = useNavigate();
+const DetailLeaveEmployee = ({ data }) => {
+  if (!data) {
+    return null;
+  }
+
+  // let status = "Pending";
+
+  // if (data.approved_by_hr === true) {
+  //   data.approved_by_hr = "Approved";
+  // } else if (
+  //   data.approved_by_hr === false && data.reject_by !== null && data.reject_by.name === data.hr_employee.name
+  // ) {
+  //   data.approved_by_hr = "Rejected";
+  // } else {
+  //   data.approved_by_hr = "Pending";
+  // }
+
+  // if (data.approved_by_team_lead === true) {
+  //   data.approved_by_team_lead = "Approved";
+  // } else if (
+  //   data.approved_by_team_lead === false && data.reject_by !== null && data.reject_by.name === data.team_lead_employee.name
+  // ) {
+  //   data.approved_by_team_lead = "Rejected";
+  // } else {
+  //   data.approved_by_team_lead = "Pending";
+  // }
+  
+  // if (
+  //   data.approved_by_hr === "Approved" && data.approved_by_team_lead === "Approved"
+  // ) {
+  //   status = "Approved";
+  // } else if (
+  //   data.approved_by_hr === "Rejected" || data.approved_by_team_lead === "Rejected"
+  // ) {
+  //   status = "Rejected";
+  // }
+
+  const formattedPermitDate = dayjs(data.date_permit).format("DD/MM/YYYY");
+  const formattedEndDatePermit = dayjs(data.end_date_permit).format(
+    "DD/MM/YYYY"
+  );
 
   return (
     <>
@@ -13,8 +51,7 @@ const DetailLeaveEmployee = () => {
           <tbody>
             <tr>
               <th>Type Leave</th>
-              <td>Cuti Haji</td>
-              {/* <td>{detailCompanyData.company_name}</td> */}
+              <td>{data.type.name}</td>
             </tr>
             <tr>
               <th></th>
@@ -22,8 +59,7 @@ const DetailLeaveEmployee = () => {
             </tr>
             <tr>
               <th>Reason</th>
-              <td>Acara Keluarga</td>
-              {/* <td>{detailCompanyData.address}</td> */}
+              <td>{data.reason}</td>
             </tr>
             <tr>
               <th></th>
@@ -31,8 +67,7 @@ const DetailLeaveEmployee = () => {
             </tr>
             <tr>
               <th>Permit Date</th>
-              <td>31/10/2023</td>
-              {/* <td>{detailCompanyData.phone_number}</td> */}
+              <td>{formattedPermitDate}</td>
             </tr>
             <tr>
               <th></th>
@@ -40,8 +75,7 @@ const DetailLeaveEmployee = () => {
             </tr>
             <tr>
               <th>End Permit Date</th>
-              <td>03/11/2023</td>
-              {/* <td>{detailCompanyData.date_founded}</td> */}
+              <td>{formattedEndDatePermit}</td>
             </tr>
             <tr>
               <th></th>
@@ -49,8 +83,7 @@ const DetailLeaveEmployee = () => {
             </tr>
             <tr>
               <th>HR</th>
-              <td>Megawati</td>
-              {/* <td>{detailCompanyData.email_address}</td> */}
+              <td>{data.hr_employee.name}</td>
             </tr>
             <tr>
               <th></th>
@@ -58,8 +91,7 @@ const DetailLeaveEmployee = () => {
             </tr>
             <tr>
               <th>Status by HR</th>
-              <td>pending</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{data.approved_by_hr}</td>
             </tr>
             <tr>
               <th></th>
@@ -67,8 +99,7 @@ const DetailLeaveEmployee = () => {
             </tr>
             <tr>
               <th>Team Leader</th>
-              <td>Joanna</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{data.team_lead_employee.name}</td>
             </tr>
             <tr>
               <th></th>
@@ -76,8 +107,7 @@ const DetailLeaveEmployee = () => {
             </tr>
             <tr>
               <th>Status by Team Leader</th>
-              <td>pending</td>
-              {/* <td>{detailCompanyData.website}</td> */}
+              <td>{data.approved_by_team_lead}</td>
             </tr>
             <tr>
               <th></th>
@@ -85,17 +115,10 @@ const DetailLeaveEmployee = () => {
             </tr>
             <tr>
               <th>Status</th>
-              <td>Pending</td>
-              {/* <td>{detailCompanyData.is_active ? 'Active' : 'Not Active'}</td> */}
+              {/* <td>{status}</td> */}
             </tr>
           </tbody>
         </table>
-      </div>
-
-      <div className="button-container">
-        <Button className="back-button-detail" onClick={() => navigate(-1)}>
-          Back
-        </Button>
       </div>
     </>
   );
