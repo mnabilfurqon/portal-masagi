@@ -41,8 +41,8 @@ const EmployeeTabs = () => {
         try {
             setSelectedEmployeeLoading(true);
             values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
-            // await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/employee/${selectedEmployeeData.key}`, values, {
-            await axios.put(`http://127.0.0.1:5000/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
+            // await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.key}`, values, {
+            await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
                 headers: {
                     "Authorization": token,
                 },
@@ -110,7 +110,7 @@ const EmployeeTabs = () => {
             values.out_year = dayjs(values.out_year, "YYYY-MM-DD").format("YYYY-MM-DD");
             values.ipk = parseFloat(values.ipk);
             setAddEducationLoading(true);
-            await axios.post(`https://attendance-1-r8738834.deta.app/api/v1/employee/education/add`,
+            await axios.post(`http://103.82.93.38/api/v1/employee/education/add`,
             {
                 employee_uuid: uuid,
                 education: values.education,
@@ -149,7 +149,7 @@ const EmployeeTabs = () => {
             values.entry_year = dayjs(values.entry_year, "YYYY-MM-DD").format("YYYY-MM-DD");
             values.out_year = dayjs(values.out_year, "YYYY-MM-DD").format("YYYY-MM-DD");
             setEditEducationLoading(true);
-            await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/education/item/${selectedEducationData.key}`, values, {
+            await axios.put(`http://103.82.93.38/api/v1/education/item/${selectedEducationData.key}`, values, {
                 headers: {
                     "Authorization": token,
                 },
@@ -208,7 +208,7 @@ const EmployeeTabs = () => {
     const addFamilyData = async (values) => {
         try {
             setAddFamilyLoading(true);
-            await axios.post(`https://attendance-1-r8738834.deta.app/api/v1/employee/family/add`,
+            await axios.post(`http://103.82.93.38/api/v1/employee/family/add`,
             {
                 employee_uuid: uuid,
                 full_name: values.full_name,
@@ -245,7 +245,7 @@ const EmployeeTabs = () => {
         try {
             setEditFamilyLoading(true);
             values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
-            await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/family/member/${selectedFamilyData.key}`, values, {
+            await axios.put(`http://103.82.93.38/api/v1/family/member/${selectedFamilyData.key}`, values, {
                 headers: {
                     "Authorization": token,
                 },
@@ -277,8 +277,8 @@ const EmployeeTabs = () => {
     const getSelectedEmployeeData = async () => {
         try {
             setSelectedEmployeeLoading(true);
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/${uuid}`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/${uuid}`, {
+            // const response = await axios.get(`http://103.82.93.38/api/v1/employee/${uuid}`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/employee/${uuid}`, {
             headers: {
               "Authorization": token,
             },

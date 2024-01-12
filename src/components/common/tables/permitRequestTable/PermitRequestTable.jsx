@@ -67,7 +67,7 @@ const PermitRequestTable = (props) => {
         } else {
           page = tableParams.pagination.current;
         }
-        const response = await axios.get("http://127.0.0.1:5000/api/v1/permit/", {
+        const response = await axios.get("http://103.82.93.38/api/v1/permit/", {
           params: {
             page: page,
             per_page: countValue,

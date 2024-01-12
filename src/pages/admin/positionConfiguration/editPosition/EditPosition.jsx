@@ -58,7 +58,7 @@ const EditPosition = (props) => {
     try {
       event.preventDefault();
       // console.log(value);
-      const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/position/${uuid}`, {
+      const response = await axios.put(`http://103.82.93.38/api/v1/position/${uuid}`, {
           name: value,
         }, {
           headers: { Authorization: token },

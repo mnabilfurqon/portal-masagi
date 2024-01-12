@@ -1,10 +1,12 @@
 import React from 'react'
 import './detailCompanyTable.css'
+import moment from 'moment'
 
 const DetailCompanyTable = ({detailCompanyData}) => {
     if (!detailCompanyData) {
         return null;
     }
+    const dateFounded = moment(detailCompanyData.date_founded).format('DD/MM/YYYY')
 
     return (
         <div className='table-container'>
@@ -36,7 +38,7 @@ const DetailCompanyTable = ({detailCompanyData}) => {
                 </tr>
                 <tr>
                     <th>Date Founded</th>
-                    <td>{detailCompanyData.date_founded}</td>
+                    <td>{dateFounded}</td>
                 </tr>
                 <tr>
                     <th></th>
