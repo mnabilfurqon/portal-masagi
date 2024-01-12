@@ -47,6 +47,7 @@ const RoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
       }
       console.log(sortValue);
       const response = await axios.get('http://103.82.93.38/api/v1/role/', {
+      // const response = await axios.get("http://127.0.0.1:5000/api/v1/role/", {
         params: {
           page: page,
           per_page: countValue,

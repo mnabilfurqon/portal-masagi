@@ -69,8 +69,7 @@ const AddEmployee = () => {
     // GET API Division
     const getDivision = async () => {
         try {
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/division/`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/division/`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/division/`, {
                 headers: { Authorization: token },
             }
         );
@@ -86,8 +85,7 @@ const AddEmployee = () => {
     // GET API Position
     const getPosition = async () => {
         try {
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/position/`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/position/`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/position/`, {
                 headers: { Authorization: token },
             }
         );
@@ -102,8 +100,7 @@ const AddEmployee = () => {
     // GET API Company
     const getCompanies = async () => {
         try {
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
@@ -124,8 +121,7 @@ const AddEmployee = () => {
             } else {
                 values.separation_date = values.join_date;
             }
-            // const response = await axios.post(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, values, {
-            const response = await axios.post(`http://127.0.0.1:5000/api/v1/employee/`, values, {
+            const response = await axios.post(`http://103.82.93.38/api/v1/employee/`, values, {
                 headers: { Authorization: token },
             }
         );

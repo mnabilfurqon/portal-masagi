@@ -37,7 +37,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   const getPositionData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/position/', {
+      const response = await axios.get('http://103.82.93.38/api/v1/position/', {
         headers: {
           Authorization: token,
         }
@@ -85,8 +85,6 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
     return {
       key: item.uuid,
       name: item.name,
-      createdDate: item.created_date,
-      updatedDate: item.updated_date,
     }
   });
 

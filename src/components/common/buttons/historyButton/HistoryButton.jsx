@@ -5,7 +5,7 @@ import { Button, Card } from 'antd'
 const HistoryButton = (props) => {
   return (
     <>
-        <Button className='button'>
+        <Button className='button' onClick={props.onClick}>
             <div>{props.icon}</div>
 
             <span

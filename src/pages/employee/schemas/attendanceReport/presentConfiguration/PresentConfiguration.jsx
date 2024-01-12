@@ -1,18 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './presentConfiguration.css'
 import { useNavigate } from 'react-router-dom'
-import { Row, Col, DatePicker, Progress, Input, Table, Button } from 'antd'
-import pkg from '@ant-design/icons'
-const { SearchOutlined } = pkg
-// import { SearchOutlined } from '@ant-design/icons'
-import { AiOutlineFileSearch } from 'react-icons/ai'
+import { Row, Col, DatePicker, Progress, Input, Table, Button, Spin } from 'antd'
+import { AiOutlineFileSearch, AiOutlineSearch } from 'react-icons/ai'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 import CountButton from '@common/buttons/countButton/CountButton'
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
+import Cookies from 'js-cookie'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
 const PresentConfiguration = () => {
   // Declaration
   const navigate = useNavigate();
+  const token = Cookies.get("token")
+  const [loading, setLoading] = useState(false);
+  const [attendanceSummary, setAttendanceSummary] = useState({});
+  // const [today, setToday] = useState();
+
+  const date = new Date();
+  const today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+  console.log(today)
+  const dateFormat = dayjs(today, "YYYY-MM-DD").format("DD-MM-YYYY")
+  console.log(dateFormat)
+
+  // Header
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+    getAttendanceSummary();
+  }, [token, navigate,]);
 
   // Date Filter Handler
   const onChange = () => {}
@@ -95,6 +113,28 @@ const PresentConfiguration = () => {
 
   const onChangeTable = (pagination, filter, sorter, extra) => {
     //
+  }
+
+  // Get API Attendance Summary
+  const getAttendanceSummary = async () => {
+    try {
+      setLoading(true);
+      // const response = await axios.post(`http://103.82.93.38/api/v1/attendance/summary`, values,
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/summary?date=${today}`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setAttendanceSummary(response.data)
+      console.log(attendanceSummary);
+      // console.log(response);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const data = [
@@ -196,12 +236,13 @@ const PresentConfiguration = () => {
 
   return (
     <>
+      <Spin size='large' spinning={loading}>
       <Row gutter={16}>
         <Col xs={24} sm={24} md={20} lg={20} xl={20} xxl={20}>
           <p className='week'>Saturday, 28 October 2023</p>
         </Col>
         <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-          <DatePicker onChange={onChange} picker="date" placeholder='Filter By Date' style={{ width: "100%", background: "#629093",}} />
+          <DatePicker onChange={onChange} picker="date" placeholder='Filter By Date' style={{ width: "100%", }} />
         </Col>
       </Row>
       <br />
@@ -210,55 +251,55 @@ const PresentConfiguration = () => {
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={95} strokeWidth={10} size={55} />
+              <Progress type="circle" percent={attendanceSummary.total_attendance/attendanceSummary.total_employee} strokeWidth={10} size={55} />
             }
             title="Total Presents"
-            value="146"
+            value={0+attendanceSummary.total_attendance}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={25} strokeColor="#DC3545" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={attendanceSummary.total_absent/attendanceSummary.total_employee} strokeColor="#DC3545" strokeWidth={10} size={55} />
             }
             title="Absents"
-            value="1"
+            value={0+attendanceSummary.total_absent}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={25} strokeColor="#28A745" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={1/attendanceSummary.total_employee} strokeColor="#28A745" strokeWidth={10} size={55} />
             }
             title="Official Travels"
-            value="1"
+            value={0}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={25} strokeColor="#FD7E14" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={1/attendanceSummary.total_employee} strokeColor="#FD7E14" strokeWidth={10} size={55} />
             }
               title="Overtimes"
-              value="3"
+              value={0}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={25} strokeColor="#6F42C1" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={1/attendanceSummary.total_employee} strokeColor="#6F42C1" strokeWidth={10} size={55} />
             }
             title="Leaves"
-            value="1"
+            value={0}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={10} strokeColor="#FFC107" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={attendanceSummary.total_permit_requested/attendanceSummary.total_employee} strokeColor="#FFC107" strokeWidth={10} size={55} />
             }
             title="Permits"
-            value="1"
+            value={0+attendanceSummary.total_permit_requested}
           />
         </Col>
       </Row>
@@ -268,7 +309,7 @@ const PresentConfiguration = () => {
         <Col xs={24} sm={24} md={14} lg={18} xl={18} xxl={18}>
           <Input 
             className='search-box'
-            prefix={<SearchOutlined/>} 
+            prefix={<AiOutlineSearch/>} 
             placeholder='Search for employee name' 
             onSearch={(value)=>{ 
               setSearchValue(value)
@@ -302,6 +343,7 @@ const PresentConfiguration = () => {
           }}
         />
       </div>
+      </Spin>
     </>
   )
 }

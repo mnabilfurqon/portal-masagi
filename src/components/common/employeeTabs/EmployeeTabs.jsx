@@ -42,8 +42,7 @@ const EmployeeTabs = () => {
         try {
             setSelectedEmployeeLoading(true);
             values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
-            // await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/employee/${selectedEmployeeData.key}`, values, {
-            await axios.put(`http://127.0.0.1:5000/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
+            await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
                 headers: {
                     "Authorization": token,
                 },
@@ -278,8 +277,7 @@ const EmployeeTabs = () => {
     const getSelectedEmployeeData = async () => {
         try {
             setSelectedEmployeeLoading(true);
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/${uuid}`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/${uuid}`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/employee/${uuid}`, {
             headers: {
               "Authorization": token,
             },
@@ -312,8 +310,8 @@ const EmployeeTabs = () => {
             </Col>
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
-                {/* <h4 className='profile-name'>{selectedEmployeeData.name}</h4>
-                <p className='profile-role'>{selectedEmployeeData.position.name}</p> */}
+                <h4 className='profile-name'>{selectedEmployeeData.name}</h4>
+                <p className='profile-role'>{selectedEmployeeData.position.name}</p>
                 </div>
             </Col>
             </Row>

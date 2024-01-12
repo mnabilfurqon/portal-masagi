@@ -13,7 +13,7 @@ h1 {
 
 .attendance {
   margin: 0 20% 5% 20%;
-  padding: 20px 0;
+  padding: 20px;
   border: 1px solid #e0e6ed;
   border-radius: 20px;
   box-shadow: 0 5px 5px 0 #e0e6ed;
@@ -23,6 +23,11 @@ h1 {
   color: #556172;
   font-size: 1rem;
   margin: 15px 0 25px 0;
+}
+
+.attendance > center > Flex > span {
+  margin: 0;
+  padding: 0;
 }
 
 .attendance-button {
