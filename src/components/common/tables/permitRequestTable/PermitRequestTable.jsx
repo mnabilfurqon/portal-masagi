@@ -26,18 +26,15 @@ function isDateInRange(itemDate, selectedMonthYear) {
 }
 
 const PermitRequestTable = (props) => {
+  let typePermit ;
   const token = Cookies.get('token');
   const [permitData, setPermitData] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {searchValue, filterValue, sortValue, countValue, datePickerValue, columns} = props;
+  const {searchValue, filterValue, sortValue, countValue, datePickerValue, columns, respondApproveModalVisible, respondRejectModalVisible} = props;
   const location = useLocation();
   const formatDate = (dateString) => {
     return moment(dateString).format("DD/MM/YYYY");
-  }
-  const formatOvertimeHours = (hoursString) => {
-    const hours = hoursString.split(":")[0];
-    return `${hours} hours`;
   }
 
     const [tableParams, setTableParams] = useState({
@@ -58,6 +55,16 @@ const PermitRequestTable = (props) => {
         per_page: tableParams.pagination.pageSize,
     });
 
+    if (location.pathname === '/leave-request') {
+      typePermit = "cuti"
+    } else if (location.pathname === '/permit-request') {
+      typePermit = "izin"
+    } else if (location.pathname === '/overtime-request') {
+      typePermit = "lembur"
+    } else if (location.pathname === '/official-travel-request') {
+      typePermit = "dinas"
+    }
+
     const getPermitData = async () => {
       try {
         var page;
@@ -72,6 +79,8 @@ const PermitRequestTable = (props) => {
             page: page,
             per_page: countValue,
             search: searchValue,
+            type_permit: typePermit,
+            date_permit: datePickerValue ? datePickerValue : null,
             filter: filterValue,
             desc: sortValue === 'latestEndPermitDate' ? true : false,
             sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
@@ -101,108 +110,30 @@ const PermitRequestTable = (props) => {
         navigate("/login");
       }
       getPermitData();
-    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
-
-    const dataOfficialTravelRaw = permitData
-    .filter(item => item.type.uuid === "8a155999-b14f-4104-9b7d-bed8564a0985")
-    .map(item => {
-      let status;
-      let statusByHr;
-      let statusByTeamLeader;
-
-      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
-        status = 'approved';
-      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
-        status = 'rejected';
-      } else {
-        status = 'pending';
-      }
-
-      if (item.approved_by_hr === true) {
-        statusByHr = 'approved';
-      } else if (item.approved_by_hr === false) {
-        statusByHr = 'rejected';
-      } else {
-        statusByHr = 'pending';
-      }
-
-      if (item.approved_by_team_lead === true) {
-        statusByTeamLeader = 'approved';
-      } else if (item.approved_by_team_lead === false) {
-        statusByTeamLeader = 'rejected';
-      } else {
-        statusByTeamLeader = 'pending';
-      }
-
-      return {
-        key: item.uuid,
-        employee_name: item.attendance.employee.name,
-        agenda: item.type.name,
-        destination: item.destination,
-        permit_date: formatDate(item.date_permit),
-        end_permit_date: formatDate(item.end_date_permit),
-        status: status,
-        hr: item.hr_employee,
-        status_by_hr: statusByHr,
-        team_leader: item.team_lead_employee,
-        status_by_team_leader: statusByTeamLeader,
-      }
-    });
-
-    const dataOfficialTravel = dataOfficialTravelRaw.filter(item => {
-      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
-      ? filterValue.includes(item.status)
-      : true
-
-      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
-      const dateItem = item.permit_date.split("/").reverse().join("/");
-      const isDateMatch = datePickerValue
-      ? isDateInRange(dateItem, datePickerValue)
-      : true
-
-      console.log(dateItem)
-      console.log(datePickerValue)
-      console.log(isDateMatch)
-
-      return isStatusMatch && isDateMatch;
-    });
-
-    const leaveExcludedTypePermit = [
-      "7bce22f2-f7d8-4823-b0e3-f6cf1bfa2dc0", 
-      "934ced73-5a80-4f8e-be38-e7b7ed62261d",
-      "18db53e6-79b2-44a2-84d8-4f005d3c6a4f",
-      "8a155999-b14f-4104-9b7d-bed8564a0985"
-    ];
+    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue, respondApproveModalVisible, respondRejectModalVisible, datePickerValue]);
 
     const dataLeaveRaw = permitData
-    .filter(item => !leaveExcludedTypePermit.includes(item.type.uuid))
     .map(item => {
-      let status;
-      let statusByHr;
-      let statusByTeamLeader;
+      let status = "pending";
+      let statusByHr = "pending";
+      let statusByTeamLeader = "pending";
 
-      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
-        status = 'approved';
-      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
-        status = 'rejected';
-      } else {
-        status = 'pending';
-      }
-
-      if (item.approved_by_hr === true) {
-        statusByHr = 'approved';
-      } else if (item.approved_by_hr === false) {
-        statusByHr = 'rejected';
-      } else {
-        statusByHr = 'pending';
+      if (item.approved_by_hr === true ) {
+        statusByHr = "approved";
+      } else if (item.approved_by_hr === false && item.reject_by !== null) {
+        statusByHr = "rejected";
       }
 
       if (item.approved_by_team_lead === true) {
-        statusByTeamLeader = 'approved';
-      } else if (item.approved_by_team_lead === false) {
-        statusByTeamLeader = 'rejected';
-      } else {
-        statusByTeamLeader = 'pending';
+        statusByTeamLeader = "approved";
+      } else if (item.approved_by_team_lead === false && item.reject_by !== null) {
+        statusByTeamLeader = "rejected";
+      }
+
+      if (statusByHr === "approved" && statusByTeamLeader === "approved") {
+        status = "approved";
+      } else if (statusByHr === "rejected" || statusByTeamLeader === "rejected") {
+        status = "rejected";
       }
 
       return {
@@ -234,35 +165,134 @@ const PermitRequestTable = (props) => {
       return isStatusMatch && isDateMatch;
     });
 
-    const dataPermitRaw = permitData
-    .filter(item => item.type.uuid === "7bce22f2-f7d8-4823-b0e3-f6cf1bfa2dc0" || item.type.uuid === "934ced73-5a80-4f8e-be38-e7b7ed62261d")
+    const dataOfficialTravelRaw = permitData
     .map(item => {
-      let status;
-      let statusByHr;
-      let statusByTeamLeader;
+      let status = "pending";
+      let statusByHr = "pending";
+      let statusByTeamLeader = "pending";
 
-      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
-        status = 'approved';
-      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
-        status = 'rejected';
-      } else {
-        status = 'pending';
-      }
-
-      if (item.approved_by_hr === true) {
-        statusByHr = 'approved';
-      } else if (item.approved_by_hr === false) {
-        statusByHr = 'rejected';
-      } else {
-        statusByHr = 'pending';
+      if (item.approved_by_hr === true ) {
+        statusByHr = "approved";
+      } else if (item.approved_by_hr === false && item.reject_by !== null) {
+        statusByHr = "rejected";
       }
 
       if (item.approved_by_team_lead === true) {
-        statusByTeamLeader = 'approved';
-      } else if (item.approved_by_team_lead === false) {
-        statusByTeamLeader = 'rejected';
-      } else {
-        statusByTeamLeader = 'pending';
+        statusByTeamLeader = "approved";
+      } else if (item.approved_by_team_lead === false && item.reject_by !== null) {
+        statusByTeamLeader = "rejected";
+      }
+
+      if (statusByHr === "approved" && statusByTeamLeader === "approved") {
+        status = "approved";
+      } else if (statusByHr === "rejected" || statusByTeamLeader === "rejected") {
+        status = "rejected";
+      }
+
+      return {
+        key: item.uuid,
+        employee_name: item.attendance.employee.name,
+        agenda: item.type.name,
+        destination: item.destination,
+        permit_date: formatDate(item.date_permit),
+        end_permit_date: formatDate(item.end_date_permit),
+        status: status,
+        hr: item.hr_employee,
+        status_by_hr: statusByHr,
+        team_leader: item.team_lead_employee,
+        status_by_team_leader: statusByTeamLeader,
+      }
+    });
+
+    const dataOfficialTravel = dataOfficialTravelRaw.filter(item => {
+      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+      ? filterValue.includes(item.status)
+      : true
+
+      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
+      const dateItem = item.permit_date.split("/").reverse().join("/");
+      const isDateMatch = datePickerValue
+      ? isDateInRange(dateItem, datePickerValue)
+      : true
+
+      return isStatusMatch && isDateMatch;
+    });
+
+    const dataOvertimeRaw = permitData
+    .map(item => {
+      let status = "pending";
+      let statusByHr = "pending";
+      let statusByTeamLeader = "pending";
+
+      if (item.approved_by_hr === true ) {
+        statusByHr = "approved";
+      } else if (item.approved_by_hr === false && item.reject_by !== null) {
+        statusByHr = "rejected";
+      }
+
+      if (item.approved_by_team_lead === true) {
+        statusByTeamLeader = "approved";
+      } else if (item.approved_by_team_lead === false && item.reject_by !== null) {
+        statusByTeamLeader = "rejected";
+      }
+
+      if (statusByHr === "approved" && statusByTeamLeader === "approved") {
+        status = "approved";
+      } else if (statusByHr === "rejected" || statusByTeamLeader === "rejected") {
+        status = "rejected";
+      }
+
+      return {
+        key: item.uuid,
+        employee_name: item.attendance.employee.name,
+        type_overtime: item.type.name,
+        reason: item.reason,
+        overtime_date: formatDate(item.date_permit),
+        duration: item.hours_overtime,
+        status: status,
+        hr: item.hr_employee,
+        status_by_hr: statusByHr,
+        team_leader: item.team_lead_employee,
+        status_by_team_leader: statusByTeamLeader,
+      }
+    });
+
+    const dataOvertime = dataOvertimeRaw.filter(item => {
+      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+      ? filterValue.includes(item.status)
+      : true
+
+      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
+      const dateItem = item.overtime_date.split("/").reverse().join("/");
+      const isDateMatch = datePickerValue
+      ? isDateInRange(dateItem, datePickerValue)
+      : true
+
+      return isStatusMatch && isDateMatch;
+    });
+
+    const dataPermitRaw = permitData
+    .map(item => {
+      let status = "pending";
+      let statusByHr = "pending";
+      let statusByTeamLeader = "pending";
+
+      if (item.approved_by_hr === true ) {
+        statusByHr = "approved";
+      } else if (item.approved_by_hr === false && item.reject_by !== null) {
+        statusByHr = "rejected";
+      }
+
+      if (item.approved_by_team_lead === true) {
+        statusByTeamLeader = "approved";
+      } else if (item.approved_by_team_lead === false && item.reject_by !== null) {
+        statusByTeamLeader = "rejected";
+      }
+
+      if (statusByHr === "approved" && statusByTeamLeader === "approved") {
+        status = "approved";
+      } else if (statusByHr === "rejected" || statusByTeamLeader === "rejected") {
+        status = "rejected";
       }
 
       return {
@@ -287,66 +317,6 @@ const PermitRequestTable = (props) => {
 
       // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
       const dateItem = item.permit_date.split("/").reverse().join("/");
-      const isDateMatch = datePickerValue
-      ? isDateInRange(dateItem, datePickerValue)
-      : true
-
-      return isStatusMatch && isDateMatch;
-    });
-
-    const dataOvertimeRaw = permitData
-    .filter(item => item.type.uuid === "18db53e6-79b2-44a2-84d8-4f005d3c6a4f")
-    .map(item => {
-      let status;
-      let statusByHr;
-      let statusByTeamLeader;
-
-      if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
-        status = 'approved';
-      } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
-        status = 'rejected';
-      } else {
-        status = 'pending';
-      }
-
-      if (item.approved_by_hr === true) {
-        statusByHr = 'approved';
-      } else if (item.approved_by_hr === false) {
-        statusByHr = 'rejected';
-      } else {
-        statusByHr = 'pending';
-      }
-
-      if (item.approved_by_team_lead === true) {
-        statusByTeamLeader = 'approved';
-      } else if (item.approved_by_team_lead === false) {
-        statusByTeamLeader = 'rejected';
-      } else {
-        statusByTeamLeader = 'pending';
-      }
-
-      return {
-        key: item.uuid,
-        employee_name: item.attendance.employee.name,
-        type_overtime: item.type.name,
-        reason: item.reason,
-        overtime_date: "belum ada",
-        duration: formatOvertimeHours(item.hours_overtime),
-        status: status,
-        hr: item.hr_employee,
-        status_by_hr: statusByHr,
-        team_leader: item.team_lead_employee,
-        status_by_team_leader: statusByTeamLeader,
-      }
-    });
-
-    const dataOvertime = dataOvertimeRaw.filter(item => {
-      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
-      ? filterValue.includes(item.status)
-      : true
-
-      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
-      const dateItem = item.overtime_date.split("/").reverse().join("/");
       const isDateMatch = datePickerValue
       ? isDateInRange(dateItem, datePickerValue)
       : true
