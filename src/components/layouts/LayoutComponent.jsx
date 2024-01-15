@@ -81,6 +81,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
 
   // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
+  let pageTitle2 = "";
   let pageSubTitle = "";
   let finalPageTitle = "Dashboard";
 
@@ -434,10 +435,99 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/client") {
+    pageTitle = "Client";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/client/add-client")) {
+    pageTitle = (
+      <Link to="/client" className="page-title">
+        Client /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Client Configuration</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/client/detail-client/")) {
+    pageTitle = (
+      <Link to="/client" className="page-title">
+        Client /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Client</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/client/edit-client/")) {
+    pageTitle = (
+      <Link to="/client" className="page-title">
+        Client /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Edit Client</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/team-project") {
+    pageTitle = "Team Project";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/team-project/add-team-project")) {
+    pageTitle = (
+      <Link to="/team-project" className="page-title">
+        Team Project /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title"> Team Project Configuration</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/team-project/detail-team-project/")) {
+    pageTitle = (
+      <Link to="/team-project" className="page-title">
+        Team Project /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Team Project Detail</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/team-project/add-member-team-project/")) { 
+    pageTitle = (
+      <Link to="/team-project" className="page-title">
+        Team Project / {" "}
+      </Link>
+    );
+    pageTitle2 = (
+      <Link to="/team-project/detail-team-project" className="page-title">
+        Team Project Detail /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Team Member</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageTitle2}
+        {pageSubTitle}
+      </>
+    );
   }
-
-
-
 
   return (
     <Layout className="layout-container">
@@ -506,6 +596,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
               icon={<TbDatabasePlus />}
               title="Master Data"
             >
+              <Menu.Item key="/client">
+                <Link to="/client">Client</Link>
+              </Menu.Item>
               <Menu.Item key="/company">
                 <Link to="/company">Company</Link>
               </Menu.Item>
@@ -520,6 +613,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
               </Menu.Item>
               <Menu.Item key="/role">
                 <Link to="/role">Role</Link>
+              </Menu.Item>
+              <Menu.Item key="/team-project">
+                <Link to="/team-project">Team Project</Link>
               </Menu.Item>
               <Menu.Item key="/user">
                 <Link to="/user">User</Link>

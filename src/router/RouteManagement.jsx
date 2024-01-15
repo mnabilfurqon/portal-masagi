@@ -47,6 +47,12 @@ import HistoryConfiguration from "../pages/employee/schemas/historyConfiguration
 import ReportConfiguration from "../pages/employee/schemas/attendanceReport/reportConfiguration/ReportConfiguartion";
 import AttendanceDetails from "../pages/employee/schemas/attendanceReport/attendanceDetails/AttendanceDetails";
 import PresentConfiguration from "../pages/employee/schemas/attendanceReport/presentConfiguration/PresentConfiguration";
+import MainClientConfiguration from "../pages/admin/clientConfiguration/mainClientConfiguration/MainClientConfiguration";
+import AddClientConfiguration from "../pages/admin/clientConfiguration/addClientConfiguration/AddClientConfiguration";
+import DetailClientConfiguration from "../pages/admin/clientConfiguration/detailClientConfiguration/DetailClientConfiguration";
+import EditClientConfiguration from "../pages/admin/clientConfiguration/editClientConfiguration/EditClientConfiguration";
+import MainTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/mainTeamProjectConfiguration/MainTeamProjectConfiguration";
+import AddTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/addTeamProjectConfiguration/AddTeamProjectConfiguration.";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -286,6 +292,84 @@ const RouteManagement = () => {
               }
             />
             {/* End of Position Configuration Route */}
+
+            {/* Client Configuration Route */}
+            <Route
+              path="/client"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <MainClientConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/client/detail-client/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailClientConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/client/add-client"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddClientConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/client/edit-client/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <EditClientConfiguration />
+                </LayoutComponent>
+              }
+            />
+      
+            {/* End of Configuration Route */}
+
+            {/* Team Project Configuration Route */}
+            <Route
+              path="/team-project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <MainTeamProjectConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/team-project/add-team-project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddTeamProjectConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/team-project/detail-team-project/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Detail Team Project</p>
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/team-project/add-member-team-project/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Add Member Team Project</p>
+                </LayoutComponent>
+              }
+            />
+
+            {/* End of Team Project Configuration Route */}
           </React.Fragment>
         </Routes>
       </Suspense>
