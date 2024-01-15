@@ -4,6 +4,7 @@ import './educationTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const EducationTable = ({onDetailClick}) => {
@@ -102,8 +103,8 @@ const EducationTable = ({onDetailClick}) => {
         thesis: item.education_items.thesis,
         ipk: item.education_items.ipk,
         certificate_number: item.education_items.certificate_number,
-        entry_year: item.education_items.entry_year,
-        out_year: item.education_items.out_year,
+        entry_year: dayjs(item.education_items.entry_year).format('YYYY'),
+        out_year: dayjs(item.education_items.out_year).format('YYYY'),
       }
     });
 

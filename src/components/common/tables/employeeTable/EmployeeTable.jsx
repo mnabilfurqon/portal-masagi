@@ -6,6 +6,7 @@ import { BsPersonAdd } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
 const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
@@ -179,7 +180,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
         no_bpjs_tk: item.no_bpjs_tk,
         no_bpjs_kes: item.no_bpjs_kes,
         npwp: item.npwp,
-        join_date: item.join_date,
+        join_date: dayjs(item.join_date).format('DD/MM/YYYY'),
         emergency_contact_name: item.emergency_contact_name,
         emergency_contact_number: item.emergency_contact_number,
         separation_date: item.separation_date,

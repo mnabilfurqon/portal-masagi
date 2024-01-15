@@ -10,7 +10,7 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editFami
     const [form] = Form.useForm();
 
     // Date Picker
-    const dateFormatList = 'YYYY-MM-DD';
+    const dateFormatList = 'DD/MM/YYYY';
 
     if (editFamilyData) {
         form.setFieldsValue({
@@ -41,7 +41,7 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editFami
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             initialValues={{
-                birth_date: dayjs('1970-01-01', dateFormatList),
+                birth_date: dayjs('01/01/1970', dateFormatList),
             }}
         >
             <Form.Item
@@ -69,7 +69,7 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editFami
                 },
                 {
                     pattern: /^[0-9]+$/,
-                    message: 'Please enter a valid contact person (numbers and dot(.) only)!',
+                    message: 'Please enter a valid NIK (numbers only)!',
                 },
             ]}
             >
@@ -87,7 +87,7 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editFami
                 },
             ]}
             >
-            <DatePicker placeholder='YYYY-MM-DD' format={dateFormatList} className='date-picker'/>
+            <DatePicker placeholder='DD/MM/YYYY' format={dateFormatList} className='date-picker'/>
             </Form.Item>
 
             <Form.Item
