@@ -165,7 +165,7 @@ const PermitMain = () => {
                     <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={handleApproveModalOpen} ghost>
+                    <Button className="action-button" type="primary" size="small" onClick={() => {handleApproveModalOpen(record)}} ghost>
                         <AiOutlineCheckSquare className="accept-icon" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
