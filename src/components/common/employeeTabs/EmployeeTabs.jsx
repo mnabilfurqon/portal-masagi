@@ -27,6 +27,8 @@ const EmployeeTabs = () => {
     const token = Cookies.get("token");
     const navigate = useNavigate();
     const [selectedEmployeeData, setSelectedEmployeeData] = useState([]);
+    const [employeeName, setEmployeeName] = useState();
+    const [employeePosition, setEmployeePosition] = useState();
     const [selectedEmployeeLoading, setSelectedEmployeeLoading] = useState(false);
 
     const [selectedEducationData, setSelectedEducationData] = useState([]);
@@ -283,7 +285,10 @@ const EmployeeTabs = () => {
             },
             });
             setSelectedEmployeeData(response.data);
-            console.log(response.data);
+            setEmployeeName(response.data.name);
+            setEmployeePosition(response.data.position.name);
+            console.log("emloyee data", selectedEmployeeData);
+            // console.log(response.data.position.name);
         } catch (error) {
             console.log(error);
         } finally {
@@ -310,8 +315,8 @@ const EmployeeTabs = () => {
             </Col>
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
-                <h4 className='profile-name'>{selectedEmployeeData.name}</h4>
-                <p className='profile-role'>{selectedEmployeeData.position.name}</p>
+                <h4 className='profile-name'>{employeeName}</h4>
+                <p className='profile-role'>{employeePosition}</p>
                 </div>
             </Col>
             </Row>

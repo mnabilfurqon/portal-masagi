@@ -56,8 +56,8 @@ const AttendanceModals = (props) => {
           mirrored={true}
           width="100%"
           height="100%"
-          screenshotFormat='image/jpeg'
-          screenshotQuality={0.5}
+          screenshotFormat='image/png'
+          // screenshotQuality={0.5}
           disablePictureInPicture={true}
         />
         <Flex align='center' justify='space-between'>

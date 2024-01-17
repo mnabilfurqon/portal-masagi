@@ -84,6 +84,7 @@ const AddUser = () => {
         try {
             setLoading(true);
             const response = await axios.get(`http://103.82.93.38/api/v1/role/`, {
+            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
                 headers: { Authorization: token },
             }
         );
@@ -100,6 +101,7 @@ const AddUser = () => {
         try {
             setLoading(true);
             const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
+            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
@@ -117,6 +119,7 @@ const AddUser = () => {
         try {
             setLoading(true);
             const response = await axios.get(`http://103.82.93.38/api/v1/employee/`, {
+            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/`, {
                 headers: { Authorization: token },
             }
         );
@@ -135,7 +138,8 @@ const AddUser = () => {
             console.log(values);
             // console.log(values.username);
             const response = await axios.post("http://103.82.93.38/api/v1/users/", values, 
-            {
+            // const response = await axios.post(`http://127.0.0.1:5000/api/v1/users/`, values,
+                {
                 headers: { Authorization: token, },
             });
             setIsSuccessModalVisible(true);

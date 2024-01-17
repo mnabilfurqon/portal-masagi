@@ -15,25 +15,35 @@ const PresentConfiguration = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token")
   const [loading, setLoading] = useState(false);
-  const [attendanceSummary, setAttendanceSummary] = useState({});
-  // const [today, setToday] = useState();
+  const [attendanceSummary, setAttendanceSummary] = useState();
+  const [totalPresent, setTotalPresent] = useState();
+  const [totalAbsents, setTotalAbsents] = useState();
+  const [totalEmployee, setTotalEmployee] = useState();
+  const [totalPermit, setTotalPermit] = useState();
+  const [totalLeaves, setTotalLeaves] = useState();
+  const [totalOvertime, setTotalOvertime] = useState();
+  const [totalOfficialTravels, setTotalOfficialTravels] = useState();
 
-  const date = new Date();
-  const today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-  console.log(today)
-  const dateFormat = dayjs(today, "YYYY-MM-DD").format("DD-MM-YYYY")
-  console.log(dateFormat)
+  const today = dayjs()
+  const currentDate = today.format("YYYY-MM-DD")
+  const currentDayDate = today.format('dddd, DD MMMM YYYY')
+  const [filterValue, setFilterValue] = useState(currentDate);
+  const [dayDate, setDayDate] = useState(currentDayDate);
+  // console.log(filterValue)
 
   // Header
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
-    getAttendanceSummary();
-  }, [token, navigate,]);
+    getAttendanceSummary()
+  }, [token, navigate, filterValue]);
 
   // Date Filter Handler
-  const onChange = () => {}
+  const onChange = (e) => {
+    setDayDate(e.format('dddd, DD MMMM YYYY'))
+    setFilterValue(e.format('YYYY-MM-DD'))
+  }
 
   // OnClick Handler
   const onPresents = () => {}
@@ -120,14 +130,22 @@ const PresentConfiguration = () => {
     try {
       setLoading(true);
       // const response = await axios.post(`http://103.82.93.38/api/v1/attendance/summary`, values,
-      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/summary?date=${today}`,
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/summary?date=${filterValue}`,
         {
           headers: { Authorization: token },
         }
       );
       setLoading(false);
       setAttendanceSummary(response.data)
-      console.log(attendanceSummary);
+      console.log("attendance summary", attendanceSummary)
+      setTotalPresent(attendanceSummary.total_present)
+      setTotalEmployee(attendanceSummary.total_employee)
+      setTotalAbsents(attendanceSummary.total_absent)
+      setTotalPermit(attendanceSummary.total_permit_requested)
+      setTotalLeaves(attendanceSummary.total_permit_by_type["Izin Tidak Masuk"])
+      setTotalOvertime(attendanceSummary.total_permit_by_type["Lembur"])
+      setTotalOfficialTravels(attendanceSummary.total_permit_by_type["Perjalanan Dinas"])
+      // console.log("total leaves", attendanceSummary.total_permit_by_type["Lembur"]);
       // console.log(response);
     } catch (error) {
       console.log(error);
@@ -239,7 +257,7 @@ const PresentConfiguration = () => {
       <Spin size='large' spinning={loading}>
       <Row gutter={16}>
         <Col xs={24} sm={24} md={20} lg={20} xl={20} xxl={20}>
-          <p className='week'>Saturday, 28 October 2023</p>
+          <p className='week'>{dayDate}</p>
         </Col>
         <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
           <DatePicker onChange={onChange} picker="date" placeholder='Filter By Date' style={{ width: "100%", }} />
@@ -251,55 +269,55 @@ const PresentConfiguration = () => {
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={attendanceSummary.total_attendance/attendanceSummary.total_employee} strokeWidth={10} size={55} />
+              <Progress type="circle" percent={totalPresent/totalEmployee*100} strokeWidth={10} size={55} />
             }
             title="Total Presents"
-            value={0+attendanceSummary.total_attendance}
+            value={0+totalPresent}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={attendanceSummary.total_absent/attendanceSummary.total_employee} strokeColor="#DC3545" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={totalAbsents/totalEmployee*100} strokeColor="#DC3545" strokeWidth={10} size={55} />
             }
             title="Absents"
-            value={0+attendanceSummary.total_absent}
+            value={0+totalAbsents}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={1/attendanceSummary.total_employee} strokeColor="#28A745" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={totalOfficialTravels/totalEmployee*100} strokeColor="#28A745" strokeWidth={10} size={55} />
             }
             title="Official Travels"
-            value={0}
+            value={0+totalOfficialTravels}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={1/attendanceSummary.total_employee} strokeColor="#FD7E14" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={totalOvertime/totalEmployee*100} strokeColor="#FD7E14" strokeWidth={10} size={55} />
             }
               title="Overtimes"
-              value={0}
+              value={0+totalOvertime}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={1/attendanceSummary.total_employee} strokeColor="#6F42C1" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={totalLeaves/totalEmployee*100} strokeColor="#6F42C1" strokeWidth={10} size={55} />
             }
             title="Leaves"
-            value={0}
+            value={0+totalLeaves}
           />
         </Col>
         <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
           <HistoryButton 
             icon={
-              <Progress type="circle" percent={attendanceSummary.total_permit_requested/attendanceSummary.total_employee} strokeColor="#FFC107" strokeWidth={10} size={55} />
+              <Progress type="circle" percent={totalPermit/totalEmployee*100} strokeColor="#FFC107" strokeWidth={10} size={55} />
             }
             title="Permits"
-            value={0+attendanceSummary.total_permit_requested}
+            value={0+totalPermit}
           />
         </Col>
       </Row>

@@ -37,10 +37,10 @@ const SuccessModal = (props) => {
           <center>
             <GoCheckCircle style={{ color: "#28a745" }} size="100"/>
             <h1>Success</h1>
-            <p>
+            <div>
               {props.action} successfull! <br /> <br />
               {props.additional}
-              </p>
+            </div>
           </center>
         </Modal>
     </>
