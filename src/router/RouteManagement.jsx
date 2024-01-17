@@ -51,7 +51,7 @@ import AttendanceConfiguration from '../pages/employee/schemas/attendanceConfigu
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
-  const role_uuid = Cookies.get("role_uuid");
+  const role_name = Cookies.get("role_name");
   const navigate = useNavigate();
   let roleNumber = 3;
 
@@ -61,14 +61,14 @@ const RouteManagement = () => {
     }
   }, [token, navigate]);
 
-  if (role_uuid === "8ab999f6-ad6d-48e7-943a-aa400007223f") {
-  // if (role_uuid === "2e387c6f-4e70-40b1-a4b5-0d009e920619") { // local
+  if (role_name === "superadmin") {
     roleNumber = 1;
-  } else if (role_uuid === "4386da8b-fa01-4414-96e9-d1db09de66ff") {
-  // } else if (role_uuid === "fc2f53d9-57d2-43d2-a9f2-348d8201bf3f") {
+  } else if (role_name === "admin") {
     roleNumber = 2;
-  } else {
+  } else if (role_name === "HR" || role_name === "Head of Division") {
     roleNumber = 3;
+  } else {
+    roleNumber = 4;
   }
 
   if (roleNumber === 1) {
@@ -283,8 +283,8 @@ const RouteManagement = () => {
         </Routes>
       </Suspense>
     );
-  } else {
-    // Routing untuk Employee
+  } else if (roleNumber === 3) {
+    // Routing untuk HR atau Team Leader
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
@@ -477,7 +477,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/official-travel-request/detail"
+              path="/official-travel-request/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <OfficialTravelDetail />
@@ -495,7 +495,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/leave-request/detail"
+              path="/leave-request/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <LeaveDetail />
@@ -513,7 +513,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/overtime-request/detail"
+              path="/overtime-request/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <OvertimeDetail />
@@ -531,10 +531,196 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/permit-request/detail"
+              path="/permit-request/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <PermitDetail />
+                </LayoutComponent>
+              }
+            />
+          </React.Fragment>
+        </Routes>
+      </Suspense>
+    );
+  } else {
+    // Routing untuk Employee
+    return (
+      <Suspense fallback={<LoadingComponent />}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <React.Fragment>
+            {/* Attendance Configuration Route */}
+            <Route
+              path="/attendance"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Attendance</p>
+                </LayoutComponent>
+              }
+            />
+
+            {/* History Configuration Route */}
+            <Route
+              path="/history"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  {/* <p>History</p> */}
+                  <HistoryConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            {/* Attendance Report Configuration Route */}
+            <Route
+              path="/attendance-report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Attendance Report</p>
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/present"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <PresentConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/present/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AttendanceDetails />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <ReportConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/report/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AttendanceDetails />
+                </LayoutComponent>
+              }
+            />
+
+            {/* Permit Configuration Route */}
+            <Route
+              path="/official-travel"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <OfficialTravelEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/official-travel/official-travel-requested"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddOfficialTravelEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/official-travel/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailOfficialTravelEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/leave"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <LeaveEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/leave/leave-requested"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddLeaveEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/leave/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailLeaveEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/overtime"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <OvertimeEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/overtime/overtime-requested"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddOvertimeEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/overtime/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailOvertimeEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/permit"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <PermitEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/permit/permit-requested"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddPermitEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/permit/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailPermitEmployee />
                 </LayoutComponent>
               }
             />

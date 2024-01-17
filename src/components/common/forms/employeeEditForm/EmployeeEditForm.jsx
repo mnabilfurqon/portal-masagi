@@ -37,7 +37,7 @@ const EmployeeEditForm = (props) => {
         }
         getDivisions();
         getPositions();
-        getCompanies();
+        // getCompanies();
         getEmployee();
         document.getElementById('save').style.display = "none";
         document.getElementById('edit').style.display = "flex";

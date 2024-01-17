@@ -6,19 +6,27 @@ import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestT
 import CountButton from '@common/buttons/countButton/CountButton'
 import DialogModal from '@common/modals/dialogModal/DialogModal'
 import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import { Row, Col, DatePicker, Space, Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { AiOutlineFileSearch, AiOutlineCheckSquare, AiOutlineCloseSquare } from 'react-icons/ai'
 // import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const OvertimeMain = () => {
 
     const monthFormat = 'MMMM YYYY';
+    const monthPickerFormat = 'YYYY-MM';
     const navigate = useNavigate();
+    const token = Cookies.get('token');
+    const [uuidPermit, setUuidPermit] = useState("");
+    const [loading, setLoading] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
     const [respondApproveModalVisible, setRespondApproveModalVisible] = useState(false);
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [respondRejectModalVisible, setRespondRejectModalVisible] = useState(false);
+    const [failedAddDataModalVisible, setFailedAddDataModalVisible] = useState(false);
 
     // search handler
     const [searchValue, setSearchValue] = useState("");
@@ -52,6 +60,20 @@ const OvertimeMain = () => {
     };
     // end of count handler
 
+    // date picker handler
+    const [datePickerValue, setDatePickerValue] = useState("");
+
+    const handleDatePicker = (value) => {
+        // convert value to MMMM YYYY format
+        if (value !== null) {
+            value = value.format(monthPickerFormat);
+            setDatePickerValue(value);
+        } else {
+            setDatePickerValue("");
+        }
+    };
+    // end of date picker handler
+
     const treeData = [
         {
             title: 'Approved',
@@ -68,14 +90,6 @@ const OvertimeMain = () => {
     ];
 
     const itemsSort = [
-        {
-          key: 'aToZEmployee',
-          label: 'A-Z Employee Name'
-        },
-        {
-          key: 'zToAEmployee',
-          label: 'Z-A Employee Name'
-        },
         {
           key: 'latestOvertimeDate',
           label: 'Latest Overtime Date'
@@ -122,10 +136,10 @@ const OvertimeMain = () => {
           key: 'status',
           dataIndex: 'status',
           render: (text) => {
-            if (text === 'pending') {
+            if (text === 'rejected') {
                 return (
-                    <Button className="pending-button" type="primary" size="small" value="pending" ghost>
-                    pending
+                    <Button className="rejected-button" type="primary" size="small" value="rejected" ghost>
+                    rejected
                     </Button>
                 );
             } else if (text === 'approved') {
@@ -136,8 +150,8 @@ const OvertimeMain = () => {
                 );
             } else {
                 return (
-                    <Button className="rejected-button" type="primary" size="small" value="rejected" ghost>
-                    rejected
+                    <Button className="pending-button" type="primary" size="small" value="pending" ghost>
+                    pending
                     </Button>
                 );
             }
@@ -163,11 +177,34 @@ const OvertimeMain = () => {
     ];
 
     const handleDetailClick = (record) => {
-        navigate('/overtime-request/detail', { state: { data: record } });
+        const value = record.key;
+        navigate(`/overtime-request/detail/${value}`);
     };
     
-    const handleApproveModalOpen = () => {
+    const handleApproveModalOpen = (record) => {
+        setUuidPermit(record.key);
         setApproveModalVisible(true);
+    };
+
+    const approveOvertimeRequest = async () => {
+        try {
+            setLoading(true);
+            await axios.post(`http://103.82.93.38/api/v1/permit/approve_permit`, 
+            { permit_uuid: uuidPermit },
+            {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setApproveModalVisible(false);
+            setRespondApproveModalVisible(true);
+        } catch (error) {
+            console.log(error);
+            setApproveModalVisible(false);
+            setFailedAddDataModalVisible(true);
+        } finally {
+            setLoading(false);
+        }
     };
     
     const handleApproveModalNo = () => {
@@ -175,21 +212,41 @@ const OvertimeMain = () => {
     };
     
     const handleApproveModalYes = () => {
-        setApproveModalVisible(false);
-        setRespondApproveModalVisible(true);
+        approveOvertimeRequest();
     };
     
     const handleRespondApproveModal = () => {
         setRespondApproveModalVisible(false);
     };
     
-    const handleRejectModalOpen = () => {
+    const handleRejectModalOpen = (record) => {
+        setUuidPermit(record.key);
         setRejectModalVisible(true);
+    };
+
+    const rejectOvertimeRequest = async () => {
+        try {
+            setLoading(true);
+            await axios.post(`http://103.82.93.38/api/v1/permit/reject_permit`, 
+            { permit_uuid: uuidPermit },
+            {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setRejectModalVisible(false);
+            setRespondRejectModalVisible(true);
+        } catch (error) {
+            console.log(error);
+            setRejectModalVisible(false);
+            setFailedAddDataModalVisible(true);
+        } finally {
+            setLoading(false);
+        }
     };
     
     const handleRejectModalYes = () => {
-        setRejectModalVisible(false);
-        setRespondRejectModalVisible(true);
+        rejectOvertimeRequest();
     };
     
     const handleRejectModalNo = () => {
@@ -199,13 +256,20 @@ const OvertimeMain = () => {
     const handleRespondRejectModal = () => {
         setRespondRejectModalVisible(false);
     };
+
+    const handleFailedAddDataModal = () => {
+        setFailedAddDataModalVisible(false);
+    };
     
     const propsTable = {
         searchValue,
         filterValue,
         sortValue,
         countValue,
+        datePickerValue,
         columns,
+        respondApproveModalVisible,
+        respondRejectModalVisible,
     };
     
     const propsApproveDialogModal = {
@@ -244,6 +308,11 @@ const OvertimeMain = () => {
         dialogText: "Overtime request is rejected!",
     };
 
+    const propsFailedAddDataModal = {
+        visible: failedAddDataModalVisible,
+        onClose: handleFailedAddDataModal,
+    };
+
   return (
     <div>
         <Row gutter={[16, 8]}>
@@ -260,7 +329,7 @@ const OvertimeMain = () => {
             <CountButton className="count-button" onCount={handleCount} />
             </Col>
             <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 2}} xxl={{span: 4, offset: 6}}>
-            <DatePicker picker="month" format={monthFormat} className='date-picker-month' />
+            <DatePicker picker="month" format={monthFormat} className='date-picker-month' onChange={handleDatePicker} />
             </Col>
         </Row>
             <div style={{marginTop: 24}}>
@@ -269,6 +338,7 @@ const OvertimeMain = () => {
             <RespondLeftModal {...propsApproveRespondModal} />
             <DialogModal {...propsRejectDialogModal} />
             <RespondLeftModal {...propsRejectRespondModal} />
+            <FailedAddDataModal {...propsFailedAddDataModal} />
         </div>
     </div>
   )

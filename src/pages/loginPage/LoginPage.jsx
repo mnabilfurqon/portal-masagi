@@ -36,6 +36,7 @@ const LoginPage = () => {
         }
       );
       Cookies.set("role_uuid", protectedResponse.data.user.role.uuid);
+      Cookies.set("role_name", protectedResponse.data.user.role.name);
       Cookies.set("username", protectedResponse.data.user.username);
       Cookies.set("company_uuid", protectedResponse.data.user.company.uuid);
     } catch (error) {
@@ -47,8 +48,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token) {
-      if (Cookies.get("role_uuid") === "8ab999f6-ad6d-48e7-943a-aa400007223f" || Cookies.get("role_uuid") === "4386da8b-fa01-4414-96e9-d1db09de66ff") navigate("../dashboard");
-      // if (Cookies.get("role_uuid") === "2e387c6f-4e70-40b1-a4b5-0d009e920619" || Cookies.get("role_uuid") === "fc2f53d9-57d2-43d2-a9f2-348d8201bf3f") navigate("../dashboard"); // local
+      if (Cookies.get("role_name") === "superadmin" || Cookies.get("role_name") === "admin") navigate("../dashboard");
       else navigate("../attendance");
     }
   }, [token, navigate]);

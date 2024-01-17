@@ -135,7 +135,7 @@ const editUser = (props) => {
 //   // GET API Company
 //   const getCompanies = async () => {
 //     try {
-//         const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+//         const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
 //             headers: { Authorization: token },
 //         }
 //     );

@@ -43,7 +43,7 @@ const DetailEducationTable = ({detailEducationData}) => {
                     <td></td>
                 </tr>
                 <tr>
-                    <th>GPA</th>
+                    <th>IPK</th>
                     <td>{detailEducationData.ipk}</td>
                 </tr>
                 <tr>

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineHome, AiOutlineBell, AiOutlineDown, AiOutlineUser, AiOutlineIdcard, AiOutlineHistory } from 'react-icons/ai';
 // import pkg from "@ant-design/icons";
-// const {
+// import {
 //   HomeOutlined,
 //   BellOutlined,
 //   DownOutlined,
 //   UserOutlined,
 //   IdcardOutlined,
 //   HistoryOutlined,
-// } = pkg;
+// } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
@@ -51,6 +51,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       Cookies.remove("role_uuid");
       Cookies.remove("username");
       Cookies.remove("company_uuid");
+      Cookies.remove("role_name");
       navigate("/login");
     };
 
@@ -532,8 +533,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
             </SubMenu>
           </Menu>
         </Sider>
-      ) : (
-        // Login sebagai Employee
+      ) : roleNumber === 3 ? (
+        // Login sebagai HR atau Team Leder
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -551,6 +552,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
           >
             <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
+            </Menu.Item>
+            <Menu.Item key='/history' icon={<HistoryOutlined />}>
+              <Link to='/history'>Attendance History</Link>
             </Menu.Item>
             <SubMenu
               key="attendance-report"
@@ -600,6 +604,48 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Menu.Item key='/permit-request'>
                   <Link to='/permit-request'>Permit</Link>
                 </Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+      ) : (
+        // Login sebagai Employee
+        <Sider
+          breakpoint="md"
+          collapsedWidth="0"
+          width={230}
+          style={{
+            background: colorBgContainer,
+            backgroundColor: "rgba(248, 249, 250, 1)",
+          }}
+        >
+          <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
+          <Menu
+            defaultSelectedKeys={[location.pathname]}
+            mode="inline"
+            style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          >
+            <Menu.Item key="/attendance" icon={<IdcardOutlined />}>
+              <Link to="/attendance">Attendance</Link>
+            </Menu.Item>
+            <Menu.Item key='/history' icon={<HistoryOutlined />}>
+              <Link to='/history'>Attendance History</Link>
+            </Menu.Item>
+            <SubMenu
+              key="permit-employee"
+              icon={<LuClipboardSignature />}
+              title='Permit'>
+              <Menu.Item key='leave'>
+                <Link to='/leave'>Leave</Link>
+              </Menu.Item>
+              <Menu.Item key='official-travel'>
+                <Link to='/official-travel'>Official Travel</Link>
+              </Menu.Item>
+              <Menu.Item key='overtime'>
+                <Link to='/overtime'>Overtime</Link>
+              </Menu.Item>
+              <Menu.Item key="permit">
+                <Link to="/permit">Permit</Link>
+              </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
