@@ -55,12 +55,16 @@ import MainTeamProjectConfiguration from "../pages/admin/teamProjectConfiguratio
 import AddTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/addTeamProjectConfiguration/AddTeamProjectConfiguration.";
 import DetailTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/detailTeamProjectConfiguration/DetailTeamProjectConfiguration";
 import AddMemberTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/addMemberTeamProjectConfiguration/AddMemberTeamProjectConfiguration";
+import TaskMain from "../pages/employee/schemas/taskConfiguration/taskMain/TaskMain";
+import TaskAdd from "../pages/employee/schemas/taskConfiguration/taskAdd/TaskAdd";
+import TaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/TaskDetail";
+import EmployeeTaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/EmployeeTaskDetail";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
   const role_name = Cookies.get("role_name");
   const navigate = useNavigate();
-  let roleNumber = 3;
+  let roleNumber;
 
   useEffect(() => {
     if (!token) {
@@ -72,10 +76,12 @@ const RouteManagement = () => {
     roleNumber = 1;
   } else if (role_name === "admin") {
     roleNumber = 2;
-  } else if (role_name === "HR" || role_name === "Head of Division") {
+  } else if (role_name === "HR") {
     roleNumber = 3;
-  } else {
+  } else if (role_name === "Head of Division") {
     roleNumber = 4;
+  } else {
+    roleNumber = 5;
   }
 
   if (roleNumber === 1) {
@@ -377,7 +383,7 @@ const RouteManagement = () => {
       </Suspense>
     );
   } else if (roleNumber === 3) {
-    // Routing untuk HR atau Team Leader
+    
     return (
       <Suspense fallback={<LoadingComponent />}>
         <Routes>
@@ -635,6 +641,304 @@ const RouteManagement = () => {
         </Routes>
       </Suspense>
     );
+  } else if (roleNumber === 4 ) {
+    // Routing untuk Team Leader
+    return (
+      <Suspense fallback={<LoadingComponent />}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <React.Fragment>
+            {/* Attendance Configuration Route */}
+            <Route
+              path="/attendance"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Attendance</p>
+                </LayoutComponent>
+              }
+            />
+
+            {/* History Configuration Route */}
+            <Route
+              path="/history"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  {/* <p>History</p> */}
+                  <HistoryConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            {/* Attendance Report Configuration Route */}
+            <Route
+              path="/attendance-report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Attendance Report</p>
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/present"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <PresentConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/present/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AttendanceDetails />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <ReportConfiguration />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/report/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AttendanceDetails />
+                </LayoutComponent>
+              }
+            />
+
+            {/* Permit Configuration Route */}
+            <Route
+              path="/official-travel"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <OfficialTravelEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/official-travel/official-travel-requested"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddOfficialTravelEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/official-travel/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailOfficialTravelEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/leave"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <LeaveEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/leave/leave-requested"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddLeaveEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/leave/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailLeaveEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/overtime"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <OvertimeEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/overtime/overtime-requested"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddOvertimeEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/overtime/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailOvertimeEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/permit"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <PermitEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/permit/permit-requested"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddPermitEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/permit/detail"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailPermitEmployee />
+                </LayoutComponent>
+              }
+            />
+
+            {/* Permit Request Configuration Route */}
+            <Route
+              path="/official-travel-request"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <OfficialTravelMain />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/official-travel-request/detail/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <OfficialTravelDetail />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/leave-request"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <LeaveMain />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/leave-request/detail/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <LeaveDetail />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/overtime-request"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <OvertimeMain />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/overtime-request/detail/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <OvertimeDetail />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/permit-request"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <PermitMain />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/permit-request/detail/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <PermitDetail />
+                </LayoutComponent>
+              }
+            />
+
+            {/* Task Management Configuration Route */}
+            <Route
+              path="/project-report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Project Report</p>
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskMain />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task/add-task"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskAdd />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task/detail-task/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskDetail />
+                </LayoutComponent>
+              }
+            />
+
+            {/* End of Task Management Configuration Route */}
+          </React.Fragment>
+        </Routes>
+      </Suspense>
+    );
   } else {
     // Routing untuk Employee
     return (
@@ -817,6 +1121,19 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
+
+            {/* End of Permit Configuration Route */}
+
+            {/* Task Management Configuration Route */}
+            <Route
+              path="task-report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <EmployeeTaskDetail />
+                </LayoutComponent>
+              }
+            />
+            {/* End of Task Management Configuration Route */}
           </React.Fragment>
         </Routes>
       </Suspense>
