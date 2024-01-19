@@ -15,12 +15,16 @@ import { CgCloseR } from "react-icons/cg";
 const OvertimeMain = () => {
 
     const monthFormat = 'MMMM YYYY';
-    const monthPickerFormat = 'MM/YYYY';
+    const monthPickerFormat = 'YYYY-MM';
     const navigate = useNavigate();
+    const token = Cookies.get('token');
+    const [uuidPermit, setUuidPermit] = useState("");
+    const [loading, setLoading] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
     const [respondApproveModalVisible, setRespondApproveModalVisible] = useState(false);
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [respondRejectModalVisible, setRespondRejectModalVisible] = useState(false);
+    const [failedAddDataModalVisible, setFailedAddDataModalVisible] = useState(false);
 
   // search handler
   const [searchValue, setSearchValue] = useState("");
@@ -171,11 +175,34 @@ const OvertimeMain = () => {
     ];
 
     const handleDetailClick = (record) => {
-        navigate('/overtime-request/detail', { state: { data: record } });
+        const value = record.key;
+        navigate(`/overtime-request/detail/${value}`);
     };
     
-    const handleApproveModalOpen = () => {
+    const handleApproveModalOpen = (record) => {
+        setUuidPermit(record.key);
         setApproveModalVisible(true);
+    };
+
+    const approveOvertimeRequest = async () => {
+        try {
+            setLoading(true);
+            await axios.post(`http://103.82.93.38/api/v1/permit/approve_permit`, 
+            { permit_uuid: uuidPermit },
+            {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setApproveModalVisible(false);
+            setRespondApproveModalVisible(true);
+        } catch (error) {
+            console.log(error);
+            setApproveModalVisible(false);
+            setFailedAddDataModalVisible(true);
+        } finally {
+            setLoading(false);
+        }
     };
     
     const handleApproveModalNo = () => {
@@ -183,21 +210,41 @@ const OvertimeMain = () => {
     };
     
     const handleApproveModalYes = () => {
-        setApproveModalVisible(false);
-        setRespondApproveModalVisible(true);
+        approveOvertimeRequest();
     };
     
     const handleRespondApproveModal = () => {
         setRespondApproveModalVisible(false);
     };
     
-    const handleRejectModalOpen = () => {
+    const handleRejectModalOpen = (record) => {
+        setUuidPermit(record.key);
         setRejectModalVisible(true);
+    };
+
+    const rejectOvertimeRequest = async () => {
+        try {
+            setLoading(true);
+            await axios.post(`http://103.82.93.38/api/v1/permit/reject_permit`, 
+            { permit_uuid: uuidPermit },
+            {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setRejectModalVisible(false);
+            setRespondRejectModalVisible(true);
+        } catch (error) {
+            console.log(error);
+            setRejectModalVisible(false);
+            setFailedAddDataModalVisible(true);
+        } finally {
+            setLoading(false);
+        }
     };
     
     const handleRejectModalYes = () => {
-        setRejectModalVisible(false);
-        setRespondRejectModalVisible(true);
+        rejectOvertimeRequest();
     };
     
     const handleRejectModalNo = () => {
@@ -207,6 +254,10 @@ const OvertimeMain = () => {
     const handleRespondRejectModal = () => {
         setRespondRejectModalVisible(false);
     };
+
+    const handleFailedAddDataModal = () => {
+        setFailedAddDataModalVisible(false);
+    };
     
     const propsTable = {
         searchValue,
@@ -215,6 +266,8 @@ const OvertimeMain = () => {
         countValue,
         datePickerValue,
         columns,
+        respondApproveModalVisible,
+        respondRejectModalVisible,
     };
     
     const propsApproveDialogModal = {
@@ -253,6 +306,11 @@ const OvertimeMain = () => {
         dialogText: "Overtime request is rejected!",
     };
 
+    const propsFailedAddDataModal = {
+        visible: failedAddDataModalVisible,
+        onClose: handleFailedAddDataModal,
+    };
+
   return (
     <div>
         <Row gutter={[16, 8]}>
@@ -278,6 +336,7 @@ const OvertimeMain = () => {
             <RespondLeftModal {...propsApproveRespondModal} />
             <DialogModal {...propsRejectDialogModal} />
             <RespondLeftModal {...propsRejectRespondModal} />
+            <FailedAddDataModal {...propsFailedAddDataModal} />
         </div>
     </div>
   );

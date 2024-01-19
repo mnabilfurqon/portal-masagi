@@ -6,6 +6,7 @@ import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestT
 import CountButton from '@common/buttons/countButton/CountButton'
 import DialogModal from '@common/modals/dialogModal/DialogModal'
 import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import { Row, Col, DatePicker, Space, Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { AiOutlineFileSearch } from 'react-icons/ai'
@@ -14,12 +15,16 @@ import { CgCloseR } from "react-icons/cg";
 
 const LeaveMain = () => {
     const monthFormat = 'MMMM YYYY';
-    const monthPickerFormat = 'MM/YYYY';
+    const monthPickerFormat = 'YYYY-MM';
     const navigate = useNavigate();
+    const token = Cookies.get("token");
+    const [uuidPermit, setUuidPermit] = useState("");
+    const [loading, setLoading] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
     const [respondApproveModalVisible, setRespondApproveModalVisible] = useState(false);
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [respondRejectModalVisible, setRespondRejectModalVisible] = useState(false);
+    const [failedAddDataModalVisible, setFailedAddDataModalVisible] = useState(false);
 
     // search handler
     const [searchValue, setSearchValue] = useState("");
@@ -170,33 +175,76 @@ const LeaveMain = () => {
     ];
 
     const handleDetailClick = (record) => {
-        navigate('/leave-request/detail', { state: { data: record } });
+        const value = record.key;
+        navigate(`/leave-request/detail/${value}`);
     };
     
-    const handleApproveModalOpen = () => {
+    const handleApproveModalOpen = (record) => {
+        setUuidPermit(record.key);
         setApproveModalVisible(true);
     };
-    
+
+    const approveLeaveRequest = async () => {
+        try {
+            setLoading(true);
+            await axios.post(`http://103.82.93.38/api/v1/permit/approve_permit`, 
+            { permit_uuid: uuidPermit },
+            {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setApproveModalVisible(false);
+            setRespondApproveModalVisible(true);
+        } catch (error) {
+            console.log(error);
+            setApproveModalVisible(false);
+            setFailedAddDataModalVisible(true);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleApproveModalNo = () => {
         setApproveModalVisible(false);
     };
     
     const handleApproveModalYes = () => {
-        setApproveModalVisible(false);
-        setRespondApproveModalVisible(true);
+        approveLeaveRequest();
     };
     
     const handleRespondApproveModal = () => {
         setRespondApproveModalVisible(false);
     };
     
-    const handleRejectModalOpen = () => {
+    const handleRejectModalOpen = (record) => {
+        setUuidPermit(record.key);
         setRejectModalVisible(true);
     };
-    
+
+    const rejectLeaveRequest = async () => {
+        try {
+            setLoading(true);
+            await axios.post(`http://103.82.93.38/api/v1/permit/reject_permit`, 
+            { permit_uuid: uuidPermit },
+            {
+                headers: {
+                    "Authorization": token,
+                },
+            });
+            setRejectModalVisible(false);
+            setRespondRejectModalVisible(true);
+        } catch (error) {
+            console.log(error);
+            setRejectModalVisible(false);
+            setFailedAddDataModalVisible(true);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleRejectModalYes = () => {
-        setRejectModalVisible(false);
-        setRespondRejectModalVisible(true);
+        rejectLeaveRequest();
     };
     
     const handleRejectModalNo = () => {
@@ -206,6 +254,10 @@ const LeaveMain = () => {
     const handleRespondRejectModal = () => {
         setRespondRejectModalVisible(false);
     };
+
+    const handleFailedAddDataModal = () => {
+        setFailedAddDataModalVisible(false);
+    };
     
     const propsTable = {
         searchValue,
@@ -214,6 +266,8 @@ const LeaveMain = () => {
         countValue,
         datePickerValue,
         columns,
+        respondApproveModalVisible,
+        respondRejectModalVisible,
     };
     
     const propsApproveDialogModal = {
@@ -252,6 +306,11 @@ const LeaveMain = () => {
         dialogText: "Leave request is rejected!",
     };
 
+    const propsFailedAddDataModal = {
+        visible: failedAddDataModalVisible,
+        onClose: handleFailedAddDataModal,
+    };
+
   return (
     <div>
         <Row gutter={[16, 8]}>
@@ -277,6 +336,7 @@ const LeaveMain = () => {
         <RespondLeftModal {...propsApproveRespondModal} />
         <DialogModal {...propsRejectDialogModal} />
         <RespondLeftModal {...propsRejectRespondModal} />
+        <FailedAddDataModal {...propsFailedAddDataModal} />
       </div>
     </div>
   )

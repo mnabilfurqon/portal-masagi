@@ -5,6 +5,7 @@ import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
 import CountButton from '@common/buttons/countButton/CountButton'
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import DialogModal from '@common/modals/dialogModal/DialogModal'
 import './officialTravel.css'
@@ -15,12 +16,16 @@ import { CgCloseR } from "react-icons/cg";
 
 const OfficialTravelMain = () => {
   const monthFormat = 'MMMM YYYY';
-  const monthPickerFormat = 'MM/YYYY';
+  const monthPickerFormat = 'YYYY-MM';
   const navigate = useNavigate();
+  const token = Cookies.get("token");
+  const [uuidPermit, setUuidPermit] = useState("");
+  const [loading, setLoading] = useState(false);
   const [approveModalVisible, setApproveModalVisible] = useState(false);
   const [respondApproveModalVisible, setRespondApproveModalVisible] = useState(false);
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [respondRejectModalVisible, setRespondRejectModalVisible] = useState(false);
+  const [failedAddDataModalVisible, setFailedAddDataModalVisible] = useState(false);
 
   // search handler
   const [searchValue, setSearchValue] = useState("");
@@ -172,11 +177,34 @@ const OfficialTravelMain = () => {
   ];
 
   const handleDetailClick = (record) => {
-    navigate('/official-travel-request/detail', { state: { data: record } });
+    const value = record.key;
+    navigate(`/official-travel-request/detail/${value}`);
   };
 
-  const handleApproveModalOpen = () => {
+  const handleApproveModalOpen = (record) => {
+    setUuidPermit(record.key);
     setApproveModalVisible(true);
+  };
+
+  const approveOfficialTravelRequest = async () => {
+    try {
+        setLoading(true);
+        await axios.post(`http://103.82.93.38/api/v1/permit/approve_permit`, 
+        { permit_uuid: uuidPermit },
+        {
+            headers: {
+                "Authorization": token,
+            },
+        });
+        setApproveModalVisible(false);
+        setRespondApproveModalVisible(true);
+    } catch (error) {
+        console.log(error);
+        setApproveModalVisible(false);
+        setFailedAddDataModalVisible(true);
+    } finally {
+        setLoading(false);
+    }
   };
 
   const handleApproveModalNo = () => {
@@ -184,21 +212,41 @@ const OfficialTravelMain = () => {
   };
 
   const handleApproveModalYes = () => {
-    setApproveModalVisible(false);
-    setRespondApproveModalVisible(true);
+    approveOfficialTravelRequest();
   };
 
   const handleRespondApproveModal = () => {
     setRespondApproveModalVisible(false);
   };
 
-  const handleRejectModalOpen = () => {
+  const handleRejectModalOpen = (record) => {
+    setUuidPermit(record.key);
     setRejectModalVisible(true);
   };
 
+  const rejectOfficialTravelRequest = async () => {
+    try {
+        setLoading(true);
+        await axios.post(`http://103.82.93.38/api/v1/permit/reject_permit`, 
+        { permit_uuid: uuidPermit },
+        {
+            headers: {
+                "Authorization": token,
+            },
+        });
+        setRejectModalVisible(false);
+        setRespondRejectModalVisible(true);
+    } catch (error) {
+        console.log(error);
+        setRejectModalVisible(false);
+        setFailedAddDataModalVisible(true);
+    } finally {
+        setLoading(false);
+    }
+  };
+
   const handleRejectModalYes = () => {
-    setRejectModalVisible(false);
-    setRespondRejectModalVisible(true);
+    rejectOfficialTravelRequest();
   };
 
   const handleRejectModalNo = () => {
@@ -209,6 +257,10 @@ const OfficialTravelMain = () => {
     setRespondRejectModalVisible(false);
   };
 
+  const handleFailedAddDataModal = () => {
+    setFailedAddDataModalVisible(false);
+};
+
   const propsTable = {
     searchValue,
     filterValue,
@@ -216,6 +268,8 @@ const OfficialTravelMain = () => {
     countValue,
     datePickerValue,
     columns,
+    respondApproveModalVisible,
+    respondRejectModalVisible,
   };
 
   const propsApproveDialogModal = {
@@ -254,6 +308,11 @@ const OfficialTravelMain = () => {
     dialogText: "Official Travel request is rejected!",
   };
 
+  const propsFailedAddDataModal = {
+    visible: failedAddDataModalVisible,
+    onClose: handleFailedAddDataModal,
+  };
+
   return (
     <div>
       <Row gutter={[16, 8]}>
@@ -279,6 +338,7 @@ const OfficialTravelMain = () => {
         <RespondLeftModal {...propsApproveRespondModal} />
         <DialogModal {...propsRejectDialogModal} />
         <RespondLeftModal {...propsRejectRespondModal} />
+        <FailedAddDataModal {...propsFailedAddDataModal} />
       </div>
     </div>
   )

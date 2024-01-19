@@ -9,7 +9,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
     const { TextArea } = Input;
     const [form] = Form.useForm();
     // Date Picker
-    const dateFormatList = 'YYYY-MM-DD';
+    const dateFormatYear = 'YYYY';
 
     if (editEducationData) {
         form.setFieldsValue({
@@ -19,8 +19,8 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
             thesis: editEducationData.thesis,
             ipk: editEducationData.ipk,
             certificate_number: editEducationData.certificate_number,
-            entry_year: dayjs(editEducationData.entry_year, dateFormatList),
-            out_year: dayjs(editEducationData.out_year, dateFormatList),
+            entry_year: dayjs(editEducationData.entry_year, dateFormatYear),
+            out_year: dayjs(editEducationData.out_year, dateFormatYear),
         })
     }
 
@@ -41,8 +41,8 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             initialValues={{
-                entry_year: dayjs('1970-01-01', dateFormatList),
-                out_year: dayjs('1970-01-01', dateFormatList),
+                entry_year: dayjs('1970', dateFormatYear),
+                out_year: dayjs('1970', dateFormatYear),
             }}
         >
             <Form.Item
@@ -112,7 +112,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
                 },
                 {
                     pattern: /^[0-9.]+$/,
-                    message: 'Please enter a valid contact person (numbers and dot(.) only)!',
+                    message: 'Please enter a valid IPK (numbers and dot(.) only)!',
                 },
             ]}
             >
@@ -144,7 +144,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
                 },
             ]}
             >
-            <DatePicker placeholder='YYYY-MM-DD' format={dateFormatList} className='date-picker'/>
+            <DatePicker placeholder='YYYY' format={dateFormatYear} className='date-picker' picker='year'/>
             </Form.Item>
 
             <Form.Item
@@ -158,7 +158,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
                 },
             ]}
             >
-            <DatePicker placeholder='YYYY-MM-DD' format={dateFormatList} className='date-picker'/>
+            <DatePicker placeholder='YYYY' format={dateFormatYear} className='date-picker' picker='year'/>
             </Form.Item>
 
             <Form.Item

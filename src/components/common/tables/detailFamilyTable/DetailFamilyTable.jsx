@@ -1,10 +1,12 @@
 import React from 'react'
+import dayjs from 'dayjs';
 import './detailFamilyTable.css'
 
 const DetailFamilyTable = ({detailFamilyData}) => {
     if (!detailFamilyData) {
         return null;
     }
+    detailFamilyData.birth_date = dayjs(detailFamilyData.birth_date).format('DD/MM/YYYY');
 
     return (
         <div className='table-container'>

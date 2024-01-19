@@ -102,8 +102,8 @@ const editUser = (props) => {
   const getUser = async () => {
     try {
       setLoading(true)
-      // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, {
-      const response = await axios.get(`http://127.0.0.1:5000/api/v1/users/${key}`, {
+      // const response = await axios.get(`http://103.82.93.38/api/v1/users/${key}`, {
+      const response = await axios.get(`http://103.82.93.38/api/v1/users/${key}`, {
           headers: { Authorization: token },
         }
       );
@@ -121,8 +121,8 @@ const editUser = (props) => {
   const getRoles = async () => {
     try {
       setLoading(true)
-      // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/role/`, {
-      const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
+      // const response = await axios.get(`http://103.82.93.38/api/v1/role/`, {
+      const response = await axios.get(`http://103.82.93.38/api/v1/role/`, {
           headers: { Authorization: token },
         }
       );
@@ -137,7 +137,7 @@ const editUser = (props) => {
 //   // GET API Company
 //   const getCompanies = async () => {
 //     try {
-//         const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
+//         const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
 //             headers: { Authorization: token },
 //         }
 //     );
@@ -150,8 +150,8 @@ const editUser = (props) => {
 // GET API Employee
 const getEmployees = async () => {
     try {
-        // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/`, {
-        const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/`, {
+        // const response = await axios.get(`http://103.82.93.38/api/v1/employee/`, {
+        const response = await axios.get(`http://103.82.93.38/api/v1/employee/`, {
             headers: { Authorization: token },
         }
     );
@@ -167,8 +167,8 @@ const getEmployees = async () => {
     try {
       setLoading(true);
       // console.log("values", values);
-      // const response = await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/users/${key}`, values,
-      const response = await axios.put(`http://127.0.0.1:5000/api/v1/users/${key}`, values,
+      // const response = await axios.put(`http://103.82.93.38/api/v1/users/${key}`, values,
+      const response = await axios.put(`http://103.82.93.38/api/v1/users/${key}`, values,
         {
           headers: { Authorization: token },
         }

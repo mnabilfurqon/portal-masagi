@@ -68,7 +68,7 @@ const AddPosition = () => {
   // Add Position to API
   const addPosition = async () => {
     try {
-      const response = await axios.post("https://attendance-1-r8738834.deta.app/api/v1/position/", {
+      const response = await axios.post("http://103.82.93.38/api/v1/position/", {
         'name': value,
       });
       setLoading(true);

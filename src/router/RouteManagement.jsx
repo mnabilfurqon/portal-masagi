@@ -50,7 +50,7 @@ import DetailPermitData from "../pages/employee/schemas/permitConfiguration/perm
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
-  const role_uuid = Cookies.get("role_uuid");
+  const role_name = Cookies.get("role_name");
   const navigate = useNavigate();
   let roleNumber = 3;
 
@@ -60,11 +60,11 @@ const RouteManagement = () => {
     }
   }, [token, navigate]);
 
-  if (role_uuid === "8ab999f6-ad6d-48e7-943a-aa400007223f") {
+  if (role_name === "superadmin") {
     roleNumber = 1;
-  } else if (role_uuid === "4386da8b-fa01-4414-96e9-d1db09de66ff") {
+  } else if (role_name === "admin") {
     roleNumber = 2;
-  } else if (role_uuid === "7424b423-5b4d-44a9-9b03-990ae45c59f0" || role_uuid === "df0502d2-ab6f-455b-a360-49aebc14894d") {
+  } else if (role_name === "HR" || role_name === "Head of Division") {
     roleNumber = 3;
   } else {
     roleNumber = 4;
@@ -475,7 +475,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/official-travel-request/detail"
+              path="/official-travel-request/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <OfficialTravelDetail />
@@ -493,7 +493,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/leave-request/detail"
+              path="/leave-request/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <LeaveDetail />
@@ -511,7 +511,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/overtime-request/detail"
+              path="/overtime-request/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <OvertimeDetail />
@@ -529,7 +529,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/permit-request/detail"
+              path="/permit-request/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <PermitDetail />
