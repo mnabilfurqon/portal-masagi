@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -10,22 +10,31 @@ import "./addLeaveEmployee.css";
 const AddLeaveEmployee = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
-  const { uuid } = useParams();
-  const [form] = Form.useForm();
+  const dateFormatList = "DD/MM/YYYY";
   const { TextArea } = Input;
-  const [employeeData, setEmployeeData] = useState("");
+  const [form] = Form.useForm();
+  const [employeeData, setEmployeeData] = useState();
+  const [typePermit, setTypePermit] = useState([]);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dateFormatList = "DD/MM/YYYY";
 
   const addLeave = async (values) => {
     try {
       setLoading(true);
-      values.leave_date = dayjs(values.leave_date, "DD/MM/YYYY").format(
-        "YYYY-MM-DDTHH:mm:ss.SSSZ"
+      values.date_permit = dayjs(values.date_permit, "DD/MM/YYYY").format(
+        "YYYY-MM-DD"
       );
-      await axios.post("http://103.82.93.38/api/v1/permit/", values, {
+      values.end_date_permit = dayjs(values.end_date_permit, "DD/MM/YYYY").format(
+        "YYYY-MM-DD"
+      );
+      const data = excludeObject(values, ['team_leader','hr'])
+      const form = new FormData();
+      form.append("type_permit_uuid", data.type_permit_uuid);
+      form.append("reason", data.reason);
+      form.append("date_permit", data.date_permit);
+      form.append("end_date_permit", data.end_date_permit);
+      await axios.post("http://103.82.93.38/api/v1/permit/", form, {
         headers: {
           Authorization: token,
         },
@@ -38,17 +47,44 @@ const AddLeaveEmployee = () => {
     }
   };
 
+  const excludeObject = (obj, key) => {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([k]) => !key.includes(k))
+    );
+  };
+
+  const getTypePermit = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "http://103.82.93.38/api/v1/type_permit/",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setTypePermit(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterArray = typePermit.slice(0,9)
+
   const getSelectedLeave = async () => {
     try {
       setLoading(true);
-      const response =  await axios.get(`http://103.82.93.38/api/v1/permit/${uuid}`, {
+      const response = await axios.get(`http://103.82.93.38/api/v1/employee/get_hr_lead`, {
         headers: {
           Authorization: token,
         },
       });
-      setEmployeeData(response.data[0].items);
+      setEmployeeData(response.data);
     } catch (error) {
-      console.error("Error fetching selected leave:", error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -58,6 +94,7 @@ const AddLeaveEmployee = () => {
     if (!token) {
       navigate("/login");
     }
+    getTypePermit();
     getSelectedLeave()
   }, [token, navigate]);
 
@@ -95,27 +132,21 @@ const AddLeaveEmployee = () => {
         }}
         wrapperCol={{ span: 15 }}
         layout="horizontal"
+        onFinish={addLeave}
       >
         <Form.Item
           label="Type Leave"
-          name="type_leave"
+          name="type_permit_uuid"
           rules={[
-            { required: true, message: "Please choose your type leave!" },
+            { required: true, message: "Please choose type leave!" },
           ]}
         >
           <Select placeholder="Choose Type Leave" className="type-leave-select">
-            <Select.Option value="cuti-sakit">Cuti Sakit</Select.Option>
-            <Select.Option value="cuti-hari-besar-keagamaan">
-              Cuti Hari Besar Keagamaan
-            </Select.Option>
-            <Select.Option value="cuti-hari-libur-nasional">
-              Cuti Hari Libur Nasional
-            </Select.Option>
-            <Select.Option value="cuti-hamil">Cuti Hamil</Select.Option>
-            <Select.Option value="cuti-haji">Cuti Haji</Select.Option>
-            <Select.Option value="cuti-umrah">Cuti Umrah</Select.Option>
-            <Select.Option value="cuti-menikah">Cuti Menikah</Select.Option>
-            <Select.Option value="cuti-kedukaan">Cuti Kedukaan</Select.Option>
+            {filterArray.map((item) => (
+              <Select.Option key={item.uuid} value={item.uuid}>
+                {item.name}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item
@@ -131,9 +162,9 @@ const AddLeaveEmployee = () => {
         </Form.Item>
         <Form.Item
           label="Permit Date"
-          name="permit_date"
+          name="date_permit"
           rules={[
-            { required: true, message: "Please input your permit date!" },
+            { required: true, message: "Please input permit date!" },
           ]}
         >
           <DatePicker
@@ -145,11 +176,11 @@ const AddLeaveEmployee = () => {
         </Form.Item>
         <Form.Item
           label="End Permit Date"
-          name="end_permit_date"
+          name="end_date_permit"
           rules={[
             {
               required: true,
-              message: "Please input your end permit date!",
+              message: "Please input end permit date!",
             },
           ]}
         >
@@ -161,10 +192,10 @@ const AddLeaveEmployee = () => {
           />
         </Form.Item>
         <Form.Item label="HR" name="hr">
-          <Input value={employeeData.hr_employee} disabled />
+          <Input placeholder={employeeData?.hr_employee.name} disabled />
         </Form.Item>
         <Form.Item label="Team Leader" name="team_leader">
-          <Input value={employeeData.team_lead_employee} disabled />
+          <Input placeholder={employeeData?.team_lead_employee.name} disabled />
         </Form.Item>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
@@ -177,7 +208,6 @@ const AddLeaveEmployee = () => {
           <Button
             className="request-button-leave"
             htmlType="submit"
-            onClick={addLeave}
             loading={loading}
           >
             Request

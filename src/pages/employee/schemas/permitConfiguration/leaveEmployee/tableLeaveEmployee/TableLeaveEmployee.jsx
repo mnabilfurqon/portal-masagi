@@ -1,15 +1,17 @@
 import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import moment from "moment";
 import "./tableLeaveEmployee.css";
 
 const TableLeaveEmployee = (props) => {
+  let typePermit
   const token = Cookies.get('token');
   const navigate = useNavigate();
+  const location = useLocation()
   const {searchValue, filterValue, sortValue, countValue} = props;
   const [leaveData, setLeaveData] = useState([])
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,7 @@ const TableLeaveEmployee = (props) => {
           page: page,
           per_page: countValue,
           search: searchValue,
+          type_permit: typePermit,
           desc: sortValue === 'latestEndPermitDate' ? true : false,
           sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
         },
@@ -69,21 +72,18 @@ const TableLeaveEmployee = (props) => {
       setLoading(false);
     }
   };
-
-  const leaveExcludedTypePermit = [
-    "8358293b-40d3-442e-8d68-f9f844ab1318", 
-    "3fd18093-7292-4d75-8b1f-4ff25b8f32b0",
-    "ce13b620-1ec0-4338-8f5b-5b47f3d6f374",
-    "0b9dadbc-f86d-4ca3-b05b-b8e20f2f5f03",
-    "debcf4ec-15da-4b5c-993a-fcc1257b281e",
-    "ea93050f-004e-4f0b-98b7-f8ee5d39786e",
-    "c65aab7d-8739-46cc-a903-91895bf751ef",
-    "deb9db5a-5654-4f9e-910b-55366521d5f8",
-    "9d54f991-ae9a-48e4-83fc-1faa1acf8b3f"
-  ];
+  
+  if (location.pathname === '/leave') {
+    typePermit = "cuti"
+  } else if (location.pathname === '/permit') {
+    typePermit = "izin"
+  } else if (location.pathname === '/overtime') {
+    typePermit = "lembur"
+  } else if (location.pathname === '/official-travel') {
+    typePermit = "dinas"
+  }
 
   const dataLeaveRaw = leaveData
-  .filter(item => !leaveExcludedTypePermit.includes(item.type.uuid))
   .map(item => {
     let status;
     let statusByHr;

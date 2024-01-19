@@ -1,15 +1,17 @@
 import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import moment from "moment";
 import "./tableOfficialTravelEmployee.css";
 
 const TableOfficialTravelEmployee = (props) => {
+  let typePermit
   const token = Cookies.get('token');
   const navigate = useNavigate();
+  const location = useLocation()
   const {searchValue, filterValue, sortValue, countValue} = props;
   const [officialTravelData, setOfficialTravelData] = useState([])
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,7 @@ const TableOfficialTravelEmployee = (props) => {
           page: page,
           per_page: countValue,
           search: searchValue,
+          type_permit: typePermit,
           desc: sortValue === 'latestEndPermitDate' ? true : false,
           sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
         },
@@ -70,8 +73,17 @@ const TableOfficialTravelEmployee = (props) => {
     }
   };
 
+  if (location.pathname === '/leave') {
+    typePermit = "cuti"
+  } else if (location.pathname === '/permit') {
+    typePermit = "izin"
+  } else if (location.pathname === '/overtime') {
+    typePermit = "lembur"
+  } else if (location.pathname === '/official-travel') {
+    typePermit = "dinas"
+  }
+
   const dataOfficialTravelRaw = officialTravelData
-    .filter(item => item.type.uuid === "490cef45-7966-46a8-8108-ae613a1c6ad1")
     .map(item => {
       let status;
       let statusByHr;
@@ -129,7 +141,7 @@ const TableOfficialTravelEmployee = (props) => {
       navigate('/login');
     }
     getOfficialTravelData();
-  }, [token, navigate, params]);
+  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue]);
 
   const title = [
     {

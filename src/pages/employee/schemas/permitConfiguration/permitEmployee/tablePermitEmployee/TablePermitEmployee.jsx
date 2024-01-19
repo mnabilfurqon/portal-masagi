@@ -1,15 +1,17 @@
 import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import moment from "moment";
 import "./tablePermitEmployee.css";
 
 const TablePermitEmployee = (props) => {
+  let typePermit
   const token = Cookies.get('token');
   const navigate = useNavigate();
+  const location = useLocation()
   const {searchValue, filterValue, sortValue, countValue} = props;
   const [permitData, setPermitData] = useState([])
   const [loading, setLoading] = useState(false);
@@ -48,6 +50,7 @@ const TablePermitEmployee = (props) => {
           per_page: countValue,
           search: searchValue,
           filter: filterValue,
+          type_permit: typePermit,
           desc: sortValue === 'latestEndPermitDate' ? true : false,
           sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
         },
@@ -71,8 +74,17 @@ const TablePermitEmployee = (props) => {
     }
   };
 
+  if (location.pathname === '/leave') {
+    typePermit = "cuti"
+  } else if (location.pathname === '/permit') {
+    typePermit = "izin"
+  } else if (location.pathname === '/overtime') {
+    typePermit = "lembur"
+  } else if (location.pathname === '/official-travel') {
+    typePermit = "dinas"
+  }
+
   const dataPermitRaw = permitData
-    .filter(item => item.type.uuid === "c6c489fb-28f3-4dda-b8ca-2af1c8b6892d" || item.type.uuid === "54bf06d7-a705-4d7d-abfc-9c105fc36fbc")
     .map(item => {
       let status;
       let statusByHr;
@@ -130,7 +142,7 @@ const TablePermitEmployee = (props) => {
       navigate('/login');
     }
     getPermitData();
-  }, [token, navigate, params]);
+  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue]);
 
   const title = [
     {

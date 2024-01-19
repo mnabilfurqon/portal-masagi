@@ -1,48 +1,51 @@
 import React from "react";
 import dayjs from "dayjs";
-import "./detailLeaveEmployee.css";
+import "./detailOvertimeEmployee.css"
 
-const DetailLeaveEmployee = ({ data }) => {
+const DetailOvertimeTable = ({data}) => {
   if (!data) {
     return null;
   }
 
-  // let status = "Pending";
+  let status = "Pending";
 
-  // if (data.approved_by_hr === true) {
-  //   data.approved_by_hr = "Approved";
-  // } else if (
-  //   data.approved_by_hr === false && data.reject_by !== null && data.reject_by.name === data.hr_employee.name
-  // ) {
-  //   data.approved_by_hr = "Rejected";
-  // } else {
-  //   data.approved_by_hr = "Pending";
-  // }
+  if (data.approved_by_hr === true) {
+    data.approved_by_hr = "Approved";
+  } else if (
+    data.approved_by_hr === false &&
+    data.reject_by !== null &&
+    data.reject_by.name === data.hr_employee.name
+  ) {
+    data.approved_by_hr = "Rejected";
+  } else {
+    data.approved_by_hr = "Pending";
+  }
 
-  // if (data.approved_by_team_lead === true) {
-  //   data.approved_by_team_lead = "Approved";
-  // } else if (
-  //   data.approved_by_team_lead === false && data.reject_by !== null && data.reject_by.name === data.team_lead_employee.name
-  // ) {
-  //   data.approved_by_team_lead = "Rejected";
-  // } else {
-  //   data.approved_by_team_lead = "Pending";
-  // }
-  
-  // if (
-  //   data.approved_by_hr === "Approved" && data.approved_by_team_lead === "Approved"
-  // ) {
-  //   status = "Approved";
-  // } else if (
-  //   data.approved_by_hr === "Rejected" || data.approved_by_team_lead === "Rejected"
-  // ) {
-  //   status = "Rejected";
-  // }
+  if (data.approved_by_team_lead === true) {
+    data.approved_by_team_lead = "Approved";
+  } else if (
+    data.approved_by_team_lead === false &&
+    data.reject_by !== null &&
+    data.reject_by.name === data.team_lead_employee.name
+  ) {
+    data.approved_by_team_lead = "Rejected";
+  } else {
+    data.approved_by_team_lead = "Pending";
+  }
+
+  if (
+    data.approved_by_hr === "Approved" &&
+    data.approved_by_team_lead === "Approved"
+  ) {
+    status = "Approved";
+  } else if (
+    data.approved_by_hr === "Rejected" ||
+    data.approved_by_team_lead === "Rejected"
+  ) {
+    status = "Rejected";
+  }
 
   const formattedPermitDate = dayjs(data.date_permit).format("DD/MM/YYYY");
-  const formattedEndDatePermit = dayjs(data.end_date_permit).format(
-    "DD/MM/YYYY"
-  );
 
   return (
     <>
@@ -50,7 +53,7 @@ const DetailLeaveEmployee = ({ data }) => {
         <table className="table-content-detail">
           <tbody>
             <tr>
-              <th>Type Leave</th>
+              <th>Reason</th>
               <td>{data.type.name}</td>
             </tr>
             <tr>
@@ -58,15 +61,7 @@ const DetailLeaveEmployee = ({ data }) => {
               <td></td>
             </tr>
             <tr>
-              <th>Reason</th>
-              <td>{data.reason}</td>
-            </tr>
-            <tr>
-              <th></th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>Permit Date</th>
+              <th>Date</th>
               <td>{formattedPermitDate}</td>
             </tr>
             <tr>
@@ -74,8 +69,24 @@ const DetailLeaveEmployee = ({ data }) => {
               <td></td>
             </tr>
             <tr>
-              <th>End Permit Date</th>
-              <td>{formattedEndDatePermit}</td>
+              <th>Start Overtime</th>
+              <td>{data.start_overtime_time}</td>
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>End Overtime</th>
+              <td>{data.end_overtime_time}</td>
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Duration</th>
+              <td>{data.hours_overtime}</td>
             </tr>
             <tr>
               <th></th>
@@ -115,7 +126,7 @@ const DetailLeaveEmployee = ({ data }) => {
             </tr>
             <tr>
               <th>Status</th>
-              {/* <td>{status}</td> */}
+              <td>{status}</td>
             </tr>
           </tbody>
         </table>
@@ -124,4 +135,4 @@ const DetailLeaveEmployee = ({ data }) => {
   );
 };
 
-export default DetailLeaveEmployee;
+export default DetailOvertimeTable;

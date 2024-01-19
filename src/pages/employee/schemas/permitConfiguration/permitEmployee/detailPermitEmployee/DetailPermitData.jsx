@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { Button } from "antd";
-import DetailLeaveEmployee from "./DetailLeaveTable";
-import "./detailLeaveEmployee.css";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { Button } from 'antd';
+import DetailPermitTable from './DetailPermitTable';
+import "./detailPermitEmployee.css"
 
-const DetailLeaveData = () => {
+const DetailPermitData = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const { uuid } = useParams();
-  const [leaveData, setLeaveData] = useState();
+  const [permitData, setPermitData] = useState();
   const [loading, setLoading] = useState(false);
 
-  const getLeaveDetailData = async () => {
+  const getPermitData = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
@@ -24,7 +24,7 @@ const DetailLeaveData = () => {
           },
         }
       );
-      setLeaveData(response.data);
+      setPermitData(response.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -36,12 +36,12 @@ const DetailLeaveData = () => {
     if (!token) {
       navigate("/login");
     }
-    getLeaveDetailData();
+    getPermitData();
   }, [token, navigate]);
 
   return (
     <>
-      <DetailLeaveEmployee data={leaveData} loading={loading} />
+      <DetailPermitTable data={permitData} loading={loading} />
       <div className="button-container">
         <Button className="back-button-detail" onClick={() => navigate(-1)}>
           Back
@@ -49,6 +49,6 @@ const DetailLeaveData = () => {
       </div>
     </>
   );
-};
+}
 
-export default DetailLeaveData;
+export default DetailPermitData;

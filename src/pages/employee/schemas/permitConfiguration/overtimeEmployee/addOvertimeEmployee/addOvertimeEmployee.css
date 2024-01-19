@@ -78,11 +78,13 @@
   text-align: left;
 }
 
+.type-overtime-select:hover,
 .overtime-input:hover,
 .start-overtime-input:hover,
 .reason-input:hover,
 .end-overtime-input:hover,
 .duration-input:hover,
+.type-overtime-select:focus,
 .overtime-input:focus,
 .start-overtime-input:focus,
 .end-overtime-input:focus 
