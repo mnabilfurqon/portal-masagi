@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import "./positionConfiguration.css"
-import { AiOutlineSearch } from 'react-icons/ai';
-// import { SearchOutlined } from '@ant-design/icons'
-import { Table, Space, Button, Row, Col, Input} from "antd"
+import { IoIosSearch } from "react-icons/io";
+import { Table, Space, Row, Col, Input} from "antd"
 import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
 import { useNavigate } from 'react-router-dom'
 import EditPosition from './editPosition/EditPosition'
@@ -199,7 +198,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
           <Input 
           className='search-box'
           placeholder='Search' 
-          prefix={<AiOutlineSearch/>} 
+          prefix={<IoIosSearch />} 
           onSearch={(value)=>{ 
             setSearchText(value)
           }}

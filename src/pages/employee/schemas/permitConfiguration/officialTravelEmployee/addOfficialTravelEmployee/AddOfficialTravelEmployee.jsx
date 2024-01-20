@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, DatePicker, Form, Input, Modal } from "antd";
+import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -10,9 +10,11 @@ import "./addOfficialTravelEmployee.css";
 const AddOfficialTravelEmployee = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  const dateFormatList = "DD/MM/YYYY";
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const dateFormatList = "YYYY-MM-DD";
+  const [typePermit, setTypePermit] = useState([]);
+  const [employeeData, setEmployeeData] = useState();
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,10 +22,21 @@ const AddOfficialTravelEmployee = () => {
   const addOfficialTravel = async (values) => {
     try {
       setLoading(true);
-      values.permit_date = dayjs(values.permit_date, "DD/MM/YYYY").format(
+      values.date_permit = dayjs(values.date_permit, "DD/MM/YYYY").format(
         "YYYY-MM-DD"
       );
-      await axios.post("", values, {
+      values.end_date_permit = dayjs(values.end_date_permit, "DD/MM/YYYY").format(
+        "YYYY-MM-DD"
+      );
+      const data = excludeObject(values, ['team_leader','hr'])
+      console.log(data)
+      const form = new FormData();
+      form.append("type_permit_uuid", data.type_permit_uuid);
+      form.append("destination", data.destination);
+      form.append("date_permit", data.date_permit);
+      form.append("end_date_permit", data.end_date_permit);
+      form.append("reason", data.reason);
+      await axios.post("http://103.82.93.38/api/v1/permit/", form, {
         headers: {
           Authorization: token,
         },
@@ -36,11 +49,60 @@ const AddOfficialTravelEmployee = () => {
     }
   };
 
+  const excludeObject = (obj, key) => {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([k]) => !key.includes(k))
+    );
+  };
+
+  const getTypePermit = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "http://103.82.93.38/api/v1/type_permit/",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setTypePermit(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterArray = typePermit.slice(12)
+
+  const getSelectedLeave = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/employee/get_hr_lead`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setEmployeeData(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
+    getTypePermit()
+    getSelectedLeave()
   }, [token, navigate]);
+
+  const disabledDate = (current) => {
+    return current && current < dayjs().startOf("day");
+  };
 
   const successTitle = (
     <div className="success-title-official-travel">
@@ -59,11 +121,6 @@ const AddOfficialTravelEmployee = () => {
     </div>
   );
 
-  const handleBackAdd = () => {
-    setErrorModalOpen(false);
-    setModalOpen(false);
-  };
-
   return (
     <>
       <Form
@@ -80,16 +137,20 @@ const AddOfficialTravelEmployee = () => {
         }}
         wrapperCol={{ span: 15 }}
         layout="horizontal"
-        initialValues={{
-          permit_date: dayjs("1970-01-01", dateFormatList),
-        }}
+        onFinish={addOfficialTravel}
       >
         <Form.Item
           label="Agenda"
-          name="agenda"
-          rules={[{ required: true, message: "Please input your agenda!" }]}
+          name="type_permit_uuid"
+          rules={[{ required: true, message: "Please choose your agenda!" }]}
         >
-          <Input placeholder="Enter Agenda" className="agenda-input" />
+          <Select placeholder="Choose Agenda" className="agenda-input">
+            {filterArray.map((item) => (
+              <Select.Option key={item.uuid} value={item.uuid}>
+                {item.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
           label="Destination"
@@ -106,30 +167,40 @@ const AddOfficialTravelEmployee = () => {
         </Form.Item>
         <Form.Item
           label="Permit Date"
-          name="permit-date"
+          name="date_permit"
           rules={[
-            { required: true, message: "Please input your permit date!" },
+            { required: true, message: "Please input permit date!" },
           ]}
         >
-          <DatePicker placeholder="YYYY/MM/DD" className="permit-input" />
+          <DatePicker
+            placeholder="DD/MM/YYYY"
+            className="permit-input"
+            format={dateFormatList}
+            disabledDate={disabledDate}
+          />
         </Form.Item>
         <Form.Item
           label="End Permit Date"
-          name="end-permit-date"
+          name="end_date_permit"
           rules={[
             {
               required: true,
-              message: "Please input your end permit date!",
+              message: "Please input end permit date!",
             },
           ]}
         >
-          <DatePicker placeholder="YYYY/MM/DD" className="end-permit-input" />
+          <DatePicker
+            placeholder="DD/MM/YYYY"
+            className="end-permit-input"
+            format={dateFormatList}
+            disabledDate={disabledDate}
+          />
         </Form.Item>
         <Form.Item label="HR" name="hr">
-          <Input disabled />
+          <Input placeholder={employeeData?.hr_employee.name} disabled />
         </Form.Item>
-        <Form.Item label="Team Leader" name="team-leader">
-          <Input disabled />
+        <Form.Item label="Team Leader" name="team_leader">
+          <Input placeholder={employeeData?.team_lead_employee.name} disabled />
         </Form.Item>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
@@ -142,7 +213,6 @@ const AddOfficialTravelEmployee = () => {
           <Button
             className="request-button-official-travel"
             htmlType="submit"
-            onClick={addOfficialTravel}
             loading={loading}
           >
             Request
@@ -185,7 +255,7 @@ const AddOfficialTravelEmployee = () => {
           <Button
             key="backOfficialTravel"
             className="back-add-button"
-            onClick={handleBackAdd}
+            onClick={() => setErrorModalOpen(false)}
           >
             Back
           </Button>

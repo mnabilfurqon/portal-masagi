@@ -1,27 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { Button, DatePicker, Form, Input, Modal, TimePicker } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Select,
+  TimePicker,
+} from "antd";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
-import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import "./addOvertimeEmployee.css";
 
 const AddOvertimeEmployee = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  const dateFormatList = "DD/MM/YYYY";
   const [form] = Form.useForm();
   const { TextArea } = Input;
+  const [typePermit, setTypePermit] = useState([]);
+  const [employeeData, setEmployeeData] = useState();
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dateFormatList = "YYYY-MM-DD";
 
-  const addovertime = async (values) => {
+  const addOvertime = async (values) => {
     try {
       setLoading(true);
-      values.date = dayjs(values.date, "DD/MM/YYYY").format("YYYY-MM-DD");
-      await axios.post("", values, {
+      values.start_overtime_time = values.start_overtime_time.format(
+        "HH:mm"
+      );
+      values.end_overtime_time = values.end_overtime_time.format(
+        "HH:mm"
+      );
+      values.hours_overtime = values.hours_overtime.format(
+        "HH:mm"
+      );
+      values.date_permit = dayjs(values.date_permit, "DD/MM/YYYY").format(
+        "YYYY-MM-DD"
+      );
+      const data = excludeObject(values, ["team_leader", "hr"]);
+      const form = new FormData();
+      form.append("type_permit_uuid", data.type_permit_uuid);
+      form.append("start_overtime_time", data.start_overtime_time);
+      form.append("end_overtime_time", data.end_overtime_time);
+      form.append("hours_overtime", data.hours_overtime);
+      form.append('end_date_permit', data.date_permit)
+      form.append("reason", data.reason);
+      form.append("date_permit", data.date_permit);
+      form.append("end_date_permit", data.end_date_permit);
+      await axios.post("http://103.82.93.38/api/v1/permit/", form, {
         headers: {
           Authorization: token,
         },
@@ -29,6 +60,50 @@ const AddOvertimeEmployee = () => {
       setSuccessModalOpen(true);
     } catch (error) {
       setErrorModalOpen(true);
+      console.log(error)
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const excludeObject = (obj, key) => {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([k]) => !key.includes(k))
+    );
+  };
+
+  const getTypePermit = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "http://103.82.93.38/api/v1/type_permit/",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setTypePermit(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterArray = typePermit.slice(11, 12);
+
+  const getSelectedLeave = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/employee/get_hr_lead`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setEmployeeData(response.data);
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -38,11 +113,13 @@ const AddOvertimeEmployee = () => {
     if (!token) {
       navigate("/login");
     }
+    getTypePermit();
+    getSelectedLeave()
   }, [token, navigate]);
 
-  const handleBackAdd = () => {
-    setErrorModalOpen(false);
-    setModalOpen(false);
+  const disabledDate = (current) => {
+    const today = dayjs().startOf("day");
+    return current && (current < today || current > today.endOf("day"));
   };
 
   const successTitle = (
@@ -75,32 +152,54 @@ const AddOvertimeEmployee = () => {
         }}
         wrapperCol={{ span: 15 }}
         layout="horizontal"
-        initialValues={{
-          date: dayjs("1970-01-01", dateFormatList),
-        }}
+        onFinish={addOvertime}
       >
         <Form.Item
-          label="Overtime Date"
-          name="setOvertimeDate"
-          rules={[{ required: true, message: "Please input overtime date!" }]}
+          label="Type Overtime"
+          name="type_permit_uuid"
+          rules={[
+            { required: true, message: "Please choose type overtime!" },
+          ]}
         >
-          <DatePicker placeholder="YYYY/MM/DD" className="overtime-input" />
+          <Select
+            placeholder="Choose Type Overtime"
+            className="type-overtime-select"
+          >
+            {filterArray.map((item) => (
+              <Select.Option key={item.uuid} value={item.uuid}>
+                {item.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label="Overtime Date"
+          name="date_permit"
+          rules={[
+            { required: true, message: "Please input overtime date!" },
+          ]}
+        >
+          <DatePicker
+            placeholder="DD/MM/YYYY"
+            className="overtime-input"
+            format={dateFormatList}
+            disabledDate={disabledDate}
+          />
         </Form.Item>
         <Form.Item
           label="Start Overtime"
-          name="startOvertime"
+          name="start_overtime_time"
           rules={[{ required: true, message: "Please input start overtime!" }]}
         >
           <TimePicker
             className="start-overtime-input"
-            format="hh:mm A"
-            use12Hours
             placeholder="00:00"
+            format={"HH:mm"}
           />
         </Form.Item>
         <Form.Item
           label="End Overtime"
-          name="endOvertime"
+          name="end_overtime_time"
           rules={[
             {
               required: true,
@@ -110,14 +209,12 @@ const AddOvertimeEmployee = () => {
         >
           <TimePicker
             className="end-overtime-input"
-            format="hh:mm A"
-            use12Hours
             placeholder="00:00"
           />
         </Form.Item>
         <Form.Item
           label="Duration"
-          name="duration"
+          name="hours_overtime"
           rules={[
             {
               required: true,
@@ -127,8 +224,9 @@ const AddOvertimeEmployee = () => {
         >
           <TimePicker
             className="duration-input"
-            format="HH:mm:ss"
+            // format="HH:mm:ss"
             placeholder="00:00:00"
+            defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")}
           />
         </Form.Item>
         <Form.Item
@@ -143,10 +241,10 @@ const AddOvertimeEmployee = () => {
           />
         </Form.Item>
         <Form.Item label="HR" name="hr">
-          <Input disabled />
+          <Input placeholder={employeeData?.hr_employee.name} disabled />
         </Form.Item>
-        <Form.Item label="Team Leader" name="team-leader">
-          <Input disabled />
+        <Form.Item label="Team Leader" name="team_leader">
+          <Input placeholder={employeeData?.team_lead_employee.name} disabled />
         </Form.Item>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
@@ -159,7 +257,6 @@ const AddOvertimeEmployee = () => {
           <Button
             className="request-button-overtime"
             htmlType="submit"
-            onClick={addovertime}
             loading={loading}
           >
             Request
@@ -200,7 +297,7 @@ const AddOvertimeEmployee = () => {
           <Button
             key="backOvertime"
             className="back-add-button"
-            onClick={handleBackAdd}
+            onClick={() => setErrorModalOpen(false)}
           >
             Back
           </Button>

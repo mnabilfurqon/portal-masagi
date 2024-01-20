@@ -1,16 +1,23 @@
 import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { TABLE_DATA } from "./constans";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from "axios";
+import moment from "moment";
 import "./tableLeaveEmployee.css";
 
 const TableLeaveEmployee = (props) => {
+  let typePermit
   const token = Cookies.get('token');
   const navigate = useNavigate();
-  const {searchValue, filterValue, sortValue, countValue, columns} = props;
+  const location = useLocation()
+  const {searchValue, filterValue, sortValue, countValue} = props;
+  const [leaveData, setLeaveData] = useState([])
   const [loading, setLoading] = useState(false);
+  const formatDate = (dateString) => {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -37,18 +44,20 @@ const TableLeaveEmployee = (props) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get('', {
+      const response = await axios.get('http://103.82.93.38/api/v1/permit/', {
         params: {
           page: page,
           per_page: countValue,
           search: searchValue,
-          desc: sortValue === 'latest' ? true : false,
+          type_permit: typePermit,
+          desc: sortValue === 'latestEndPermitDate' ? true : false,
+          sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
         },
         headers: {
           Authorization: token,
         },
       });
-      // setLeaveData(response.data.items);
+      setLeaveData(response.data[0].items);
       setTableParams({
         ...tableParams,
         pagination: {
@@ -63,39 +72,107 @@ const TableLeaveEmployee = (props) => {
       setLoading(false);
     }
   };
+  
+  if (location.pathname === '/leave') {
+    typePermit = "cuti"
+  } else if (location.pathname === '/permit') {
+    typePermit = "izin"
+  } else if (location.pathname === '/overtime') {
+    typePermit = "lembur"
+  } else if (location.pathname === '/official-travel') {
+    typePermit = "dinas"
+  }
+
+  const dataLeaveRaw = leaveData
+  .map(item => {
+    let status;
+    let statusByHr;
+    let statusByTeamLeader;
+
+    if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
+      status = 'approved';
+    } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
+      status = 'rejected';
+    } else {
+      status = 'pending';
+    }
+
+    if (item.approved_by_hr === true) {
+      statusByHr = 'approved';
+    } else if (item.approved_by_hr === false) {
+      statusByHr = 'rejected';
+    } else {
+      statusByHr = 'pending';
+    }
+
+    if (item.approved_by_team_lead === true) {
+      statusByTeamLeader = 'approved';
+    } else if (item.approved_by_team_lead === false) {
+      statusByTeamLeader = 'rejected';
+    } else {
+      statusByTeamLeader = 'pending';
+    }
+
+    return {
+      key: item.uuid,
+      employee_name: item.attendance.employee.name,
+      type_leave: item.type.name,
+      reason: item.reason,
+      permit_date: formatDate(item.date_permit),
+      end_permit_date: formatDate(item.end_date_permit),
+      status: status,
+      hr: item.hr_employee,
+      status_by_hr: statusByHr,
+      team_leader: item.team_lead_employee,
+      status_by_team_leader: statusByTeamLeader,
+    }
+  });
+
+  const dataLeave = dataLeaveRaw.filter(item => { 
+    const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+    ? filterValue.includes(item.status)
+    : true
+    
+    return isStatusMatch;
+  });
 
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
-    // getLeaveData();
-  }, [token, navigate]);
+    getLeaveData();
+  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue]);
 
   const title = [
     {
-      key: "typeLeave",
+      key: "type_leave",
       title: "Type Leave",
-      dataIndex: "typeLeave",
+      dataIndex: "type_leave",
+      ellipsis: true,
     },
     {
       key: "reason",
       title: "Reason",
       dataIndex: "reason",
+      ellipsis: true,
     },
     {
-      key: "permitDate",
+      key: "permit_date",
       title: "Permit Date",
-      dataIndex: "permitDate",
+      dataIndex: "permit_date",
+      ellipsis: true,
     },
     {
-      key: "endPermitDate",
+      key: "end_permit_date",
       title: "End Permit Date",
-      dataIndex: "endPermitDate",
+      dataIndex: "end_permit_date",
+      ellipsis: true,
     },
     {
       key: "status",
       title: "Status",
       dataIndex: "status",
+      ellipsis: true,
       render: (text) => {
         if (text === "pending") {
           return (
@@ -139,6 +216,7 @@ const TableLeaveEmployee = (props) => {
     {
       key: "action",
       title: "Action",
+      ellipsis: true,
       render: (record) => (
         <Button
           className="detail-button-leave-employee"
@@ -154,27 +232,29 @@ const TableLeaveEmployee = (props) => {
   ];
 
   const handleDetailClick = record => {
-    // const value = record.key;
-    navigate(`/leave/detail`);
+    const value = record.key;
+    navigate(`/leave/detail/${value}`);
   };
 
-  const handleTableChange = (pagination, sorter) => {
+  const handleTableChange = (pagination,filters, sorter) => {
     setTableParams({
       pagination: {
         ...tableParams.pagination,
         current: pagination.current,
         pageSize: countValue,
       },
+      filters,
       ...sorter,
     });
 
     setParams({
       page: pagination.current,
       per_page: pagination.pageSize,
+      search: searchValue,
     });
 
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setRoleData([]);
+      setLeaveData([]);
     }
   };
 
@@ -183,7 +263,7 @@ const TableLeaveEmployee = (props) => {
       <Table
         className="table-leave-empolyee"
         columns={title}
-        dataSource={TABLE_DATA}
+        dataSource={dataLeave}
         pagination={tableParams.pagination}
         onChange={handleTableChange}
         loading={loading}

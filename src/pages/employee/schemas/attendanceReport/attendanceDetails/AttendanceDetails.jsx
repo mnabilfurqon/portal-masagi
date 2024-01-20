@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Row, Col, Avatar, Flex, DatePicker, Table, } from 'antd'
-import { AiOutlineUser } from 'react-icons/ai'
+import { AiOutlineUser } from "react-icons/ai";
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 
 const AttendanceDetails = () => {
