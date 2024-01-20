@@ -63,6 +63,7 @@ import EmployeeTaskDetail from "../pages/employee/schemas/taskConfiguration/task
 import ProjectConfiguration from "../pages/admin/projectConfiguration/ProjectConfiguration";
 import AddProject from "../pages/admin/projectConfiguration/addProject/AddProject";
 import DetailProject from "../pages/admin/projectConfiguration/detailProject/DetailProject";
+import EditProject from "../pages/admin/projectConfiguration/editProject/EditProject";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -397,6 +398,14 @@ const RouteManagement = () => {
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailProject />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="/edit-project/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <EditProject />
                 </LayoutComponent>
               }
             />

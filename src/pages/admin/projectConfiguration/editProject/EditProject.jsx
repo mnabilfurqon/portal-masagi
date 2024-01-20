@@ -7,7 +7,7 @@ import { Button, DatePicker, Flex, Form, Input, Select, Spin } from 'antd'
 import SuccessModal from "@common/modals/successModal/SuccessModal"
 import FailedModal from "@common/modals/failedModal/FailedModal"
 
-const AddProject = () => {
+const EditProject = () => {
   // Declaration
   const token = Cookies.get("token");
   const navigate = useNavigate();
@@ -85,13 +85,13 @@ const AddProject = () => {
     }
   }
 
-  // POST API to Insert New Project - Form Handler
+  // PUT API to Update Project - Form Handler
   const onFinish = async (values) => {
     try {
         setLoading(true)
         console.log(values);
-        const response = await axios.post("http://103.82.93.38/api/v1/project/", values, 
-        // const response = await axios.post(`http://127.0.0.1:5000/api/v1/project/`, values,
+        const response = await axios.put("http://103.82.93.38/api/v1/project/", values, 
+        // const response = await axios.put(`http://127.0.0.1:5000/api/v1/project/`, values,
             {
             headers: { Authorization: token, },
         });
@@ -218,4 +218,4 @@ const AddProject = () => {
   )
 }
 
-export default AddProject
+export default EditProject

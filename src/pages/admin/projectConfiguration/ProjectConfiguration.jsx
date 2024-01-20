@@ -153,7 +153,7 @@ const ProjectConfiguration = () => {
       title: 'Action',
       key: 'action',
       render: (record) => (
-        <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+        <Button type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost style={{ border: 0,}}>
           <AiOutlineFileSearch className="action-icon" />
         </Button>
       ),

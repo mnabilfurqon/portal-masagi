@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Flex } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const DetailProject = () => {
   // Declaration 
   const navigate = useNavigate();
+  const getUuid = useParams();
+  const [uuid, setUUid] = useState(getUuid.uuid);
+
+  console.log(uuid)
 
   return (
     <>
@@ -13,7 +17,7 @@ const DetailProject = () => {
                 <tbody>
                 <tr>
                     <th>Client</th>
-                    <td></td>
+                    <td>PT Suka-Suka</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -21,7 +25,7 @@ const DetailProject = () => {
                 </tr>
                 <tr>
                     <th>Project Name</th>
-                    <td></td>
+                    <td>Website E-Learning</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -29,7 +33,7 @@ const DetailProject = () => {
                 </tr>
                 <tr>
                     <th>Description</th>
-                    <td></td>
+                    <td>Lorem ipsum</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -37,7 +41,7 @@ const DetailProject = () => {
                 </tr>
                 <tr>
                     <th>Type Project</th>
-                    <td></td>
+                    <td>Website Development</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -45,7 +49,7 @@ const DetailProject = () => {
                 </tr>
                 <tr>
                     <th>Start Date</th>
-                    <td></td>
+                    <td>15/01/2020</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -53,7 +57,7 @@ const DetailProject = () => {
                 </tr>
                 <tr>
                     <th>Due Date</th>
-                    <td></td>
+                    <td>25/10/2020</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -61,7 +65,7 @@ const DetailProject = () => {
                 </tr>
                 <tr>
                     <th>Status</th>
-                    <td></td>
+                    <td>Done</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -69,7 +73,7 @@ const DetailProject = () => {
                 </tr>
                 <tr>
                     <th>Cancle Date</th>
-                    <td></td>
+                    <td>-</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -77,7 +81,7 @@ const DetailProject = () => {
                 </tr>
                 <tr>
                     <th>Done Date</th>
-                    <td></td>
+                    <td>-</td>
                 </tr>
                 <tr>
                     <th></th>

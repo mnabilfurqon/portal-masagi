@@ -3,13 +3,10 @@ import { AiOutlineUser } from "react-icons/ai";
 import { SlLock } from "react-icons/sl";
 import { Button, Card, Form, Input } from 'antd';
 import { LogoMasagi } from '../../assets';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { Button, Card, Form, Input } from 'antd';
-import { LogoMasagi } from '../../assets';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
 import './loginPage.css';
 

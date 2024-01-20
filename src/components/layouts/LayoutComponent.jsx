@@ -449,23 +449,23 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Project /{" "}
       </Link>
     );
-    pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    pageSubTitle = <span className="page-sub-title"> Project Detail </span>;
     finalPageTitle = (
       <>
         {pageTitle}
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname.includes("/project/edit-project")) {
+  } else if (location.pathname.includes("/edit-project")) {
     pageTitle = (
-      <div>
+      <span>
         <Link to="/project" className="page-title">
           Project /{" "}
         </Link>
-        <Link to="/project/detail-project" className="page-title">
+        <Link to={-1} className="page-title">
           Project Detail /{" "}
         </Link>
-      </div>
+      </span>
     );
     pageSubTitle = <span className="page-sub-title"> Edit Data </span>;
     finalPageTitle = (
