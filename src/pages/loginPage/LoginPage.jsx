@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { AiOutlineUser } from "react-icons/ai";
+import { SlLock } from "react-icons/sl";
+import { Button, Card, Form, Input } from 'antd';
+import { LogoMasagi } from '../../assets';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Button, Card, Form, Input } from 'antd';
@@ -88,7 +92,7 @@ const LoginPage = () => {
                 },
               ]}>
               <Input.Password
-                prefix={<AiOutlineLock />}
+                prefix={<SlLock />}
                 type='password'
                 placeholder='Enter password'
                 className='custom-input'

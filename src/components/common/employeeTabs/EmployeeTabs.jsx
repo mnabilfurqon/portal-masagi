@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Tabs, Button, Avatar, Divider, Row, Col, Spin } from 'antd';
-import { AiOutlineUser } from 'react-icons/ai';
-// import { UserOutlined } from '@ant-design/icons';
+import { AiOutlineUser } from "react-icons/ai";
 import { useParams, useNavigate } from 'react-router-dom';
 import AddButton from '../buttons/addButton/AddButton';
 import './employeeTabs.css';
@@ -22,6 +21,7 @@ import LoadingComponent from '../../loadingComponent/LoadingComponent';
 const { TabPane } = Tabs;
 
 const EmployeeTabs = () => {
+    const { UserOutlined } = pkg
 
     const { uuid } = useParams();
     const token = Cookies.get("token");

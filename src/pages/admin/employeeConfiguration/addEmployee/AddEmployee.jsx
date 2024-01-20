@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import './addEmployee.css'
 import { Link, useNavigate } from 'react-router-dom'
-import { AiOutlineUser, AiOutlineLoading, AiOutlinePlus } from 'react-icons/ai';
-// import { UserOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Col, message, Upload, Row } from 'antd'
-import { Space, Tabs, Button, Form, Input, InputNumber, DatePicker, Radio, Select, Flex, Avatar, Divider } from 'antd'
+import { Form, Input, InputNumber, DatePicker, Radio, Select, Flex, Avatar, Divider, message } from 'antd'
 import SubmitButton from '@common/buttons/submitButton/SubmitButton'
 import SuccessModal from '@common/modals/successModal/SuccessModal';
 import FailedModal from '@common/modals/failedModal/FailedModal';
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import dayjs from 'dayjs';
+import { AiOutlineUser, AiOutlineLoading3Quarters } from "react-icons/ai";
+import { FaPlus } from "react-icons/fa6";
 
 const AddEmployee = () => {
     // Declaration
@@ -208,7 +207,7 @@ const AddEmployee = () => {
 
     const uploadButton = (
         <div>
-            {loading ? <AiOutlineLoading /> : <AiOutlinePlus />}
+            {loading ? <AiOutlineLoading3Quarters /> : <FaPlus />}
             <div style={{ marginTop: 8, }} >
                 Upload
             </div>

@@ -6,17 +6,15 @@ import SortButton from '@common/buttons/sortButton/SortButton'
 import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
 import CountButton from '@common/buttons/countButton/CountButton'
 import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
-import { AiOutlineFileSearch, AiOutlineCheckSquare, AiOutlineCloseSquare } from 'react-icons/ai'
-// import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
+import { AiOutlineFileSearch } from "react-icons/ai";
 import DialogModal from '@common/modals/dialogModal/DialogModal'
 import './officialTravel.css'
 import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import Cookies from 'js-cookie'
+import { FaRegCheckSquare } from "react-icons/fa";
+import { CgCloseR } from "react-icons/cg";
 
 const OfficialTravelMain = () => {
-
   const monthFormat = 'MMMM YYYY';
   const monthPickerFormat = 'YYYY-MM';
   const navigate = useNavigate();
@@ -167,11 +165,11 @@ const OfficialTravelMain = () => {
                 <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                     <AiOutlineFileSearch className="action-icon" />
                 </Button>
-                <Button className="action-button" type="primary" size="small" onClick={() => {handleApproveModalOpen(record)}} ghost>
-                    <AiOutlineCheckSquare className="accept-icon" />
+                <Button className="action-button" type="primary" size="small" onClick={handleApproveModalOpen} ghost>
+                    <FaRegCheckSquare className="accept-icon"/>
                 </Button>
                 <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
-                    <AiOutlineCloseSquare className="reject-icon" />
+                    <CgCloseR className="reject-icon"/>
                 </Button>
             </Space>
         ),

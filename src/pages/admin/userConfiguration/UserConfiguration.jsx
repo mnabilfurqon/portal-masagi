@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AiOutlineSearch } from 'react-icons/ai';
-// import { SearchOutlined } from '@ant-design/icons';
+import { IoIosSearch } from "react-icons/io";
 import { Table, Tag, Space, Button, Row, Col, Input } from 'antd'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
@@ -17,6 +16,7 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 const UserConfiguration = () => {
+  const { SearchOutlined } = pkg
   // {searchValue, filterValue, sortValue, countValue }
 
   // Declaration
@@ -238,7 +238,7 @@ const UserConfiguration = () => {
       <Col>
         <Input 
         className='search-box'
-        prefix={<AiOutlineSearch/>} 
+        prefix={<IoIosSearch />} 
         placeholder='Search' 
         onSearch={(value)=>{ 
           setSearchText(value)

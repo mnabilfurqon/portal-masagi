@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './reportConfiguartion.css'
 import { Col, Row, Table, DatePicker, Input, Button } from 'antd'
-import { AiOutlineFileSearch, AiOutlineSearch } from 'react-icons/ai'
+import { IoIosSearch } from "react-icons/io";
+import { AiOutlineFileSearch } from 'react-icons/ai'
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
@@ -293,7 +294,7 @@ return (
             <Col xs={24} sm={24} md={14} lg={18} xl={18} xxl={18}>
             <Input 
                 className='search-box'
-                prefix={<AiOutlineSearch/>} 
+                prefix={<IoIosSearch />} 
                 placeholder='Search for employee name' 
                 onSearch={(value)=>{ 
                   setSearchValue(value)
