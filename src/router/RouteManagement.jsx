@@ -53,6 +53,8 @@ import DetailClientConfiguration from "../pages/admin/clientConfiguration/detail
 import EditClientConfiguration from "../pages/admin/clientConfiguration/editClientConfiguration/EditClientConfiguration";
 import MainTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/mainTeamProjectConfiguration/MainTeamProjectConfiguration";
 import AddTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/addTeamProjectConfiguration/AddTeamProjectConfiguration.";
+import DetailTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/detailTeamProjectConfiguration/DetailTeamProjectConfiguration";
+import AddMemberTeamProjectConfiguration from "../pages/admin/teamProjectConfiguration/addMemberTeamProjectConfiguration/AddMemberTeamProjectConfiguration";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -355,7 +357,7 @@ const RouteManagement = () => {
               path="/team-project/detail-team-project/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Detail Team Project</p>
+                  <DetailTeamProjectConfiguration/>
                 </LayoutComponent>
               }
             />
@@ -364,7 +366,7 @@ const RouteManagement = () => {
               path="/team-project/add-member-team-project/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Add Member Team Project</p>
+                  <AddMemberTeamProjectConfiguration />
                 </LayoutComponent>
               }
             />

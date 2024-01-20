@@ -514,16 +514,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Team Project / {" "}
       </Link>
     );
-    pageTitle2 = (
-      <Link to="/team-project/detail-team-project" className="page-title">
-        Team Project Detail /{" "}
-      </Link>
-    );
     pageSubTitle = <span className="page-sub-title"> Team Member</span>;
     finalPageTitle = (
       <>
         {pageTitle}
-        {pageTitle2}
         {pageSubTitle}
       </>
     );
