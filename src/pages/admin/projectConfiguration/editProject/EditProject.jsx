@@ -194,6 +194,36 @@ const EditProject = () => {
         >
           <DatePicker placeholder='DD/MM/YYYY'/>
         </Form.Item>
+        <Form.Item 
+          name="status" 
+          label="Status"
+          colon={false} 
+          labelAlign='left'
+        >
+            <Select>
+                <Select.Option value="cancel">Cancel</Select.Option>
+                <Select.Option value="done">Done</Select.Option>
+                <Select.Option value="inprogress">In-Progress</Select.Option>
+            </Select>
+        </Form.Item>
+        <Form.Item 
+          name="cancel_date" 
+          label="Cancel Date" 
+          style={{ width: "100%", }}
+          colon={false} 
+          labelAlign='left'
+        >
+          <DatePicker placeholder='DD/MM/YYYY'/>
+        </Form.Item>
+        <Form.Item 
+          name="done_date" 
+          label="Done Date" 
+          style={{ width: "100%", }}
+          colon={false} 
+          labelAlign='left' 
+        >
+          <DatePicker placeholder='DD/MM/YYYY'/>
+        </Form.Item>
 
         <Flex gap={20} align='center' justify='end'>
             <Link to={-1} style={{ color: "black", }}>Cancel</Link>
