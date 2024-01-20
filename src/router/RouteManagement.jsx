@@ -48,6 +48,9 @@ import ReportConfiguration from "../pages/employee/schemas/attendanceReport/repo
 import AttendanceDetails from "../pages/employee/schemas/attendanceReport/attendanceDetails/AttendanceDetails";
 import PresentConfiguration from "../pages/employee/schemas/attendanceReport/presentConfiguration/PresentConfiguration";
 import AttendanceConfiguration from '../pages/employee/schemas/attendanceConfiguration/AttendanceConfiguration'
+import ProjectConfiguration from "../pages/admin/projectConfiguration/ProjectConfiguration";
+import AddProject from "../pages/admin/projectConfiguration/addProject/AddProject";
+import DetailProject from "../pages/admin/projectConfiguration/detailProject/DetailProject";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -279,6 +282,44 @@ const RouteManagement = () => {
               }
             />
             {/* End of Position Configuration Route */}
+
+            {/* Project Configuration Route */}
+            <Route
+              path="/project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <ProjectConfiguration />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="/add-project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddProject />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="/project/detail-project/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailProject />
+                </LayoutComponent>
+              }
+            />
+            {/* End of Project Configuration Route */}
+
+            {/* Type Project Configuration Route */}
+            <Route
+              path="/type-project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Type Project</p>
+                </LayoutComponent>
+              }
+            />
+            {/* End of Type Project Configuration Route */}
           </React.Fragment>
         </Routes>
       </Suspense>
@@ -305,7 +346,6 @@ const RouteManagement = () => {
               path="/history"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  {/* <p>History</p> */}
                   <HistoryConfiguration />
                 </LayoutComponent>
               }
@@ -316,7 +356,7 @@ const RouteManagement = () => {
               path="/attendance-report"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance Report</p>
+                  <ReportConfiguration />
                 </LayoutComponent>
               }
             />
@@ -554,7 +594,7 @@ const RouteManagement = () => {
               path="/attendance"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance</p>
+                  <AttendanceConfiguration />
                 </LayoutComponent>
               }
             />
@@ -575,7 +615,7 @@ const RouteManagement = () => {
               path="/attendance-report"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance Report</p>
+                  <ReportConfiguration />
                 </LayoutComponent>
               }
             />

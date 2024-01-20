@@ -438,6 +438,53 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/project") {
+    pageTitle = "Project";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === "/add-project") {
+    pageTitle = (
+      <Link to="/project" className="page-title">
+        Project /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Project Configuration </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/project/detail-project")) {
+    pageTitle = (
+      <Link to="/project" className="page-title">
+        Project /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/project/edit-project")) {
+    pageTitle = (
+      <div>
+        <Link to="/project" className="page-title">
+          Project /{" "}
+        </Link>
+        <Link to="/project/detail-project" className="page-title">
+          Project Detail /{" "}
+        </Link>
+      </div>
+    );
+    pageSubTitle = <span className="page-sub-title"> Edit Data </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
   }
 
 
@@ -524,8 +571,14 @@ const LayoutComponent = ({ children, roleNumber }) => {
               <Menu.Item key="/position">
                 <Link to="/position">Position</Link>
               </Menu.Item>
+              <Menu.Item key="/project">
+                <Link to="/project">Project</Link>
+              </Menu.Item>
               <Menu.Item key="/role">
                 <Link to="/role">Role</Link>
+              </Menu.Item>
+              <Menu.Item key="/type-project">
+                <Link to="/type-project">Type Project</Link>
               </Menu.Item>
               <Menu.Item key="/user">
                 <Link to="/user">User</Link>
@@ -553,7 +606,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
             </Menu.Item>
-            <Menu.Item key='/history' icon={<HistoryOutlined />}>
+            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
               <Link to='/history'>Attendance History</Link>
             </Menu.Item>
             <SubMenu
@@ -624,10 +677,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
             mode="inline"
             style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
           >
-            <Menu.Item key="/attendance" icon={<IdcardOutlined />}>
+            <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
             </Menu.Item>
-            <Menu.Item key='/history' icon={<HistoryOutlined />}>
+            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
               <Link to='/history'>Attendance History</Link>
             </Menu.Item>
             <SubMenu
