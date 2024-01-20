@@ -1,0 +1,59 @@
+.done-button {
+    background-color: #ffffff !important;
+    border-color: #28A745 !important;; 
+    color: #28A745 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.done-button button {
+    pointer-events: none;
+}
+
+.open-button {
+    background-color: #ffffff !important;
+    border-color: #F9B700 !important;; 
+    color: #F9B700 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.open-button button {
+    pointer-events: none;
+}
+
+.cancel-button {
+    background-color: #ffffff !important;
+    border-color: #DC3545 !important;; 
+    color: #DC3545 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.cancel-button button {
+    pointer-events: none;
+}
+
+.in-progress-button {
+    background-color: #ffffff !important;
+    border-color: #007BFF !important;; 
+    color: #007BFF !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.in-progress-button button {
+    pointer-events: none;
+}
+
+.review-button {
+    background-color: #ffffff !important;
+    border-color: #6F42C1 !important;; 
+    color: #6F42C1 !important;
+    border-radius: 15px !important;
+    cursor: default;
+}
+
+.review-button button {
+    pointer-events: none;
+}
