@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  HomeOutlined,
-  BellOutlined,
-  DownOutlined,
-  UserOutlined,
-  IdcardOutlined,
-  HistoryOutlined,
-} from "@ant-design/icons";
+import { AiOutlineHome, AiOutlineBell, AiOutlineDown, AiOutlineUser, AiOutlineIdcard, AiOutlineHistory } from 'react-icons/ai';
+// import pkg from "@ant-design/icons";
+// import {
+//   HomeOutlined,
+//   BellOutlined,
+//   DownOutlined,
+//   UserOutlined,
+//   IdcardOutlined,
+//   HistoryOutlined,
+// } from "@ant-design/icons";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
@@ -68,10 +70,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 size="medium"
                 gap={2}
               >
-                <UserOutlined />
+                <AiOutlineUser />
               </Avatar>
               {username}
-              <DownOutlined />
+              <AiOutlineDown />
             </Space>
           </a>
         </Dropdown>
@@ -133,7 +135,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === '/user') {
     pageTitle = 'User';
     finalPageTitle = pageTitle;
-  } else if (location.pathname === "/user/add-user") {
+  } else if (location.pathname.includes("/employee/add-user")) {
     pageTitle = (
       <Link to="/user" className="page-title">
         User /{" "}
@@ -415,7 +417,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Attendance Report /{" "}
       </Link>
     );
-    pageSubTitle = <span className="page-sub-title"> Detail Attendance </span>;
+    pageSubTitle = (
+      <span className="page-sub-title"> Detail Attendance </span>
+    );
     finalPageTitle = (
       <>
         {pageTitle}
@@ -544,7 +548,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
             mode="inline"
             style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
           >
-            <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+            {/* <Menu.Item key="/dashboard" icon={<HomeOutlined />}> */}
+            <Menu.Item key="/dashboard" icon={<AiOutlineHome />}>
               <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
             <SubMenu
@@ -582,7 +587,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
             mode="inline"
             style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
           >
-            <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
+            {/* <Menu.Item key="/dashboard" icon={<HomeOutlined />}> */}
+            <Menu.Item key="/dashboard" icon={<AiOutlineHome />}>
               <Link to="/dashboard">Dashboard</Link>
             </Menu.Item>
             <SubMenu
@@ -634,7 +640,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
             mode="inline"
             style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
           >
-            <Menu.Item key="/attendance" icon={<IdcardOutlined />}>
+            <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
             </Menu.Item>
             <Menu.Item key='/history' icon={<HistoryOutlined />}>
@@ -652,6 +658,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Link to="/report">Report</Link>
               </Menu.Item>
             </SubMenu>
+            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
+              <Link to='/history'>History</Link>
+            </Menu.Item>
             <SubMenu
               key="permit-employee"
               icon={<LuClipboardSignature />}
@@ -758,7 +767,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
 
             <Flex>
               <Space style={{ padding: "10px" }}>
-                <BellOutlined />
+                <AiOutlineBell />
                 <MyDropdown />
               </Space>
             </Flex>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { SearchOutlined } from '@ant-design/icons';
+import { AiOutlineSearch } from 'react-icons/ai';
+// import { SearchOutlined } from '@ant-design/icons';
 import './searchBox.css';
 import { Input, Row, Col } from 'antd';
 
@@ -20,7 +21,7 @@ const SearchBox = ({onSearch}) => {
     return (
         <Input 
             className='search-box'
-            prefix={<SearchOutlined/>} 
+            prefix={<AiOutlineSearch/>} 
             value={searchValue}
             onChange={handleChange}
             placeholder='Search'

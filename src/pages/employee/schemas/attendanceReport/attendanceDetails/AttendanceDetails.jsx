@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Row, Col, Avatar, Flex, DatePicker, Table, } from 'antd'
-import { UserOutlined } from '@ant-design/icons';
+import { AiOutlineUser } from 'react-icons/ai'
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 
 const AttendanceDetails = () => {
@@ -9,6 +9,8 @@ const AttendanceDetails = () => {
   const navigate = useNavigate();
   const { data } = location.state || {};
   console.log("data record", data)
+
+  const [tableName, setTableName] = useState("Presents");
 
   const columns = [
     {
@@ -39,7 +41,7 @@ const AttendanceDetails = () => {
     },
   ]
 
-  const dataSource = [
+  const presents = [
     {
         key: "1",
         date: "01-10-2023",
@@ -96,13 +98,97 @@ const AttendanceDetails = () => {
         total_hours: "09:00:00",
         lateness: "00:00:00",
     },
-  ]
+]
+
+const absents = [
+    {
+        key: "1",
+        date: "08-10-2023",
+        in_time: "",
+        out_time: "",
+        total_hours: "00:00:00",
+        lateness: "00:00:00",
+    },
+]
+
+const officialTravel = [
+    {
+        key: "1",
+        date: "09-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+]
+
+const overtimes = [
+    {
+        key: "1",
+        date: "10-10-2023",
+        in_time: "05:00 PM",
+        out_time: "07:00 PM",
+        total_hours: "02:00:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "2",
+        date: "11-10-2023",
+        in_time: "05:00 PM",
+        out_time: "07:30 PM",
+        total_hours: "02:30:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "3",
+        date: "12-10-2023",
+        in_time: "05:00 PM",
+        out_time: "07:00 PM",
+        total_hours: "02:00:00",
+        lateness: "00:00:00",
+    },
+]
+
+const leaves = [
+    {
+        key: "1",
+        date: "13-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+    {
+        key: "2",
+        date: "15-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+]
+
+const permits = [
+    {
+        key: "1",
+        date: "14-10-2023",
+        in_time: "08:00 AM",
+        out_time: "05:00 PM",
+        total_hours: "09:00:00",
+        lateness: "00:00:00",
+    },
+]
+
+const [dataSource, setDataSource] = useState(presents);
+const onChange = () => {
+
+}
 
   return (
     <>
         <Row align='middle' gutter={[56, 8]}>
             <Col xs={8} sm={6} md={6} lg={4} xl={3} xxl={2}>
-                <Avatar size={120} icon={<UserOutlined />} />
+                <Avatar size={120} icon={<AiOutlineUser />} />
             </Col>
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
@@ -129,6 +215,7 @@ const AttendanceDetails = () => {
                         </svg>}
                     title="Total Presents"
                     value="21"
+                    onClick={() => (setTableName("Presents"), setDataSource(presents))}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -139,6 +226,7 @@ const AttendanceDetails = () => {
                         </svg>}
                     title="Absents"
                     value="1"
+                    onClick={() => (setTableName("Absents"), setDataSource(absents))}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -149,6 +237,7 @@ const AttendanceDetails = () => {
                         </svg>}
                     title="Official Travels"
                     value="1"
+                    onClick={() => (setTableName("Official Travels"), setDataSource(officialTravel))}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -159,16 +248,18 @@ const AttendanceDetails = () => {
                         </svg>}
                     title="Overtimes"
                     value="3"
+                    onClick={() => (setTableName("Overtimes"), setDataSource(overtimes))}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M28 48.625H14.25C13.0344 48.625 11.8686 48.1421 11.0091 47.2826C10.1495 46.423 9.66666 45.2572 9.66666 44.0417V16.5417C9.66666 15.3261 10.1495 14.1603 11.0091 13.3008C11.8686 12.4412 13.0344 11.9583 14.25 11.9583H41.75C42.9656 11.9583 44.1314 12.4412 44.9909 13.3008C45.8504 14.1603 46.3333 15.3261 46.3333 16.5417V26.8542M37.1667 7.375V16.5417M18.8333 7.375V16.5417M9.66666 25.7083H46.3333M50.9167 50.9167C50.9167 49.7011 50.4338 48.5353 49.5742 47.6758C48.7147 46.8162 47.5489 46.3333 46.3333 46.3333H41.75C40.5344 46.3333 39.3686 46.8162 38.5091 47.6758C37.6496 48.5353 37.1667 49.7011 37.1667 50.9167M39.4583 39.4583C39.4583 40.6739 39.9412 41.8397 40.8008 42.6992C41.6603 43.5588 42.8261 44.0417 44.0417 44.0417C45.2572 44.0417 46.423 43.5588 47.2826 42.6992C48.1421 41.8397 48.625 40.6739 48.625 39.4583C48.625 38.2428 48.1421 37.077 47.2826 36.2174C46.423 35.3579 45.2572 34.875 44.0417 34.875C42.8261 34.875 41.6603 35.3579 40.8008 36.2174C39.9412 37.077 39.4583 38.2428 39.4583 39.4583Z" stroke="#6F42C1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M28 48.625H14.25C13.0344 48.625 11.8686 48.1421 11.0091 47.2826C10.1495 46.423 9.66666 45.2572 9.66666 44.0417V16.5417C9.66666 15.3261 10.1495 14.1603 11.0091 13.3008C11.8686 12.4412 13.0344 11.9583 14.25 11.9583H41.75C42.9656 11.9583 44.1314 12.4412 44.9909 13.3008C45.8504 14.1603 46.3333 15.3261 46.3333 16.5417V26.8542M37.1667 7.375V16.5417M18.8333 7.375V16.5417M9.66666 25.7083H46.3333M50.9167 50.9167C50.9167 49.7011 50.4338 48.5353 49.5742 47.6758C48.7147 46.8162 47.5489 46.3333 46.3333 46.3333H41.75C40.5344 46.3333 39.3686 46.8162 38.5091 47.6758C37.6496 48.5353 37.1667 49.7011 37.1667 50.9167M39.4583 39.4583C39.4583 40.6739 39.9412 41.8397 40.8008 42.6992C41.6603 43.5588 42.8261 44.0417 44.0417 44.0417C45.2572 44.0417 46.423 43.5588 47.2826 42.6992C48.1421 41.8397 48.625 40.6739 48.625 39.4583C48.625 38.2428 48.1421 37.077 47.2826 36.2174C46.423 35.3579 45.2572 34.875 44.0417 34.875C42.8261 34.875 41.6603 35.3579 40.8008 36.2174C39.9412 37.077 39.4583 38.2428 39.4583 39.4583Z" stroke="#6F42C1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>}
                     title="Leaves"
                     value="2"
+                    onClick={() => (setTableName("Leaves"), setDataSource(leaves))}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -179,13 +270,14 @@ const AttendanceDetails = () => {
                         </svg>}
                     title="Permits"
                     value="1"
+                    onClick={() => (setTableName("Permits"), setDataSource(permits))}
                 />
             </Col>
         </Row>
         <br /> <br />
 
         <div className='table'>
-            <p className='sub-title'>Presents</p>
+            <p className='sub-title'>{tableName}</p>
             <Table 
                 dataSource={dataSource}
                 columns={columns}

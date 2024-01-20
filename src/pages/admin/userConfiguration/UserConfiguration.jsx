@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react'
-// import { AudioOutlined } from '@ant-design/icons'
-// import { Input } from 'antd'
-// import { Button, Dropdown } from 'antd'
-// import { InputNumber } from 'antd'
-import { SearchOutlined } from '@ant-design/icons';
+import { AiOutlineSearch } from 'react-icons/ai';
+// import { SearchOutlined } from '@ant-design/icons';
 import { Table, Tag, Space, Button, Row, Col, Input } from 'antd'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
 import { SuccessUpdateModal } from '@common/modals/successModal/SuccessModal'
-import { useNavigate, useParams, Link } from 'react-router-dom'
-import './userConfiguration.css'
-import EditUser from './editUser/EditUser'
 import SuccessModal from '@common/modals/successModal/SuccessModal'
 import FailedModal from '@common/modals/failedModal/FailedModal'
 import SearchBox from '@common/SearchBox/SearchBox'
+import './userConfiguration.css'
+import EditUser from './editUser/EditUser'
 import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
@@ -48,8 +45,8 @@ const UserConfiguration = () => {
   const getUsersData = async () => {
     try {
       setLoading(true);
-      // const response = await axios.get('http://103.82.93.38/api/v1/users/', {
       const response = await axios.get('http://103.82.93.38/api/v1/users/', {
+      // const response = await axios.get('http://127.0.0.1:5000/api/v1/users/', {
         headers: {
           Authorization: token,
         }
@@ -241,7 +238,7 @@ const UserConfiguration = () => {
       <Col>
         <Input 
         className='search-box'
-        prefix={<SearchOutlined/>} 
+        prefix={<AiOutlineSearch/>} 
         placeholder='Search' 
         onSearch={(value)=>{ 
           setSearchText(value)

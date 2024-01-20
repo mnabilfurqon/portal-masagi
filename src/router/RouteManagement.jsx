@@ -47,6 +47,7 @@ import HistoryConfiguration from "../pages/employee/schemas/historyConfiguration
 import ReportConfiguration from "../pages/employee/schemas/attendanceReport/reportConfiguration/ReportConfiguartion";
 import AttendanceDetails from "../pages/employee/schemas/attendanceReport/attendanceDetails/AttendanceDetails";
 import PresentConfiguration from "../pages/employee/schemas/attendanceReport/presentConfiguration/PresentConfiguration";
+import AttendanceConfiguration from '../pages/employee/schemas/attendanceConfiguration/AttendanceConfiguration'
 import MainClientConfiguration from "../pages/admin/clientConfiguration/mainClientConfiguration/MainClientConfiguration";
 import AddClientConfiguration from "../pages/admin/clientConfiguration/addClientConfiguration/AddClientConfiguration";
 import DetailClientConfiguration from "../pages/admin/clientConfiguration/detailClientConfiguration/DetailClientConfiguration";
@@ -236,18 +237,10 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
-            {/* <Route
-              path='/user/add-user'
-              element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
-                  <AddUser />
-                </LayoutComponent>
-              }
-            /> */}
             <Route
-              path='/user/add-user/:uuid'
+              path='/employee/add-user/:uuid'
               element={
-                <LayoutComponent hideButtons={true} isSuperAdmin={false}>
+                <LayoutComponent roleNumber={roleNumber}>
                   <AddUser />
                 </LayoutComponent>
               }
@@ -388,7 +381,7 @@ const RouteManagement = () => {
               path="/attendance"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance</p>
+                  <AttendanceConfiguration />
                 </LayoutComponent>
               }
             />

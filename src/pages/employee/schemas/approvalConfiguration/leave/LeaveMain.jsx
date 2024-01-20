@@ -9,8 +9,8 @@ import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
 import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import { Row, Col, DatePicker, Space, Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { AiOutlineFileSearch } from 'react-icons/ai'
-import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
+import { AiOutlineFileSearch, AiOutlineCheckSquare, AiOutlineCloseSquare } from 'react-icons/ai'
+// import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -166,10 +166,10 @@ const LeaveMain = () => {
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" onClick={() => {handleApproveModalOpen(record)}} ghost>
-                        <CheckSquareOutlined className="accept-icon" />
+                        <AiOutlineCheckSquare className="accept-icon" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
-                        <CloseSquareOutlined className="reject-icon" />
+                        <AiOutlineCloseSquare className="reject-icon" />
                     </Button>
                 </Space>
             ),
