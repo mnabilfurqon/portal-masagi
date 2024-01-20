@@ -1,0 +1,58 @@
+.add-team-member-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-team-member-form .add-team-member-label {
+    text-align: left;
+}
+
+.add-team-member-form .add-team-member-input {
+    text-align: left;
+} 
+
+.input-description {
+    resize: none !important;
+    height: 100px;
+}
+
+.input-description:hover,
+.input-description:focus {
+    border-color: #17A2B8 !important;
+}
+
+.input-button:hover,
+.input-button:focus {
+    border-color: #17A2B8 !important;
+}
+
+.date-picker {
+    width: 100%;
+}
+
+.date-picker:hover,
+.date-picker:focus {
+    border-color: #17A2B8 !important;
+}
+
+.action-button {
+    width:100%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.add-data-button {
+    background-color: #629093;
+    border-color: #629093;
+    border-radius: 4px;
+}
+
+.add-data-button:hover {
+    background-color: #ffffff !important;
+    border-color: #629093 !important;
+    color: #629093 !important;
+}
