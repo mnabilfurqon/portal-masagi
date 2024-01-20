@@ -7,8 +7,8 @@ const DetailProject = () => {
   const navigate = useNavigate();
   const getUuid = useParams();
   const [uuid, setUUid] = useState(getUuid.uuid);
+  //   console.log(uuid)
 
-  console.log(uuid)
 
   return (
     <>
