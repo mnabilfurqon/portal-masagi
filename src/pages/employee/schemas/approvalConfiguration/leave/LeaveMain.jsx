@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom'
 import { AiOutlineFileSearch } from 'react-icons/ai'
 import { FaRegCheckSquare } from "react-icons/fa";
 import { CgCloseR } from "react-icons/cg";
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const LeaveMain = () => {
     const monthFormat = 'MMMM YYYY';

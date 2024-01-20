@@ -5,8 +5,11 @@ import { Button, Card, Form, Input } from 'antd';
 import { LogoMasagi } from '../../assets';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Button, Card, Form, Input } from 'antd';
+import { LogoMasagi } from '../../assets';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
 import './loginPage.css';
 
@@ -22,12 +25,14 @@ const LoginPage = () => {
       setLoading(true);
       const loginResponse = await axios.post(
         'http://103.82.93.38/api/v1/auth/login',
+        // 'http://127.0.0.1:5000/api/v1/auth/login',
         values
       );
       Cookies.set('token', loginResponse.data.token);
 
       const protectedResponse = await axios.get(
         'http://103.82.93.38/api/v1/auth/protected',
+        // 'http://127.0.0.1:5000/api/v1/auth/protected',
         {
           headers: {
             Authorization: loginResponse.data.token,

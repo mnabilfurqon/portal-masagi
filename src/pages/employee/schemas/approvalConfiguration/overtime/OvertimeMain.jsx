@@ -6,11 +6,14 @@ import PermitRequestTable from "@common/tables/permitRequestTable/PermitRequestT
 import CountButton from "@common/buttons/countButton/CountButton";
 import DialogModal from "@common/modals/dialogModal/DialogModal";
 import RespondLeftModal from "@common/modals/respondLeftModal/RespondLeftModal";
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import { Row, Col, DatePicker, Space, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { FaRegCheckSquare } from "react-icons/fa";
 import { CgCloseR } from "react-icons/cg";
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const OvertimeMain = () => {
 
