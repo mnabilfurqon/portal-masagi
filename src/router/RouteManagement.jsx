@@ -64,6 +64,7 @@ import ProjectConfiguration from "../pages/admin/projectConfiguration/ProjectCon
 import AddProject from "../pages/admin/projectConfiguration/addProject/AddProject";
 import DetailProject from "../pages/admin/projectConfiguration/detailProject/DetailProject";
 import EditProject from "../pages/admin/projectConfiguration/editProject/EditProject";
+import TypeProjectConfiguration from "../pages/admin/typeProjectConfiguration/TypeProjectConfiguration";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -416,7 +417,7 @@ const RouteManagement = () => {
               path="/type-project"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Type Project</p>
+                  <TypeProjectConfiguration />
                 </LayoutComponent>
               }
             />
