@@ -16,7 +16,7 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 const UserConfiguration = () => {
-  const { SearchOutlined } = pkg
+  // const { SearchOutlined } = pkg
   // {searchValue, filterValue, sortValue, countValue }
 
   // Declaration
