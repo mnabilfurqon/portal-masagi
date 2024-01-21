@@ -60,6 +60,10 @@ import TaskMain from "../pages/employee/schemas/taskConfiguration/taskMain/TaskM
 import TaskAdd from "../pages/employee/schemas/taskConfiguration/taskAdd/TaskAdd";
 import TaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/TaskDetail";
 import EmployeeTaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/EmployeeTaskDetail";
+import ProjectConfiguration from "../pages/admin/projectConfiguration/ProjectConfiguration";
+import AddProject from "../pages/admin/projectConfiguration/addProject/AddProject";
+import DetailProject from "../pages/admin/projectConfiguration/detailProject/DetailProject";
+import EditProject from "../pages/admin/projectConfiguration/editProject/EditProject";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -371,6 +375,52 @@ const RouteManagement = () => {
             />
 
             {/* End of Team Project Configuration Route */}
+
+            {/* Project Configuration Route */}
+            <Route
+              path="/project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <ProjectConfiguration />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="/add-project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <AddProject />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="/project/detail-project/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailProject />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="/edit-project/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <EditProject />
+                </LayoutComponent>
+              }
+            />
+            {/* End of Project Configuration Route */}
+
+            {/* Type Project Configuration Route */}
+            <Route
+              path="/type-project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Type Project</p>
+                </LayoutComponent>
+              }
+            />
+            {/* End of Type Project Configuration Route */}
           </React.Fragment>
         </Routes>
       </Suspense>
@@ -397,7 +447,6 @@ const RouteManagement = () => {
               path="/history"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  {/* <p>History</p> */}
                   <HistoryConfiguration />
                 </LayoutComponent>
               }
@@ -408,7 +457,7 @@ const RouteManagement = () => {
               path="/attendance-report"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance Report</p>
+                  <ReportConfiguration />
                 </LayoutComponent>
               }
             />
@@ -646,7 +695,7 @@ const RouteManagement = () => {
               path="/attendance"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance</p>
+                  <AttendanceConfiguration />
                 </LayoutComponent>
               }
             />
@@ -666,7 +715,7 @@ const RouteManagement = () => {
               path="/attendance-report"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance Report</p>
+                  <ReportConfiguration />
                 </LayoutComponent>
               }
             />
