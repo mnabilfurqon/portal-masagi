@@ -1,15 +1,15 @@
-import React, {useState} from 'react'
-import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
-import SortButton from '@common/buttons/sortButton/SortButton'
-import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
-import CountButton from '@common/buttons/countButton/CountButton'
-import DialogModal from '@common/modals/dialogModal/DialogModal'
-import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
+import React, { useState } from "react";
+import SearchBox from "@common/SearchBox/SearchBox";
+import FilterButton from "@common/buttons/FilterButton/FilterButton";
+import SortButton from "@common/buttons/sortButton/SortButton";
+import PermitRequestTable from "@common/tables/permitRequestTable/PermitRequestTable";
+import CountButton from "@common/buttons/countButton/CountButton";
+import DialogModal from "@common/modals/dialogModal/DialogModal";
+import RespondLeftModal from "@common/modals/respondLeftModal/RespondLeftModal";
 import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
-import { Row, Col, DatePicker, Space, Button } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { AiOutlineFileSearch } from 'react-icons/ai'
+import { Row, Col, DatePicker, Space, Button } from "antd";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import { FaRegCheckSquare } from "react-icons/fa";
 import { CgCloseR } from "react-icons/cg";
 import axios from 'axios'

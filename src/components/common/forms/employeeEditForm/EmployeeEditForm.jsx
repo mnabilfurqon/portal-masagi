@@ -128,7 +128,6 @@ const EmployeeEditForm = (props) => {
     // GET API Employee
     const getEmployee = async () => {
         try {
-            // const response = await axios.get(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.uuid}`, {
             const response = await axios.get(`http://103.82.93.38/api/v1/employee/${employee_uuid.uuid}`, {
                 headers: { Authorization: token },
             }
@@ -147,7 +146,6 @@ const EmployeeEditForm = (props) => {
     // GET API Position
     const getPositions = async () => {
         try {
-            // const response = await axios.get(`http://103.82.93.38/api/v1/position/`, {
             const response = await axios.get(`http://103.82.93.38/api/v1/position/`, {
                 headers: { Authorization: token },
             }
@@ -163,7 +161,6 @@ const EmployeeEditForm = (props) => {
     // GET API Company
     const getCompanies = async () => {
         try {
-            // const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
             const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
                 headers: { Authorization: token },
             }
@@ -179,7 +176,6 @@ const EmployeeEditForm = (props) => {
     // GET API Division
     const getDivisions = async () => {
         try {
-            // const response = await axios.get(`http://103.82.93.38/api/v1/division/`, {
             const response = await axios.get(`http://103.82.93.38/api/v1/division/`, {
                 headers: { Authorization: token },
             }

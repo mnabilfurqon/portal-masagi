@@ -17,6 +17,8 @@ const SortButton = ({onSort, items}) => {
     zToADivision: 'Z-A Division Name',
     aToZEmployee: 'A-Z Employee Name',
     zToAEmployee: 'Z-A Employee Name',
+    aToZProject: 'A-Z Project Name',
+    zToAProject: 'Z-A Project Name',
     latestOvertimeDate: 'Latest Overtime Date',
     oldestOvertimeDate: 'Oldest OverTime Date',
     latestEndPermitDate: 'Latest End Permit Date',

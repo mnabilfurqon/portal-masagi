@@ -127,7 +127,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === "/user") {
     pageTitle = "User";
     finalPageTitle = pageTitle;
-  } else if (location.pathname === "/user/add-user") {
+  } else if (location.pathname.includes("/employee/add-user")) {
     pageTitle = (
       <Link to="/user" className="page-title">
         User /{" "}
@@ -405,7 +405,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Attendance Report /{" "}
       </Link>
     );
-    pageSubTitle = <span className="page-sub-title"> Detail Attendance </span>;
+    pageSubTitle = (
+      <span className="page-sub-title"> Detail Attendance </span>
+    );
     finalPageTitle = (
       <>
         {pageTitle}
@@ -425,6 +427,174 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/project") {
+    pageTitle = "Project";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === "/add-project") {
+    pageTitle = (
+      <Link to="/project" className="page-title">
+        Project /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Project Configuration </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/project/detail-project")) {
+    pageTitle = (
+      <Link to="/project" className="page-title">
+        Project /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Project Detail </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/edit-project")) {
+    pageTitle = (
+      <span>
+        <Link to="/project" className="page-title">
+          Project /{" "}
+        </Link>
+        <Link to={-1} className="page-title">
+          Project Detail /{" "}
+        </Link>
+      </span>
+    );
+    pageSubTitle = <span className="page-sub-title"> Edit Data </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/client") {
+    pageTitle = "Client";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/client/add-client")) {
+    pageTitle = (
+      <Link to="/client" className="page-title">
+        Client /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Client Configuration</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/client/detail-client/")) {
+    pageTitle = (
+      <Link to="/client" className="page-title">
+        Client /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Client</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/client/edit-client/")) {
+    pageTitle = (
+      <Link to="/client" className="page-title">
+        Client /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Edit Client</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/team-project") {
+    pageTitle = "Team Project";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/team-project/add-team-project")) {
+    pageTitle = (
+      <Link to="/team-project" className="page-title">
+        Team Project /{" "}
+      </Link>
+    );
+    pageSubTitle = (
+      <span className="page-sub-title"> Team Project Configuration</span>
+    );
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/team-project/detail-team-project/")) {
+    pageTitle = (
+      <Link to="/team-project" className="page-title">
+        Team Project /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Team Project Detail</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/team-project/add-member-team-project/")) { 
+    pageTitle = (
+      <Link to="/team-project" className="page-title">
+        Team Project / {" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Team Member</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/project-report") {
+    pageTitle = "Project Report";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname === "/task") {
+    pageTitle = "Task";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/task/add-task")) {
+    pageTitle = (
+      <Link to="/task" className="page-title">
+        Task /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Task Configuration</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/task/detail-task/")) {
+    pageTitle = (
+      <Link to="/task" className="page-title">
+        Task /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Task</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname === "/task-report") {
+    pageTitle = "Task Report";
+    finalPageTitle = pageTitle;
   }
 
   return (
@@ -494,6 +664,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
               icon={<TbDatabasePlus />}
               title="Master Data"
             >
+              <Menu.Item key="/client">
+                <Link to="/client">Client</Link>
+              </Menu.Item>
               <Menu.Item key="/company">
                 <Link to="/company">Company</Link>
               </Menu.Item>
@@ -506,8 +679,17 @@ const LayoutComponent = ({ children, roleNumber }) => {
               <Menu.Item key="/position">
                 <Link to="/position">Position</Link>
               </Menu.Item>
+              <Menu.Item key="/project">
+                <Link to="/project">Project</Link>
+              </Menu.Item>
               <Menu.Item key="/role">
                 <Link to="/role">Role</Link>
+              </Menu.Item>
+              <Menu.Item key="/team-project">
+                <Link to="/team-project">Team Project</Link>
+              </Menu.Item>
+              <Menu.Item key="/type-project">
+                <Link to="/type-project">Type Project</Link>
               </Menu.Item>
               <Menu.Item key="/user">
                 <Link to="/user">User</Link>
@@ -516,7 +698,81 @@ const LayoutComponent = ({ children, roleNumber }) => {
           </Menu>
         </Sider>
       ) : roleNumber === 3 ? (
-        // Login sebagai HR atau Team Leder
+        // Login sebagai HR
+        <Sider
+          breakpoint="md"
+          collapsedWidth="0"
+          width={230}
+          style={{
+            background: colorBgContainer,
+            backgroundColor: "rgba(248, 249, 250, 1)",
+          }}
+        >
+          <img src={LogoMasagi} alt="Logo Masagi" className="logo-masagi" />
+          <Menu
+            defaultSelectedKeys={[location.pathname]}
+            mode="inline"
+            style={{ backgroundColor: "rgba(248, 249, 250, 1)" }}
+          >
+            <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
+              <Link to="/attendance">Attendance</Link>
+            </Menu.Item>
+            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
+              <Link to='/history'>Attendance History</Link>
+            </Menu.Item>
+            <SubMenu
+              key="attendance-report"
+              icon={<RiTeamLine />}
+              title="Attendance Report"
+            >
+              <Menu.Item key="/present">
+                <Link to="/present">Present</Link>
+              </Menu.Item>
+              <Menu.Item key="/report">
+                <Link to="/report">Report</Link>
+              </Menu.Item>
+            </SubMenu>
+            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
+              <Link to='/history'>History</Link>
+            </Menu.Item>
+            <SubMenu
+              key="permit-employee"
+              icon={<LuClipboardSignature />}
+              title='Permit'>
+              <Menu.Item key='leave'>
+                <Link to='/leave'>Leave</Link>
+              </Menu.Item>
+              <Menu.Item key='official-travel'>
+                <Link to='/official-travel'>Official Travel</Link>
+              </Menu.Item>
+              <Menu.Item key='overtime'>
+                <Link to='/overtime'>Overtime</Link>
+              </Menu.Item>
+              <Menu.Item key="permit">
+                <Link to="/permit">Permit</Link>
+              </Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key="permit-request-leaders"
+              icon={<HiOutlineClipboardList />}
+              title='Permit Request'>
+                <Menu.Item key='/leave-request'>
+                  <Link to='/leave-request'>Leave</Link>
+                </Menu.Item>
+                <Menu.Item key='/official-travel-request'>
+                  <Link to='/official-travel-request'>Official Travel</Link>
+                </Menu.Item>
+                <Menu.Item key='/overtime-request'>
+                  <Link to='/overtime-request'>Overtime</Link>
+                </Menu.Item>
+                <Menu.Item key='/permit-request'>
+                  <Link to='/permit-request'>Permit</Link>
+                </Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+      ) : roleNumber === 4 ? (
+        // Login sebagai Team Leader
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -585,6 +841,17 @@ const LayoutComponent = ({ children, roleNumber }) => {
                   <Link to='/permit-request'>Permit</Link>
                 </Menu.Item>
             </SubMenu>
+            <SubMenu
+              key="task-management"
+              icon={<TbClipboardTypography />}
+              title='Task Management'>
+                <Menu.Item key='/project-report'>
+                  <Link to='/project-report'>Project Report</Link>
+                </Menu.Item>
+                <Menu.Item key='/task'>
+                  <Link to='/task'>Task</Link>
+                </Menu.Item>
+            </SubMenu>
           </Menu>
         </Sider>
       ) : (
@@ -627,6 +894,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Link to="/permit">Permit</Link>
               </Menu.Item>
             </SubMenu>
+            <Menu.Item key="/task-report" icon={<TbClipboardTypography />}>
+              <Link to="/task-report">Task Report</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
       )}

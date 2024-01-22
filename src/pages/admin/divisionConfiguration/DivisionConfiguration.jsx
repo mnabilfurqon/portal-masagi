@@ -325,6 +325,7 @@ const DivisionConfiguration = () => {
 
         {deleteLoading ? <LoadingComponent /> :
           <DeleteModal
+            textModal="Are you sure you want to delete this division?"
             visible={isDeleteModalOpen}
             handleDelete={handleDeleteButtonDeleteModal}
             handleCancel={handleCancelButtonDeleteModal}

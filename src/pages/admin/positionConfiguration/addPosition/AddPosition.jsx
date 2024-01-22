@@ -66,10 +66,12 @@ const AddPosition = () => {
       : null;
   
   // Add Position to API
-  const addPosition = async () => {
+  const addPosition = async (values) => {
     try {
-      const response = await axios.post("http://103.82.93.38/api/v1/position/", {
-        'name': value,
+      const response = await axios.post("http://103.82.93.38/api/v1/position/", values, {
+        headers: {
+          Authorization: token,
+        }
       });
       setLoading(true);
       setTimeout(() => {
@@ -80,7 +82,7 @@ const AddPosition = () => {
         console.log("New position added!");
       }, 3000);
     } catch (error) {
-      console.log(error);
+      console.log(error, values);
     }
   }
   
@@ -93,23 +95,23 @@ const AddPosition = () => {
         open={isModalOpen}
         title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Add Position</h2>}
         onCancel={handleCancel}
-        footer={[
-          <Button key="submit" type="none" loading={loading} onClick={addPosition} className="update-button">
-            Save
-          </Button>,
-        ]}
+        footer={<div></div>}
     >
         <Form
             {...formItemLayout}
             layout={formLayout}
             form={form}
+            onFinish={addPosition}
             initialValues={{
                 layout: formLayout,
             }}
         >
-            <Form.Item label="Name">
+            <Form.Item label="Name" name="name">
                 <Input placeholder="Enter Position Name" name="name" value={value} onChange={handleValue}/>
             </Form.Item>
+            <Button htmlType='submit' loading={loading} className="update-button">
+              Save
+            </Button>
         </Form>
     </Modal>
 
