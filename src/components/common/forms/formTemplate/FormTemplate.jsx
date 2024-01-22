@@ -12,7 +12,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin, edit
     const { TextArea } = Input;
 
     // Date Picker
-    const dateFormatList = 'YYYY-MM-DD';
+    const dateFormatList = 'DD/MM/YYYY';
 
     // Radio Button
     const [valueRadio, setValue] = useState('active');
@@ -29,7 +29,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin, edit
             company_name: editCompanyData.company_name,
             address: editCompanyData.address,
             phone_number: editCompanyData.phone_number,
-            date_founded: dayjs(editCompanyData.date_founded, dateFormatList),
+            date_founded: dayjs(editCompanyData.date_founded),
             email_address: editCompanyData.email_address,
             website: editCompanyData.website,
             contact_person: editCompanyData.contact_person,
@@ -116,7 +116,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin, edit
                         },
                     ]}
                     >
-                    <DatePicker placeholder='DD/MM/YYYY' className='date-picker'/>
+                    <DatePicker placeholder='DD/MM/YYYY' format={dateFormatList} className='date-picker'/>
                     </Form.Item>
         
                     <Form.Item
@@ -238,7 +238,7 @@ const FormTemplate = ( {onFinish, onFinishFailed, buttonText, isSuperAdmin, edit
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                     initialValues={{
-                        date_founded: dayjs('1970-01-01', dateFormatList)
+                        date_founded: dayjs('01/01/1970', dateFormatList)
                     }}
                 >
                     <Form.Item

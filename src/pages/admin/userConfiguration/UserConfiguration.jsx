@@ -20,7 +20,6 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 const UserConfiguration = () => {
-  const { SearchOutlined } = pkg
   // {searchValue, filterValue, sortValue, countValue }
 
   // Declaration
@@ -49,8 +48,8 @@ const UserConfiguration = () => {
   const getUsersData = async () => {
     try {
       setLoading(true);
-      // const response = await axios.get('https://attendance-1-r8738834.deta.app/api/v1/users/', {
-      const response = await axios.get('http://127.0.0.1:5000/api/v1/users/', {
+      // const response = await axios.get('http://103.82.93.38/api/v1/users/', {
+      const response = await axios.get('http://103.82.93.38/api/v1/users/', {
         headers: {
           Authorization: token,
         }

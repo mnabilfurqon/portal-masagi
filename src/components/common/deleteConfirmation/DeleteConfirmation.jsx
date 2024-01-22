@@ -57,7 +57,7 @@ export const DeleteConfirmationDialog = (props) => {
   const handleOk = (event) => {
     if (props.data === "Position") {
       try {
-        const response = axios.delete(`https://attendance-1-r8738834.deta.app/api/v1/position/${uuid}`);
+        const response = axios.delete(`http://103.82.93.38/api/v1/position/${uuid}`);
         setLoading(true);
         setTimeout(() => {
           setLoading(false);
@@ -74,7 +74,7 @@ export const DeleteConfirmationDialog = (props) => {
     } 
     // else if (props.data === "User") {
     //   try {
-    //     const response = axios.delete(`http://127.0.0.1:5000/api/v1/users/${uuid}`);
+    //     const response = axios.delete(`http://103.82.93.38/api/v1/users/${uuid}`);
     //     setIsModalOpen(false);
     //     setIsSuccessModalOpen(true);
     //     event.preventDefault();

@@ -38,12 +38,14 @@ const EmployeeTabs = () => {
     const [editFamilyLoading, setEditFamilyLoading] = useState(false);
 
     // hanlder employee data tabs
+    const [isSuccessEmployeeModalVisible, setIsSuccessEmployeeModalVisible] = useState(false);
+
     const editEmployeeData = async (values) => {
         try {
             setSelectedEmployeeLoading(true);
             values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
-            // await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/employee/${selectedEmployeeData.key}`, values, {
-            await axios.put(`http://127.0.0.1:5000/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
+            // await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.key}`, values, {
+            await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
                 headers: {
                     "Authorization": token,
                 },
@@ -67,7 +69,7 @@ const EmployeeTabs = () => {
     }
 
     const handleEmployeeSuccessModalClose = () => {
-        setIsSuccessModalVisible(false);
+        setIsSuccessEmployeeModalVisible(false);
     };
 
     const handleEmployeeFailedModalClose = () => {
@@ -76,7 +78,7 @@ const EmployeeTabs = () => {
 
     // handler education data tabs
     const [activeEducationTab, setActiveEducationTab] = useState('education-data');
-    const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+    const [isSuccessEducationModalVisible, setIsSuccessEducationModalVisible] = useState(false);
     const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
 
     const handleEducationAddButtonClick = () => {
@@ -107,15 +109,15 @@ const EmployeeTabs = () => {
     // API call to add education data
     const addEducationData = async (values) => {
         try {
-            values.entry_year = dayjs(values.entry_year, "YYYY-MM-DD").format("YYYY-MM-DD");
-            values.out_year = dayjs(values.out_year, "YYYY-MM-DD").format("YYYY-MM-DD");
+            values.entry_year = dayjs(values.entry_year, "YYYY").format("YYYY-01-01");
+            values.out_year = dayjs(values.out_year, "YYYY").format("YYYY-01-01");
             values.ipk = parseFloat(values.ipk);
             setAddEducationLoading(true);
-            await axios.post(`https://attendance-1-r8738834.deta.app/api/v1/employee/education/add`,
+            await axios.post(`http://103.82.93.38/api/v1/employee/education/add`,
             {
                 employee_uuid: uuid,
                 education: values.education,
-                institute: values.institution,
+                institute: values.institute,
                 major: values.major,
                 thesis: values.thesis,
                 ipk: values.ipk,
@@ -128,7 +130,7 @@ const EmployeeTabs = () => {
                     "Authorization": token,
                 },
             });
-            setIsSuccessModalVisible(true);
+            setIsSuccessEducationModalVisible(true);
         } catch (error) {
             console.log(error);
         } finally {
@@ -147,15 +149,15 @@ const EmployeeTabs = () => {
     // API call to edit education data
     const editEducationData = async (values) => {
         try {
-            values.entry_year = dayjs(values.entry_year, "YYYY-MM-DD").format("YYYY-MM-DD");
-            values.out_year = dayjs(values.out_year, "YYYY-MM-DD").format("YYYY-MM-DD");
+            values.entry_year = dayjs(values.entry_year, "YYYY-MM-DD").format("YYYY-01-01");
+            values.out_year = dayjs(values.out_year, "YYYY-MM-DD").format("YYYY-01-01");
             setEditEducationLoading(true);
-            await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/education/item/${selectedEducationData.key}`, values, {
+            await axios.put(`http://103.82.93.38/api/v1/education/item/${selectedEducationData.key}`, values, {
                 headers: {
                     "Authorization": token,
                 },
             });
-            setIsSuccessModalVisible(true);
+            setIsSuccessEducationModalVisible(true);
         } catch (error) {
             setIsFailedModalVisible(true);
             console.log(error);
@@ -169,7 +171,7 @@ const EmployeeTabs = () => {
     }
 
     const handleEducationSuccessModalClose = () => {
-        setIsSuccessModalVisible(false);
+        setIsSuccessEducationModalVisible(false);
         setActiveEducationTab('education-data');
     };
 
@@ -180,6 +182,7 @@ const EmployeeTabs = () => {
 
     // handler family data tabs
     const [activeFamilyTab, setActiveFamilyTab] = useState('family-data');
+    const [isSuccessFamilyModalVisible, setIsSuccessFamilyModalVisible] = useState(false);
 
     const handleFamilyAddButtonClick = () => {
         setActiveFamilyTab('family-add-form');
@@ -208,8 +211,9 @@ const EmployeeTabs = () => {
 
     const addFamilyData = async (values) => {
         try {
+            values.birth_date = dayjs(values.birth_date, "DD/MM/YYYY").format("YYYY-MM-DD");
             setAddFamilyLoading(true);
-            await axios.post(`https://attendance-1-r8738834.deta.app/api/v1/employee/family/add`,
+            await axios.post(`http://103.82.93.38/api/v1/employee/family/add`,
             {
                 employee_uuid: uuid,
                 full_name: values.full_name,
@@ -225,7 +229,7 @@ const EmployeeTabs = () => {
                     "Authorization": token,
                 },
             });
-            setIsSuccessModalVisible(true);
+            setIsSuccessFamilyModalVisible(true);
         } catch (error) {
             setIsFailedModalVisible(true);
             console.log(error);
@@ -245,13 +249,13 @@ const EmployeeTabs = () => {
     const editFamilyData = async (values) => {
         try {
             setEditFamilyLoading(true);
-            values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
-            await axios.put(`https://attendance-1-r8738834.deta.app/api/v1/family/member/${selectedFamilyData.key}`, values, {
+            values.birth_date = dayjs(values.birth_date, "DD/MM/YYYY").format("YYYY-MM-DD");
+            await axios.put(`http://103.82.93.38/api/v1/family/member/${selectedFamilyData.key}`, values, {
                 headers: {
                     "Authorization": token,
                 },
             });
-            setIsSuccessModalVisible(true);
+            setIsSuccessFamilyModalVisible(true);
         } catch (error) {
             setIsFailedModalVisible(true);
             console.log(error);
@@ -265,7 +269,7 @@ const EmployeeTabs = () => {
     }
 
     const handleFamilySuccessModalClose = () => {
-        setIsSuccessModalVisible(false);
+        setIsSuccessFamilyModalVisible(false);
         setActiveFamilyTab('family-data');
     };
 
@@ -278,8 +282,8 @@ const EmployeeTabs = () => {
     const getSelectedEmployeeData = async () => {
         try {
             setSelectedEmployeeLoading(true);
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/${uuid}`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/${uuid}`, {
+            // const response = await axios.get(`http://103.82.93.38/api/v1/employee/${uuid}`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/employee/${uuid}`, {
             headers: {
               "Authorization": token,
             },
@@ -302,7 +306,7 @@ const EmployeeTabs = () => {
           navigate("/login");
         }
         getSelectedEmployeeData();
-    }, [token, navigate, isSuccessModalVisible]);
+    }, [token, navigate, isSuccessEducationModalVisible, isSuccessFamilyModalVisible, isSuccessEmployeeModalVisible]);
 
     return (
         <>
@@ -328,7 +332,7 @@ const EmployeeTabs = () => {
                 onFinishFailed={handleEmployeeFailedAddForm}/>
 
                 <SuccessAddDataModal
-                visible={isSuccessModalVisible}
+                visible={isSuccessEmployeeModalVisible}
                 onClose={handleEmployeeSuccessModalClose}
                 textParagraph="Data update successful!"
                 />
@@ -378,7 +382,7 @@ const EmployeeTabs = () => {
                             onFinishFailed={handleEducationFailedAddForm}/>
 
                             <SuccessAddDataModal
-                            visible={isSuccessModalVisible}
+                            visible={isSuccessEducationModalVisible}
                             onClose={handleEducationSuccessModalClose}
                             textParagraph="Data upload successful!"
                             />
@@ -401,7 +405,7 @@ const EmployeeTabs = () => {
                             editEducationData={selectedEducationData}/>
 
                             <SuccessAddDataModal
-                            visible={isSuccessModalVisible}
+                            visible={isSuccessEducationModalVisible}
                             onClose={handleEducationSuccessModalClose}
                             textParagraph="Data update successful!"
                             />
@@ -453,7 +457,7 @@ const EmployeeTabs = () => {
                             onFinishFailed={handleFamilyFailedAddForm}/>
 
                             <SuccessAddDataModal
-                            visible={isSuccessModalVisible}
+                            visible={isSuccessFamilyModalVisible}
                             onClose={handleFamilySuccessModalClose}
                             textParagraph="Data upload successful!"
                             />
@@ -476,7 +480,7 @@ const EmployeeTabs = () => {
                             editFamilyData={selectedFamilyData}/>
 
                             <SuccessAddDataModal
-                            visible={isSuccessModalVisible}
+                            visible={isSuccessFamilyModalVisible}
                             onClose={handleFamilySuccessModalClose}
                             textParagraph="Data upload successful!"
                             />

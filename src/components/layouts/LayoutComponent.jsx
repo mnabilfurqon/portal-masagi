@@ -44,6 +44,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       Cookies.remove("role_uuid");
       Cookies.remove("username");
       Cookies.remove("company_uuid");
+      Cookies.remove("role_name");
       navigate("/login");
     };
 

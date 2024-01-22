@@ -37,7 +37,7 @@ const EmployeeEditForm = (props) => {
         }
         getDivisions();
         getPositions();
-        getCompanies();
+        // getCompanies();
         getEmployee();
         document.getElementById('save').style.display = "none";
         document.getElementById('edit').style.display = "flex";
@@ -128,8 +128,8 @@ const EmployeeEditForm = (props) => {
     // GET API Employee
     const getEmployee = async () => {
         try {
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/employee/${selectedEmployeeData.uuid}`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/${employee_uuid.uuid}`, {
+            // const response = await axios.get(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.uuid}`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/employee/${employee_uuid.uuid}`, {
                 headers: { Authorization: token },
             }
         );
@@ -147,8 +147,8 @@ const EmployeeEditForm = (props) => {
     // GET API Position
     const getPositions = async () => {
         try {
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/position/`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/position/`, {
+            // const response = await axios.get(`http://103.82.93.38/api/v1/position/`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/position/`, {
                 headers: { Authorization: token },
             }
         );
@@ -163,8 +163,8 @@ const EmployeeEditForm = (props) => {
     // GET API Company
     const getCompanies = async () => {
         try {
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/company/`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
+            // const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
@@ -179,8 +179,8 @@ const EmployeeEditForm = (props) => {
     // GET API Division
     const getDivisions = async () => {
         try {
-            // const response = await axios.get(`https://attendance-1-r8738834.deta.app/api/v1/division/`, {
-            const response = await axios.get(`http://127.0.0.1:5000/api/v1/division/`, {
+            // const response = await axios.get(`http://103.82.93.38/api/v1/division/`, {
+            const response = await axios.get(`http://103.82.93.38/api/v1/division/`, {
                 headers: { Authorization: token },
             }
         );
