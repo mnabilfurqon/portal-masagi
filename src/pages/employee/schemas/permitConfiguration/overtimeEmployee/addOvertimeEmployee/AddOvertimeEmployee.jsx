@@ -13,6 +13,7 @@ import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
+import moment from 'moment';
 import "./addOvertimeEmployee.css";
 
 const AddOvertimeEmployee = () => {
@@ -26,6 +27,9 @@ const AddOvertimeEmployee = () => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [duration, setDuration] = useState(null);
 
   const addOvertime = async (values) => {
     try {
@@ -122,6 +126,24 @@ const AddOvertimeEmployee = () => {
     return current && (current < today || current > today.endOf("day"));
   };
 
+  const handleStartTimeChange = (time) => {
+    setStartTime(time);
+    calculateDuration(time, endTime);
+  };
+
+  const handleEndTimeChange = (time) => {
+    setEndTime(time);
+    calculateDuration(startTime, time);
+  };
+
+  const calculateDuration = (start, end) => {
+    if (start && end) {
+      const duration = moment.duration(end.diff(start));
+      const formattedDuration = moment.utc(duration.asMilliseconds()).format('HH:mm');
+      setDuration(formattedDuration);
+    }
+  };  
+
   const successTitle = (
     <div className="success-title-overtime">
       <AiOutlineCheckCircle size={80} className="success-logo-overtime" />
@@ -184,7 +206,7 @@ const AddOvertimeEmployee = () => {
             className="overtime-input"
             format={dateFormatList}
             disabledDate={disabledDate}
-          />
+            />
         </Form.Item>
         <Form.Item
           label="Start Overtime"
@@ -194,7 +216,8 @@ const AddOvertimeEmployee = () => {
           <TimePicker
             className="start-overtime-input"
             placeholder="00:00"
-            format={"HH:mm"}
+            format="HH:mm"
+            onChange={handleStartTimeChange}
           />
         </Form.Item>
         <Form.Item
@@ -210,23 +233,18 @@ const AddOvertimeEmployee = () => {
           <TimePicker
             className="end-overtime-input"
             placeholder="00:00"
+            format="HH:mm"
+            onChange={handleEndTimeChange}
           />
         </Form.Item>
         <Form.Item
           label="Duration"
           name="hours_overtime"
-          rules={[
-            {
-              required: true,
-              message: "Please input duration!",
-            },
-          ]}
         >
           <TimePicker
             className="duration-input"
-            // format="HH:mm:ss"
-            placeholder="00:00:00"
-            defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")}
+            placeholder={duration}
+            disabled
           />
         </Form.Item>
         <Form.Item
