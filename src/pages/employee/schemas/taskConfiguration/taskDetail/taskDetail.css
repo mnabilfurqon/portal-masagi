@@ -70,14 +70,24 @@
     pointer-events: none;
 }
 
-.update-task-button {
-    background-color: #629093;
-    border-color: #629093;
-    border-radius: 4px;
+.delegate-button {
+    background-color: #ffffff !important;
+    border-color: #aec142 !important;; 
+    color: #aec142 !important;
+    border-radius: 15px !important;
+    cursor: default;
 }
 
-.update-task-button:hover {
-    background-color: #ffffff !important;
-    border-color: #629093 !important;
-    color: #629093 !important;
+.delegate-button button {
+    pointer-events: none;
+}
+
+.custom-placeholder-datepicker .ant-picker-input input::placeholder {
+    font-weight: bold;
+    color: #DC3545;
+}
+
+.custom-done-date-placeholder-datepicker .ant-picker-input input::placeholder {
+    font-weight: bold;
+    color: #28A745;
 }

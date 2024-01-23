@@ -58,7 +58,6 @@ import AddMemberTeamProjectConfiguration from "../pages/admin/teamProjectConfigu
 import TaskMain from "../pages/employee/schemas/taskConfiguration/taskMain/TaskMain";
 import TaskAdd from "../pages/employee/schemas/taskConfiguration/taskAdd/TaskAdd";
 import TaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/TaskDetail";
-import EmployeeTaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/EmployeeTaskDetail";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -1126,10 +1125,37 @@ const RouteManagement = () => {
 
             {/* Task Management Configuration Route */}
             <Route
-              path="task-report"
+              path="/task"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <EmployeeTaskDetail />
+                  <TaskMain />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task-report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Task Report Employee</p>
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task/add-task"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskAdd />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task/detail-task/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskDetail />
                 </LayoutComponent>
               }
             />
