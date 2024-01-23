@@ -3,12 +3,16 @@ import { Table } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import './taskTable.css'
 import Cookies from 'js-cookie'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
 const TaskTable = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
+  const [taskData, setTaskData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {searchValue, filterValue, sortValue, countValue, columns} = props;
+  const {searchValue, filterValue, sortValue, countValue, columns, urlApi} = props;
+  const dateFormat = 'DD/MM/YYYY';
 
     const [tableParams, setTableParams] = useState({
         pagination : {
@@ -28,65 +32,68 @@ const TaskTable = (props) => {
         per_page: tableParams.pagination.pageSize,
     });
 
+    const getTaskData = async () => {
+      try {
+        var page;
+        setLoading(true);
+        if (tableParams.pagination.total < countValue) {
+          page = 1;
+        } else {
+          page = tableParams.pagination.current;
+        }
+
+        const response = await axios.get(urlApi, {
+          params: {
+            page: page,
+            per_page: countValue,
+            search: searchValue,
+            project_uuid: filterValue[0],
+            desc: sortValue === 'zToATask' ? true : false,
+            sort_by: 'name',
+          },
+          headers: {
+            Authorization: token,
+            "ngrok-skip-browser-warning": "69420",
+          },
+        });
+
+        setTaskData(response.data.items);
+
+        setTableParams({
+          ...tableParams,
+          pagination: {
+            ...tableParams.pagination,
+            total: response.data._meta.total_items,
+            pageSize: countValue,
+          },
+        });
+
+      } catch (error) {
+        console.log(error);    
+      } finally {
+        setLoading(false);
+      }
+    };
+
     useEffect(() => {
       if (!token) {
         navigate("/login");
       }
-    //   getPermitData();
+      getTaskData();
     }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
 
-    const dataDummy = [
-        {
-            key: '1',
-            project: 'Web Development Project',
-            client: 'PT. ABC',
-            task: 'Create Register Page',
-            deadline: '01/12/2023',
-            assignTo: 'John Doe',
-            createdBy: 'Samuel Jackson',
-            status: 'in progress',
-        },
-        {
-            key: '2',
-            project: 'Web Development Project',
-            client: 'PT. ABC',
-            task: 'Create Login Page',
-            deadline: '07/12/2023',
-            assignTo: 'John Doe',
-            createdBy: 'Samuel Jackson',
-            status: 'done',
-        },
-        {
-            key: '3',
-            project: 'Web Development Project',
-            client: 'PT. ABC',
-            task: 'Create Home Page',
-            deadline: '14/12/2023',
-            assignTo: 'John Doe',
-            createdBy: 'Samuel Jackson',
-            status: 'review',
-        },
-        {
-            key: '4',
-            project: 'Web Development Project',
-            client: 'PT. ABC',
-            task: 'Create About Page',
-            deadline: '21/12/2023',
-            assignTo: 'John Doe',
-            createdBy: 'Samuel Jackson',
-            status: 'cancel',
-        },
-        {
-            key: '5',
-            project: 'Web Development Project',
-            client: 'PT. ABC',
-            task: 'Create Contact Page',
-            deadline: '28/12/2023',
-            assignTo: 'John Doe',
-            createdBy: 'Samuel Jackson',
-            status: 'open',
-        }
-    ];
+  const data = taskData.map(item => {
+    return {
+      key: item.uuid,
+      project: item.project.name,
+      client: item.project.client.name,
+      task: item.name,
+      deadline: dayjs(item.deadline).format(dateFormat),
+      assignTo: item.asign_to_employee.name,
+      createdBy: item.created_by_employee.name,
+      status: item.status.name,
+    }
+  })
 
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
@@ -106,7 +113,7 @@ const TaskTable = (props) => {
         });
     
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-        //   setPermitData([]);
+            setTaskData([]);
         }
     };
 
@@ -114,7 +121,7 @@ const TaskTable = (props) => {
         <div>
             <Table 
                 columns={columns}
-                dataSource={dataDummy}
+                dataSource={data}
                 pagination={tableParams.pagination}
                 loading={loading}
                 rowClassName="custom-row"

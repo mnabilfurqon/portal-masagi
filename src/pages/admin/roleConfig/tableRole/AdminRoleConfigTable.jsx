@@ -10,9 +10,10 @@ import { PiWarningCircleLight } from 'react-icons/pi';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen }) => {
+const AdminRoleConfigTable = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
+  const { searchValue, sortValue, countValue, modalOpen } = props
   const [uuid, setUuid] = useState(null);
   const [roleData, setRoleData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -51,7 +52,8 @@ const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen })
           page: page,
           per_page: countValue,
           search: searchValue,
-          desc: sortValue === 'latest' ? true : false,
+          desc: sortValue === 'latestJoinDate' || sortValue === 'zToARole' ? true : false,
+          sort_by: sortValue === 'latestJoinDate' || sortValue === 'oldestJoinDate' ? 'created_date' : null,
         },
         headers: {
           Authorization: token,
@@ -76,7 +78,7 @@ const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen })
   const deleteRoleData = async () => {
     try {
       setDeleting(true);
-      const response = await axios.delete(
+      await axios.delete(
         `http://103.82.93.38/api/v1/role/${uuid}`,
         {
           headers: {
@@ -173,6 +175,17 @@ const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen })
     };
   });
 
+  const sortedData = [...tabel_data].sort((a, b) => {
+    if (sortValue === 'aToZRole') {
+      return a.roleName.localeCompare(b.roleName);
+    } else if (sortValue === 'zToARole') {
+      return b.roleName.localeCompare(a.roleName);
+    } else {
+      return 0;
+    }
+  });
+
+
   const handleTableChange = (pagination, sorter) => {
     setTableParams({
       pagination: {
@@ -197,7 +210,7 @@ const AdminRoleConfigTable = ({ searchValue, sortValue, countValue, modalOpen })
     <>
       <Table
         columns={title}
-        dataSource={tabel_data}
+        dataSource={sortedData}
         pagination={tableParams.pagination}
         loading={loading}
         onChange={handleTableChange}

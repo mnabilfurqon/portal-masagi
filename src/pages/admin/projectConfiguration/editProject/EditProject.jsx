@@ -15,10 +15,11 @@ const EditProject = () => {
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState('horizontal');
   const [requiredMark, setRequiredMarkType] = useState('optional');
-  const [loading, setLoading] = useState('');
+  const [loading, setLoading] = useState(false);
   const [clients, setClients] = useState();
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailedModal, setOpenFailedModal] = useState(false);
+  const { TextArea } = Input;
 
   // Header 
   useEffect(() => {
@@ -60,11 +61,11 @@ const EditProject = () => {
 
   // Failed Modal Handler
   const onOkFailedModal = () => {
-    setOpenSuccessModal(false)
+    setOpenFailedModal(false)
   }
   
   const onCancelFailedModal = () => {
-    setOpenSuccessModal(false)
+    setOpenFailedModal(false)
   }
 
   // GET API Client
@@ -106,7 +107,7 @@ const EditProject = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    // setOpenFailedModal(true);
+    setOpenFailedModal(true);
     console.log('Failed:', errorInfo);
   };
 
@@ -155,6 +156,18 @@ const EditProject = () => {
           <Input placeholder='Enter Project Name'/>
         </Form.Item>
         <Form.Item 
+          name="description" 
+          label="Description"
+          colon={false} 
+          labelAlign='left' 
+          rules={[ 
+            { required: true, 
+              message: 'Please input your project name!', },
+          ]}
+        >
+          <TextArea rows={3} placeholder='Enter Description'/>
+        </Form.Item>
+        <Form.Item 
           name="project_uuid" 
           label="Type Project"
           colon={false} 
@@ -179,7 +192,7 @@ const EditProject = () => {
               message: 'Please input your project start date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY'/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
         </Form.Item>
         <Form.Item 
           name="due_date" 
@@ -192,7 +205,37 @@ const EditProject = () => {
               message: 'Please input your project due date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY'/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
+        </Form.Item>
+        <Form.Item 
+          name="status" 
+          label="Status"
+          colon={false} 
+          labelAlign='left'
+        >
+            <Select>
+                <Select.Option value="cancel">Cancel</Select.Option>
+                <Select.Option value="done">Done</Select.Option>
+                <Select.Option value="inprogress">In-Progress</Select.Option>
+            </Select>
+        </Form.Item>
+        <Form.Item 
+          name="cancel_date" 
+          label="Cancel Date" 
+          style={{ width: "100%", }}
+          colon={false} 
+          labelAlign='left'
+        >
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
+        </Form.Item>
+        <Form.Item 
+          name="done_date" 
+          label="Done Date" 
+          style={{ width: "100%", }}
+          colon={false} 
+          labelAlign='left' 
+        >
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
         </Form.Item>
         <Form.Item 
           name="status" 
@@ -227,7 +270,7 @@ const EditProject = () => {
 
         <Flex gap={20} align='center' justify='end'>
             <Link to={-1} style={{ color: "black", }}>Cancel</Link>
-            <Button htmlType='submit' className='submit-button' style={{ color: "white", }}>Save</Button>
+            <Button htmlType='submit' className='submit-button' style={{ color: "white", }} loading={loading}>Save</Button>
         </Flex>
       </Form>
       

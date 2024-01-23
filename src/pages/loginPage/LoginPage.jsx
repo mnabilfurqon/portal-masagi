@@ -33,13 +33,16 @@ const LoginPage = () => {
         {
           headers: {
             Authorization: loginResponse.data.token,
+            "ngrok-skip-browser-warning": "69420",
           },
         }
       );
       Cookies.set("role_uuid", protectedResponse.data.user.role.uuid);
-      Cookies.set("role_name", protectedResponse.data.user.role.name);
+      Cookies.set("role_name", encodeURIComponent(protectedResponse.data.user.role.name));
       Cookies.set("username", protectedResponse.data.user.username);
       Cookies.set("company_uuid", protectedResponse.data.user.company.uuid);
+      Cookies.set("employee_name", protectedResponse.data.user.employee.name);
+      Cookies.set("employee_uuid", protectedResponse.data.user.employee.uuid);
     } catch (error) {
       setLoginError('Invalid username or password');
     } finally {

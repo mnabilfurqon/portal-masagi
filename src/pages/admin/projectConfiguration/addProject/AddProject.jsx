@@ -19,6 +19,7 @@ const AddProject = () => {
   const [clients, setClients] = useState();
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailedModal, setOpenFailedModal] = useState(false);
+  const { TextArea } = Input;
 
   // Header 
   useEffect(() => {
@@ -155,6 +156,18 @@ const AddProject = () => {
           <Input placeholder='Enter Project Name'/>
         </Form.Item>
         <Form.Item 
+          name="description" 
+          label="Description"
+          colon={false} 
+          labelAlign='left' 
+          rules={[ 
+            { required: true, 
+              message: 'Please input your project name!', },
+          ]}
+        >
+          <TextArea rows={3} placeholder='Enter Description'/>
+        </Form.Item>
+        <Form.Item 
           name="project_uuid" 
           label="Type Project"
           colon={false} 
@@ -179,7 +192,7 @@ const AddProject = () => {
               message: 'Please input your project start date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY'/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
         </Form.Item>
         <Form.Item 
           name="due_date" 
@@ -192,7 +205,7 @@ const AddProject = () => {
               message: 'Please input your project due date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY'/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
         </Form.Item>
 
         <Flex gap={20} align='center' justify='end'>
