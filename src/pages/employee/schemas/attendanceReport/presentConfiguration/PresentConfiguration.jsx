@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './presentConfiguration.css'
 import { useNavigate } from 'react-router-dom'
-import { Row, Col, DatePicker, Progress, Input, Table, Button } from 'antd'
+import { Row, Col, DatePicker, Progress, Input, Table, Button, Spin } from 'antd'
 import { IoIosSearch } from "react-icons/io";
 import { AiOutlineFileSearch } from 'react-icons/ai'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'

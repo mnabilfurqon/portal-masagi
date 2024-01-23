@@ -522,7 +522,8 @@ const RouteManagement = () => {
               path="/official-travel/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailOfficialTravelEmployee />
+                  {/* <DetailOfficialTravelEmployee /> */}
+                  <DetailOfficialTravelData />
                 </LayoutComponent>
               }
             />
@@ -549,7 +550,8 @@ const RouteManagement = () => {
               path="/leave/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailLeaveEmployee />
+                  {/* <DetailLeaveEmployee /> */}
+                  <DetailLeaveData />
                 </LayoutComponent>
               }
             />
@@ -576,7 +578,8 @@ const RouteManagement = () => {
               path="/overtime/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailOvertimeEmployee />
+                  {/* <DetailOvertimeEmployee /> */}
+                  <DetailOvertimeData />
                 </LayoutComponent>
               }
             />
@@ -603,7 +606,8 @@ const RouteManagement = () => {
               path="/permit/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailPermitEmployee />
+                  {/* <DetailPermitEmployee /> */}
+                  <DetailPermitData />
                 </LayoutComponent>
               }
             />
@@ -993,7 +997,7 @@ const RouteManagement = () => {
               path="/attendance"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance</p>
+                  <AttendanceConfiguration />
                 </LayoutComponent>
               }
             />

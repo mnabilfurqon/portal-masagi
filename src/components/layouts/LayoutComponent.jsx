@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
-import { TbDatabasePlus } from "react-icons/tb";
+import { TbDatabasePlus, TbClipboardTypography } from "react-icons/tb";
 import { RiTeamLine } from "react-icons/ri";
 import { LuClipboardSignature } from "react-icons/lu";
 import { HiOutlineClipboardList } from "react-icons/hi";
@@ -732,9 +732,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Link to="/report">Report</Link>
               </Menu.Item>
             </SubMenu>
-            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
-              <Link to='/history'>History</Link>
-            </Menu.Item>
             <SubMenu
               key="permit-employee"
               icon={<LuClipboardSignature />}

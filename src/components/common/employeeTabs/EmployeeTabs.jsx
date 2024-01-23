@@ -21,8 +21,6 @@ import LoadingComponent from '../../loadingComponent/LoadingComponent';
 const { TabPane } = Tabs;
 
 const EmployeeTabs = () => {
-    const { UserOutlined } = pkg
-
     const { uuid } = useParams();
     const token = Cookies.get("token");
     const navigate = useNavigate();
@@ -51,10 +49,10 @@ const EmployeeTabs = () => {
                     "Authorization": token,
                 },
             });
-            setIsSuccessModalVisible(true);
+            setIsSuccessEmployeeModalVisible(true);
         } catch (error) {
             setIsFailedModalVisible(true);
-            console.log(error, values);
+            console.log("Galat", error, "Nilai", values);
         } finally {
             setSelectedEmployeeLoading(false);
         }
