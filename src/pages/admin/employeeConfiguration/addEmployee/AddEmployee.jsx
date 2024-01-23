@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import './addEmployee.css'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserOutlined } from '@ant-design/icons';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Col, message, Upload, Row } from 'antd'
-import { Space, Tabs, Button, Form, Input, InputNumber, DatePicker, Radio, Select, Flex, Avatar, Divider } from 'antd'
+import { Form, Input, InputNumber, DatePicker, Radio, Select, Flex, Avatar, Divider, message } from 'antd'
 import SubmitButton from '@common/buttons/submitButton/SubmitButton'
 import SuccessModal from '@common/modals/successModal/SuccessModal';
 import FailedModal from '@common/modals/failedModal/FailedModal';
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import dayjs from 'dayjs';
+import { AiOutlineUser, AiOutlineLoading3Quarters } from "react-icons/ai";
+import { FaPlus } from "react-icons/fa6";
 
 const AddEmployee = () => {
     // Declaration
@@ -69,7 +68,6 @@ const AddEmployee = () => {
     // GET API Division
     const getDivision = async () => {
         try {
-            // const response = await axios.get(`http://103.82.93.38/api/v1/division/`, {
             const response = await axios.get(`http://103.82.93.38/api/v1/division/`, {
                 headers: { Authorization: token },
             }
@@ -86,7 +84,6 @@ const AddEmployee = () => {
     // GET API Position
     const getPosition = async () => {
         try {
-            // const response = await axios.get(`http://103.82.93.38/api/v1/position/`, {
             const response = await axios.get(`http://103.82.93.38/api/v1/position/`, {
                 headers: { Authorization: token },
             }
@@ -102,7 +99,6 @@ const AddEmployee = () => {
     // GET API Company
     const getCompanies = async () => {
         try {
-            // const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
             const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
                 headers: { Authorization: token },
             }
@@ -124,7 +120,6 @@ const AddEmployee = () => {
             } else {
                 values.separation_date = values.join_date;
             }
-            // const response = await axios.post(`http://103.82.93.38/api/v1/employee/`, values, {
             const response = await axios.post(`http://103.82.93.38/api/v1/employee/`, values, {
                 headers: { Authorization: token },
             }
@@ -212,7 +207,7 @@ const AddEmployee = () => {
 
     const uploadButton = (
         <div>
-            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            {loading ? <AiOutlineLoading3Quarters /> : <FaPlus />}
             <div style={{ marginTop: 8, }} >
                 Upload
             </div>
@@ -222,7 +217,7 @@ const AddEmployee = () => {
     return (
     <>
         <Flex gap={15} align='center'>
-            {/* <Avatar size={128} icon={<UserOutlined />} /> */}
+            {/* <Avatar size={128} icon={<AiOutlineUser />} /> */}
             <div>
                 {/* <Upload
                 name="avatar"
@@ -245,7 +240,7 @@ const AddEmployee = () => {
                         uploadButton
                     )}
                 </Upload> */}
-                <Avatar size={100} icon={<UserOutlined />} />
+                <Avatar size={100} icon={<AiOutlineUser />} />
             </div>
             <div>
                 <h2>Full Name</h2>

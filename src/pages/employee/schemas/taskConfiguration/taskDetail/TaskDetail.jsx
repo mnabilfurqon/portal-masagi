@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { TbClipboardTypography } from "react-icons/tb";
 import { LuClipboardList } from "react-icons/lu";
 import { FaRegCommentDots } from "react-icons/fa";
-import { DownOutlined } from '@ant-design/icons';
+// import { DownOutlined } from '@ant-design/icons';
+import { AiOutlineDown } from 'react-icons/ai';
 import { CiPaperplane } from "react-icons/ci";
 import { DatePicker, Input, List, Button, Space, Flex, Avatar, Tooltip, Typography, Card, Row, Col, Dropdown, message, Spin } from 'antd';
 import './taskDetail.css'
@@ -671,7 +672,7 @@ const TaskDetail = () => {
                             <a onClick={(e) => e.preventDefault()}>
                             <Space>
                                 {delegateLabel}
-                                <DownOutlined />
+                                <AiOutlineDown />
                             </Space>
                             </a>
                         </Dropdown>
@@ -716,7 +717,7 @@ const TaskDetail = () => {
                                 <a onClick={(e) => e.preventDefault()}>
                                 <Space>
                                     {statusLabel}
-                                    <DownOutlined />
+                                    <AiOutlineDown />
                                 </Space>
                                 </a>
                             </Dropdown>

@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import "./editUser.css"
 import { Button, Modal, Form, Input, Select, Radio } from 'antd'
 import { BiEdit } from "react-icons/bi"
-import SuccessModal from '../../../../components/common/modals/successModal/SuccessModal'
-import FailedModal from '../../../../components/common/modals/failedModal/FailedModal'
+import SuccessModal from '@common/modals/successModal/SuccessModal'
+import FailedModal from '@common/modals/failedModal/FailedModal'
 
 const editUser = (props) => {
   // Declaration
@@ -102,7 +102,6 @@ const editUser = (props) => {
   const getUser = async () => {
     try {
       setLoading(true)
-      // const response = await axios.get(`http://103.82.93.38/api/v1/users/${key}`, {
       const response = await axios.get(`http://103.82.93.38/api/v1/users/${key}`, {
           headers: { Authorization: token },
         }
@@ -121,7 +120,6 @@ const editUser = (props) => {
   const getRoles = async () => {
     try {
       setLoading(true)
-      // const response = await axios.get(`http://103.82.93.38/api/v1/role/`, {
       const response = await axios.get(`http://103.82.93.38/api/v1/role/`, {
           headers: { Authorization: token },
         }
@@ -150,7 +148,6 @@ const editUser = (props) => {
 // GET API Employee
 const getEmployees = async () => {
     try {
-        // const response = await axios.get(`http://103.82.93.38/api/v1/employee/`, {
         const response = await axios.get(`http://103.82.93.38/api/v1/employee/`, {
             headers: { Authorization: token },
         }
@@ -167,7 +164,6 @@ const getEmployees = async () => {
     try {
       setLoading(true);
       // console.log("values", values);
-      // const response = await axios.put(`http://103.82.93.38/api/v1/users/${key}`, values,
       const response = await axios.put(`http://103.82.93.38/api/v1/users/${key}`, values,
         {
           headers: { Authorization: token },

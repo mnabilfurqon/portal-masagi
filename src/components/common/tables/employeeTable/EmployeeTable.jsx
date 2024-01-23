@@ -22,7 +22,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
 
   const handleAddUserClick = (record) => {
     const value = record.key;
-    navigate(`/user/add-user/${value}`);
+    navigate(`/employee/add-user/${value}`);
     // navigate(`/user/add-user`);
   }
 
@@ -66,7 +66,6 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
       } else {
         page = tableParams.pagination.current;
       }
-      // const response = await axios.get("http://103.82.93.38/api/v1/employee/", {
       const response = await axios.get("http://103.82.93.38/api/v1/employee/", {
         params: {
           page: page,

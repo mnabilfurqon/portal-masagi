@@ -4,7 +4,6 @@ import {
   AiOutlineCloseCircle,
   AiOutlinePlus,
 } from "react-icons/ai";
-import RoleConfigTable from "./tableRole/AdminRoleConfigTable";
 import { Button, Col, Input, Modal, Row } from "antd";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
@@ -14,6 +13,7 @@ import SearchBox from "@common/SearchBox/SearchBox";
 import SortButton from "@common/buttons/sortButton/SortButton";
 import CountButton from "@common/buttons/countButton/CountButton";
 import { sortData } from "./constans";
+import AdminRoleConfigTable from "./tableRole/AdminRoleConfigTable";
 
 const AdminRoleConfig = () => {
   const token = Cookies.get("token");
@@ -202,7 +202,7 @@ const AdminRoleConfig = () => {
       </Row>
 
       <div className="role-table-container">
-        <RoleConfigTable
+        <AdminRoleConfigTable
           searchValue={searchValue}
           sortValue={sortValue}
           countValue={countValue}

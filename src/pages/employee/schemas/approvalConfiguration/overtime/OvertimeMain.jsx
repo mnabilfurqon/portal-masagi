@@ -1,16 +1,17 @@
-import React, {useState} from 'react'
-import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
-import SortButton from '@common/buttons/sortButton/SortButton'
-import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
-import CountButton from '@common/buttons/countButton/CountButton'
-import DialogModal from '@common/modals/dialogModal/DialogModal'
-import RespondLeftModal from '@common/modals/respondLeftModal/RespondLeftModal'
+import React, { useState } from "react";
+import SearchBox from "@common/SearchBox/SearchBox";
+import FilterButton from "@common/buttons/FilterButton/FilterButton";
+import SortButton from "@common/buttons/sortButton/SortButton";
+import PermitRequestTable from "@common/tables/permitRequestTable/PermitRequestTable";
+import CountButton from "@common/buttons/countButton/CountButton";
+import DialogModal from "@common/modals/dialogModal/DialogModal";
+import RespondLeftModal from "@common/modals/respondLeftModal/RespondLeftModal";
 import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
-import { Row, Col, DatePicker, Space, Button } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { AiOutlineFileSearch } from 'react-icons/ai'
-import { CheckSquareOutlined, CloseSquareOutlined } from '@ant-design/icons'
+import { Row, Col, DatePicker, Space, Button } from "antd";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineFileSearch } from "react-icons/ai";
+import { FaRegCheckSquare } from "react-icons/fa";
+import { CgCloseR } from "react-icons/cg";
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -28,32 +29,32 @@ const OvertimeMain = () => {
     const [respondRejectModalVisible, setRespondRejectModalVisible] = useState(false);
     const [failedAddDataModalVisible, setFailedAddDataModalVisible] = useState(false);
 
-    // search handler
-    const [searchValue, setSearchValue] = useState("");
+  // search handler
+  const [searchValue, setSearchValue] = useState("");
 
-    const handleSearch = (value) => {
-        setSearchValue(value);
-    };
-    // end of search handler
+  const handleSearch = (value) => {
+    setSearchValue(value);
+  };
+  // end of search handler
 
-    // filter handler
-    const [filterValue, setFilterValue] = useState("");
+  // filter handler
+  const [filterValue, setFilterValue] = useState("");
 
-    const handleFilter = (value) => {
-        setFilterValue(value);
-    };
-    // end of filter handler
+  const handleFilter = (value) => {
+    setFilterValue(value);
+  };
+  // end of filter handler
 
-    // sort handler
-    const [sortValue, setSortValue] = useState("");
+  // sort handler
+  const [sortValue, setSortValue] = useState("");
 
-    const handleSort = (value) => {
-        setSortValue(value);
-    };
-    // end of sort handler
+  const handleSort = (value) => {
+    setSortValue(value);
+  };
+  // end of sort handler
 
-    // count handler
-    const [countValue, setCountValue] = useState("10");
+  // count handler
+  const [countValue, setCountValue] = useState("10");
 
     const handleCount = (value) => {
         setCountValue(value);
@@ -74,20 +75,20 @@ const OvertimeMain = () => {
     };
     // end of date picker handler
 
-    const treeData = [
-        {
-            title: 'Approved',
-            key: 'approved',
-        },
-        {
-            title: 'Pending',
-            key: 'pending',
-        },
-        {
-            title: 'Rejected',
-            key: 'rejected',
-        },
-    ];
+  const treeData = [
+    {
+      title: "Approved",
+      key: "approved",
+    },
+    {
+      title: "Pending",
+      key: "pending",
+    },
+    {
+      title: "Rejected",
+      key: "rejected",
+    },
+  ];
 
     const itemsSort = [
         {
@@ -165,11 +166,11 @@ const OvertimeMain = () => {
                     <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={() => {handleApproveModalOpen(record)}} ghost>
-                        <CheckSquareOutlined className="accept-icon" />
+                    <Button className="action-button" type="primary" size="small" onClick={handleApproveModalOpen} ghost>
+                        <FaRegCheckSquare className="accept-icon" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
-                        <CloseSquareOutlined className="reject-icon" />
+                        <CgCloseR className="reject-icon" />
                     </Button>
                 </Space>
             ),
@@ -341,7 +342,7 @@ const OvertimeMain = () => {
             <FailedAddDataModal {...propsFailedAddDataModal} />
         </div>
     </div>
-  )
-}
+  );
+};
 
-export default OvertimeMain
+export default OvertimeMain;

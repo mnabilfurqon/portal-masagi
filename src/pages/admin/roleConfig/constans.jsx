@@ -1,10 +1,10 @@
 export const sortData = [
   {
-    key: 'aToZCompany',
+    key: 'aToZRole',
     label: 'A-Z Role Name'
   },
   {
-    key: 'zToACompany',
+    key: 'zToARole',
     label: 'Z-A Role Name'
   },
   {

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Tabs, Button, Avatar, Divider, Row, Col, Spin } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { AiOutlineUser } from "react-icons/ai";
 import { useParams, useNavigate } from 'react-router-dom';
 import AddButton from '../buttons/addButton/AddButton';
 import './employeeTabs.css';
@@ -21,11 +21,14 @@ import LoadingComponent from '../../loadingComponent/LoadingComponent';
 const { TabPane } = Tabs;
 
 const EmployeeTabs = () => {
+    const { UserOutlined } = pkg
 
     const { uuid } = useParams();
     const token = Cookies.get("token");
     const navigate = useNavigate();
     const [selectedEmployeeData, setSelectedEmployeeData] = useState([]);
+    const [employeeName, setEmployeeName] = useState();
+    const [employeePosition, setEmployeePosition] = useState();
     const [selectedEmployeeLoading, setSelectedEmployeeLoading] = useState(false);
 
     const [selectedEducationData, setSelectedEducationData] = useState([]);
@@ -43,7 +46,6 @@ const EmployeeTabs = () => {
         try {
             setSelectedEmployeeLoading(true);
             values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
-            // await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.key}`, values, {
             await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
                 headers: {
                     "Authorization": token,
@@ -281,14 +283,16 @@ const EmployeeTabs = () => {
     const getSelectedEmployeeData = async () => {
         try {
             setSelectedEmployeeLoading(true);
-            // const response = await axios.get(`http://103.82.93.38/api/v1/employee/${uuid}`, {
             const response = await axios.get(`http://103.82.93.38/api/v1/employee/${uuid}`, {
             headers: {
               "Authorization": token,
             },
             });
             setSelectedEmployeeData(response.data);
-            console.log(response.data);
+            setEmployeeName(response.data.name);
+            setEmployeePosition(response.data.position.name);
+            console.log("emloyee data", selectedEmployeeData);
+            // console.log(response.data.position.name);
         } catch (error) {
             console.log(error);
         } finally {
@@ -311,12 +315,12 @@ const EmployeeTabs = () => {
         <>
             <Row align='middle' gutter={[56, 8]}>
             <Col xs={8} sm={6} md={6} lg={4} xl={3} xxl={2}>
-                <Avatar size={100} icon={<UserOutlined />} />
+                <Avatar size={100} icon={<AiOutlineUser />} />
             </Col>
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
-                {/* <h4 className='profile-name'>{selectedEmployeeData.name}</h4>
-                <p className='profile-role'>{selectedEmployeeData.position.name}</p> */}
+                <h4 className='profile-name'>{employeeName}</h4>
+                <p className='profile-role'>{employeePosition}</p>
                 </div>
             </Col>
             </Row>
