@@ -7,6 +7,7 @@ import { RiTeamLine } from "react-icons/ri";
 import { LuClipboardSignature } from "react-icons/lu";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { AiOutlineHome, AiOutlineUser, AiOutlineIdcard, AiOutlineHistory } from "react-icons/ai";
+import { TbClipboardTypography } from "react-icons/tb";
 import { FaRegBell } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
 import Cookies from "js-cookie";
@@ -14,6 +15,7 @@ import "./layoutComponent.css";
 
 const LayoutComponent = ({ children, roleNumber }) => {
   const token = Cookies.get("token");
+  const employeeName = Cookies.get("employee_name");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +47,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
       Cookies.remove("username");
       Cookies.remove("company_uuid");
       Cookies.remove("role_name");
+      Cookies.remove("employee_name");
+      Cookies.remove("employee_uuid");
       navigate("/login");
     };
 
@@ -63,7 +67,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 size="medium"
                 gap={2}
               >
-                <AiOutlineUser />
+                {employeeName ? employeeName.charAt(0) : <AiOutlineUser />}
               </Avatar>
               {username}
               <FaChevronDown />
@@ -894,9 +898,23 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Link to="/permit">Permit</Link>
               </Menu.Item>
             </SubMenu>
-            <Menu.Item key="/task-report" icon={<TbClipboardTypography />}>
+            {/* sementara */}
+            <SubMenu
+              key="task-management"
+              icon={<TbClipboardTypography />}
+              title='Task Management'>
+                <Menu.Item key='/task-report'>
+                  <Link to='/task-report'>Task Report</Link>
+                </Menu.Item>
+                <Menu.Item key='/task'>
+                  <Link to='/task'>Task</Link>
+                </Menu.Item>
+            </SubMenu>
+            {/* sementara */}
+            
+            {/* <Menu.Item key="/task-report" icon={<TbClipboardTypography />}>
               <Link to="/task-report">Task Report</Link>
-            </Menu.Item>
+            </Menu.Item> */}
           </Menu>
         </Sider>
       )}

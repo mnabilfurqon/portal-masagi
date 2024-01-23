@@ -32,13 +32,17 @@ import OvertimeDetail from "../pages/employee/schemas/approvalConfiguration/over
 import PermitMain from "../pages/employee/schemas/approvalConfiguration/permit/PermitMain";
 import PermitDetail from "../pages/employee/schemas/approvalConfiguration/permit/PermitDetail";
 import OfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/OfficialTravelEmployee";
+import DetailOfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelEmployee";
 import AddOfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/addOfficialTravelEmployee/AddOfficialTravelEmployee";
 import LeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/LeaveEmployee";
 import AddLeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/addLeaveEmployee/AddLeaveEmployee";
+import DetailLeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/detailLeaveEmployee/DetailLeaveEmployee";
 import PermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/PermitEmployee";
 import AddPermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/addPermitEmployee/AddPermitEmployee";
+import DetailPermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/detailPermitEmployee/DetailPermitEmployee";
 import OvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/OvertimeEmployee";
 import AddOvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/addOvertimeEmployee/AddOvertimeEmployee";
+import DetailOvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/detailOvertimeEmployee/DetailOvertimeEmployee";
 import HistoryConfiguration from "../pages/employee/schemas/historyConfiguration/HistoryConfiguration";
 import ReportConfiguration from "../pages/employee/schemas/attendanceReport/reportConfiguration/ReportConfiguartion";
 import AttendanceDetails from "../pages/employee/schemas/attendanceReport/attendanceDetails/AttendanceDetails";
@@ -59,7 +63,6 @@ import AddMemberTeamProjectConfiguration from "../pages/admin/teamProjectConfigu
 import TaskMain from "../pages/employee/schemas/taskConfiguration/taskMain/TaskMain";
 import TaskAdd from "../pages/employee/schemas/taskConfiguration/taskAdd/TaskAdd";
 import TaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/TaskDetail";
-import EmployeeTaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/EmployeeTaskDetail";
 import ProjectConfiguration from "../pages/admin/projectConfiguration/ProjectConfiguration";
 import AddProject from "../pages/admin/projectConfiguration/addProject/AddProject";
 import DetailProject from "../pages/admin/projectConfiguration/detailProject/DetailProject";
@@ -1167,10 +1170,37 @@ const RouteManagement = () => {
 
             {/* Task Management Configuration Route */}
             <Route
-              path="task-report"
+              path="/task"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <EmployeeTaskDetail />
+                  <TaskMain />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task-report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <p>Task Report Employee</p>
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task/add-task"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskAdd />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task/detail-task/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskDetail />
                 </LayoutComponent>
               }
             />

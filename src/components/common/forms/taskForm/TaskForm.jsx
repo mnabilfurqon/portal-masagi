@@ -1,22 +1,82 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import dayjs from 'dayjs';
-import { Button, Form, Input, DatePicker, Select } from 'antd';
+import { Button, Form, Input, DatePicker, Select, Spin } from 'antd';
 import SubmitButton from '../../buttons/submitButton/SubmitButton';
 import './taskForm.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
     const [form] = Form.useForm();
     const { Option } = Select;
-
-    // Address Input
+    const token = Cookies.get("token");
+    const roleName = Cookies.get("role_name");
+    const navigate = useNavigate();
+    const [project, setProject] = React.useState([]);
+    const [employee, setEmployee] = React.useState([]);
+    const [uuidProject, setUuidProject] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
     const { TextArea } = Input;
 
-    // Date Picker
-    const dateFormatList = 'DD/MM/YYYY';
+    const getProject = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get('http://103.82.93.38/api/v1/project/', {
+                headers: {
+                    'Authorization': token,
+                    "ngrok-skip-browser-warning": "69420",
+                }
+            });
+            setProject(response.data.items);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const getEmployee = async (value) => {
+        try {
+            setLoading(true);
+            const response = await axios.get(`http://103.82.93.38/api/v1/project/${value}`, {
+                headers: {
+                    'Authorization': token,
+                    "ngrok-skip-browser-warning": "69420",
+                }
+            });
+            setEmployee(response.data.team.team_members);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);       
+        }
+    }
+
+    useEffect(() => {
+        if (!token) {
+          navigate("/login");
+        }
+        getProject();
+    }
+    , [token, navigate]);
+
+
+    // format deadline DD MMM YYYY at HH:mm
+    const format = 'DD MMMM YYYY [at] HH:mm';
+
+    const disabledDate = (current) => {
+        // Can not select days before today only
+        return current && current < dayjs().startOf('day');
+    }
+
+    const handleProjectSelected = (value) => {
+        setUuidProject(value);
+        getEmployee(value);
+    }
 
         return (
-            <>
+            <Spin spinning={loading} size='large' tip="Get Data...">
                 <Form
                     name="task"
                     form={form}
@@ -31,9 +91,6 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
-                    initialValues={{
-                        date_founded: dayjs('01/01/2024', dateFormatList)
-                    }}
                 >
                     <Form.Item
                     label="Task"
@@ -60,14 +117,17 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
                         },
                     ]}
                     >
-                        <Select placeholder="Please select project name">
-                            <Option value="mobile_dev">Mobile Development</Option>
-                            <Option value="web_dev">Web Development</Option>
-                            <Option value="maintenance_web">Maintenance Web</Option>
-                            <Option value="sistem_internal">Sistem Internal</Option>                       
+                        <Select placeholder="Please select project name" onSelect={handleProjectSelected} value={uuidProject}>
+                            {project.map((item) => (
+                                item.team && item.team.team_members.map((member) => (
+                                    member.employee.name === Cookies.get('employee_name') ? 
+                                        <Option key={item.uuid} value={item.uuid}>{item.name}</Option> : null
+                                ))
+                            ))}
                         </Select>
                     </Form.Item>
 
+                    {roleName === 'Head of Division' ? 
                     <Form.Item
                     label="Assign to"
                     name="assign_to"
@@ -79,23 +139,21 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
                         },
                     ]}
                     >
-                        <Select placeholder="Please select assign to">
-                            <Option value="eden_hazard">Eden Hazard</Option>
-                            <Option value="frank_lampard">Frank Lampard</Option>
-                            <Option value="didier_drogba">Didier Drogba</Option>
-                            <Option value="john_terry">John Terry</Option>
-                            <Option value="diego_costa">Diego Costa</Option>
-                            <Option value="petr_cech">Petr Cech</Option>                       
+                        <Select placeholder="Please select assign to (select project name first)">
+                            {employee.map((item) => (
+                                <Option key={item.employee.uuid} value={item.employee.uuid}>{item.employee.name}</Option>
+                            ))}
                         </Select>
                     </Form.Item>
-
+                    : 
                     <Form.Item
-                    label="Status"
-                    name="status"
+                    label="Assign to"
+                    name="assign_to"
                     colon={false}
                     >
-                    <Input disabled placeholder='Open' className='input-button'/>
+                        <Input placeholder={Cookies.get("employee_name")} className='input-button' disabled/>
                     </Form.Item>
+                    }
 
                     <Form.Item
                     label="Deadline"
@@ -108,15 +166,15 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
                         },
                     ]}
                     >
-                    <DatePicker placeholder='01/01/2024' format={dateFormatList} className='date-picker'/>
+                    <DatePicker placeholder='Please select deadline' format={format} disabledDate={disabledDate} showTime className='date-picker'/>
                     </Form.Item>
 
                     <Form.Item
-                    label="Created by"
-                    name="created_by"
+                    label="Description"
+                    name="description"
                     colon={false}
                     >
-                    <Input disabled placeholder='Chamber' className='input-button'/>
+                    <TextArea rows={4} className='input-description' placeholder='Enter Description'/>
                     </Form.Item>
         
                     <Form.Item
@@ -131,7 +189,7 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
                     </div>
                     </Form.Item>
                 </Form>
-            </>
+            </Spin>
         );
 }
 

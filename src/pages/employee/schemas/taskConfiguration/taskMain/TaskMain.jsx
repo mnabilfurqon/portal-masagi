@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import SearchBox from '@common/SearchBox/SearchBox'
 import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
@@ -8,9 +8,42 @@ import TaskTable from '@common/tables/taskTable/TaskTable'
 import { Row, Col, Space, Button } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiOutlineFileSearch } from "react-icons/ai";
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const TaskMain = () => {
     const navigate = useNavigate();
+    const token = Cookies.get('token');
+    const roleName = decodeURIComponent(Cookies.get('role_name'));
+    const [filterData, setFilterData] = useState([]);
+    let urlApi;
+
+    if (roleName !== 'Head of Division') {
+        urlApi = 'http://103.82.93.38/api/v1/task/employee'
+    } else {
+        urlApi = 'http://103.82.93.38/api/v1/task/'
+    }
+
+    const getFilterData = async () => {
+        try {
+            const response = await axios.get(urlApi, {
+                headers: {
+                    Authorization: token,
+                    "ngrok-skip-browser-warning": "69420",
+                },
+            });
+            setFilterData(response.data.items);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if (!token) {
+            navigate('/login');
+        } 
+        getFilterData();
+    }, [token, navigate]);
 
     // search handler
     const [searchValue, setSearchValue] = useState("");
@@ -44,37 +77,29 @@ const TaskMain = () => {
     };
     // end of count handler
 
-    const treeData = [
-        {
-          title: 'All Project',
-          key: 'all_project',
-        },
-        {
-          title: 'Data Mining',
-          key: 'data_mining',
-        },
-        {
-          title: 'Web Development',
-          key: 'web_development',
-        },
-        {
-          title: 'Mobile Development',
-          key: 'mobile_development',
-        },
-        {
-          title: 'Sistem Internal',
-          key: 'sistem_internal',
+    const uniqueProjectNames = new Set();
+
+    const treeData = filterData.map(item => {
+        const projectName = item.project.name;
+        if (!uniqueProjectNames.has(projectName)) {
+            uniqueProjectNames.add(projectName);
+                return {
+                    key: item.project.uuid,
+                    title: item.project.name,
+                }
         }
-    ];
+
+        return null;
+    }).filter(item => item !== null);
 
     const itemsSort = [
         {
-          key: 'aToZProject',
-          label: 'A to Z Project Name'
+          key: 'aToZTask',
+          label: 'A to Z Task Name'
         },
         {
-          key: 'zToAProject',
-          label: 'Z to A Project Name'
+          key: 'zToATask',
+          label: 'Z to A Task Name'
         },
     ];
 
@@ -138,10 +163,22 @@ const TaskMain = () => {
                         review
                         </Button>
                     );
-                } else if (text === 'in progress') {
+                } else if (text === 'in-progress') {
                     return (
-                        <Button className="in-progress-button" type="primary" size="small" value="in progress" ghost>
+                        <Button className="in-progress-button" type="primary" size="small" value="in-progress" ghost>
                         in progress
+                        </Button>
+                    );
+                } else if (text === 'reopen') {
+                    return (
+                        <Button className="reopen-button" type="primary" size="small" value="reopen" ghost>
+                        reopen
+                        </Button>
+                    );
+                } else if (text === 'delegate') {
+                    return (
+                        <Button className="delegate-button" type="primary" size="small" value="delegate" ghost>
+                        delegate
                         </Button>
                     );
                 } else {
@@ -183,6 +220,7 @@ const TaskMain = () => {
         {
           title: 'Action',
           key: 'action',
+          ellipsis: true,
             render: (record) => (
                 <Space size="small">
                     <Button className="action-button" type="primary" size="small" ghost onClick={() => handleDetailClick(record)}>
@@ -204,6 +242,7 @@ const TaskMain = () => {
         sortValue,
         countValue,
         columns,
+        urlApi,
     };
 
     return (
