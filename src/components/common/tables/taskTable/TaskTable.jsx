@@ -11,8 +11,65 @@ const TaskTable = (props) => {
   const navigate = useNavigate();
   const [taskData, setTaskData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {searchValue, filterValue, sortValue, countValue, columns, urlApi} = props;
+  const [projectFilter, setProjectFilter] = useState([]);
+  const [statusFilter, setStatusFilter] = useState([]);
+  const {searchValue, filterValue, sortValue, countValue, columns, urlApi, isSuccessDeleteModalOpen} = props;
   const dateFormat = 'DD/MM/YYYY';
+
+    const getProjectData = async () => {
+      try {
+          const response = await axios.get(urlApi, {
+              headers: {
+                  Authorization: token,
+              },
+          });
+          setProjectFilter(response.data.items);
+      } catch (error) {
+          console.log(error);
+      }
+    };
+
+    const getStatusData = async () => {
+        try {
+            const response = await axios.get('http://103.82.93.38/api/v1/task_status/', {
+                headers: {
+                    Authorization: token,
+                },
+            });
+            setStatusFilter(response.data.items);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const uniqueProjectNames = new Set();
+    const treeDataProject = projectFilter.map(item => {
+      const projectName = item.project.name;
+      if (!uniqueProjectNames.has(projectName)) {
+          uniqueProjectNames.add(projectName);
+              return {
+                  key: item.project.uuid,
+                  title: item.project.name,
+              }
+      }
+
+      return null;
+    }).filter(item => item !== null);
+
+    const treeDataStatus = statusFilter.map(item => {
+        return {
+            key: item.uuid,
+            title: item.name,
+        }
+    });
+
+    // cek apakah filterValue[0] termasuk di dalam treeDataProject, jika iya maka projectParams = filterValue[0], jika tidak maka projectParams = null
+    const isProject = treeDataProject.some(item => item.key === filterValue[0]);
+    const projectParams = isProject ? filterValue[0] : null;
+
+    // cek apakah filterValue[0] termasuk di dalam treeDataStatus, jika iya maka statusParams = filterValue[0], jika tidak maka statusParams = null
+    const isStatus = treeDataStatus.some(item => item.key === filterValue[0]);
+    const statusParams = isStatus ? filterValue[0] : null;
 
     const [tableParams, setTableParams] = useState({
         pagination : {
@@ -47,13 +104,13 @@ const TaskTable = (props) => {
             page: page,
             per_page: countValue,
             search: searchValue,
-            project_uuid: filterValue[0],
-            desc: sortValue === 'zToATask' ? true : false,
-            sort_by: 'name',
+            project_uuid: projectParams,
+            status_uuid: statusParams,
+            desc: sortValue === 'aToZTask' ? false : true,
+            sort_by: sortValue === 'zToATask' || sortValue === 'aToZTask' ? 'name' : null,
           },
           headers: {
             Authorization: token,
-            "ngrok-skip-browser-warning": "69420",
           },
         });
 
@@ -80,7 +137,9 @@ const TaskTable = (props) => {
         navigate("/login");
       }
       getTaskData();
-    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
+      getProjectData();
+      getStatusData();
+    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue, isSuccessDeleteModalOpen]);
 
   const data = taskData.map(item => {
     return {

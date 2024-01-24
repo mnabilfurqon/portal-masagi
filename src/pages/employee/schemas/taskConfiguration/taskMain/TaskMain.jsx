@@ -5,9 +5,12 @@ import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import AddButton from '@common/buttons/addButton/AddButton'
 import TaskTable from '@common/tables/taskTable/TaskTable'
+import DeleteModal from '@common/modals/deleteModal/DeleteModal'
+import SuccessDeleteModal from '@common/modals/successModal/SuccessDeleteModal'
 import { Row, Col, Space, Button } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiOutlineFileSearch } from "react-icons/ai";
+import { MdOutlineDelete } from "react-icons/md";
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -15,7 +18,11 @@ const TaskMain = () => {
     const navigate = useNavigate();
     const token = Cookies.get('token');
     const roleName = decodeURIComponent(Cookies.get('role_name'));
+    const [taskUuid, setTaskUuid] = useState('');
     const [filterData, setFilterData] = useState([]);
+    const [statusData, setStatusData] = useState([]);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isSuccessDeleteModalOpen, setIsSuccessDeleteModalOpen] = useState(false);
     let urlApi;
 
     if (roleName !== 'Head of Division') {
@@ -29,10 +36,35 @@ const TaskMain = () => {
             const response = await axios.get(urlApi, {
                 headers: {
                     Authorization: token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             setFilterData(response.data.items);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getStatusData = async () => {
+        try {
+            const response = await axios.get('http://103.82.93.38/api/v1/task_status/', {
+                headers: {
+                    Authorization: token,
+                },
+            });
+            setStatusData(response.data.items);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const deleteTask = async () => {
+        try {
+            await axios.delete(`http://103.82.93.38/api/v1/task/${taskUuid}`, {
+                headers: {
+                    Authorization: token,
+                },
+            });
+            setIsSuccessDeleteModalOpen(true);
         } catch (error) {
             console.log(error);
         }
@@ -43,6 +75,7 @@ const TaskMain = () => {
             navigate('/login');
         } 
         getFilterData();
+        getStatusData();
     }, [token, navigate]);
 
     // search handler
@@ -77,9 +110,25 @@ const TaskMain = () => {
     };
     // end of count handler
 
+    // delete modal handler
+    const handleDeleteButtonDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+        deleteTask();
+    };
+
+    const handleCancelButtonDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+    };
+
+    const handleOkSuccessDeleteModal = () => {
+        setIsSuccessDeleteModalOpen(false);
+    };
+
+    // end of delete modal handler
+
     const uniqueProjectNames = new Set();
 
-    const treeData = filterData.map(item => {
+    const treeDataProjectRaw = filterData.map(item => {
         const projectName = item.project.name;
         if (!uniqueProjectNames.has(projectName)) {
             uniqueProjectNames.add(projectName);
@@ -91,6 +140,27 @@ const TaskMain = () => {
 
         return null;
     }).filter(item => item !== null);
+
+    const treeDataProject = {
+        key: 'project',
+        title: 'Project',
+        children: treeDataProjectRaw,
+    };
+
+    const treeDataStatusRaw = statusData.map(item => {
+        return {
+            key: item.uuid,
+            title: item.name,
+        }
+    });
+
+    const treeDataStatus = {
+        key: 'status',
+        title: 'Status',
+        children: treeDataStatusRaw,
+    };
+
+    const treeData = [treeDataProject, treeDataStatus];
 
     const itemsSort = [
         {
@@ -189,33 +259,6 @@ const TaskMain = () => {
                     );
                 }
             },
-            filters: [
-                {
-                    text: 'Cancel',
-                    value: 'cancel',
-                },
-                {
-                    text: 'Done',
-                    value: 'done',
-                },
-                {
-                    text: 'Review',
-                    value: 'review',
-                },
-                {
-                    text: 'In progress',
-                    value: 'in progress',
-                },
-                {
-                    text: 'Open',
-                    value: 'open',
-                },
-                {
-                    text: 'Reopen',
-                    value: 'reopen',
-                }
-            ],
-            onFilter: (value, record) => record.status.indexOf(value) === 0,
         },
         {
           title: 'Action',
@@ -226,6 +269,11 @@ const TaskMain = () => {
                     <Button className="action-button" type="primary" size="small" ghost onClick={() => handleDetailClick(record)}>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
+                    {roleName === 'Head of Division' ? (
+                    <Button className="action-button" type="primary" size="small" onClick={() => handleDeleteClick(record)} ghost>
+                        <MdOutlineDelete className="action-icon-delete" />
+                    </Button>
+                    ) : null}
                 </Space>
             ),
         },
@@ -236,6 +284,12 @@ const TaskMain = () => {
         navigate(`/task/detail-task/${value}`);
     }
 
+    const handleDeleteClick = (record) => {
+        const value = record.key;
+        setTaskUuid(value);
+        setIsDeleteModalOpen(true);
+    }
+
     const propsTable = {
         searchValue,
         filterValue,
@@ -243,6 +297,7 @@ const TaskMain = () => {
         countValue,
         columns,
         urlApi,
+        isSuccessDeleteModalOpen,
     };
 
     return (
@@ -270,6 +325,16 @@ const TaskMain = () => {
             </div>
             <div style={{marginTop: 24}}>
                 <TaskTable {...propsTable} />
+                <DeleteModal
+                    textModal="Are you sure you want to delete this task?"
+                    visible={isDeleteModalOpen}
+                    handleDelete={handleDeleteButtonDeleteModal}
+                    handleCancel={handleCancelButtonDeleteModal}
+                />
+                <SuccessDeleteModal
+                visible={isSuccessDeleteModalOpen}
+                onClose={handleOkSuccessDeleteModal}
+                />
             </div>
         </div>
     )
