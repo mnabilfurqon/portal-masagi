@@ -34,7 +34,6 @@ const TaskAdd = () => {
             }, {
                 headers: {
                     'Authorization': token,
-                    "ngrok-skip-browser-warning": "69420",
                 }
             });
     
