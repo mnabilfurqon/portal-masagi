@@ -65,6 +65,8 @@ import AddProject from "../pages/admin/projectConfiguration/addProject/AddProjec
 import DetailProject from "../pages/admin/projectConfiguration/detailProject/DetailProject";
 import EditProject from "../pages/admin/projectConfiguration/editProject/EditProject";
 import TypeProjectConfiguration from "../pages/admin/typeProjectConfiguration/TypeProjectConfiguration";
+import TaskReport from "../pages/employee/schemas/taskReport/TaskReport";
+import DetailTaskReport from "../pages/employee/schemas/taskReport/detailTaskReport/DetailTaskReport";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -1167,10 +1169,26 @@ const RouteManagement = () => {
 
             {/* Task Management Configuration Route */}
             <Route
-              path="task-report"
+              path="task"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <EmployeeTaskDetail />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="task-report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskReport />
+                </LayoutComponent>
+              }
+            />
+            <Route
+              path="task-report/detail/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailTaskReport />
                 </LayoutComponent>
               }
             />

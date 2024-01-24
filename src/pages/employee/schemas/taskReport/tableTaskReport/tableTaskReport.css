@@ -1,0 +1,85 @@
+.task-report-table {
+  padding: 30px;
+  border: 1px solid #e0e6ed;
+  border-radius: 10px;
+  box-shadow: 0 10px 10px 0 #e0e6ed;
+  margin-top: 30px;
+}
+
+.in-progress-button {
+  background-color: #ffffff !important;
+  border-color: #007BFF !important;; 
+  color: #007BFF !important;
+  border-radius: 15px !important;
+  cursor: default;
+}
+.in-progress-button button {
+  pointer-events: none;
+}
+
+.done-button {
+  background-color: #ffffff !important;
+  border-color: #28A745 !important;; 
+  color: #28A745 !important;
+  border-radius: 15px !important;
+  cursor: default;
+}
+.done-button button {
+  pointer-events: none;
+}
+
+.review-button {
+  background-color: #ffffff !important;
+  border-color: #6F42C1 !important;; 
+  color: #6F42C1 !important;
+  border-radius: 15px !important;
+  cursor: default;
+}
+.review-button button {
+  pointer-events: none;
+}
+
+.cancel-button {
+  background-color: #ffffff !important;
+  border-color: #DC3545 !important;; 
+  color: #DC3545 !important;
+  border-radius: 15px !important;
+  cursor: default;
+}
+.cancel-button button {
+  pointer-events: none;
+}
+
+.open-button {
+  background-color: #ffffff !important;
+  border-color: #FD7E14 !important;; 
+  color: #FD7E14 !important;
+  border-radius: 15px !important;
+  cursor: default;
+}
+.open-button button {
+  pointer-events: none;
+}
+
+.detail-button-task-report {
+  border: none;
+}
+
+.detail-icon-task-report {
+  color: #629093;
+  font-size: 25px;
+  cursor: pointer;
+}
+.detail-icon-task-report:hover {
+  color: #F9B700;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.table-title {
+  margin: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #556172;
+}

@@ -1,0 +1,296 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { Button, Table } from 'antd';
+import { AiOutlineFileSearch } from "react-icons/ai";
+import Cookies from "js-cookie";
+import axios from "axios";
+import "./tableTaskReport.css"
+import { data } from './constans';
+
+const TableTaskReport = (props) => {
+  const token = Cookies.get('token');
+  const navigate = useNavigate();
+  const {searchValue, filterValue, countValue} = props;
+  const [taskReportData, setTaskReportData] = useState([])
+  const [loading, setLoading] = useState(false);
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: countValue,
+      showTotal: (total, range) => (
+        <div className='total-data'>
+          {range[0]}-{range[1]} of {total} items
+        </div>
+      ),
+      showLessItems: true,
+    },
+  });
+  const [params, setParams] = useState({
+    page: tableParams.pagination.current,
+    per_page: tableParams.pagination.pageSize,
+  });
+
+  const getTaskReportData = async () => {
+    try {
+      var page;
+      setLoading(true);
+      if (tableParams.pagination.total < countValue) {
+        page = 1;
+      } else {
+        page = tableParams.pagination.current;
+      }
+      const response = await axios.get('http://103.82.93.38/api/v1/permit/', {
+        params: {
+          page: page,
+          per_page: countValue,
+          search: searchValue,
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      setTaskReportData(response.data[0].items);
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          total: response.data[0]._meta.total_items,
+          pageSize: countValue,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // const dataLeaveRaw = leaveData
+  // .map(item => {
+  //   let status;
+  //   let statusByHr;
+  //   let statusByTeamLeader;
+
+  //   if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
+  //     status = 'approved';
+  //   } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
+  //     status = 'rejected';
+  //   } else {
+  //     status = 'pending';
+  //   }
+
+  //   if (item.approved_by_hr === true) {
+  //     statusByHr = 'approved';
+  //   } else if (item.approved_by_hr === false) {
+  //     statusByHr = 'rejected';
+  //   } else {
+  //     statusByHr = 'pending';
+  //   }
+
+  //   if (item.approved_by_team_lead === true) {
+  //     statusByTeamLeader = 'approved';
+  //   } else if (item.approved_by_team_lead === false) {
+  //     statusByTeamLeader = 'rejected';
+  //   } else {
+  //     statusByTeamLeader = 'pending';
+  //   }
+
+  //   return {
+  //     key: item.uuid,
+  //     employee_name: item.attendance.employee.name,
+  //     type_leave: item.type.name,
+  //     reason: item.reason,
+  //     permit_date: formatDate(item.date_permit),
+  //     end_permit_date: formatDate(item.end_date_permit),
+  //     status: status,
+  //     hr: item.hr_employee,
+  //     status_by_hr: statusByHr,
+  //     team_leader: item.team_lead_employee,
+  //     status_by_team_leader: statusByTeamLeader,
+  //   }
+  // });
+
+  // const dataLeave = dataLeaveRaw.filter(item => { 
+  //   const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
+  //   ? filterValue.includes(item.status)
+  //   : true
+    
+  //   return isStatusMatch;
+  // });
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+    // getTaskReportData();
+  }, [token, navigate, params, searchValue, filterValue, countValue]);
+
+  const title = [
+    {
+      key: "project",
+      title: "Project",
+      dataIndex: "project",
+      ellipsis: true,
+    },
+    {
+      key: "client",
+      title: "Client",
+      dataIndex: "client",
+      ellipsis: true,
+    },
+    {
+      key: "task",
+      title: "Task",
+      dataIndex: "task",
+      ellipsis: true,
+    },
+    {
+      key: "deadline",
+      title: "Deadline",
+      dataIndex: "deadline",
+      ellipsis: true,
+    },
+    {
+      key: "assignTo",
+      title: "Assign To",
+      dataIndex: "assignTo",
+      ellipsis: true,
+    },
+    {
+      key: "createdBy",
+      title: "Created By",
+      dataIndex: "createdBy",
+      ellipsis: true,
+    },
+    {
+      key: "status",
+      title: "Status",
+      dataIndex: "status",
+      ellipsis: true,
+      render: (text) => {
+        if (text === "in-progress") {
+          return (
+            <Button
+              className="in-progress-button"
+              type="primary"
+              size="small"
+              value="in-progress"
+              ghost
+            >
+              in-progress
+            </Button>
+          );
+        } else if (text === "done") {
+          return (
+            <Button
+              className="done-button"
+              type="primary"
+              size="small"
+              value="done"
+              ghost
+            >
+              done
+            </Button>
+          );
+        } else if (text === "review") {
+          return (
+            <Button
+              className="review-button"
+              type="primary"
+              size="small"
+              value="review"
+              ghost
+            >
+              review
+            </Button>
+          );
+        } else if (text === "cancel") {
+          return (
+            <Button
+              className="cancel-button"
+              type="primary"
+              size="small"
+              value="cancel"
+              ghost
+            >
+              cancel
+            </Button>
+          );
+        } else {
+          return (
+            <Button
+              className="open-button"
+              type="primary"
+              size="small"
+              value="open"
+              ghost
+            >
+              open
+            </Button>
+          );
+        }
+      },
+    },
+    {
+      key: "action",
+      title: "Action",
+      ellipsis: true,
+      render: (record) => (
+        <Button
+          className="detail-button-task-report"
+          type="primary"
+          onClick={() => handleDetailClick(record)}
+          size="small"
+          ghost
+        >
+          <AiOutlineFileSearch className="detail-icon-task-report" />
+        </Button>
+      ),
+    },
+  ];
+
+  const handleDetailClick = record => {
+    const value = record.key;
+    navigate(`/task-report/detail/${value}`);
+  };
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    setTableParams({
+      pagination: {
+        ...tableParams.pagination,
+        current: pagination.current,
+        pageSize: countValue,
+      },
+      filters,
+      ...sorter,
+    });
+
+    setParams({
+      page: pagination.current,
+      per_page: pagination.pageSize,
+      search: searchValue,
+    });
+
+    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+      // setTaskReportData([]);
+    }
+  };
+
+  return (
+    <>
+    <div className="task-report-table">
+      <p className='table-title'>All Task</p>
+      <Table
+        columns={title}
+        dataSource={data}
+        pagination={tableParams.pagination}
+        onChange={handleTableChange}
+        loading={loading}
+        scroll={{ x: true, y: 650 }}
+      />
+    </div>
+    </>
+  );
+}
+
+export default TableTaskReport;
