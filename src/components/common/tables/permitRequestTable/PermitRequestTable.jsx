@@ -81,9 +81,9 @@ const PermitRequestTable = (props) => {
             search: searchValue,
             type_permit: typePermit,
             date_permit: datePickerValue ? datePickerValue : null,
-            filter: filterValue,
             desc: sortValue === 'latestEndPermitDate' ? true : false,
             sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
+            status: filterValue[0],
           },
           headers: {
             Authorization: token,
