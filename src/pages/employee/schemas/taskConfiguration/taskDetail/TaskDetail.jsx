@@ -39,7 +39,6 @@ const TaskDetail = () => {
             const response = await axios.get(`http://103.82.93.38/api/v1/task/${uuid}`, {
                 headers: {
                     "Authorization": token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             setDetailTask(response.data);
@@ -135,7 +134,6 @@ const TaskDetail = () => {
             }, {
                 headers: {
                     "Authorization": token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             console.log(response.data);
@@ -218,7 +216,6 @@ const TaskDetail = () => {
             const response = await axios.get(`http://103.82.93.38/api/v1/task_status/`, {
                 headers: {
                     "Authorization": token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             setStatusData(response.data.items);
@@ -237,7 +234,6 @@ const TaskDetail = () => {
             }, {
                 headers: {
                     "Authorization": token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             setDetailTask(response.data);
@@ -325,7 +321,7 @@ const TaskDetail = () => {
                 ),
             };
         } else {
-            if (item.name === 'cancel' || item.name === 'done' || item.name === 'delegate') {
+            if (item.name === 'cancel' || item.name === 'done' || item.name === 'delegate' || item.name === 'reopen') {
                 return null;
             }
             return {
@@ -338,10 +334,6 @@ const TaskDetail = () => {
                         </Button>
                     ) : item.name === 'review' ? (
                         <Button className="review-button" type="primary" size="small" value="review" ghost>
-                            {item.name}
-                        </Button>
-                    ) : item.name === 'reopen' ? (
-                        <Button className="reopen-button" type="primary" size="small" value="reopen" ghost>
                             {item.name}
                         </Button>
                     ) : (
@@ -420,7 +412,6 @@ const TaskDetail = () => {
             }, {
                 headers: {
                     "Authorization": token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             setDetailTask(response.data);
@@ -450,7 +441,6 @@ const TaskDetail = () => {
             }, {
                 headers: {
                     "Authorization": token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             setDetailTask(response.data);
@@ -478,7 +468,6 @@ const TaskDetail = () => {
             }, {
                 headers: {
                     "Authorization": token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             setDetailTask(response.data);
@@ -521,7 +510,6 @@ const TaskDetail = () => {
             }, {
                 headers: {
                     "Authorization": token,
-                    "ngrok-skip-browser-warning": "69420",
                 },
             });
             setComment('');
@@ -663,6 +651,9 @@ const TaskDetail = () => {
                         }
                     >
                         <Paragraph style={{color: '#888888', marginBottom: 12}}> Delegate To </Paragraph>
+                        {/* conditional if rolename != head of division disabled dropdown */}
+
+                        {roleName === 'Head of Division' ? (
                         <Dropdown
                             menu={{
                             items: itemsDelegate,
@@ -676,6 +667,22 @@ const TaskDetail = () => {
                             </Space>
                             </a>
                         </Dropdown>
+                        ) : (
+                        <Dropdown
+                            menu={{
+                            items: itemsDelegate,
+                            onClick: onDelegateClick,
+                            }}
+                            disabled
+                        >
+                            <a onClick={(e) => e.preventDefault()}>
+                            <Space>
+                                {delegateLabel}
+                                <AiOutlineDown />
+                            </Space>
+                            </a>
+                        </Dropdown>
+                        )}
                     </Card>
                     </Col>
                 </Row>
@@ -733,6 +740,7 @@ const TaskDetail = () => {
                             padding: 0 }
                         }
                     >
+                        {roleName === 'Head of Division' ? (
                         <Flex wrap='wrap' justify='space-between' gap={'small'} align='center'>
                             <Flex align='center' style={{ height: '100%' }}>
                                 <Paragraph strong={true} style={{color: '#DC3545', marginBottom: 0}}> Deadline </Paragraph>
@@ -749,6 +757,24 @@ const TaskDetail = () => {
                                 />
                             </Flex>
                         </Flex>
+                        ) : (
+                        <Flex wrap='wrap' justify='space-between' gap={'small'} align='center'>
+                            <Flex align='center' style={{ height: '100%' }}>
+                                <Paragraph strong={true} style={{color: '#DC3545', marginBottom: 0}}> Deadline </Paragraph>
+                            </Flex>
+                            <Flex align='center' style={{ height: '100%' }}>
+                                <DatePicker 
+                                    disabled
+                                    className='custom-placeholder-datepicker' 
+                                    placeholder={deadline} 
+                                    disabledDate={disabledDate} 
+                                    format={format} 
+                                    showTime
+                                    allowClear={false}
+                                />
+                            </Flex>
+                        </Flex>
+                        )}
                     </Card>
                 </Row>
                 <Row style={{marginTop: 12}}>

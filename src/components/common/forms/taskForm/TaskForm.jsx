@@ -11,7 +11,7 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
     const [form] = Form.useForm();
     const { Option } = Select;
     const token = Cookies.get("token");
-    const roleName = Cookies.get("role_name");
+    const roleName = decodeURIComponent(Cookies.get("role_name"));
     const navigate = useNavigate();
     const [project, setProject] = React.useState([]);
     const [employee, setEmployee] = React.useState([]);
@@ -25,7 +25,6 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
             const response = await axios.get('http://103.82.93.38/api/v1/project/', {
                 headers: {
                     'Authorization': token,
-                    "ngrok-skip-browser-warning": "69420",
                 }
             });
             setProject(response.data.items);
@@ -42,7 +41,6 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
             const response = await axios.get(`http://103.82.93.38/api/v1/project/${value}`, {
                 headers: {
                     'Authorization': token,
-                    "ngrok-skip-browser-warning": "69420",
                 }
             });
             setEmployee(response.data.team.team_members);
@@ -127,7 +125,9 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
                         </Select>
                     </Form.Item>
 
-                    {roleName === 'Head of Division' ? 
+                    {/* conditional if role name is head of division */}
+
+                    {roleName === 'Head of Division' ?
                     <Form.Item
                     label="Assign to"
                     name="assign_to"
@@ -146,6 +146,7 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
                         </Select>
                     </Form.Item>
                     : 
+
                     <Form.Item
                     label="Assign to"
                     name="assign_to"
