@@ -68,7 +68,7 @@ import DetailOfficialTravelData from "../pages/employee/schemas/permitConfigurat
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
-  const role_name = Cookies.get("role_name");
+  const role_name = decodeURIComponent(Cookies.get("role_name"));
   const navigate = useNavigate();
   let roleNumber;
 

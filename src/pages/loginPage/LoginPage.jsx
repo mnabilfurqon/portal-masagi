@@ -33,7 +33,6 @@ const LoginPage = () => {
         {
           headers: {
             Authorization: loginResponse.data.token,
-            "ngrok-skip-browser-warning": "69420",
           },
         }
       );
