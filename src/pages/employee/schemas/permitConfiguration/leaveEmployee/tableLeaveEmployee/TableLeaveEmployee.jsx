@@ -12,7 +12,7 @@ const TableLeaveEmployee = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
   const location = useLocation()
-  const {searchValue, filterValue, sortValue, countValue, status} = props;
+  const {searchValue, filterValue, sortValue, countValue} = props;
   const [leaveData, setLeaveData] = useState([])
   const [loading, setLoading] = useState(false);
   const formatDate = (dateString) => {
@@ -142,7 +142,7 @@ const TableLeaveEmployee = (props) => {
       navigate('/login');
     }
     getLeaveData();
-  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue, status]);
+  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue]);
 
   const title = [
     {

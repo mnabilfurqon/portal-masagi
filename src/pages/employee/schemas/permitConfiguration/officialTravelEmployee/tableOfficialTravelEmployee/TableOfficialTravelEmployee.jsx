@@ -12,7 +12,7 @@ const TableOfficialTravelEmployee = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
   const location = useLocation()
-  const {searchValue, filterValue, sortValue, countValue, status} = props;
+  const {searchValue, filterValue, sortValue, countValue} = props;
   const [officialTravelData, setOfficialTravelData] = useState([])
   const [loading, setLoading] = useState(false);
   const formatDate = (dateString) => {
@@ -142,7 +142,7 @@ const TableOfficialTravelEmployee = (props) => {
       navigate('/login');
     }
     getOfficialTravelData();
-  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue, status]);
+  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue]);
 
   const title = [
     {

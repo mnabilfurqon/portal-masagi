@@ -12,7 +12,7 @@ const TableOvertimeEmployee = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
   const location = useLocation()
-  const {searchValue, filterValue, sortValue, countValue, status} = props;
+  const {searchValue, filterValue, sortValue, countValue} = props;
   const [overtimeData, setOvertimeData] = useState([])
   const [loading, setLoading] = useState(false);
   const formatDate = (dateString) => {
@@ -145,7 +145,7 @@ const TableOvertimeEmployee = (props) => {
       navigate('/login');
     }
     getOvertimeData();
-  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue, status]);
+  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue]);
 
   const title = [
     {
