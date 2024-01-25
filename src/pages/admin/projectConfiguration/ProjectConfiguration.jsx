@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './projectConfiguration.css'
-import Cookies from 'js-cookie'
+import { Row, Col, Table, Input, Button, Flex } from 'antd'
+import { AiOutlineSearch, AiOutlinePlus, AiOutlineFileSearch, } from 'react-icons/ai'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import Cookies from 'js-cookie'
+import AddButton from '@common/buttons/addButton/AddButton'
 import SearchBox from '@common/SearchBox/SearchBox'
 import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import SuccessModal from '@common/modals/successModal/SuccessModal'
 import FailedModal from '@common/modals/failedModal/FailedModal'
-import { Row, Col, Table, Input, Button, Flex } from 'antd'
-import { AiOutlineSearch, AiOutlinePlus, AiOutlineFileSearch, } from 'react-icons/ai'
+import './projectConfiguration.css'
 
 const ProjectConfiguration = () => {
   // Declaration
@@ -19,14 +20,47 @@ const ProjectConfiguration = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState();
+  const [projects, setProjects] = useState();
 
   // Header
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
-    // getUsersData();
+    getProjects();
   }, [token, navigate]);
+
+  // Get Type Project
+  const getProjects = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://103.82.93.38/api/v1/project/", {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setLoading(false);
+      setProjects(response.data.items);
+      // console.log("Projects", projects);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  }
+  
+  const data = projects?.map(item => {
+    return {
+      key: item.uuid,
+      client: item.client.name,
+      name: item.name,
+      start_date: dayjs(item.start_date).format("DD/MM/YYYY"),
+      due_date: dayjs(item.due_date).format("DD/MM/YYYY"),
+      status: item.status.name,
+      type: item.type.name,
+      cancle_at: dayjs(item.cancle_at).format("DD/MM/YYYY"),
+      done_at: dayjs(item.done_at).format("DD/MM/YYYY"),
+    }
+  })
 
   // Search Handler
   const [searchText, setSearchText] = useState("");
@@ -76,13 +110,23 @@ const ProjectConfiguration = () => {
   const itemsSort = [
     {
       key: 'aToZ',
-      label: 'A-Z Username'
+      label: 'A-Z Project Name'
     },
     {
       key: 'zToA',
-      label: 'Z-A Username'
+      label: 'Z-A Project Name'
     },
   ];
+
+  const sortedData = data?.sort((a, b) => {
+    if (sortValue === 'aToZ') {
+      return a.name.localeCompare(b.name);
+    } else if (sortValue === 'zToA') {
+      return b.name.localeCompare(a.name);
+    } else {
+      return 0;
+    }
+  });
 
   // Count Handler
   const [countValue, setCountValue] = useState("10");
@@ -94,7 +138,7 @@ const ProjectConfiguration = () => {
   // Detail Button Handler
   const handleDetailClick = (record) => {
     const value = record.key;
-    navigate(`/project/detail-project/${value}`);
+    navigate(`/project/detail-project/${value}`, { state: {data: record} });
   }
 
   // Table
@@ -106,35 +150,36 @@ const ProjectConfiguration = () => {
     },
     {
       title: 'Project Name',
-      dataIndex: 'projectName',
-      key: 'projectName',
+      dataIndex: 'name',
+      key: 'name',
       filteredValue: [searchText],
       onFilter: (value, record) => {
-        return String(record.projectName).toLowerCase().includes(value.toLowerCase());
+        return String(record.name).toLowerCase().includes(value.toLowerCase());
       },
     },
     {
       title: 'Start Date',
-      dataIndex: 'startDate',
-      key: 'startDate',
+      dataIndex: 'start_date',
+      key: 'start_date',
     },
     {
       title: 'Due Date',
-      dataIndex: 'dueDate',
-      key: 'dueDate',
+      dataIndex: 'due_date',
+      key: 'due_date',
     },
     {
       title: 'Status',
       key: 'status',
       dataIndex: 'status',
       render: (record) => {
+        // console.log(record)
         if (record === "done") {
           return (
             <Button key={record.uuid} className="active-button" type="primary" size="small" value="active" ghost>
               done
             </Button>
           );
-        } else if (record === "inProgress") {
+        } else if (record === "in-progress") {
           return (
             <Button key={record.uuid} style={{ borderRadius: 10, }} type="primary" size="small" value="active" ghost>
               in-progress
@@ -204,7 +249,6 @@ const ProjectConfiguration = () => {
           className='search-box'
           prefix={<AiOutlineSearch/>} 
           placeholder='Search' 
-          onSearch={handleSearch}
           onChange={onChangeSearch}
           allowClear
         />
@@ -220,13 +264,12 @@ const ProjectConfiguration = () => {
         <CountButton className="count-button" onCount={handleCount} />
       </Col>
       <Col lg={6} md={16} sm={24}>
-        {/* <AddPosition /> */}
-        <Button onClick={() => navigate("/add-project")} className="submit-button" style={{ color: "white", width: "100%", }} >
+        {/* <Button onClick={() => navigate("/add-project")} className="add-button" style={{ color: "white", width: "100%", }} >
           <Flex justify='center' align='center' gap={10}>
-            <AiOutlinePlus />
-            Add Project
+            + Add Project
           </Flex> 
-        </Button>
+        </Button> */}
+        <AddButton handleClick={() => navigate("/add-project")} buttonText="Add Projects" />
       </Col>
       </Row>
       <br />
@@ -234,7 +277,7 @@ const ProjectConfiguration = () => {
       <Table 
         columns={columns} 
         pagination={{ pageSize: countValue, }} 
-        dataSource={dataSource} 
+        dataSource={sortedData} 
         loading={loading}
         scroll={{
             x: 200,

@@ -22,9 +22,12 @@ const TypeProjectConfiguration = () => {
   const navigate = useNavigate();
 
   const [form] = Form.useForm();
+  const [formEdit] = Form.useForm();
   const [value, setValue] = useState('Website Development');
   const [loading, setLoading] = useState();
   const [formLayout, setFormLayout] = useState('vertical');
+  const [requiredMark, setRequiredMarkType] = useState('optional');
+  const [typeProjects, setTypeProjects] = useState();
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -44,48 +47,46 @@ const TypeProjectConfiguration = () => {
           },
         }
       : null;
-
+      
+  const customizeRequiredMark = (label, { required }) => (
+    <>
+      {required ? <Tag color="error">Required</Tag> : <Tag color="warning">optional</Tag>}
+      {label}
+    </>
+  );
+      
   // Header
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
-    // getUsersData();
-  }, [token, navigate]);
+    getTypeProject();
+  }, [token, navigate, openSuccessAddModal, openSuccessEditModal, openSuccessDeleteModal]);
 
-  // Data
-  const dataSource = [
-    {
-        key: "1",
-        name: "Website Development",
-        description: "Lorem ipsum",
-    },
-    {
-        key: "2",
-        name: "Mobile Development",
-        description: "Lorem ipsum",
-    },
-    {
-        key: "3",
-        name: "Desktop Development",
-        description: "Lorem ipsum",
-    },
-    {
-        key: "4",
-        name: "IoS Development",
-        description: "Lorem ipsum",
-    },
-    {
-        key: "5",
-        name: "Artificial Intelligence Development",
-        description: "Lorem ipsum",
-    },
-    {
-        key: "6",
-        name: "Internet of Things Development",
-        description: "Lorem ipsum",
-    },
-  ]
+  // Get Type Project
+  const getTypeProject = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://103.82.93.38/api/v1/type_project/", {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setLoading(false);
+      setTypeProjects(response.data.items);
+      // console.log("Type Projects", typeProjects);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  }
+
+  const data = typeProjects?.map(item => {
+    return {
+      key: item.uuid,
+      name: item.name,
+    }
+  });
 
   // Search Handler
   const [searchText, setSearchText] = useState("");
@@ -117,7 +118,7 @@ const TypeProjectConfiguration = () => {
     },
   ];
 
-  const sortedData = [...dataSource].sort((a, b) => {
+  const sortedData = data?.sort((a, b) => {
     if (sortValue === 'aToZ') {
       return a.name.localeCompare(b.name);
     } else if (sortValue === 'zToA') {
@@ -224,16 +225,17 @@ const TypeProjectConfiguration = () => {
   const onCancelFailedModal = () => {
     setOpenFailedModal(false)
   }
-
+  
   // Post Type Project
   const addTypeProject = async (values) => {
     try {
       setLoading(true);
-    //   const response = await axios.post("http://103.82.93.38/api/v1/type_project/", values, {
-    //     headers: {
-    //       Authorization: token,
-    //     }
-    //   });
+      console.log("Values", values);
+      const response = await axios.post("http://103.82.93.38/api/v1/type_project/", values, {
+        headers: {
+          Authorization: token,
+        }
+      });
       setTimeout(() => {
         setLoading(false);
         setOpenAddModal(false);
@@ -259,11 +261,12 @@ const TypeProjectConfiguration = () => {
   const editTypeProject = async (values) => {
     try {
       setLoading(true);
-    //   const response = await axios.put("http://103.82.93.38/api/v1/type_project/", values, {
-    //     headers: {
-    //       Authorization: token,
-    //     }
-    //   });
+      console.log("Values", values);
+      // const response = await axios.put("http://103.82.93.38/api/v1/type_project/", values, {
+      //   headers: {
+      //     Authorization: token,
+      //   }
+      // });
       setTimeout(() => {
         setLoading(false);
         setOpenEditModal(false);
@@ -286,14 +289,14 @@ const TypeProjectConfiguration = () => {
   }
 
    // Delete Type Project
-   const deleteTypeProject = async (values) => {
+   const deleteTypeProject = async () => {
     try {
       setLoading(true);
-    //   const response = await axios.delete(`http://103.82.93.38/api/v1/type_project/`, values, {
-    //     headers: {
-    //       Authorization: token,
-    //     }
-    //   });
+      // const response = await axios.delete(`http://103.82.93.38/api/v1/type_project/${uuid}`, {
+      //   headers: {
+      //     Authorization: token,
+      //   }
+      // });
       setTimeout(() => {
         setLoading(false);
         setOpenDeleteModal(false);
@@ -359,14 +362,21 @@ const TypeProjectConfiguration = () => {
         form={form}
         onFinish={addTypeProject}
         onFinishFailed={failedAddTypeProject}
+        requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
         initialValues={{
         //   layout: formLayout,
         }}
         >
-          <Form.Item label="Type Project" name="name">
+          <Form.Item label="Type Project" name="name" rules={[ { required: true, message: "Please input your type project name!" }, ]}>
             <Input
             placeholder="Enter your type project name"
             name="name"
+            />
+          </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input
+            placeholder="Enter your type project description"
+            name="description"
             />
           </Form.Item>
           <Button htmlType='submit' loading={loading} className="add-button">
@@ -386,17 +396,24 @@ const TypeProjectConfiguration = () => {
         <Form
         {...formItemLayout}
         layout={formLayout}
-        form={form}
+        form={formEdit}
         onFinish={editTypeProject}
         onFinishFailed={failedEditTypeProject}
+        requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
         initialValues={{
           name: value,
         }}
         >
-          <Form.Item label="Type Project" name="name">
+          <Form.Item label="Type Project" name="name" rules={[ { required: true, message: "Please input your type project name!" }, ]}>
             <Input
             placeholder="Enter your type project name"
             name="name"
+            />
+          </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input
+            placeholder="Enter your type project description"
+            name="description"
             />
           </Form.Item>
           <Button htmlType='submit' loading={loading} className="add-button">

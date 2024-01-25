@@ -102,7 +102,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
           onOk={deletePosition} 
           onCancel={onCancelDeleteModal} 
           loading={loading}
-          data="Position"/>
+          data="position"/>
         </Space>
       ),
     },

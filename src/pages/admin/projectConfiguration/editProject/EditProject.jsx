@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
@@ -11,12 +11,16 @@ const EditProject = () => {
   // Declaration
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  const {uuid} = useParams();
 
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState('horizontal');
   const [requiredMark, setRequiredMarkType] = useState('optional');
   const [loading, setLoading] = useState(false);
   const [clients, setClients] = useState();
+  const [statuses, setStatuses] = useState();
+  const [typeProjects, setTypeProjects] = useState();
+  const [project, setProject] = useState({});
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailedModal, setOpenFailedModal] = useState(false);
   const { TextArea } = Input;
@@ -27,6 +31,9 @@ const EditProject = () => {
       navigate("/login");
     }
     getClients();
+    getProject();
+    getStatus();
+    getTypeProjects();
   }, [token, navigate]);
 
   // Form Layout
@@ -34,7 +41,7 @@ const EditProject = () => {
   formLayout === 'horizontal'
     ? {
         labelCol: {
-          span: 5,
+          span: 6,
         },
         wrapperCol: {
           span: 50,
@@ -48,6 +55,10 @@ const EditProject = () => {
         {label}
     </>
   );
+
+  const disableDate = (current) => {
+    return current && current < dayjs().endOf('day');
+  }
 
   // Success Modal Handler
   const onOkSuccessModal = () => {
@@ -86,23 +97,95 @@ const EditProject = () => {
     }
   }
 
+  // GET API Type Project
+  const getTypeProjects = async() => {
+    try{
+        setLoading(true)
+        const response = await axios.get("http://103.82.93.38/api/v1/type_project/", 
+        // const response = await axios.get(`http://127.0.0.1:5000/api/v1/type_project/`,
+        {
+            headers: { Authorization: token, },
+        });
+        setTypeProjects(response.data.items)
+        setLoading(false)
+        // console.log("Type projects", typeProjects)
+    } catch (error) {
+        console.log("Error", error)
+        setLoading(false)
+    }
+  }
+
+  // GET API Status
+  const getStatus = async() => {
+    try{
+        setLoading(true)
+        const response = await axios.get(`http://103.82.93.38/api/v1/project_status/`, 
+        // const response = await axios.get(`http://127.0.0.1:5000/api/v1/type_project/`,
+        {
+            headers: { Authorization: token, },
+        });
+        setStatuses(response.data.items)
+        setLoading(false)
+        // console.log("Statuses", statuses)
+    } catch (error) {
+        console.log("Error", error)
+        setLoading(false)
+    }
+  }
+
+  // GET API Detail Project
+  const getProject = async() => {
+    try{
+        setLoading(true)
+        const response = await axios.get(`http://103.82.93.38/api/v1/project/${uuid}`, 
+        // const response = await axios.get(`http://127.0.0.1:5000/api/v1/project/${uuid}`,
+        {
+            headers: { Authorization: token, },
+        });
+        setProject(response.data)
+        setLoading(false)
+        // console.log("Project", project)
+
+        form.setFieldsValue({
+          name: response.data.name,
+          client_uuid: response.data.client.uuid,
+          status_uuid: response.data.status.uuid,
+          type_uuid: response.data.type.uuid,
+          description: response.data.description,
+          start_date: dayjs(response.data.start_date),
+          due_date: dayjs(response.data.due_date),
+          done_at: ((response.data.done_at) ? dayjs(response.data.done_at) : ""),
+          cancel_at: ((response.data.cancel_at) ? dayjs(response.data.cancel_at) : ""),
+        })
+        // console.log(form.getFieldsValue())
+    } catch (error) {
+        console.log("Error", error)
+        setLoading(false)
+    }
+  }
+
   // PUT API to Update Project - Form Handler
   const onFinish = async (values) => {
     try {
         setLoading(true)
+        values.due_date = dayjs(values.due_date).format("YYYY-MM-DD");
+        values.start_date = dayjs(values.start_date).format("YYYY-MM-DD");
+        // values.done_at = ((values.done_at) ? dayjs(values.done_at).format("YYYY-MM-DD") : "");
+        // values.cancel_at = ((values.cancel_at) ? dayjs(values.cancel_at).format("YYYY-MM-DD") : "");
         console.log(values);
-        const response = await axios.put("http://103.82.93.38/api/v1/project/", values, 
-        // const response = await axios.put(`http://127.0.0.1:5000/api/v1/project/`, values,
-            {
+        const response = await axios.put(`http://103.82.93.38/api/v1/project/${uuid}`, values, 
+        // const response = await axios.put(`http://127.0.0.1:5000/api/v1/project/${uuid}`, values,
+        {
             headers: { Authorization: token, },
         });
-        // setOpenSuccessModal(true);
+        setOpenSuccessModal(true);
         setLoading(false)
-        console.log("New peoject added!");
+        console.log("Project updates!");
+        console.log("Response", response);
       } catch (error) {
-        console.log(error);
         setLoading(false)
-        // setOpenFailedModal(true);
+        setOpenFailedModal(true);
+        console.log('Failed:', error);
     }
   };
 
@@ -123,7 +206,7 @@ const EditProject = () => {
         layout={formLayout}
         requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
         initialValues={{
-            // 
+            //
         }}
         autoComplete="off"
       >
@@ -139,7 +222,7 @@ const EditProject = () => {
         >
             <Select>
               {clients?.map(client => 
-                    <Select.Option key={(client.uuid)} value={(client.uuid)}>{(client.name)}</Select.Option>)
+                <Select.Option key={(client.uuid)} value={(client.uuid)}>{(client.name)}</Select.Option>)
               }
             </Select>
         </Form.Item>
@@ -168,7 +251,7 @@ const EditProject = () => {
           <TextArea rows={3} placeholder='Enter Description'/>
         </Form.Item>
         <Form.Item 
-          name="project_uuid" 
+          name="type_uuid" 
           label="Type Project"
           colon={false} 
           labelAlign='left' 
@@ -178,7 +261,9 @@ const EditProject = () => {
           ]}
         >
             <Select>
-                <Select.Option>Project type</Select.Option>
+              {typeProjects?.map(item => 
+                <Select.Option key={(item.uuid)} value={(item.uuid)}>{(item.name)}</Select.Option>)
+              }
             </Select>
         </Form.Item>
         <Form.Item 
@@ -205,67 +290,39 @@ const EditProject = () => {
               message: 'Please input your project due date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" disabledDate={disableDate}
+          // defaultValue={dayjs(project.due_date, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")}
+          />
         </Form.Item>
         <Form.Item 
-          name="status" 
+          name="status_uuid" 
           label="Status"
           colon={false} 
           labelAlign='left'
         >
             <Select>
-                <Select.Option value="cancel">Cancel</Select.Option>
-                <Select.Option value="done">Done</Select.Option>
-                <Select.Option value="inprogress">In-Progress</Select.Option>
+              {statuses?.map(status => 
+                <Select.Option key={(status.uuid)} value={(status.uuid)}>{(status.name)}</Select.Option>)
+              }
             </Select>
         </Form.Item>
         <Form.Item 
-          name="cancel_date" 
+          // name="cancel_at" 
           label="Cancel Date" 
           style={{ width: "100%", }}
           colon={false} 
           labelAlign='left'
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
+          <DatePicker placeholder='DD/MM/YYYY' disabled/>
         </Form.Item>
         <Form.Item 
-          name="done_date" 
+          // name="done_at" 
           label="Done Date" 
           style={{ width: "100%", }}
           colon={false} 
           labelAlign='left' 
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
-        </Form.Item>
-        <Form.Item 
-          name="status" 
-          label="Status"
-          colon={false} 
-          labelAlign='left'
-        >
-            <Select>
-                <Select.Option value="cancel">Cancel</Select.Option>
-                <Select.Option value="done">Done</Select.Option>
-                <Select.Option value="inprogress">In-Progress</Select.Option>
-            </Select>
-        </Form.Item>
-        <Form.Item 
-          name="cancel_date" 
-          label="Cancel Date" 
-          style={{ width: "100%", }}
-          colon={false} 
-          labelAlign='left'
-        >
-          <DatePicker placeholder='DD/MM/YYYY'/>
-        </Form.Item>
-        <Form.Item 
-          name="done_date" 
-          label="Done Date" 
-          style={{ width: "100%", }}
-          colon={false} 
-          labelAlign='left' 
-        >
-          <DatePicker placeholder='DD/MM/YYYY'/>
+          <DatePicker placeholder='DD/MM/YYYY' disabled/>
         </Form.Item>
 
         <Flex gap={20} align='center' justify='end'>
@@ -275,7 +332,7 @@ const EditProject = () => {
       </Form>
       
       <SuccessModal 
-        action="Add project" 
+        action="Edit project" 
         isModalOpen={openSuccessModal} 
         handleOk={onOkSuccessModal} 
         handleCancel={onCancelSuccessModal} 

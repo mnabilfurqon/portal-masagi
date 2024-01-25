@@ -7,7 +7,6 @@ import { RiTeamLine } from "react-icons/ri";
 import { LuClipboardSignature } from "react-icons/lu";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { AiOutlineHome, AiOutlineUser, AiOutlineIdcard, AiOutlineHistory } from "react-icons/ai";
-import { TbClipboardTypography } from "react-icons/tb";
 import { FaRegBell } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
 import Cookies from "js-cookie";
