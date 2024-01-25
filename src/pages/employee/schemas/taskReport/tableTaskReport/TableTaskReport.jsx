@@ -4,15 +4,18 @@ import { Button, Table } from 'antd';
 import { AiOutlineFileSearch } from "react-icons/ai";
 import Cookies from "js-cookie";
 import axios from "axios";
+import dayjs from 'dayjs'
 import "./tableTaskReport.css"
-import { data } from './constans';
 
 const TableTaskReport = (props) => {
+  // let urlApi;
   const token = Cookies.get('token');
   const navigate = useNavigate();
   const {searchValue, filterValue, countValue} = props;
+  // const roleName = decodeURIComponent(Cookies.get('role_name'));
   const [taskReportData, setTaskReportData] = useState([])
   const [loading, setLoading] = useState(false);
+  const dateFormat = 'DD/MM/YYYY';
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -30,6 +33,12 @@ const TableTaskReport = (props) => {
     per_page: tableParams.pagination.pageSize,
   });
 
+  // if (roleName !== 'Head of Division') {
+  //   urlApi = 'http://103.82.93.38/api/v1/task/employee'
+  // } else {
+  //   urlApi = 'http://103.82.93.38/api/v1/task/'
+  // }
+
   const getTaskReportData = async () => {
     try {
       var page;
@@ -39,7 +48,7 @@ const TableTaskReport = (props) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get('http://103.82.93.38/api/v1/permit/', {
+      const response = await axios.get("http://103.82.93.38/api/v1/task/", {
         params: {
           page: page,
           per_page: countValue,
@@ -49,7 +58,8 @@ const TableTaskReport = (props) => {
           Authorization: token,
         },
       });
-      setTaskReportData(response.data[0].items);
+      setTaskReportData(response.data.items);
+      console.log(response.data.items)
       setTableParams({
         ...tableParams,
         pagination: {
@@ -65,64 +75,24 @@ const TableTaskReport = (props) => {
     }
   };
 
-  // const dataLeaveRaw = leaveData
-  // .map(item => {
-  //   let status;
-  //   let statusByHr;
-  //   let statusByTeamLeader;
-
-  //   if (item.approved_by_hr === true && item.approved_by_team_lead === true) {
-  //     status = 'approved';
-  //   } else if (item.approved_by_hr === 'rejected' || item.approved_by_team_lead === 'rejected') {
-  //     status = 'rejected';
-  //   } else {
-  //     status = 'pending';
-  //   }
-
-  //   if (item.approved_by_hr === true) {
-  //     statusByHr = 'approved';
-  //   } else if (item.approved_by_hr === false) {
-  //     statusByHr = 'rejected';
-  //   } else {
-  //     statusByHr = 'pending';
-  //   }
-
-  //   if (item.approved_by_team_lead === true) {
-  //     statusByTeamLeader = 'approved';
-  //   } else if (item.approved_by_team_lead === false) {
-  //     statusByTeamLeader = 'rejected';
-  //   } else {
-  //     statusByTeamLeader = 'pending';
-  //   }
-
-  //   return {
-  //     key: item.uuid,
-  //     employee_name: item.attendance.employee.name,
-  //     type_leave: item.type.name,
-  //     reason: item.reason,
-  //     permit_date: formatDate(item.date_permit),
-  //     end_permit_date: formatDate(item.end_date_permit),
-  //     status: status,
-  //     hr: item.hr_employee,
-  //     status_by_hr: statusByHr,
-  //     team_leader: item.team_lead_employee,
-  //     status_by_team_leader: statusByTeamLeader,
-  //   }
-  // });
-
-  // const dataLeave = dataLeaveRaw.filter(item => { 
-  //   const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
-  //   ? filterValue.includes(item.status)
-  //   : true
-    
-  //   return isStatusMatch;
-  // });
+  const data = taskReportData.map(item => {
+    return {
+      key: item.uuid,
+      project: item.project.name,
+      client: item.project.client.name,
+      task: item.name,
+      deadline: dayjs(item.deadline).format(dateFormat),
+      assignTo: item.asign_to_employee.name,
+      createdBy: item.created_by_employee.name,
+      status: item.status.name,
+    }
+  })
 
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
-    // getTaskReportData();
+    getTaskReportData();
   }, [token, navigate, params, searchValue, filterValue, countValue]);
 
   const title = [
@@ -171,7 +141,7 @@ const TableTaskReport = (props) => {
         if (text === "in-progress") {
           return (
             <Button
-              className="in-progress-button"
+              className="in-progress-buttons"
               type="primary"
               size="small"
               value="in-progress"
@@ -183,7 +153,7 @@ const TableTaskReport = (props) => {
         } else if (text === "done") {
           return (
             <Button
-              className="done-button"
+              className="done-buttons"
               type="primary"
               size="small"
               value="done"
@@ -195,7 +165,7 @@ const TableTaskReport = (props) => {
         } else if (text === "review") {
           return (
             <Button
-              className="review-button"
+              className="review-buttons"
               type="primary"
               size="small"
               value="review"
@@ -207,7 +177,7 @@ const TableTaskReport = (props) => {
         } else if (text === "cancel") {
           return (
             <Button
-              className="cancel-button"
+              className="cancel-buttons"
               type="primary"
               size="small"
               value="cancel"
@@ -219,7 +189,7 @@ const TableTaskReport = (props) => {
         } else {
           return (
             <Button
-              className="open-button"
+              className="open-buttons"
               type="primary"
               size="small"
               value="open"
@@ -230,6 +200,29 @@ const TableTaskReport = (props) => {
           );
         }
       },
+      filters: [
+        {
+          text: 'In-Progress',
+          value: 'in-progress',
+        },
+        {
+          text: 'Done',
+          value: 'done',
+        },
+        {
+          text: 'Review',
+          value: 'review',
+        },
+        {
+          text: 'Cancel',
+          value: 'cancel',
+        },
+        {
+          text: 'Open',
+          value: 'open',
+        },
+      ],
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
     },
     {
       key: "action",
@@ -251,7 +244,7 @@ const TableTaskReport = (props) => {
 
   const handleDetailClick = record => {
     const value = record.key;
-    navigate(`/task-report/detail/${value}`);
+    navigate(`/task-report/detail-task/${value}`);
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -272,7 +265,7 @@ const TableTaskReport = (props) => {
     });
 
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      // setTaskReportData([]);
+      setTaskReportData([]);
     }
   };
 

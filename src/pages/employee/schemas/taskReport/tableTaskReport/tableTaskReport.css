@@ -6,58 +6,58 @@
   margin-top: 30px;
 }
 
-.in-progress-button {
+.in-progress-buttons {
   background-color: #ffffff !important;
   border-color: #007BFF !important;; 
   color: #007BFF !important;
   border-radius: 15px !important;
   cursor: default;
 }
-.in-progress-button button {
+.in-progress-buttons button {
   pointer-events: none;
 }
 
-.done-button {
+.done-buttons {
   background-color: #ffffff !important;
   border-color: #28A745 !important;; 
   color: #28A745 !important;
   border-radius: 15px !important;
   cursor: default;
 }
-.done-button button {
+.done-buttons button {
   pointer-events: none;
 }
 
-.review-button {
+.review-buttons {
   background-color: #ffffff !important;
   border-color: #6F42C1 !important;; 
   color: #6F42C1 !important;
   border-radius: 15px !important;
   cursor: default;
 }
-.review-button button {
+.review-buttons button {
   pointer-events: none;
 }
 
-.cancel-button {
+.cancel-buttons {
   background-color: #ffffff !important;
   border-color: #DC3545 !important;; 
   color: #DC3545 !important;
   border-radius: 15px !important;
   cursor: default;
 }
-.cancel-button button {
+.cancel-buttons button {
   pointer-events: none;
 }
 
-.open-button {
+.open-buttons {
   background-color: #ffffff !important;
   border-color: #FD7E14 !important;; 
   color: #FD7E14 !important;
   border-radius: 15px !important;
   cursor: default;
 }
-.open-button button {
+.open-buttons button {
   pointer-events: none;
 }
 

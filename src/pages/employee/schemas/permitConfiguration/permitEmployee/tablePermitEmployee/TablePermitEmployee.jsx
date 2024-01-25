@@ -12,7 +12,7 @@ const TablePermitEmployee = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
   const location = useLocation()
-  const {searchValue, filterValue, sortValue, countValue} = props;
+  const {searchValue, filterValue, sortValue, countValue, status} = props;
   const [permitData, setPermitData] = useState([])
   const [loading, setLoading] = useState(false);
   const formatDate = (dateString) => {
@@ -53,6 +53,7 @@ const TablePermitEmployee = (props) => {
           type_permit: typePermit,
           desc: sortValue === 'latestEndPermitDate' ? true : false,
           sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
+          status: filterValue[0]
         },
         headers: {
           Authorization: token,
@@ -142,7 +143,7 @@ const TablePermitEmployee = (props) => {
       navigate('/login');
     }
     getPermitData();
-  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue]);
+  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue, status]);
 
   const title = [
     {

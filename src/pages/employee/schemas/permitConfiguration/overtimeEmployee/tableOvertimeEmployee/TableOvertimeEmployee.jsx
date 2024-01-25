@@ -12,7 +12,7 @@ const TableOvertimeEmployee = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
   const location = useLocation()
-  const {searchValue, filterValue, sortValue, countValue} = props;
+  const {searchValue, filterValue, sortValue, countValue, status} = props;
   const [overtimeData, setOvertimeData] = useState([])
   const [loading, setLoading] = useState(false);
   const formatDate = (dateString) => {
@@ -53,6 +53,7 @@ const TableOvertimeEmployee = (props) => {
           type_permit: typePermit,
           desc: sortValue === 'latestEndPermitDate' ? true : false,
           sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
+          status: filterValue[0]
         },
         headers: {
           Authorization: token,
@@ -144,7 +145,7 @@ const TableOvertimeEmployee = (props) => {
       navigate('/login');
     }
     getOvertimeData();
-  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue]);
+  }, [token, navigate, params, searchValue, filterValue, sortValue, countValue, status]);
 
   const title = [
     {

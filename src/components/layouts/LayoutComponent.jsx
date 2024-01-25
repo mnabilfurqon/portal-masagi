@@ -19,6 +19,7 @@ import "./layoutComponent.css";
 
 const LayoutComponent = ({ children, roleNumber }) => {
   const token = Cookies.get("token");
+  const employeeName = Cookies.get("employee_name");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,6 +51,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
       Cookies.remove("username");
       Cookies.remove("company_uuid");
       Cookies.remove("role_name");
+      Cookies.remove("employee_name");
+      Cookies.remove("employee_uuid");
       navigate("/login");
     };
 
@@ -68,7 +71,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 size="medium"
                 gap={2}
               >
-                <AiOutlineUser />
+                {employeeName ? employeeName.charAt(0) : <AiOutlineUser />}
               </Avatar>
               {username}
               <FaChevronDown />
@@ -604,20 +607,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === "/task-report") {
     pageTitle = "Task Report";
     finalPageTitle = pageTitle;
-  } else if (location.pathname.includes("/task-report/detail")) {
-    pageTitle = (
-      <Link to="/task-report" className="page-title">
-        Task Report /{" "}
-      </Link>
-    );
-    pageSubTitle = <span className="page-sub-title"> Task Report Detail </span>;
-    finalPageTitle = (
-      <>
-        {pageTitle}
-        {pageSubTitle}
-      </>
-    );
-  }
+  } 
   
   return (
     <Layout className="layout-container">

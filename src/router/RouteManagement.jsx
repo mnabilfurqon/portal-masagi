@@ -44,7 +44,6 @@ import ReportConfiguration from "../pages/employee/schemas/attendanceReport/repo
 import AttendanceDetails from "../pages/employee/schemas/attendanceReport/attendanceDetails/AttendanceDetails";
 import PresentConfiguration from "../pages/employee/schemas/attendanceReport/presentConfiguration/PresentConfiguration";
 import DetailLeaveData from "../pages/employee/schemas/permitConfiguration/leaveEmployee/detailLeaveEmployee/DetailLeaveData";
-import DetailOfficialTravelData from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelData";
 import DetailOvertimeData from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/detailOvertimeEmployee/DetailOvertimeData";
 import DetailPermitData from "../pages/employee/schemas/permitConfiguration/permitEmployee/detailPermitEmployee/DetailPermitData";
 import AttendanceConfiguration from '../pages/employee/schemas/attendanceConfiguration/AttendanceConfiguration'
@@ -59,14 +58,13 @@ import AddMemberTeamProjectConfiguration from "../pages/admin/teamProjectConfigu
 import TaskMain from "../pages/employee/schemas/taskConfiguration/taskMain/TaskMain";
 import TaskAdd from "../pages/employee/schemas/taskConfiguration/taskAdd/TaskAdd";
 import TaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/TaskDetail";
-import EmployeeTaskDetail from "../pages/employee/schemas/taskConfiguration/taskDetail/EmployeeTaskDetail";
 import ProjectConfiguration from "../pages/admin/projectConfiguration/ProjectConfiguration";
 import AddProject from "../pages/admin/projectConfiguration/addProject/AddProject";
 import DetailProject from "../pages/admin/projectConfiguration/detailProject/DetailProject";
 import EditProject from "../pages/admin/projectConfiguration/editProject/EditProject";
 import TypeProjectConfiguration from "../pages/admin/typeProjectConfiguration/TypeProjectConfiguration";
 import TaskReport from "../pages/employee/schemas/taskReport/TaskReport";
-import DetailTaskReport from "../pages/employee/schemas/taskReport/detailTaskReport/DetailTaskReport";
+import DetailOfficialTravelData from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelData";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -524,7 +522,7 @@ const RouteManagement = () => {
               path="/official-travel/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailOfficialTravelEmployee />
+                  <DetailOfficialTravelData />
                 </LayoutComponent>
               }
             />
@@ -551,7 +549,7 @@ const RouteManagement = () => {
               path="/leave/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailLeaveEmployee />
+                  <DetailLeaveData />
                 </LayoutComponent>
               }
             />
@@ -578,7 +576,7 @@ const RouteManagement = () => {
               path="/overtime/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailOvertimeEmployee />
+                  <DetailOvertimeData />
                 </LayoutComponent>
               }
             />
@@ -605,7 +603,7 @@ const RouteManagement = () => {
               path="/permit/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailPermitEmployee />
+                  <DetailPermitData />
                 </LayoutComponent>
               }
             />
@@ -1169,26 +1167,37 @@ const RouteManagement = () => {
 
             {/* Task Management Configuration Route */}
             <Route
-              path="task"
+              path="/task"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <EmployeeTaskDetail />
+                  <TaskMain />
                 </LayoutComponent>
               }
             />
+
+            <Route
+              path="/task/add-task"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskAdd />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="/task/detail-task/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskDetail />
+                </LayoutComponent>
+              }
+            />
+
             <Route
               path="task-report"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <TaskReport />
-                </LayoutComponent>
-              }
-            />
-            <Route
-              path="task-report/detail/:uuid"
-              element={
-                <LayoutComponent roleNumber={roleNumber}>
-                  <DetailTaskReport />
                 </LayoutComponent>
               }
             />
