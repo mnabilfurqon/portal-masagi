@@ -2,12 +2,16 @@ import React, { useEffect } from "react";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
-import { TbDatabasePlus } from "react-icons/tb";
+import { TbDatabasePlus, TbClipboardTypography } from "react-icons/tb";
 import { RiTeamLine } from "react-icons/ri";
 import { LuClipboardSignature } from "react-icons/lu";
 import { HiOutlineClipboardList } from "react-icons/hi";
-import { AiOutlineHome, AiOutlineUser, AiOutlineIdcard, AiOutlineHistory } from "react-icons/ai";
-import { TbClipboardTypography } from "react-icons/tb";
+import {
+  AiOutlineHome,
+  AiOutlineUser,
+  AiOutlineIdcard,
+  AiOutlineHistory,
+} from "react-icons/ai";
 import { FaRegBell } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
 import Cookies from "js-cookie";
@@ -409,9 +413,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Attendance Report /{" "}
       </Link>
     );
-    pageSubTitle = (
-      <span className="page-sub-title"> Detail Attendance </span>
-    );
+    pageSubTitle = <span className="page-sub-title"> Detail Attendance </span>;
     finalPageTitle = (
       <>
         {pageTitle}
@@ -440,7 +442,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Project /{" "}
       </Link>
     );
-    pageSubTitle = <span className="page-sub-title"> Project Configuration </span>;
+    pageSubTitle = (
+      <span className="page-sub-title"> Project Configuration </span>
+    );
     finalPageTitle = (
       <>
         {pageTitle}
@@ -487,7 +491,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Client /{" "}
       </Link>
     );
-    pageSubTitle = <span className="page-sub-title"> Client Configuration</span>;
+    pageSubTitle = (
+      <span className="page-sub-title"> Client Configuration</span>
+    );
     finalPageTitle = (
       <>
         {pageTitle}
@@ -551,10 +557,12 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname.includes("/team-project/add-member-team-project/")) { 
+  } else if (
+    location.pathname.includes("/team-project/add-member-team-project/")
+  ) {
     pageTitle = (
       <Link to="/team-project" className="page-title">
-        Team Project / {" "}
+        Team Project /{" "}
       </Link>
     );
     pageSubTitle = <span className="page-sub-title"> Team Member</span>;
@@ -599,8 +607,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === "/task-report") {
     pageTitle = "Task Report";
     finalPageTitle = pageTitle;
-  }
-
+  } 
+  
   return (
     <Layout className="layout-container">
       {/* Sider */}
@@ -721,8 +729,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
             </Menu.Item>
-            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
-              <Link to='/history'>Attendance History</Link>
+            <Menu.Item key="/history" icon={<AiOutlineHistory />}>
+              <Link to="/history">Attendance History</Link>
             </Menu.Item>
             <SubMenu
               key="attendance-report"
@@ -736,21 +744,22 @@ const LayoutComponent = ({ children, roleNumber }) => {
                 <Link to="/report">Report</Link>
               </Menu.Item>
             </SubMenu>
-            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
-              <Link to='/history'>History</Link>
+            <Menu.Item key="/history" icon={<AiOutlineHistory />}>
+              <Link to="/history">History</Link>
             </Menu.Item>
             <SubMenu
               key="permit-employee"
               icon={<LuClipboardSignature />}
-              title='Permit'>
-              <Menu.Item key='leave'>
-                <Link to='/leave'>Leave</Link>
+              title="Permit"
+            >
+              <Menu.Item key="leave">
+                <Link to="/leave">Leave</Link>
               </Menu.Item>
-              <Menu.Item key='official-travel'>
-                <Link to='/official-travel'>Official Travel</Link>
+              <Menu.Item key="official-travel">
+                <Link to="/official-travel">Official Travel</Link>
               </Menu.Item>
-              <Menu.Item key='overtime'>
-                <Link to='/overtime'>Overtime</Link>
+              <Menu.Item key="overtime">
+                <Link to="/overtime">Overtime</Link>
               </Menu.Item>
               <Menu.Item key="permit">
                 <Link to="/permit">Permit</Link>
@@ -759,19 +768,20 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <SubMenu
               key="permit-request-leaders"
               icon={<HiOutlineClipboardList />}
-              title='Permit Request'>
-                <Menu.Item key='/leave-request'>
-                  <Link to='/leave-request'>Leave</Link>
-                </Menu.Item>
-                <Menu.Item key='/official-travel-request'>
-                  <Link to='/official-travel-request'>Official Travel</Link>
-                </Menu.Item>
-                <Menu.Item key='/overtime-request'>
-                  <Link to='/overtime-request'>Overtime</Link>
-                </Menu.Item>
-                <Menu.Item key='/permit-request'>
-                  <Link to='/permit-request'>Permit</Link>
-                </Menu.Item>
+              title="Permit Request"
+            >
+              <Menu.Item key="/leave-request">
+                <Link to="/leave-request">Leave</Link>
+              </Menu.Item>
+              <Menu.Item key="/official-travel-request">
+                <Link to="/official-travel-request">Official Travel</Link>
+              </Menu.Item>
+              <Menu.Item key="/overtime-request">
+                <Link to="/overtime-request">Overtime</Link>
+              </Menu.Item>
+              <Menu.Item key="/permit-request">
+                <Link to="/permit-request">Permit</Link>
+              </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
@@ -795,8 +805,8 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
             </Menu.Item>
-            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
-              <Link to='/history'>Attendance History</Link>
+            <Menu.Item key="/history" icon={<AiOutlineHistory />}>
+              <Link to="/history">Attendance History</Link>
             </Menu.Item>
             <SubMenu
               key="attendance-report"
@@ -831,30 +841,32 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <SubMenu
               key="permit-request-leaders"
               icon={<HiOutlineClipboardList />}
-              title='Permit Request'>
-                <Menu.Item key='/leave-request'>
-                  <Link to='/leave-request'>Leave</Link>
-                </Menu.Item>
-                <Menu.Item key='/official-travel-request'>
-                  <Link to='/official-travel-request'>Official Travel</Link>
-                </Menu.Item>
-                <Menu.Item key='/overtime-request'>
-                  <Link to='/overtime-request'>Overtime</Link>
-                </Menu.Item>
-                <Menu.Item key='/permit-request'>
-                  <Link to='/permit-request'>Permit</Link>
-                </Menu.Item>
+              title="Permit Request"
+            >
+              <Menu.Item key="/leave-request">
+                <Link to="/leave-request">Leave</Link>
+              </Menu.Item>
+              <Menu.Item key="/official-travel-request">
+                <Link to="/official-travel-request">Official Travel</Link>
+              </Menu.Item>
+              <Menu.Item key="/overtime-request">
+                <Link to="/overtime-request">Overtime</Link>
+              </Menu.Item>
+              <Menu.Item key="/permit-request">
+                <Link to="/permit-request">Permit</Link>
+              </Menu.Item>
             </SubMenu>
             <SubMenu
               key="task-management"
               icon={<TbClipboardTypography />}
-              title='Task Management'>
-                <Menu.Item key='/project-report'>
-                  <Link to='/project-report'>Project Report</Link>
-                </Menu.Item>
-                <Menu.Item key='/task'>
-                  <Link to='/task'>Task</Link>
-                </Menu.Item>
+              title="Task Management"
+            >
+              <Menu.Item key="/project-report">
+                <Link to="/project-report">Project Report</Link>
+              </Menu.Item>
+              <Menu.Item key="/task">
+                <Link to="/task">Task</Link>
+              </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
@@ -878,43 +890,39 @@ const LayoutComponent = ({ children, roleNumber }) => {
             <Menu.Item key="/attendance" icon={<AiOutlineIdcard />}>
               <Link to="/attendance">Attendance</Link>
             </Menu.Item>
-            <Menu.Item key='/history' icon={<AiOutlineHistory />}>
-              <Link to='/history'>Attendance History</Link>
+            <Menu.Item key="/history" icon={<AiOutlineHistory />}>
+              <Link to="/history">Attendance History</Link>
             </Menu.Item>
             <SubMenu
               key="permit-employee"
               icon={<LuClipboardSignature />}
-              title='Permit'>
-              <Menu.Item key='leave'>
-                <Link to='/leave'>Leave</Link>
+              title="Permit"
+            >
+              <Menu.Item key="leave">
+                <Link to="/leave">Leave</Link>
               </Menu.Item>
-              <Menu.Item key='official-travel'>
-                <Link to='/official-travel'>Official Travel</Link>
+              <Menu.Item key="official-travel">
+                <Link to="/official-travel">Official Travel</Link>
               </Menu.Item>
-              <Menu.Item key='overtime'>
-                <Link to='/overtime'>Overtime</Link>
+              <Menu.Item key="overtime">
+                <Link to="/overtime">Overtime</Link>
               </Menu.Item>
               <Menu.Item key="permit">
                 <Link to="/permit">Permit</Link>
               </Menu.Item>
             </SubMenu>
-            {/* sementara */}
             <SubMenu
               key="task-management"
               icon={<TbClipboardTypography />}
-              title='Task Management'>
-                <Menu.Item key='/task-report'>
-                  <Link to='/task-report'>Task Report</Link>
-                </Menu.Item>
-                <Menu.Item key='/task'>
-                  <Link to='/task'>Task</Link>
-                </Menu.Item>
+              title="Task Management"
+            >
+              <Menu.Item key="/task">
+                <Link to="/task">Task</Link>
+              </Menu.Item>
+              <Menu.Item key="/task-report">
+                <Link to="/task-report">Task Report</Link>
+              </Menu.Item>
             </SubMenu>
-            {/* sementara */}
-            
-            {/* <Menu.Item key="/task-report" icon={<TbClipboardTypography />}>
-              <Link to="/task-report">Task Report</Link>
-            </Menu.Item> */}
           </Menu>
         </Sider>
       )}
