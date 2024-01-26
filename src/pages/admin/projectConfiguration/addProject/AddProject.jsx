@@ -17,6 +17,7 @@ const AddProject = () => {
   const [requiredMark, setRequiredMarkType] = useState('optional');
   const [loading, setLoading] = useState('');
   const [clients, setClients] = useState();
+  const [typeProjects, setTypeProjects] = useState();
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailedModal, setOpenFailedModal] = useState(false);
   const { TextArea } = Input;
@@ -27,6 +28,7 @@ const AddProject = () => {
       navigate("/login");
     }
     getClients();
+    getTypeProjects();
   }, [token, navigate]);
 
   // Form Layout
@@ -48,6 +50,10 @@ const AddProject = () => {
         {label}
     </>
   );
+  
+  const disableDate = (current) => {
+    return current && current < dayjs().endOf('day');
+  }
 
   // Success Modal Handler
   const onOkSuccessModal = () => {
@@ -61,11 +67,11 @@ const AddProject = () => {
 
   // Failed Modal Handler
   const onOkFailedModal = () => {
-    setOpenSuccessModal(false)
+    setOpenFailedModal(false)
   }
   
   const onCancelFailedModal = () => {
-    setOpenSuccessModal(false)
+    setOpenFailedModal(false)
   }
 
   // GET API Client
@@ -86,23 +92,43 @@ const AddProject = () => {
     }
   }
 
+  // GET API Type Project
+  const getTypeProjects = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://103.82.93.38/api/v1/type_project/", {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setLoading(false);
+      setTypeProjects(response.data.items);
+      // console.log("Type Projects", typeProjects);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  }
+
   // POST API to Insert New Project - Form Handler
   const onFinish = async (values) => {
     try {
         setLoading(true)
+        values.due_date = dayjs(values.due_date).format("YYYY-MM-DD HH:mm:ss")
+        values.start_date = dayjs(values.start_date).format("YYYY-MM-DD HH:mm:ss")
         console.log(values);
         const response = await axios.post("http://103.82.93.38/api/v1/project/", values, 
         // const response = await axios.post(`http://127.0.0.1:5000/api/v1/project/`, values,
-            {
-            headers: { Authorization: token, },
+        {
+          headers: { Authorization: token, },
         });
-        // setOpenSuccessModal(true);
+        setOpenSuccessModal(true);
         setLoading(false)
-        console.log("New peoject added!");
+        console.log("New project added!");
       } catch (error) {
         console.log(error);
         setLoading(false)
-        // setOpenFailedModal(true);
+        setOpenFailedModal(true);
     }
   };
 
@@ -168,7 +194,7 @@ const AddProject = () => {
           <TextArea rows={3} placeholder='Enter Description'/>
         </Form.Item>
         <Form.Item 
-          name="project_uuid" 
+          name="type_uuid" 
           label="Type Project"
           colon={false} 
           labelAlign='left' 
@@ -178,7 +204,9 @@ const AddProject = () => {
           ]}
         >
             <Select>
-                <Select.Option>Project type</Select.Option>
+              {typeProjects?.map(item => 
+                    <Select.Option key={(item.uuid)} value={(item.uuid)}>{(item.name)}</Select.Option>)
+              }
             </Select>
         </Form.Item>
         <Form.Item 
@@ -205,7 +233,7 @@ const AddProject = () => {
               message: 'Please input your project due date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" disabledDate={disableDate}/>
         </Form.Item>
 
         <Flex gap={20} align='center' justify='end'>

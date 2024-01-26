@@ -8,7 +8,7 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 
-const AddPosition = () => {
+const AddPosition = (props) => {
   // Declaration
   const token = Cookies.get("token");
   const navigate = useNavigate();
@@ -65,43 +65,43 @@ const AddPosition = () => {
         }
       : null;
   
-  // Add Position to API
-  const addPosition = async (values) => {
-    try {
-      const response = await axios.post("http://103.82.93.38/api/v1/position/", values, {
-        headers: {
-          Authorization: token,
-        }
-      });
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setIsModalOpen(false);
-        setIsSuccessModalOpen(true);
-        setValue("");
-        console.log("New position added!");
-      }, 3000);
-    } catch (error) {
-      console.log(error, values);
-    }
-  }
+  // // Add Position to API
+  // const addPosition = async (values) => {
+  //   try {
+  //     const response = await axios.post("http://103.82.93.38/api/v1/position/", values, {
+  //       headers: {
+  //         Authorization: token,
+  //       }
+  //     });
+  //     setLoading(true);
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //       setIsModalOpen(false);
+  //       setIsSuccessModalOpen(true);
+  //       setValue("");
+  //       console.log("New position added!");
+  //     }, 3000);
+  //   } catch (error) {
+  //     console.log(error, values);
+  //   }
+  // }
   
   return (
   <>
-    <AddButton handleClick={showModal} buttonText="Add Position" />
+    <AddButton handleClick={props.showModal} buttonText="Add Position" />
 
     <Modal
         centered
-        open={isModalOpen}
+        open={props.isModalOpen}
         title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Add Position</h2>}
-        onCancel={handleCancel}
+        onCancel={props.onCancel}
         footer={<div></div>}
     >
         <Form
             {...formItemLayout}
             layout={formLayout}
             form={form}
-            onFinish={addPosition}
+            onFinish={props.onFinish}
             initialValues={{
                 layout: formLayout,
             }}
@@ -109,13 +109,13 @@ const AddPosition = () => {
             <Form.Item label="Name" name="name">
                 <Input placeholder="Enter Position Name" name="name" value={value} onChange={handleValue}/>
             </Form.Item>
-            <Button htmlType='submit' loading={loading} className="update-button">
+            <Button htmlType='submit' loading={props.loading} className="add-button">
               Save
             </Button>
         </Form>
     </Modal>
 
-    <SuccessModal action="Add" handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} isModalOpen={isSuccessModalOpen} />
+    {/* <SuccessModal action="Add" handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} isModalOpen={isSuccessModalOpen} /> */}
   </>
   )
 }

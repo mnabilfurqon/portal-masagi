@@ -1,16 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './reportConfiguartion.css'
-import { Col, Row, Table, DatePicker, Input, Button } from 'antd'
-import { IoIosSearch } from "react-icons/io";
+import { Col, Row, Table, DatePicker, Input, Button, Flex, Avatar } from 'antd'
+import { IoIosSearch } from "react-icons/io"
 import { AiOutlineFileSearch } from 'react-icons/ai'
+import axios from 'axios'
+import dayjs from "dayjs"
+import Cookies from 'js-cookie'
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
+import './reportConfiguartion.css'
 
 const ReportConfiguartion = () => {
-// Declaration
-const navigate = useNavigate();
+    
+  // Declaration
+  const navigate = useNavigate();
+  const token = Cookies.get("token")
+  const [loading, setLoading] = useState(false);
+  const [attendanceCompany, setAttendanceCompany] = useState();
+    
+  // Header
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+    getAttendanceCompany()
+  }, [token, navigate,]);
+
+  // Get API Attendance Company
+  const getAttendanceCompany = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/company`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setAttendanceCompany(response.data.items)
+    //   console.log("attendance company", attendanceCompany)
+      // console.log(response);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
 // Sort Handler
 const [sortValue, setSortValue] = useState("");
@@ -48,11 +84,22 @@ const columns = [
         title: "Employee",
         dataIndex: "employee",
         key: "employee",
+        width: '50%',
         // defaultSortOrder: "ascend",
-        sorter: (a, b) => {
-            return a.employee.length - b.employee.lenght
+        sortDirections: ["descend", "ascend"],
+        sorter: (a, b) => {return a.employee.name.localeCompare(b.employee.name)},
+        render: (record) => {
+            // console.log("employee record", record)
+            return (
+            <Flex gap={4} align='center'>
+                <Avatar size={55}/>
+                <div style={{ margin: 0, padding: 0, }}>
+                    <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
+                    <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                </div>
+            </Flex>
+            )
         },
-        // sortDirections: ["descend", "ascend"],
     },
     {
         title: "Presents",
@@ -100,10 +147,23 @@ const onChangeTable = (pagination, filter, sorter, extra) => {
 }
 
 const handleDetailClick = (record) => {
-    navigate('/report/detail', { state: { data: record } });
+    // console.log("action record", record)
+    const uuid = record.key
+    navigate(`/report/detail/${uuid}`, { state: { data: record } });
     // navigate('/report/detail');
 };
 
+const dataSource = attendanceCompany?.map(item => {
+    return {
+        key: item.uuid,
+        employee: { 
+            uuid: item.employee.uuid, 
+            name: item.employee.name,
+            position: item.employee.position.name,
+            division: item.employee.division.name,
+        },
+    }
+})
 const data = [
     {
         key: "1",
@@ -296,9 +356,6 @@ return (
                 className='search-box'
                 prefix={<IoIosSearch />} 
                 placeholder='Search for employee name' 
-                onSearch={(value)=>{ 
-                  setSearchValue(value)
-                }}
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                 }}
@@ -317,7 +374,7 @@ return (
         <div className='table'>
             <p className='sub-title'>Attendance Report</p>
             <Table 
-                dataSource={data}
+                dataSource={dataSource}
                 columns={columns}
                 onChange={onChangeTable}
                 scroll={{

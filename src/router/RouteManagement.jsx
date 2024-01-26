@@ -32,13 +32,17 @@ import OvertimeDetail from "../pages/employee/schemas/approvalConfiguration/over
 import PermitMain from "../pages/employee/schemas/approvalConfiguration/permit/PermitMain";
 import PermitDetail from "../pages/employee/schemas/approvalConfiguration/permit/PermitDetail";
 import OfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/OfficialTravelEmployee";
+// import DetailOfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelEmployee";
 import AddOfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/addOfficialTravelEmployee/AddOfficialTravelEmployee";
 import LeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/LeaveEmployee";
 import AddLeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/addLeaveEmployee/AddLeaveEmployee";
+// import DetailLeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/detailLeaveEmployee/DetailLeaveEmployee";
 import PermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/PermitEmployee";
 import AddPermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/addPermitEmployee/AddPermitEmployee";
+// import DetailPermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/detailPermitEmployee/DetailPermitEmployee";
 import OvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/OvertimeEmployee";
 import AddOvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/addOvertimeEmployee/AddOvertimeEmployee";
+// import DetailOvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/detailOvertimeEmployee/DetailOvertimeEmployee";
 import HistoryConfiguration from "../pages/employee/schemas/historyConfiguration/HistoryConfiguration";
 import ReportConfiguration from "../pages/employee/schemas/attendanceReport/reportConfiguration/ReportConfiguartion";
 import AttendanceDetails from "../pages/employee/schemas/attendanceReport/attendanceDetails/AttendanceDetails";
@@ -491,7 +495,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/report/detail"
+              path="/report/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <AttendanceDetails />
@@ -522,6 +526,7 @@ const RouteManagement = () => {
               path="/official-travel/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
+                  {/* <DetailOfficialTravelEmployee /> */}
                   <DetailOfficialTravelData />
                 </LayoutComponent>
               }
@@ -549,6 +554,7 @@ const RouteManagement = () => {
               path="/leave/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
+                  {/* <DetailLeaveEmployee /> */}
                   <DetailLeaveData />
                 </LayoutComponent>
               }
@@ -576,6 +582,7 @@ const RouteManagement = () => {
               path="/overtime/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
+                  {/* <DetailOvertimeEmployee /> */}
                   <DetailOvertimeData />
                 </LayoutComponent>
               }
@@ -603,6 +610,7 @@ const RouteManagement = () => {
               path="/permit/detail"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
+                  {/* <DetailPermitEmployee /> */}
                   <DetailPermitData />
                 </LayoutComponent>
               }
@@ -749,7 +757,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/report/detail"
+              path="/report/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <AttendanceDetails />
@@ -993,7 +1001,7 @@ const RouteManagement = () => {
               path="/attendance"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <p>Attendance</p>
+                  <AttendanceConfiguration />
                 </LayoutComponent>
               }
             />
@@ -1046,7 +1054,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/report/detail"
+              path="/report/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <AttendanceDetails />

@@ -49,10 +49,10 @@ const EmployeeTabs = () => {
                     "Authorization": token,
                 },
             });
-            setIsSuccessModalVisible(true);
+            setIsSuccessEmployeeModalVisible(true);
         } catch (error) {
             setIsFailedModalVisible(true);
-            console.log(error, values);
+            console.log("Galat", error, "Nilai", values);
         } finally {
             setSelectedEmployeeLoading(false);
         }

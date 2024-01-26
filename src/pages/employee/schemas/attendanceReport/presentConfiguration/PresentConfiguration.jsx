@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './presentConfiguration.css'
 import { useNavigate } from 'react-router-dom'
-import { Row, Col, DatePicker, Progress, Input, Table, Button } from 'antd'
+import { Row, Col, DatePicker, Progress, Input, Table, Button, Spin, } from 'antd'
 import { IoIosSearch } from "react-icons/io";
 import { AiOutlineFileSearch } from 'react-icons/ai'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
@@ -17,6 +17,7 @@ const PresentConfiguration = () => {
   const token = Cookies.get("token")
   const [loading, setLoading] = useState(false);
   const [attendanceSummary, setAttendanceSummary] = useState();
+  const [attendanceCompany, setAttendanceCompany] = useState();
   const [totalPresent, setTotalPresent] = useState();
   const [totalAbsents, setTotalAbsents] = useState();
   const [totalEmployee, setTotalEmployee] = useState();
@@ -38,6 +39,7 @@ const PresentConfiguration = () => {
       navigate('/login');
     }
     getAttendanceSummary()
+    getAttendanceCompany()
   }, [token, navigate, filterValue]);
 
   // Date Filter Handler
@@ -70,41 +72,61 @@ const PresentConfiguration = () => {
       title: "Employee",
       dataIndex: "employee",
       key: "employee",
-      // defaultSortOrder: "ascend",
-      sorter: (a, b) => {
-        return a.employee.length - b.employee.lenght
+      filteredValue: [searchValue],
+      onFilter: (value, record) => {
+        return String(record.employee).toLowerCase().includes(value.toLowerCase());
       },
+      // defaultSortOrder: ['descend'],
+      sortDirections: ["descend", "ascend"],
+      sorter: (a, b) => {return a.employee.localeCompare(b.employee)},
+      // sorter: (a, b) =>  a.employee.lenght - b.employee.lenght,
+    },
+    {
+      title: "In-Time",
+      dataIndex: "inTime",
+      key: "inTime",
+    },
+    {
+      title: "Out-Time",
+      dataIndex: "outTime",
+      key: "outTime",
+    },
+    {
+      title: "Total Hours",
+      dataIndex: "totalHours",
+      key: "totalHours",
+    },
+    {
+      title: "Lateness",
+      dataIndex: "lateness",
+      key: "lateness",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      filters: [
+        { text: "On-Time", value: "on-time" }, { text: "Late", value: "late" }
+      ],
       // sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Presents",
-      dataIndex: "presents",
-      key: "presents",
-    },
-    {
-      title: "Absents",
-      dataIndex: "absents",
-      key: "absents",
-    },
-    {
-      title: "Official Travels",
-      dataIndex: "official_travels",
-      key: "official_travels",
-    },
-    {
-      title: "Overtimes",
-      dataIndex: "overtimes",
-      key: "overtimes",
-    },
-    {
-      title: "Leaves",
-      dataIndex: "leaves",
-      key: "leaves",
-    },
-    {
-      title: "Permits",
-      dataIndex: "permits",
-      key: "permits",
+      // sorter: (a, b) => {return a.employee.localeCompare(b.employee)},
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
+      render: (record) => {
+        // console.log("record", record)
+        if (record === "on-time") {
+          return (
+            <Button key={record.uuid} className="active-button" type="primary" size="small" value="active" ghost>
+              on-time
+            </Button>
+          );
+        } else {
+          return (
+            <Button key={record.uuid} className="not-active-button" type="primary" size="small" value="notActive" ghost>
+              late
+            </Button>
+          );
+        }
+      },
     },
     {
       title: "Action",
@@ -156,76 +178,90 @@ const PresentConfiguration = () => {
     }
   }
 
+  // Get API Attendance Company
+  const getAttendanceCompany = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/company`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setAttendanceCompany(response.data.items)
+      console.log("attendance company", attendanceCompany)
+      // console.log(response);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const data = [
     {
-      key: "1",
+      uuid: "1",
       employee: "Albert",
-      presents: "7",
-      absents: "0",
-      official_travels: "0",
-      overtimes: "1",
-      leaves: "0",
-      permits: "0",
+      inTime: "08.00 AM",
+      outTime: "05.00 PM",
+      totalHours: "09:00:00",
+      lateness: "00:000:00",
+      status: "on-time",
     },
     {
-      key: "2",
+      uuid: "2",
       employee: "Banny",
-      presents: "7",
-      absents: "0",
-      official_travels: "0",
-      overtimes: "1",
-      leaves: "0",
-      permits: "0",
+      inTime: "08.00 AM",
+      outTime: "05.00 PM",
+      totalHours: "09:00:00",
+      lateness: "00:000:00",
+      status: "on-time",
     },
     {
-      key: "3",
+      uuid: "3",
       employee: "Flauny",
-      presents: "7",
-      absents: "0",
-      official_travels: "0",
-      overtimes: "1",
-      leaves: "0",
-      permits: "0",
+      inTime: "08.00 AM",
+      outTime: "05.00 PM",
+      totalHours: "09:00:00",
+      lateness: "00:000:00",
+      status: "on-time",
     },
     {
-      key: "4",
+      uuid: "4",
       employee: "Harry",
-      presents: "7",
-      absents: "0",
-      official_travels: "0",
-      overtimes: "1",
-      leaves: "0",
-      permits: "0",
+      inTime: "08.50 AM",
+      outTime: "05.00 PM",
+      totalHours: "08:10:00",
+      lateness: "00:50:00",
+      status: "late",
     },
     {
-      key: "5",
+      uuid: "5",
       employee: "Klaust",
-      presents: "7",
-      absents: "0",
-      official_travels: "0",
-      overtimes: "1",
-      leaves: "0",
-      permits: "0",
+      inTime: "08.00 AM",
+      outTime: "05.00 PM",
+      totalHours: "09:00:00",
+      lateness: "00:00:00",
+      status: "on-time",
     },
     {
-      key: "6",
+      uuid: "6",
       employee: "Ian",
-      presents: "7",
-      absents: "0",
-      official_travels: "0",
-      overtimes: "1",
-      leaves: "0",
-      permits: "0",
+      inTime: "08.30 AM",
+      outTime: "05.00 PM",
+      totalHours: "08:03:00",
+      lateness: "00:30:00",
+      status: "late",
     },
     {
-      key: "7",
+      uuid: "7",
       employee: "Zack",
-      presents: "7",
-      absents: "0",
-      official_travels: "0",
-      overtimes: "1",
-      leaves: "0",
-      permits: "0",
+      inTime: "08.00 AM",
+      outTime: "05.00 PM",
+      totalHours: "09:00:00",
+      lateness: "00:00:00",
+      status: "on-time",
     },
   ]
 
@@ -330,9 +366,6 @@ const PresentConfiguration = () => {
             className='search-box'
             prefix={<IoIosSearch />} 
             placeholder='Search for employee name' 
-            onSearch={(value)=>{ 
-              setSearchValue(value)
-            }}
             onChange={(e) => {
               setSearchValue(e.target.value);
               }}
@@ -353,7 +386,7 @@ const PresentConfiguration = () => {
         <Table 
           dataSource={data}
           columns={columns}
-          // onChange={onChangeTable}
+          onChange={onChangeTable}
           scroll={{
             x: 200,
           }}
