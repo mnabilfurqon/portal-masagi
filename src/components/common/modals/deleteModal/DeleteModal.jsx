@@ -12,7 +12,7 @@ const DeleteModal = ({visible, handleDelete, handleCancel, textModal}) => {
     centered={true}
     footer={
         <div>
-            <Button className="cancel-button" type="none" onClick={handleCancel}>CANCEL</Button>
+            <Button className="cancel-delete-button" type="none" onClick={handleCancel}>CANCEL</Button>
             <Button className="delete-button" type="danger" onClick={handleDelete}>DELETE</Button>
         </div>
     }

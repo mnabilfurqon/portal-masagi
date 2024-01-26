@@ -12,7 +12,7 @@ const DetailClientTable = ({detailClientData}) => {
                 <tbody>
                 <tr>
                     <th>Client Name</th>
-                    <td>{detailClientData.client_name}</td>
+                    <td>{detailClientData.name}</td>
                 </tr>
                 <tr>
                     <th></th>
@@ -57,10 +57,6 @@ const DetailClientTable = ({detailClientData}) => {
                 <tr>
                     <th></th>
                     <td></td>
-                </tr>
-                <tr>
-                    <th>Contact Person</th>
-                    <td>{detailClientData.contact_person}</td>
                 </tr>
                 </tbody>
             </table>

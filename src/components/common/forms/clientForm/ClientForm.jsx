@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Button, Form, Input } from 'antd';
 import SubmitButton from '../../buttons/submitButton/SubmitButton';
 import './clientForm.css';
@@ -13,7 +13,7 @@ const ClientForm = ( {onFinish, onFinishFailed, buttonText, editClientData}) => 
     useEffect(() => {
         if (editClientData) {     
           form.setFieldsValue({
-            client_name: editClientData.client_name,
+            name: editClientData.name,
             contact_person: editClientData.contact_person,
             contact_person_name: editClientData.contact_person_name,
             email: editClientData.email,
@@ -42,7 +42,7 @@ const ClientForm = ( {onFinish, onFinishFailed, buttonText, editClientData}) => 
                 >
                     <Form.Item
                     label="Client Name"
-                    name="client_name"
+                    name="name"
                     colon={false}
                     rules={[
                         {

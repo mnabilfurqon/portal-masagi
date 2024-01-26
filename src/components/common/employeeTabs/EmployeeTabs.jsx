@@ -21,8 +21,6 @@ import LoadingComponent from '../../loadingComponent/LoadingComponent';
 const { TabPane } = Tabs;
 
 const EmployeeTabs = () => {
-    const { UserOutlined } = pkg
-
     const { uuid } = useParams();
     const token = Cookies.get("token");
     const navigate = useNavigate();
