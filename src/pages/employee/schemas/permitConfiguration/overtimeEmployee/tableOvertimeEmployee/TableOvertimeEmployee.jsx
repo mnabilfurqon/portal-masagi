@@ -53,6 +53,7 @@ const TableOvertimeEmployee = (props) => {
           type_permit: typePermit,
           desc: sortValue === 'latestEndPermitDate' ? true : false,
           sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
+          status: filterValue[0]
         },
         headers: {
           Authorization: token,

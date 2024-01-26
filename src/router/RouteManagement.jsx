@@ -48,7 +48,6 @@ import ReportConfiguration from "../pages/employee/schemas/attendanceReport/repo
 import AttendanceDetails from "../pages/employee/schemas/attendanceReport/attendanceDetails/AttendanceDetails";
 import PresentConfiguration from "../pages/employee/schemas/attendanceReport/presentConfiguration/PresentConfiguration";
 import DetailLeaveData from "../pages/employee/schemas/permitConfiguration/leaveEmployee/detailLeaveEmployee/DetailLeaveData";
-import DetailOfficialTravelData from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelData";
 import DetailOvertimeData from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/detailOvertimeEmployee/DetailOvertimeData";
 import DetailPermitData from "../pages/employee/schemas/permitConfiguration/permitEmployee/detailPermitEmployee/DetailPermitData";
 import AttendanceConfiguration from '../pages/employee/schemas/attendanceConfiguration/AttendanceConfiguration'
@@ -68,6 +67,8 @@ import AddProject from "../pages/admin/projectConfiguration/addProject/AddProjec
 import DetailProject from "../pages/admin/projectConfiguration/detailProject/DetailProject";
 import EditProject from "../pages/admin/projectConfiguration/editProject/EditProject";
 import TypeProjectConfiguration from "../pages/admin/typeProjectConfiguration/TypeProjectConfiguration";
+import TaskReport from "../pages/employee/schemas/taskReport/TaskReport";
+import DetailOfficialTravelData from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelData";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -1183,15 +1184,6 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/task-report"
-              element={
-                <LayoutComponent roleNumber={roleNumber}>
-                  <p>Task Report Employee</p>
-                </LayoutComponent>
-              }
-            />
-
-            <Route
               path="/task/add-task"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
@@ -1205,6 +1197,15 @@ const RouteManagement = () => {
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <TaskDetail />
+                </LayoutComponent>
+              }
+            />
+
+            <Route
+              path="task-report"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskReport />
                 </LayoutComponent>
               }
             />
