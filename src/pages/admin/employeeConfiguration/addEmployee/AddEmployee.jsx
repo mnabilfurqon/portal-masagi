@@ -740,7 +740,7 @@ const AddEmployee = () => {
                 name="is_active"
                 className='column'>
                     <Radio.Group>
-                        <Radio value={true}>Actice</Radio>
+                        <Radio value={true}>Active</Radio>
                         <Radio value={false}>Not Active</Radio>
                     </Radio.Group>
                 </Form.Item>

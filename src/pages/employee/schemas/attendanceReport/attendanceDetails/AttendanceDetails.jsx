@@ -1,16 +1,81 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Row, Col, Avatar, Flex, DatePicker, Table, } from 'antd'
-import { AiOutlineUser } from "react-icons/ai";
+import { Row, Col, Avatar, Flex, DatePicker, Table, Spin, } from 'antd'
+import { AiOutlineUser } from "react-icons/ai"
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import dayjs from 'dayjs'
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 
 const AttendanceDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const token = Cookies.get("token")
   const { data } = location.state || {};
-  console.log("data record", data)
-
+  
+  const [loading, setLoading] = useState(false);
+  const [employeeNip, setEmployeeNip] = useState();
+  const [employeeAttendanceDetail, setEmployeeAttendanceDetail] = useState();
   const [tableName, setTableName] = useState("Presents");
+
+  // Header
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+    getNipEmployee();
+    getEmployeeAttendanceDetail();
+  }, [token, navigate,]);
+
+  // Get API Employee
+  const getNipEmployee = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/employee/${data.employee.uuid}`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setEmployeeNip(response.data.nip)
+    } catch (error) {
+      console.log("Galat", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Get API Employee Attendance Detail
+  const getEmployeeAttendanceDetail = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/employee_attendance_detail/${data.key}`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setEmployeeAttendanceDetail(response.data)
+      // console.log("Attendance Detail", employeeAttendanceDetail)
+    } catch (error) {
+      console.log("Galat", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const employeeAttendances = employeeAttendanceDetail?.map(item => {
+    return {
+        key: item.uuid,
+        date: dayjs(item.check_in_date).format("DD-MM-YYYY"),
+        in_time: dayjs(item.check_in_date).format("hh:mm A"),
+        out_time: dayjs(item.check_out_date).format("hh:mm A"),
+        total_hours: dayjs(item.check_out_date).diff(item.check_in_date, "hour", true),
+        lateness: "00:00:00",
+    }
+  })
 
   const columns = [
     {
@@ -179,22 +244,26 @@ const permits = [
     },
 ]
 
-const [dataSource, setDataSource] = useState(presents);
-const onChange = () => {
+  const [dataSource, setDataSource] = useState(employeeAttendances);
+  const onChange = () => {
 
-}
+  }
+
+  console.log("employee attendances", employeeAttendances)
+  console.log(presents)
 
   return (
     <>
+    <Spin spinning={loading}>
         <Row align='middle' gutter={[56, 8]}>
             <Col xs={8} sm={6} md={6} lg={4} xl={3} xxl={2}>
                 <Avatar size={120} icon={<AiOutlineUser />} />
             </Col>
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
-                    <h4 style={{ fontSize: 24, fontWeight: 600, margin: 0, }} >Robert Pattinson</h4>
-                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >Informastion Technology | Team Leader</p>
-                    <h3 style={{ fontSize: 16, fontWeight: 400, margin: 0, }} >19950812023091007</h3>
+                    <h4 style={{ fontSize: 24, fontWeight: 600, margin: 0, }} >{data.employee.name}</h4>
+                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >{data.employee.division} | {data.employee.position}</p>
+                    <h3 style={{ fontSize: 16, fontWeight: 400, margin: 0, }} >{employeeNip}</h3>
                 </div>
             </Col>
         </Row>
@@ -287,6 +356,7 @@ const onChange = () => {
                 }}
             />
         </div>
+    </Spin>
     </>
   )
 }

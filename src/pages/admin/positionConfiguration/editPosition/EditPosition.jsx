@@ -54,9 +54,8 @@ const EditPosition = (props) => {
   }, [token, navigate]);
 
   // PUT API to Update Position
-  const updatePosition = async (event) => {
+  const updatePosition = async () => {
     try {
-      event.preventDefault();
       // console.log(value);
       const response = await axios.put(`http://103.82.93.38/api/v1/position/${uuid}`, {
           name: value,
@@ -118,21 +117,18 @@ const EditPosition = (props) => {
   return (
     <>
       {/* Modal Edit */}
-      <Button type="none" style={{margin:0, padding:0}} onClick={showModal}>
+      <Button type="none" style={{margin:0, padding:0}} onClick={props.onClick}>
         <BiEdit className="edit-icon" size="25" />
       </Button>
 
       <Modal
         centered
-        open={open}
+        open={props.isModalOpen}
         title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Edit Position</h2>}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <Button key="submit" type="none" loading={loading} onClick={updatePosition} className="update-button">
-            Save
-          </Button>,
-        ]}
+        onFinish={props.onFinish}
+        // onOk={handleOk}
+        onCancel={props.onCancel}
+        footer={<div></div>}
       >
         <Form
           {...formItemLayout}
@@ -140,11 +136,16 @@ const EditPosition = (props) => {
           form={form}
           initialValues={{
             layout: formLayout,
+            name: props.value,
           }}
         >
-          <Form.Item label="Name">
-            <Input placeholder={value} value={value} name="name" onChange={handleValue}/>
+          <Form.Item label="Name" name="name">
+            <Input placeholder="Input Position Name" value={props.value} onChange={props.onChangeValue}/>
           </Form.Item>
+
+          <Button htmlType="submit" type="none" loading={props.loading} className="add-button" onClick={props.onFinish}>
+            Save
+          </Button>
         </Form>
       </Modal>
 

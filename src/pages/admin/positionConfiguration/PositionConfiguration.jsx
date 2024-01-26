@@ -3,7 +3,8 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 import "./positionConfiguration.css"
 import { IoIosSearch } from "react-icons/io";
-import { Table, Space, Row, Col, Input} from "antd"
+import { MdOutlineDelete } from 'react-icons/md'
+import { Table, Space, Row, Col, Input, Button, } from "antd"
 import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
 import { useNavigate } from 'react-router-dom'
 import EditPosition from './editPosition/EditPosition'
@@ -13,6 +14,7 @@ import FailedModal from '@common/modals/failedModal/FailedModal'
 import SearchBox from '@common/SearchBox/SearchBox'
 import CountButton from '@common/buttons/countButton/CountButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
+import DeleteModal from '@common/modals/deleteModal/DeleteModal';
 
 const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   // Declaration 
@@ -25,10 +27,20 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const [uuid, setUuid] = useState();
+  const [editValue, setEditValue] = useState();
+
   const [value, setValue] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [open, setOpen] = useState(false);
+
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isSuccessUpdateModalOpen, setIsSuccessUpdateModalOpen] = useState(false);
+  const [isSuccessDeleteModalOpen, setIsSuccessDeleteModalOpen] = useState(false);
   const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
   
 
@@ -54,7 +66,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
       navigate('/login');
     }
     getPositionData();
-  }, [token, navigate, isAddModalOpen, isEditModalOpen, isDeleteModalOpen]);
+  }, [token, navigate, isSuccessModalOpen, isSuccessUpdateModalOpen, isSuccessDeleteModalOpen]);
 
   // Table
   const columns = [
@@ -62,7 +74,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      width: '88%',
+      width: '85%',
       filteredValue: [searchText],
       onFilter: (value, record) => {
         return String(record.name).toLowerCase().includes(value.toLowerCase());
@@ -73,8 +85,24 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
       key: 'action',
       render: (record) => (
         <Space size="small">
-          <EditPosition uuid={(record)} />
-          <DeleteConfirmationDialog uuid={(record.key)} data="Position"/>
+          <EditPosition 
+          uuid={(record)} 
+          isModalOpen={openEditModal}
+          onClick={() => handelOpenEditModal(record)}
+          onCancel={onCancelEditModal}
+          loading={loading}
+          onFinish={updatePosition}
+          value={editValue}
+          onChangeValue={(e) => setEditValue(e.target.value)}
+          />
+
+          <DeleteConfirmationDialog 
+          onClick={() => handelOpenDeleteModal(record)} 
+          isModalOpen={openDeleteModal} 
+          onOk={deletePosition} 
+          onCancel={onCancelDeleteModal} 
+          loading={loading}
+          data="position"/>
         </Space>
       ),
     },
@@ -118,6 +146,22 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
     setIsSuccessModalOpen(false);
   };
 
+  const handleSuccessUpdateModalOk = () => {
+    setIsSuccessUpdateModalOpen(false);
+  };
+
+  const handleSuccessUpdateModalCancel = () => {
+    setIsSuccessUpdateModalOpen(false);
+  };
+
+  const handleSuccessDeleteModalOk = () => {
+    setIsSuccessDeleteModalOpen(false);
+  };
+
+  const handleSuccessDeleteModalCancel = () => {
+    setIsSuccessDeleteModalOpen(false);
+  };
+
   // Failed Modal Handle
   const handleFailedModalOk = () => {
     setIsFailedModalOpen(false);
@@ -126,32 +170,6 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   const handleFailedModalCancel = () => {
     setIsFailedModalOpen(false);
   };
-
-  // // Filter data berdasarkan searchValue
-  // const filteredData = data.filter(item =>
-  //   item.name.toLowerCase().includes(searchValue.toLowerCase())
-  // );
-
-  // // Sort data berdasarkan sortValue
-  // const sortedData = [...filteredData].sort((a, b) => {
-  //   if (sortValue === 'aToZ') {
-  //     return a.name.localeCompare(b.name);
-  //   } else if (sortValue === 'zToA') {
-  //     return b.name.localeCompare(a.name);
-  //   } else {
-  //     return 0;
-  //   }
-  // });
-
-  // const paginationConfig = {
-  //   pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
-  //   showTotal: (total, range) => (
-  //     <span style={{ color: '#556172' }}>
-  //       Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-  //     </span>
-  //   ),
-  //   showLessItems: true,
-  // };
 
   // Count Handler
   const [countValue, setCountValue] = useState("10");
@@ -189,19 +207,115 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
     }
   });
 
+  // Add Position to API
+  const addPosition = async (values) => {
+    try {
+      setLoading(true);
+      const response = await axios.post("http://103.82.93.38/api/v1/position/", values, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setTimeout(() => {
+        setLoading(false);
+        setOpenAddModal(false);
+        setIsSuccessModalOpen(true);
+        console.log("New position added!");
+      }, 3000);
+    } catch (error) {
+      setLoading(false);
+      setIsFailedModalOpen(true);
+      console.log("Galat", error, "Values", values);
+    }
+  }
+
+  const onCancelAddModal = () => {
+    setOpenAddModal(false);
+  };
+
+  // PUT API to Update Position
+  const updatePosition = async (values) => {
+    try {
+      // console.log("uuid", uuid, "name", editValue );
+      const response = await axios.put(`http://103.82.93.38/api/v1/position/${uuid}`, 
+        {
+          name: editValue,
+        }, 
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(true); 
+      setTimeout(() => {
+        setLoading(false);
+        setOpenEditModal(false);
+        setIsSuccessUpdateModalOpen(true);
+        // setEditValue("");
+        console.log("Position updated!");
+      }, 3000);
+    } catch (error) {
+      console.log(error);
+      setOpenEditModal(false);
+      setIsFailedModalOpen(true);
+    }
+  }
+
+  const handelOpenEditModal = (record) => {
+    const uuid = record.key
+    const name = record.name
+    setUuid(uuid);
+    setEditValue(name);  
+    setOpenEditModal(true);
+    // console.log(uuid, editValue);
+  }
+
+  const onCancelEditModal = () => {
+    setOpenEditModal(false);
+  };
+
+  // DELETE API to Delete Position
+  const deletePosition = async() => {
+    try {
+      // console.log(uuid, editValue);
+      const response = await axios.delete(`http://103.82.93.38/api/v1/position/${uuid}`, { headers: { Authorization: token } });
+      // console.log(response);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setOpenDeleteModal(false);
+        setIsSuccessDeleteModalOpen(true);
+        console.log("Position deleted!");
+      }, 3000);
+    } catch (error) {
+      console.log(error);
+      setOpenDeleteModal(false);
+      setIsFailedModalOpen(true);
+    }
+  }
+
+  const handelOpenDeleteModal = (record) => {
+    const uuid = record.key
+    const name = record.name
+    setUuid(uuid);
+    setEditValue(name);  
+    setOpenDeleteModal(true);
+    // console.log(uuid, editValue);
+  }
+
+  const onCancelDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
   return (
     <>
-    <Row justify="space-between">
-      <Row gutter="10" justify="start">
+    <Row gutter={[10, 10]} justify="space-between">
+      <Row gutter={[10, 10]} justify="start">
         <Col>
           {/* <SearchBox /> */}
           <Input 
           className='search-box'
           placeholder='Search' 
           prefix={<IoIosSearch />} 
-          onSearch={(value)=>{ 
-            setSearchText(value)
-          }}
           onChange={(e) => {
             setSearchText(e.target.value);
           }}
@@ -217,7 +331,13 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
       </Row>
       
       <Row justify="end">
-          <AddPosition />
+          <AddPosition
+          showModal={() => setOpenAddModal(true)}
+          isModalOpen={openAddModal}
+          onCancel={onCancelAddModal}
+          onFinish={addPosition}
+          loading={loading}
+          />
       </Row>
     </Row>
     <br />
@@ -225,9 +345,8 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
     <div>
       <Table 
       columns={columns} 
-      // dataSource={data} 
-      loading={loading}
       dataSource={sortedData} 
+      loading={loading}
       pagination={{
         pageSize: countValue,
       }} 
@@ -236,6 +355,8 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
 
     {/* Modal Success and Failed for Update */}
     <SuccessModal action="Add" handleOk={handleSuccessModalOk} handleCancel={handleSuccessModalCancel} isModalOpen={isSuccessModalOpen} />
+    <SuccessModal action="Update" handleOk={handleSuccessUpdateModalOk} handleCancel={handleSuccessUpdateModalCancel} isModalOpen={isSuccessUpdateModalOpen} />
+    <SuccessModal action="Delete" handleOk={handleSuccessDeleteModalOk} handleCancel={handleSuccessDeleteModalCancel} isModalOpen={isSuccessDeleteModalOpen} />
     <FailedModal handleOk={handleFailedModalOk} handleCancel={handleFailedModalCancel} isModalOpen={isFailedModalOpen}/>
   </>
   )
