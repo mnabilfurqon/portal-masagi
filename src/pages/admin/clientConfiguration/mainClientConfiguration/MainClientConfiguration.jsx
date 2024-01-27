@@ -57,11 +57,11 @@ const MainClientConfiguration = () => {
 
     const itemsSort = [
         {
-          key: 'aToZ',
+          key: 'aToZClientName',
           label: 'A to Z Client Name'
         },
         {
-          key: 'zToA',
+          key: 'zToAClientName',
           label: 'Z to A Client Name'
         },
     ];
