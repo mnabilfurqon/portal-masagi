@@ -8,11 +8,9 @@ import dayjs from 'dayjs'
 import "./tableTaskReport.css"
 
 const TableTaskReport = (props) => {
-  // let urlApi;
   const token = Cookies.get('token');
   const navigate = useNavigate();
   const {searchValue, filterValue, countValue} = props;
-  // const roleName = decodeURIComponent(Cookies.get('role_name'));
   const [taskReportData, setTaskReportData] = useState([])
   const [loading, setLoading] = useState(false);
   const dateFormat = 'DD/MM/YYYY';
@@ -32,12 +30,6 @@ const TableTaskReport = (props) => {
     page: tableParams.pagination.current,
     per_page: tableParams.pagination.pageSize,
   });
-
-  // if (roleName !== 'Head of Division') {
-  //   urlApi = 'http://103.82.93.38/api/v1/task/employee'
-  // } else {
-  //   urlApi = 'http://103.82.93.38/api/v1/task/'
-  // }
 
   const getTaskReportData = async () => {
     try {
@@ -244,7 +236,7 @@ const TableTaskReport = (props) => {
 
   const handleDetailClick = record => {
     const value = record.key;
-    navigate(`/task-report/detail-task/${value}`);
+    navigate(`/task/detail-task/${value}`);
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
