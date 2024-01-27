@@ -1,47 +1,62 @@
-import React, {useEffect, useState} from 'react'
-import { Button, Spin } from 'antd'
-import { useParams, useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie'
-import DetailClientTable from '@common/tables/detailClientTable/DetailClientTable'
+import React, { useEffect, useState } from "react";
+import { Button, Spin } from "antd";
+import { useParams, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import DetailClientTable from "@common/tables/detailClientTable/DetailClientTable";
+import axios from "axios";
 
 const DetailClientConfiguration = () => {
-    const token = Cookies.get("token");
-    const navigate = useNavigate();
-    const { uuid } = useParams();
-    const [loading, setLoading] = useState(false);
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+  const { uuid } = useParams();
+  const [detailClientData, setDetailClientData] = useState();
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (!token) {
-        navigate("/login");
+  const getDetailClientData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://103.82.93.38/api/v1/client/${uuid}`,
+        {
+          headers: {
+            Authorization: token,
+          },
         }
-        // getSelectedCompanyData();
-    }, [token, navigate]);
-
-    // handle edit company data bring uuid to edit company page
-    const handleEditClientData = () => {
-        navigate(`/client/edit-client/${uuid}`);
+      );
+      setDetailClientData(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    //detail client data dummy
-    const detailClientData = {
-        client_name: 'PT ABC',
-        contact_person: '08128768612',
-        contact_person_name: 'Samuel Eto\'o',
-        email: 'abc@gmail.com',
-        phone_number: '081234567890',
-        address: 'Jl. ABC',
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
     }
+    getDetailClientData();
+  }, [token, navigate]);
+
+  // handle edit company data bring uuid to edit company page
+  const handleEditClientData = () => {
+    navigate(`/client/edit-client/${uuid}`);
+  };
 
   return (
-    <Spin spinning={loading} size='large' tip="Get Selected Data...">
-      <div className='container'>
-            <DetailClientTable detailClientData={detailClientData} />
-            <Button type="primary" className='edit-data-button' onClick={handleEditClientData}>
-                Edit Data
-            </Button>
+    <Spin spinning={loading} size="large" tip="Get Selected Data...">
+      <div className="container">
+        <DetailClientTable detailClientData={detailClientData} />
+        <Button
+          type="primary"
+          className="edit-data-button"
+          onClick={handleEditClientData}
+        >
+          Edit Data
+        </Button>
       </div>
     </Spin>
-  )
-}
+  );
+};
 
-export default DetailClientConfiguration
+export default DetailClientConfiguration;
