@@ -31,6 +31,8 @@ const MainTeamProjectConfiguration = () => {
           Authorization: token,
         },
       });
+      setIsDeleteModalOpen(false);
+      setIsSuccessDeleteModalOpen(true);
     } catch (error) {
       console.log(error);
     } finally {
@@ -79,8 +81,6 @@ const MainTeamProjectConfiguration = () => {
   // delete modal handler
   const handleDeleteButtonDeleteModal = () => {
     deleteTeamProjectData()
-    setIsDeleteModalOpen(false);
-    setIsSuccessDeleteModalOpen(true);
   };
 
   const handleCancelButtonDeleteModal = () => {
@@ -185,6 +185,7 @@ const MainTeamProjectConfiguration = () => {
     sortValue,
     countValue,
     columns,
+    isSuccessDeleteModalOpen,
   };
 
   return (

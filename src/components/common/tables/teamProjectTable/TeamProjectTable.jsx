@@ -10,7 +10,7 @@ const TeamProjectTable = (props) => {
   const navigate = useNavigate();
   const [projectTeamData, setProjectTeamData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {searchValue, filterValue, sortValue, countValue, columns} = props;
+  const {searchValue, filterValue, sortValue, countValue, columns, isSuccessDeleteModalOpen} = props;
   const formatDate = (dateString) => {
     return moment(dateString).format("DD/MM/YYYY");
   }
@@ -74,7 +74,7 @@ const TeamProjectTable = (props) => {
         navigate("/login");
       }
       getProjectTeamData();
-    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
+    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue, isSuccessDeleteModalOpen]);
 
     const data = projectTeamData.map(item => {
       const project = item.project && item.project[0];
