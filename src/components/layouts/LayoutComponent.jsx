@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TbDatabasePlus, TbClipboardTypography } from "react-icons/tb";
 import { RiTeamLine } from "react-icons/ri";
 import { LuClipboardSignature } from "react-icons/lu";
-import { HiOutlineClipboardList } from "react-icons/hi";=
+import { HiOutlineClipboardList } from "react-icons/hi";
 import {
   AiOutlineHome,
   AiOutlineUser,
