@@ -3,7 +3,7 @@ import { PiWarningCircleBold } from "react-icons/pi";
 import { Modal, Button } from 'antd';
 import './deleteModal.css'
 
-const DeleteModal = ({visible, handleDelete, handleCancel, textModal}) => {
+const DeleteModal = ({visible, handleDelete, handleCancel, textModal, loading}) => {
   return (
     <Modal
     open={visible}
@@ -13,7 +13,7 @@ const DeleteModal = ({visible, handleDelete, handleCancel, textModal}) => {
     footer={
         <div>
             <Button className="cancel-delete-button" type="none" onClick={handleCancel}>CANCEL</Button>
-            <Button className="delete-button" type="danger" onClick={handleDelete}>DELETE</Button>
+            <Button className="delete-button" loading={loading} type="danger" onClick={handleDelete}>DELETE</Button>
         </div>
     }
     >

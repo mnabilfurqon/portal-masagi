@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { Avatar, Space, Divider, Card  } from 'antd';
+import React, {useEffect, useState} from 'react'
+import { Avatar, Space, Divider, Card, Spin  } from 'antd';
 import TeamMemberTable from '@common/tables/teamMemberTable/TeamMemberTable';
 import AddButton from '@common/buttons/addButton/AddButton';
 import DeleteModal from '@common/modals/deleteModal/DeleteModal'
@@ -7,14 +7,63 @@ import SuccessDeleteModal from '@common/modals/successModal/SuccessDeleteModal'
 import { Col, Row, Button } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdOutlineDelete } from "react-icons/md";
+import axios from 'axios'
+import Cookies from 'js-cookie';
 
 const DetailTeamProjectConfiguration = () => {
+    const token = Cookies.get('token');
     const navigate = useNavigate()
+    const [teamProjectDetail, setTeamProjectDetail] = useState();
     const { uuid } = useParams()
+    const [employeeUuid, setEmployeeUuid] = useState(null);
     const noMarginTop = { marginTop: 0 }
     const noMarginBottom = { marginBottom: 0 }
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isSuccessDeleteModalOpen, setIsSuccessDeleteModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const getTeamProjectDetail = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(
+            `http://103.82.93.38/api/v1/team_project/${uuid}`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+          setTeamProjectDetail(response.data);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const deleteTeamProjectDetail = async () => {
+        try {
+          setLoading(true);
+          await axios.delete(`http://103.82.93.38/api/v1/member_team/${employeeUuid}`, {
+            headers: {
+              Authorization: token,
+            },
+          });
+        setIsSuccessDeleteModalOpen(true);
+        setIsDeleteModalOpen(false);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false)
+        }
+      };
+    
+        useEffect(() => {
+          if (!token) {
+            navigate("/login");
+          }
+          getTeamProjectDetail();
+        }, [token, navigate]);
 
     const handleAddMemberTeamClick = (uuid) => {
         navigate(`/team-project/add-member-team-project/${uuid}`)
@@ -22,8 +71,7 @@ const DetailTeamProjectConfiguration = () => {
 
     // delete modal handler
     const handleDeleteButtonDeleteModal = () => {
-        setIsDeleteModalOpen(false);
-        setIsSuccessDeleteModalOpen(true);
+        deleteTeamProjectDetail()
     };
 
     const handleCancelButtonDeleteModal = () => {
@@ -43,17 +91,6 @@ const DetailTeamProjectConfiguration = () => {
             key: 'name',
             ellipsis: true,
             sorter: (a, b) => a.name.localeCompare(b.name),
-            render: (text, record) => (
-                <Space direction='horizontal' size={16}>
-                <Avatar size={64} src={record.avatar} />
-                    <Space direction='vertical'>
-                        <p style={noMarginBottom}><b>{text}</b></p>
-                        <Space direction='horizontal'>
-                            <p style={noMarginBottom}>{record.position}</p>
-                        </Space>
-                    </Space>
-                </Space>
-            ),
         },
         {
             title: 'Action',
@@ -72,23 +109,24 @@ const DetailTeamProjectConfiguration = () => {
 
     const propsTable = {
         columns,
+        isSuccessDeleteModalOpen,
     };
 
     const isDeleteButtonClicked = (record) => {
         const value = record.key;
-        console.log(value);
+        setEmployeeUuid(value);
         setIsDeleteModalOpen(true);
     }
         
     return (
-        <>
-            <h2 style={noMarginTop}>Mobile Development Project</h2>
+        <Spin spinning={loading}>
+            <h2 style={noMarginTop}>{teamProjectDetail?.project[0]?.name}</h2>
             <Space direction='horizontal' size={16}>
                 <Avatar size={64} src={'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'} />
                 <Space direction='vertical'>
-                    <p style={noMarginBottom}><b>Mikhailo Mudryk</b></p>
+                    <p style={noMarginBottom}><b>{teamProjectDetail?.team_members[0].employee.name}</b></p>
                     <Space direction='horizontal'>
-                        <p style={noMarginBottom}>Backend</p>
+                        <p style={noMarginBottom}>{teamProjectDetail?.team_members[0].role_project.name}</p>
                         <p style={noMarginBottom}> | </p>
                         <p style={noMarginBottom}>Team Leader</p>
                     </Space>
@@ -121,7 +159,7 @@ const DetailTeamProjectConfiguration = () => {
                 onClose={handleOkSuccessDeleteModal}
                 />
             </Card>
-        </>
+        </Spin>
     )
 }
 
