@@ -21,10 +21,12 @@ const TaskReport = () => {
   const roleName = decodeURIComponent(Cookies.get("role_name"));
   const [filterData, setFilterData] = useState([]);
   const [statusData, setStatusData] = useState([]);
-  const [inProgressCount, setInProgressCount] = useState(0);
-  const [reopenCount, setReopenCount] = useState(0);
-  const [doneCount, setDoneCount] = useState(0);
-  const [cancelCount, setCancelCount] = useState(0);
+  const [inProgressData, setInProgressData] = useState(0);
+  const [openData, setOpenData] = useState(0);
+  const [doneData, setDoneData] = useState(0);
+  const [cancelData, setCancelData] = useState(0);
+  const [totalTaskData, setTotalTaskCount] = useState(0);
+  const [summary, setSummary] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const [countValue, setCountValue] = useState("10");
@@ -58,32 +60,28 @@ const TaskReport = () => {
           },
         }
       );
-      setStatusData(response.data.items)
-      if (response.data.items && response.data.items.length > 0) {
-        response.data.items.forEach((item) => {
-          switch (item.name) {
-            case 'in-progress':
-              setInProgressCount(item.total || 0);
-              break;
-            case 'reopen':
-              setReopenCount(item.total || 0);
-              break;
-            case 'done':
-              setDoneCount(item.total || 0);
-              break;
-            case 'cancel':
-              setCancelCount(item.total || 0);
-              break;
-            default:
-              break;
-          } 
-        });
-      } else {
-        setInProgressCount(0);
-        setReopenCount(0);
-        setDoneCount(0);
-        setCancelCount(0);
-      }
+      setStatusData(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSummaryData = async () => {
+    try {
+      const response = await axios.get(
+        "http://103.82.93.38/api/v1/task/summary/employee",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setInProgressData(response.data.in_progress_task || 0);
+      setOpenData(response.data.open_task || 0);
+      setDoneData(response.data.done_task || 0);
+      setCancelData(response.data.cancel_task || 0);
+      setTotalTaskCount(response.data.total_task || 0);
+      setSummary(response.data.summary || 0);
     } catch (error) {
       console.log(error);
     }
@@ -133,6 +131,7 @@ const TaskReport = () => {
     }
     getFilterData();
     getStatusData();
+    getSummaryData();
   }, [token, navigate]);
 
   const handleSearch = (value) => {
@@ -154,42 +153,42 @@ const TaskReport = () => {
           <Card className="components">
             <TbProgress className="in-progress-icon" />
             <p className="text">In Progress</p>
-            <h1 className="number">{inProgressCount}</h1>
+            <h1 className="number">{inProgressData}</h1>
           </Card>
         </Col>
         <Col xs={12} sm={12} md={8} lg={6} xl={4}>
           <Card className="components">
             <VscIssueReopened className="reopen-icon" />
-            <p className="text">Reopen</p>
-            <h1 className="number">{reopenCount}</h1>
+            <p className="text">Open</p>
+            <h1 className="number">{openData}</h1>
           </Card>
         </Col>
         <Col xs={12} sm={12} md={8} lg={6} xl={4}>
           <Card className="components">
             <IoMdCheckmarkCircleOutline className="done-icon" />
             <p className="text">Done</p>
-            <h1 className="number">{doneCount}</h1>
+            <h1 className="number">{doneData}</h1>
           </Card>
         </Col>
         <Col xs={12} sm={12} md={8} lg={6} xl={4}>
           <Card className="components">
             <MdOutlineCancel className="cancel-icon" />
             <p className="text">Cancel</p>
-            <h1 className="number">{cancelCount}</h1>
+            <h1 className="number">{cancelData}</h1>
           </Card>
         </Col>
         <Col xs={12} sm={12} md={8} lg={6} xl={4}>
           <Card className="components">
             <TbClipboardList className="total-task-icon" />
             <p className="text">Total Task</p>
-            <h1 className="number">7</h1>
+            <h1 className="number">{totalTaskData}</h1>
           </Card>
         </Col>
         <Col xs={12} sm={12} md={8} lg={6} xl={4}>
           <Card className="components">
             <GoChecklist className="summary-icon" />
             <p className="text">Summary</p>
-            <h1 className="number">60%</h1>
+            <h1 className="number">{summary}</h1>
           </Card>
         </Col>
       </Row>
