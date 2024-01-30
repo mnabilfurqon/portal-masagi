@@ -2,12 +2,18 @@ import React, {useState, useEffect} from 'react'
 import { Table } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import moment from "moment";
+import axios from 'axios'
 
 const TeamProjectTable = (props) => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
+  const [projectTeamData, setProjectTeamData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {searchValue, filterValue, sortValue, countValue, columns} = props;
+  const {searchValue, filterValue, sortValue, countValue, columns, isSuccessDeleteModalOpen} = props;
+  const formatDate = (dateString) => {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
 
     const [tableParams, setTableParams] = useState({
         pagination : {
@@ -27,36 +33,71 @@ const TeamProjectTable = (props) => {
         per_page: tableParams.pagination.pageSize,
     });
 
+    const getProjectTeamData = async () => {
+      try {
+        var page;
+        setLoading(true);
+        if (tableParams.pagination.total < countValue) {
+          page = 1;
+        } else {
+          page = tableParams.pagination.current;
+        }
+        const response = await axios.get("http://103.82.93.38/api/v1/team_project/", {
+          params: {
+            page: page,
+            per_page: countValue,
+            search: searchValue,
+            desc: sortValue === 'zToAProjectName' ? true : false,
+          },
+          headers: {
+            "Authorization": token,
+          },
+        });
+        setProjectTeamData(response.data.items);
+        setTableParams({
+          ...tableParams,
+          pagination: {
+            ...tableParams.pagination,
+            total: response.data._meta.total_items,
+            pageSize: countValue,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     useEffect(() => {
       if (!token) {
         navigate("/login");
       }
-    //   getPermitData();
-    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
+      getProjectTeamData();
+    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue, isSuccessDeleteModalOpen]);
 
-    const dataDummy = [
-        {
-            key: '1',
-            project_name: 'Mobile Development Project',
-            team_leader: 'Samuel Eto\'o',
-            start_date: '10/11/2024',
-            due_date: '10/12/2024'
-        },
-        {
-            key: '2',
-            project_name: 'Mobile Development Project',
-            team_leader: 'Samuel Eto\'o',
-            start_date: '10/11/2024',
-            due_date: '10/12/2024'
-        },
-        {
-            key: '3',
-            project_name: 'Mobile Development Project',
-            team_leader: 'Samuel Eto\'o',
-            start_date: '10/11/2024',
-            due_date: '10/12/2024'
-        }
-    ];
+    const data = projectTeamData.map(item => {
+      const project = item.project && item.project[0];
+      const teamLeader = item.team_members.find(member => member.isleader === true);
+
+      return {
+        key: item.uuid,
+        project_name: project ? project.name : '',
+        team_leader: teamLeader ? teamLeader.employee.name : '',
+        start_date: formatDate(project ? project.start_date : ''),
+        due_date: formatDate(project ? project.due_date : '')
+      }
+    });
+
+    const sortedData = [...data].sort((a, b) => {
+      if (sortValue === 'aToZ') {
+        return a.name.localeCompare(b.name);
+      } else if (sortValue === 'zToA') {
+        return b.name.localeCompare(a.name);
+      } else {
+        return 0;
+      }
+    });
 
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
@@ -76,7 +117,7 @@ const TeamProjectTable = (props) => {
         });
     
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-        //   setPermitData([]);
+          setProjectTeamData([]);
         }
     };
 
@@ -84,7 +125,7 @@ const TeamProjectTable = (props) => {
         <div>
             <Table 
                 columns={columns}
-                dataSource={dataDummy}
+                dataSource={sortedData}
                 pagination={tableParams.pagination}
                 loading={loading}
                 rowClassName="custom-row"

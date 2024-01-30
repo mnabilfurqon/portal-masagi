@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TbDatabasePlus, TbClipboardTypography } from "react-icons/tb";
 import { RiTeamLine } from "react-icons/ri";
 import { LuClipboardSignature } from "react-icons/lu";
-import { HiOutlineClipboardList } from "react-icons/hi";=
+import { HiOutlineClipboardList } from "react-icons/hi";
 import {
   AiOutlineHome,
   AiOutlineUser,
@@ -607,7 +607,20 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === "/task-report") {
     pageTitle = "Task Report";
     finalPageTitle = pageTitle;
-  } 
+  } else if (location.pathname.includes("/task-report/detail-task/")) {
+    pageTitle = (
+      <Link to="/task-report" className="page-title">
+        Task Report /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Task</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  }
   
   return (
     <Layout className="layout-container">

@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Table } from 'antd';
+import { Button, Table } from "antd";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import Cookies from "js-cookie";
 import axios from "axios";
-import dayjs from 'dayjs'
-import "./tableTaskReport.css"
+import dayjs from "dayjs";
+import "./tableTaskReport.css";
 
 const TableTaskReport = (props) => {
-  // let urlApi;
-  const token = Cookies.get('token');
+  const token = Cookies.get("token");
   const navigate = useNavigate();
-  const {searchValue, filterValue, countValue} = props;
-  // const roleName = decodeURIComponent(Cookies.get('role_name'));
-  const [taskReportData, setTaskReportData] = useState([])
+  const { searchValue, filterValue, countValue, urlApi } = props;
+  const [taskReportData, setTaskReportData] = useState([]);
+  const [projectFilter, setProjectFilter] = useState([]);
+  const [statusFilter, setStatusFilter] = useState([]);
   const [loading, setLoading] = useState(false);
-  const dateFormat = 'DD/MM/YYYY';
+  const dateFormat = "DD/MM/YYYY";
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
       pageSize: countValue,
       showTotal: (total, range) => (
-        <div className='total-data'>
+        <div className="total-data">
           {range[0]}-{range[1]} of {total} items
         </div>
       ),
@@ -33,11 +33,34 @@ const TableTaskReport = (props) => {
     per_page: tableParams.pagination.pageSize,
   });
 
-  // if (roleName !== 'Head of Division') {
-  //   urlApi = 'http://103.82.93.38/api/v1/task/employee'
-  // } else {
-  //   urlApi = 'http://103.82.93.38/api/v1/task/'
-  // }
+  const getProjectData = async () => {
+    try {
+      const response = await axios.get(urlApi, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setProjectFilter(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getStatusData = async () => {
+    try {
+      const response = await axios.get(
+        "http://103.82.93.38/api/v1/task_status/",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setStatusFilter(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getTaskReportData = async () => {
     try {
@@ -48,18 +71,19 @@ const TableTaskReport = (props) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get("http://103.82.93.38/api/v1/task/", {
+      const response = await axios.get(urlApi, {
         params: {
           page: page,
           per_page: countValue,
           search: searchValue,
+          project_uuid: projectParams,
+          status_uuid: statusParams,
         },
         headers: {
           Authorization: token,
         },
       });
       setTaskReportData(response.data.items);
-      console.log(response.data.items)
       setTableParams({
         ...tableParams,
         pagination: {
@@ -74,8 +98,37 @@ const TableTaskReport = (props) => {
       setLoading(false);
     }
   };
+  
+  const uniqueProjectNames = new Set();
+  const treeDataProject = projectFilter
+    .map((item) => {
+      const projectName = item.project.name;
+      if (!uniqueProjectNames.has(projectName)) {
+        uniqueProjectNames.add(projectName);
+        return {
+          key: item.project.uuid,
+          title: item.project.name,
+        };
+      }
 
-  const data = taskReportData.map(item => {
+      return null;
+    })
+    .filter((item) => item !== null);
+
+  const treeDataStatus = statusFilter.map((item) => {
+    return {
+      key: item.uuid,
+      title: item.name,
+    };
+  });
+
+  const isProject = treeDataProject.some((item) => item.key === filterValue[0]);
+  const projectParams = isProject ? filterValue[0] : null;
+
+  const isStatus = treeDataStatus.some((item) => item.key === filterValue[0]);
+  const statusParams = isStatus ? filterValue[0] : null;
+
+  const data = taskReportData.map((item) => {
     return {
       key: item.uuid,
       project: item.project.name,
@@ -85,15 +138,17 @@ const TableTaskReport = (props) => {
       assignTo: item.asign_to_employee.name,
       createdBy: item.created_by_employee.name,
       status: item.status.name,
-    }
-  })
+    };
+  });
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
     getTaskReportData();
-  }, [token, navigate, params, searchValue, filterValue, countValue]);
+    getProjectData();
+    getStatusData();
+  }, [token, navigate, params, searchValue, filterValue, countValue, urlApi]);
 
   const title = [
     {
@@ -200,29 +255,6 @@ const TableTaskReport = (props) => {
           );
         }
       },
-      filters: [
-        {
-          text: 'In-Progress',
-          value: 'in-progress',
-        },
-        {
-          text: 'Done',
-          value: 'done',
-        },
-        {
-          text: 'Review',
-          value: 'review',
-        },
-        {
-          text: 'Cancel',
-          value: 'cancel',
-        },
-        {
-          text: 'Open',
-          value: 'open',
-        },
-      ],
-      onFilter: (value, record) => record.status.indexOf(value) === 0,
     },
     {
       key: "action",
@@ -242,7 +274,7 @@ const TableTaskReport = (props) => {
     },
   ];
 
-  const handleDetailClick = record => {
+  const handleDetailClick = (record) => {
     const value = record.key;
     navigate(`/task-report/detail-task/${value}`);
   };
@@ -271,19 +303,19 @@ const TableTaskReport = (props) => {
 
   return (
     <>
-    <div className="task-report-table">
-      <p className='table-title'>All Task</p>
-      <Table
-        columns={title}
-        dataSource={data}
-        pagination={tableParams.pagination}
-        onChange={handleTableChange}
-        loading={loading}
-        scroll={{ x: true, y: 650 }}
-      />
-    </div>
+      <div className="task-report-table">
+        <p className="table-title">All Task</p>
+        <Table
+          columns={title}
+          dataSource={data}
+          pagination={tableParams.pagination}
+          onChange={handleTableChange}
+          loading={loading}
+          scroll={{ x: true, y: 650 }}
+        />
+      </div>
     </>
   );
-}
+};
 
 export default TableTaskReport;

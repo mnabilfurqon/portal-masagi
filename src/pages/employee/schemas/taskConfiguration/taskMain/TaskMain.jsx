@@ -18,6 +18,7 @@ const TaskMain = () => {
     const navigate = useNavigate();
     const token = Cookies.get('token');
     const roleName = decodeURIComponent(Cookies.get('role_name'));
+    const [loading, setLoading] = useState(false);
     const [taskUuid, setTaskUuid] = useState('');
     const [filterData, setFilterData] = useState([]);
     const [statusData, setStatusData] = useState([]);
@@ -59,6 +60,7 @@ const TaskMain = () => {
 
     const deleteTask = async () => {
         try {
+            setLoading(true);
             await axios.delete(`http://103.82.93.38/api/v1/task/${taskUuid}`, {
                 headers: {
                     Authorization: token,
@@ -67,6 +69,8 @@ const TaskMain = () => {
             setIsSuccessDeleteModalOpen(true);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -328,6 +332,7 @@ const TaskMain = () => {
                 <DeleteModal
                     textModal="Are you sure you want to delete this task?"
                     visible={isDeleteModalOpen}
+                    loading={loading}
                     handleDelete={handleDeleteButtonDeleteModal}
                     handleCancel={handleCancelButtonDeleteModal}
                 />
