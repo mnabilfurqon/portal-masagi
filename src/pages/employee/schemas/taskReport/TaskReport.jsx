@@ -7,7 +7,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { GoChecklist } from "react-icons/go";
 import SearchBox from "../../../../components/common/searchBox/SearchBox";
 import CountButton from "../../../../components/common/buttons/countButton/CountButton";
-import FilterButton from "../../../../components/common/buttons/filterButton/FilterButton";
+import FilterRadio from "../../../../components/common/buttons/filterButton/FilterRadio";
 import TableTaskReport from "./tableTaskReport/TableTaskReport";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -189,7 +189,7 @@ const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col xs={16} md={6} lg={9} xl={6} xxl={4}>
-          <FilterButton onFilter={handleFilter} radioData={radioData} />
+          <FilterRadio onFilter={handleFilter} radioData={radioData} />
         </Col>
       </Row>
 
