@@ -62,10 +62,6 @@
     border: none;
 }
 
-.ant-btn {
-    margin: 0 !important;
-}
-
 .action-icon {
     color: #629093;
     font-size: 25px;
@@ -74,6 +70,12 @@
 
 .action-icon:hover {
     color: #F9B700;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.action-icon-disabled {
+    color: #bebebe;
     font-size: 25px;
     cursor: pointer;
 }

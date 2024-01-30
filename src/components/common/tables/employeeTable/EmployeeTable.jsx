@@ -146,9 +146,26 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
                     <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost>
-                        <BsPersonAdd className="action-icon" />
-                    </Button>
+
+                    {employeeData.map((item) => {
+                      if (item.uuid === record.key) {
+                        if (item.users !== null) {
+                          return (
+                            <Button key={item.uuid} className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost disabled>
+                              <BsPersonAdd className="action-icon-disabled" />
+                            </Button>
+                          );
+                        } else {
+                          return (
+                            <Button key={item.uuid} className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost>
+                              <BsPersonAdd className="action-icon" />
+                            </Button>
+                          );
+                        }
+                      }
+                    }
+                    )}
+
                 </Space>
             ),
         },
