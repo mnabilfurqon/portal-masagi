@@ -100,32 +100,34 @@ const TableTaskReport = (props) => {
   };
   
   const uniqueProjectNames = new Set();
-  const treeDataProject = projectFilter
-    .map((item) => {
-      const projectName = item.project.name;
-      if (!uniqueProjectNames.has(projectName)) {
-        uniqueProjectNames.add(projectName);
-        return {
-          key: item.project.uuid,
-          title: item.project.name,
-        };
-      }
+  const radioDataProjectRaw = projectFilter
+  .map((item) => {
+    const projectName = item.project.name;
+    if (!uniqueProjectNames.has(projectName)) {
+      uniqueProjectNames.add(projectName);
+      return {
+        key: item.project.uuid,
+        label: item.project.name,
+        type: "project",
+      };
+    }
 
-      return null;
-    })
-    .filter((item) => item !== null);
+    return null;
+  })
+  .filter((item) => item !== null);
 
-  const treeDataStatus = statusFilter.map((item) => {
-    return {
-      key: item.uuid,
-      title: item.name,
-    };
-  });
+const radioDataStatusRaw = statusFilter.map((item) => {
+  return {
+    key: item.uuid,
+    label: item.name,
+    type: "status",
+  };
+});
 
-  const isProject = treeDataProject.some((item) => item.key === filterValue[0]);
+  const isProject = radioDataProjectRaw.some((item) => item.key === filterValue[0]);
   const projectParams = isProject ? filterValue[0] : null;
 
-  const isStatus = treeDataStatus.some((item) => item.key === filterValue[0]);
+  const isStatus = radioDataStatusRaw.some((item) => item.key === filterValue[0]);
   const statusParams = isStatus ? filterValue[0] : null;
 
   const data = taskReportData.map((item) => {

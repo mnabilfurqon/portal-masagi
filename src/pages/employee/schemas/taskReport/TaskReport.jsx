@@ -68,8 +68,7 @@ const TaskReport = () => {
 
   const getSummaryData = async () => {
     try {
-      const response = await axios.get(
-        "http://103.82.93.38/api/v1/task/summary/employee",
+      const response = await axios.get("http://103.82.93.38/api/v1/task/summary/employee",
         {
           headers: {
             Authorization: token,
@@ -88,42 +87,31 @@ const TaskReport = () => {
   };
 
   const uniqueProjectNames = new Set();
+  const radioDataProjectRaw = filterData
+  .map((item) => {
+    const projectName = item.project.name;
+    if (!uniqueProjectNames.has(projectName)) {
+      uniqueProjectNames.add(projectName);
+      return {
+        key: item.project.uuid,
+        label: item.project.name,
+        type: "project",
+      };
+    }
 
-  const treeDataProjectRaw = filterData
-    .map((item) => {
-      const projectName = item.project.name;
-      if (!uniqueProjectNames.has(projectName)) {
-        uniqueProjectNames.add(projectName);
-        return {
-          key: item.project.uuid,
-          title: item.project.name,
-        };
-      }
+    return null;
+  })
+  .filter((item) => item !== null);
 
-      return null;
-    })
-    .filter((item) => item !== null);
-
-  const treeDataProject = {
-    key: "project",
-    title: "Project",
-    children: treeDataProjectRaw,
+const radioDataStatusRaw = statusData.map((item) => {
+  return {
+    key: item.uuid,
+    label: item.name,
+    type: "status",
   };
+});
 
-  const treeDataStatusRaw = statusData.map((item) => {
-    return {
-      key: item.uuid,
-      title: item.name,
-    };
-  });
-
-  const treeDataStatus = {
-    key: "status",
-    title: "Status",
-    children: treeDataStatusRaw,
-  };
-
-  const treeData = [treeDataProject, treeDataStatus];
+const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
 
   useEffect(() => {
     if (!token) {
@@ -201,7 +189,7 @@ const TaskReport = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col xs={16} md={6} lg={9} xl={6} xxl={4}>
-          <FilterButton onFilter={handleFilter} treeData={treeData} />
+          <FilterButton onFilter={handleFilter} radioData={radioData} />
         </Col>
       </Row>
 
