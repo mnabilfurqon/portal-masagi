@@ -7,7 +7,7 @@ import CountButton from "@common/buttons/countButton/CountButton";
 import DialogModal from "@common/modals/dialogModal/DialogModal";
 import RespondLeftModal from "@common/modals/respondLeftModal/RespondLeftModal";
 import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
-import { Row, Col, DatePicker, Space, Button } from "antd";
+import { Row, Col, DatePicker, Flex, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { FaRegCheckSquare } from "react-icons/fa";
@@ -162,17 +162,17 @@ const PermitMain = () => {
           title: 'Action',
           key: 'action',
             render: (record) => (
-                <Space size="small">
-                    <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+                <Flex gap={10}>
+                    <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={handleApproveModalOpen} ghost>
+                    <Button style={{border: 'none'}} type="primary" size="small" onClick={handleApproveModalOpen} ghost>
                         <FaRegCheckSquare className="accept-icon" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
+                    <Button style={{border: 'none'}} type="primary" size="small" onClick={handleRejectModalOpen} ghost>
                         <CgCloseR className="reject-icon" />
                     </Button>
-                </Space>
+                </Flex>
             ),
         },
     ];
@@ -320,17 +320,22 @@ const PermitMain = () => {
             <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
             <SearchBox onSearch={handleSearch} /> 
             </Col>
-            <Col xs={11} md={10} lg={8} xl={4} xxl={3}>
+            <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
             <FilterButton onFilter={handleFilter} treeData={treeData} />
             </Col>
-            <Col xs={13} md={8} lg={8} xl={6} xxl={3}>
+            <Col xs={24} md={8} lg={8} xl={6} xxl={3}>
             <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
             </Col>
             <Col xs={8} md={4} lg={12} xl={2} xxl={2}>
             <CountButton className="count-button" onCount={handleCount} />
             </Col>
             <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 2}} xxl={{span: 4, offset: 6}}>
-            <DatePicker picker="month" format={monthFormat} className='date-picker-month' onChange={handleDatePicker} />
+            <DatePicker picker="month" format={monthFormat} className='date-picker-month' onChange={handleDatePicker} 
+            style={{ 
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis'
+            }} />
             </Col>
         </Row>
         <div style={{marginTop: 24}}>

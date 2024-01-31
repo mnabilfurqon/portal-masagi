@@ -7,10 +7,10 @@ import AddButton from '@common/buttons/addButton/AddButton'
 import TaskTable from '@common/tables/taskTable/TaskTable'
 import DeleteModal from '@common/modals/deleteModal/DeleteModal'
 import SuccessDeleteModal from '@common/modals/successModal/SuccessDeleteModal'
-import { Row, Col, Space, Button } from 'antd'
+import { Row, Col, Flex, Button } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { MdOutlineDelete } from "react-icons/md";
+import { BiTrash } from 'react-icons/bi';
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -218,6 +218,7 @@ const TaskMain = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
+            ellipsis: true,
             render: (text) => {
                 if (text === 'cancel') {
                     return (
@@ -269,16 +270,16 @@ const TaskMain = () => {
           key: 'action',
           ellipsis: true,
             render: (record) => (
-                <Space size="small">
-                    <Button className="action-button" type="primary" size="small" ghost onClick={() => handleDetailClick(record)}>
+                <Flex gap={10}>
+                    <Button style={{border: 'none'}} type="primary" size="small" ghost onClick={() => handleDetailClick(record)}>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
                     {roleName === 'Head of Division' ? (
-                    <Button className="action-button" type="primary" size="small" onClick={() => handleDeleteClick(record)} ghost>
-                        <MdOutlineDelete className="action-icon-delete" />
+                    <Button style={{border: 'none'}} type="primary" size="small" onClick={() => handleDeleteClick(record)} ghost>
+                        <BiTrash className="action-icon-delete" />
                     </Button>
                     ) : null}
-                </Space>
+                </Flex>
             ),
         },
     ];
@@ -309,12 +310,12 @@ const TaskMain = () => {
             <div>
                 <Row gutter={[16, 8]}>
                     <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
-                        <SearchBox onSearch={handleSearch} /> 
+                        <SearchBox onSearch={handleSearch} placeholder='Search by Task Name' /> 
                     </Col>
-                    <Col xs={11} md={10} lg={8} xl={4} xxl={3}>
+                    <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
                         <FilterButton onFilter={handleFilter} treeData={treeData} />
                     </Col>
-                    <Col xs={13} md={8} lg={8} xl={6} xxl={3}>
+                    <Col xs={24} md={8} lg={8} xl={6} xxl={3}>
                         <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
                     </Col>
                     <Col xs={8} md={4} lg={12} xl={2} xxl={2}>
