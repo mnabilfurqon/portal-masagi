@@ -44,7 +44,13 @@ const EmployeeTabs = () => {
         try {
             setSelectedEmployeeLoading(true);
             values.birth_date = dayjs(values.birth_date, "YYYY-MM-DD").format("YYYY-MM-DD");
-            await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
+            values.join_date = dayjs(values.join_date, "YYYY-MM-DD").format("YYYY-MM-DD");
+            if (values.separation_date) {
+                values.separation_date = dayjs(values.separation_date, "YYYY-MM-DD").format("YYYY-MM-DD");
+            } else {
+                values.separation_date = values.join_date;
+            }            
+            const response = await axios.put(`http://103.82.93.38/api/v1/employee/${selectedEmployeeData.uuid}`, values, {
                 headers: {
                     "Authorization": token,
                 },
@@ -289,7 +295,7 @@ const EmployeeTabs = () => {
             setSelectedEmployeeData(response.data);
             setEmployeeName(response.data.name);
             setEmployeePosition(response.data.position.name);
-            console.log("emloyee data", selectedEmployeeData);
+            // console.log("emloyee data", selectedEmployeeData);
             // console.log(response.data.position.name);
         } catch (error) {
             console.log(error);

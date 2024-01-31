@@ -2,11 +2,11 @@ import React from 'react'
 import './historyButton.css'
 import { Button, Card } from 'antd'
 
-const HistoryButton = (props) => {
+const HistoryButton = ({onClick, icon, title, value}) => {
   return (
     <>
-        <Button className='button' onClick={props.onClick}>
-            <div>{props.icon}</div>
+        <Button className='button' onClick={onClick}>
+            <div>{icon}</div>
 
             <span
                 style={{
@@ -15,7 +15,7 @@ const HistoryButton = (props) => {
                     paddingBottom: 0
                 }}
             >
-                {props.title}
+                {title}
             </span>
 
             <h2 
@@ -25,7 +25,7 @@ const HistoryButton = (props) => {
                     fontWeight: "bold",
                 }}
             >
-                {props.value}
+                {value}
             </h2>
         </Button>
     </>

@@ -7,7 +7,7 @@ import Cookies from 'js-cookie'
 import dayjs from 'dayjs'
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 
-const AttendanceDetails = () => {
+const DetailPresent = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const token = Cookies.get("token")
@@ -292,7 +292,7 @@ const permits = [
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
                     <h4 style={{ fontSize: 24, fontWeight: 600, margin: 0, }} >{data.employee.name}</h4>
-                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >{data.employee.division} | {data.employee.position}</p>
+                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >{data.employee.division.name} | {data.employee.position.name}</p>
                     <h3 style={{ fontSize: 16, fontWeight: 400, margin: 0, }} >{employeeNip}</h3>
                 </div>
             </Col>
@@ -314,7 +314,7 @@ const permits = [
                         </svg>}
                     title="Total Presents"
                     value="21"
-                    onClick={() => (setTableName("Presents"), setDataSource(presents))}
+                    onClick={() => (setTableName("Presents"), setDataSource(dataScr))}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -391,4 +391,4 @@ const permits = [
   )
 }
 
-export default AttendanceDetails
+export default DetailPresent

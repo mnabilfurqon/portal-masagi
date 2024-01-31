@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TbDatabasePlus, TbClipboardTypography } from "react-icons/tb";
 import { RiTeamLine } from "react-icons/ri";
 import { LuClipboardSignature } from "react-icons/lu";
-import { HiOutlineClipboardList } from "react-icons/hi";=
+import { HiOutlineClipboardList } from "react-icons/hi";
 import {
   AiOutlineHome,
   AiOutlineUser,
@@ -482,6 +482,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/role-project") {
+    pageTitle = "Role Project";
+    finalPageTitle = pageTitle;
   } else if (location.pathname === "/client") {
     pageTitle = "Client";
     finalPageTitle = pageTitle;
@@ -575,6 +578,19 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === "/project-report") {
     pageTitle = "Project Report";
     finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/project-report/detail-project")) {
+    pageTitle = (
+      <Link to="/project-report" className="page-title">
+        Project Report /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Project</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
   } else if (location.pathname === "/task") {
     pageTitle = "Task";
     finalPageTitle = pageTitle;
@@ -696,6 +712,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
               </Menu.Item>
               <Menu.Item key="/role">
                 <Link to="/role">Role</Link>
+              </Menu.Item>
+              <Menu.Item key="/role-project">
+                <Link to="/role-project">Role Project</Link>
               </Menu.Item>
               <Menu.Item key="/team-project">
                 <Link to="/team-project">Team Project</Link>

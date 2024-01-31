@@ -141,16 +141,33 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
         {
           title: 'Action',
           key: 'action',
-            render: (record) => (
-                <Space size="small">
+            render: (record) => {
+              // console.log(record);
+              if (record.user_account) {
+                return (
+                  <Space size="small">
                     <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
-                        <AiOutlineFileSearch className="action-icon" />
+                      <AiOutlineFileSearch className="action-icon" />
+                    </Button>
+                    <Button className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost disabled>
+                      <BsPersonAdd className="action-icon" />
+                    </Button>
+                  </Space>   
+                )           
+              } else {
+                return (  
+                  <Space size="small">
+                    <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+                      <AiOutlineFileSearch className="action-icon" />
                     </Button>
                     <Button className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost>
-                        <BsPersonAdd className="action-icon" />
+                      <BsPersonAdd className="action-icon" />
                     </Button>
-                </Space>
-            ),
+                  </Space>              
+                ) ;
+              }
+              
+            }
         },
     ];
 
@@ -191,6 +208,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
         division_id: item.division_id,
         company_id: item.company_id,
         nip: item.nip,
+        user_account: item.users,
       }
     });
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import './presentConfiguration.css'
 import { useNavigate } from 'react-router-dom'
-import { Row, Col, DatePicker, Progress, Input, Table, Button, Spin, } from 'antd'
+import { Row, Col, DatePicker, Progress, Input, Table, Button, Spin, Avatar, Flex } from 'antd'
 import { IoIosSearch } from "react-icons/io";
-import { AiOutlineFileSearch } from 'react-icons/ai'
+import { AiOutlineFileSearch, AiOutlineUser } from 'react-icons/ai'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 import CountButton from '@common/buttons/countButton/CountButton'
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
@@ -40,12 +40,13 @@ const PresentConfiguration = () => {
     }
     getAttendanceSummary()
     getAttendanceCompany()
-  }, [token, navigate, filterValue]);
+  }, [token, navigate,]);
 
   // Date Filter Handler
   const onChange = (e) => {
     setDayDate(e.format('dddd, DD MMMM YYYY'))
     setFilterValue(e.format('YYYY-MM-DD'))
+    getAttendanceSummary(filterValue)
   }
 
   // OnClick Handler
@@ -80,21 +81,33 @@ const PresentConfiguration = () => {
       sortDirections: ["descend", "ascend"],
       sorter: (a, b) => {return a.employee.localeCompare(b.employee)},
       // sorter: (a, b) =>  a.employee.lenght - b.employee.lenght,
+      render: (record) => {
+        // console.log("employee record", record)
+        return (
+        <Flex gap={4} align='center'>
+            <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
+            <div style={{ margin: 0, padding: 0, }}>
+                <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
+                <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division.name}</h5>
+            </div>
+        </Flex>
+        )
+    },
     },
     {
       title: "In-Time",
-      dataIndex: "inTime",
-      key: "inTime",
+      dataIndex: "in_time",
+      key: "in_time",
     },
     {
       title: "Out-Time",
-      dataIndex: "outTime",
-      key: "outTime",
+      dataIndex: "out_time",
+      key: "out_time",
     },
     {
       title: "Total Hours",
-      dataIndex: "totalHours",
-      key: "totalHours",
+      dataIndex: "total_hours",
+      key: "total_hours",
     },
     {
       title: "Lateness",
@@ -115,13 +128,13 @@ const PresentConfiguration = () => {
         // console.log("record", record)
         if (record === "on-time") {
           return (
-            <Button key={record.uuid} className="active-button" type="primary" size="small" value="active" ghost>
+            <Button className="active-button" type="primary" size="small" value="active" ghost>
               on-time
             </Button>
           );
         } else {
           return (
-            <Button key={record.uuid} className="not-active-button" type="primary" size="small" value="notActive" ghost>
+            <Button className="not-active-button" type="primary" size="small" value="notActive" ghost>
               late
             </Button>
           );
@@ -140,7 +153,9 @@ const PresentConfiguration = () => {
   ]
 
   const handleDetailClick = (record) => {
-    navigate('/present/detail', { state: { data: record } });
+    // console.log("action record", record)
+    const uuid = record.key
+    navigate(`/present/detail/${uuid}`, { state: { data: record } });
     // navigate('/report/detail');
   };
 
@@ -160,14 +175,14 @@ const PresentConfiguration = () => {
       );
       setLoading(false);
       setAttendanceSummary(response.data)
-      console.log("attendance summary", attendanceSummary)
+      // console.log("attendance summary", attendanceSummary)
       setTotalPresent(attendanceSummary.total_present)
       setTotalEmployee(attendanceSummary.total_employee)
       setTotalAbsents(attendanceSummary.total_absent)
-      setTotalPermit(attendanceSummary.total_permit_requested)
-      setTotalLeaves(attendanceSummary.total_permit_by_type["Izin Tidak Masuk"])
-      setTotalOvertime(attendanceSummary.total_permit_by_type["Lembur"])
-      setTotalOfficialTravels(attendanceSummary.total_permit_by_type["Perjalanan Dinas"])
+      setTotalPermit(attendanceSummary.total_permit_approved)
+      setTotalLeaves(attendanceSummary.total_leaves)
+      setTotalOvertime(attendanceSummary.total_overtimes)
+      setTotalOfficialTravels(attendanceSummary.total_official_travels)
       // console.log("total leaves", attendanceSummary.total_permit_by_type["Lembur"]);
       // console.log(response);
     } catch (error) {
@@ -189,7 +204,7 @@ const PresentConfiguration = () => {
       );
       setLoading(false);
       setAttendanceCompany(response.data.items)
-      console.log("attendance company", attendanceCompany)
+      // console.log("attendance company", attendanceCompany)
       // console.log(response);
     } catch (error) {
       console.log(error);
@@ -199,67 +214,80 @@ const PresentConfiguration = () => {
     }
   }
 
+  const dataSource = attendanceCompany?.map(item => {
+    return {
+      key: item.uuid,
+      employee: item.employee,
+      // in_time: item.in_time,
+      // out_time: item.out_time,
+      // status: "on-time",
+      // total_hours: "09:00:00",
+      // lateness: "00:00:00",
+    }
+  })
+  // console.log("Attendance Report", dataSource)
+
   const data = [
     {
       uuid: "1",
       employee: "Albert",
-      inTime: "08.00 AM",
-      outTime: "05.00 PM",
-      totalHours: "09:00:00",
+      in_time: "08.00 AM",
+      out_time: "05.00 PM",
+      total_hours: "09:00:00",
       lateness: "00:000:00",
       status: "on-time",
     },
     {
       uuid: "2",
       employee: "Banny",
-      inTime: "08.00 AM",
-      outTime: "05.00 PM",
-      totalHours: "09:00:00",
+      in_time: "08.00 AM",
+      out_time: "05.00 PM",
+      total_hours: "09:00:00",
       lateness: "00:000:00",
       status: "on-time",
     },
     {
       uuid: "3",
       employee: "Flauny",
-      inTime: "08.00 AM",
-      outTime: "05.00 PM",
-      totalHours: "09:00:00",
+      in_time: "08.00 AM",
+      out_time: "05.00 PM",
+      total_hours: "09:00:00",
       lateness: "00:000:00",
       status: "on-time",
     },
     {
       uuid: "4",
       employee: "Harry",
-      inTime: "08.50 AM",
-      outTime: "05.00 PM",
-      totalHours: "08:10:00",
+      in_time: "08.50 AM",
+      out_time: "05.00 PM",
+      total_hours: "08:10:00",
       lateness: "00:50:00",
       status: "late",
     },
     {
       uuid: "5",
       employee: "Klaust",
-      inTime: "08.00 AM",
-      outTime: "05.00 PM",
-      totalHours: "09:00:00",
+      in_time: "08.00 AM",
+      out_time: "05.00 PM",
+      total_hours: "09:00:00",
       lateness: "00:00:00",
       status: "on-time",
     },
     {
       uuid: "6",
       employee: "Ian",
-      inTime: "08.30 AM",
-      outTime: "05.00 PM",
-      totalHours: "08:03:00",
+      in_time: "08.30 AM",
+      out_time: "05.00 PM",
+      total_hours: "08:03:00",
       lateness: "00:30:00",
       status: "late",
     },
     {
       uuid: "7",
       employee: "Zack",
-      inTime: "08.00 AM",
-      outTime: "05.00 PM",
-      totalHours: "09:00:00",
+      in_time: "08.00 AM",
+      out_time: "05.00 PM",
+      total_hours: "09:00:00",
       lateness: "00:00:00",
       status: "on-time",
     },
@@ -384,7 +412,8 @@ const PresentConfiguration = () => {
       <div className='table'>
         <p className='sub-title'>Attendance Report</p>
         <Table 
-          dataSource={data}
+          // dataSource={data}
+          dataSource={dataSource}
           columns={columns}
           onChange={onChangeTable}
           scroll={{
