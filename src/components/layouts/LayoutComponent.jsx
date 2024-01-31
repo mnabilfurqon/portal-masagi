@@ -88,7 +88,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
               >
                 {employeeName ? employeeName.charAt(0) : <AiOutlineUser />}
               </Avatar>
-              {username}
+              <span className="username">{username}</span>
               <FaChevronDown />
             </Space>
           </a>
@@ -1026,7 +1026,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
             </div>
 
             <Flex>
-              <Space style={{ padding: "10px" }}>
+              <Space>
                 <FaRegBell />
                 <MyDropdown />
               </Space>
