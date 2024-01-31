@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Flex } from 'antd';
 import './familyTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -63,31 +62,36 @@ const FamilyTable = ({onDetailClick}) => {
           title: 'Full Name',
           dataIndex: 'full_name',
           key: 'full_name',
+          ellipsis: true,
         },
         {
           title: 'NIK',
           dataIndex: 'nik',
           key: 'nik',
+          ellipsis: true,
         },
         {
           title: 'Relation',
           dataIndex: 'relation',
           key: 'relation',
+          ellipsis: true,
         },
         {
           title: 'Job',
           key: 'job',
           dataIndex: 'job',
+          ellipsis: true,
         },
         {
           title: 'Action',
           key: 'action',
+          ellipsis: true,
             render: (record) => (
-                <Space size="small">
-                    <Button className="action-button" type="primary" size="small" ghost onClick={() => onDetailClick(record)}>
+                <Flex gap={10}>
+                    <Button className="action-button-family" type="primary" size="small" ghost onClick={() => onDetailClick(record)}>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                </Space>
+                </Flex>
             ),
         },
     ];

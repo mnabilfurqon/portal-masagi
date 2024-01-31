@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { PiWarningCircleBold } from "react-icons/pi";
 import { Modal, Button } from 'antd';
 import './deleteModal.css'
 
-const DeleteModal = ({visible, handleDelete, handleCancel, textModal, loading}) => {
+const DeleteModal = (props) => {
+  const {visible, handleDelete, handleCancel, textModal, loading} = props;
   return (
     <Modal
     open={visible}
@@ -13,7 +14,7 @@ const DeleteModal = ({visible, handleDelete, handleCancel, textModal, loading}) 
     footer={
         <div>
             <Button className="cancel-delete-button" type="none" onClick={handleCancel}>CANCEL</Button>
-            <Button className="delete-button" loading={loading} type="danger" onClick={handleDelete}>DELETE</Button>
+            <Button className="delete-button-modal" loading={loading} type="danger" onClick={handleDelete}>DELETE</Button>
         </div>
     }
     >

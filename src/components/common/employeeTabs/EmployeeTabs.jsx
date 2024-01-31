@@ -298,10 +298,6 @@ const EmployeeTabs = () => {
         }
     }
 
-    const onChange = (key) => {
-        console.log(key);
-    };
-
     useEffect(() => {
         if (!token) {
           navigate("/login");
@@ -323,7 +319,7 @@ const EmployeeTabs = () => {
             </Col>
             </Row>
         <Divider className='profile-divider'/>
-        <Tabs defaultActiveKey="employeeData" onChange={onChange}>
+        <Tabs defaultActiveKey="employeeData">
             <TabPane tab="Employee Data" key="employeeData"> <br />
             {selectedEmployeeLoading ? <LoadingComponent /> :
                 <Spin spinning={editEducationLoading} size='large' tip="Edit Data...">
@@ -408,7 +404,7 @@ const EmployeeTabs = () => {
                             <SuccessAddDataModal
                             visible={isSuccessEducationModalVisible}
                             onClose={handleEducationSuccessModalClose}
-                            textParagraph="Data update successful!"
+                            textParagraph="Data change successful!"
                             />
 
                             <FailedAddDataModal
@@ -483,7 +479,7 @@ const EmployeeTabs = () => {
                             <SuccessAddDataModal
                             visible={isSuccessFamilyModalVisible}
                             onClose={handleFamilySuccessModalClose}
-                            textParagraph="Data upload successful!"
+                            textParagraph="Data change successful!"
                             />
 
                             <FailedAddDataModal

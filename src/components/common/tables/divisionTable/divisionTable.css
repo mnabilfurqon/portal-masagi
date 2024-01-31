@@ -35,7 +35,7 @@
     background-color: #629093 !important;
 }
 
-.action-button {
+.action-button-division {
     border: none;
 }
 
@@ -61,12 +61,6 @@
     color: #F9B700;
     font-size: 25px;
     cursor: pointer;
-}
-
-.action-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
 }
 
 .action-title {
