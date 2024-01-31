@@ -84,7 +84,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
                 },
             ]}
             >
-            <Input placeholder='Enter Major' className='input-button'/>
+            <Input placeholder='Enter Major, insert - if not appropriate' className='input-button'/>
             </Form.Item>
 
             <Form.Item
@@ -98,7 +98,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
                 },
             ]}
             >
-            <TextArea rows={4} className='input-thesis' placeholder='Enter Thesis'/>
+            <TextArea rows={4} className='input-thesis' placeholder='Enter Thesis, insert - if not appropriate'/>
             </Form.Item>
 
             <Form.Item
@@ -116,19 +116,13 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
                 },
             ]}
             >
-            <Input placeholder='Enter IPK' className='input-button'/>
+            <Input placeholder='Enter IPK, insert 0 if not appropriate' className='input-button'/>
             </Form.Item>
 
             <Form.Item
             label="Certificate Number"
             name="certificate_number"
             colon={false}
-            rules={[
-                {
-                required: true,
-                message: 'Please input your certificate number!',
-                },
-            ]}
             >
             <Input placeholder='Enter certificate number' className='input-button'/>
             </Form.Item>
@@ -167,7 +161,7 @@ const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editE
                 <Button type="text" onClick={onCancleEditFormButton}>
                     Cancel
                 </Button>
-                {editEducationData ? <SubmitButton buttonText="Edit"/> :
+                {editEducationData ? <SubmitButton buttonText="Save"/> :
                 <SubmitButton buttonText="Add"/>
                 }
             </div>

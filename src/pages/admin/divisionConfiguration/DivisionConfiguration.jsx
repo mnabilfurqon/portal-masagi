@@ -19,7 +19,7 @@ import { Row, Col } from 'antd';
 const DivisionConfiguration = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
-  const [actionValue, setActionValue] = useState("");
+  const [actionValue, setActionValue] = useState('');
   const [uuid, setUuid] = useState("");
   const [defaultDivisionName, setDefaultDivisionName] = useState("");
   const [selectedLoading, setSelectedLoading] = useState(false);
@@ -97,7 +97,7 @@ const DivisionConfiguration = () => {
       });
       setIsAddModalOpen(false);
       setIsSuccessAddDataModalOpen(true);
-      setActionValue("");
+      setActionValue('');
     } catch (error) {
       console.log(error);
     } finally {
@@ -218,6 +218,7 @@ const DivisionConfiguration = () => {
   // Cancel Add Modal Handler
   const handleCancelAddModal = () => {
     setIsAddModalOpen(false);
+    setActionValue('');
   }
 
   // Success Add Modal Handler
@@ -238,6 +239,7 @@ const DivisionConfiguration = () => {
   // Cancel Edit Modal Handler
   const handleCancelEditModal = () => {
     setIsEditModalOpen(false);
+    setActionValue('');
   }
 
   // Success Edit Modal Handler
@@ -346,7 +348,7 @@ const DivisionConfiguration = () => {
         <SuccessAddDataModal
           visible={isSuccessEditDataModalOpen}
           onClose={handleOkSuccessEditDataModal}
-          textParagraph="Data changes successful!"
+          textParagraph="Data change successful!"
         />
 
         <FailedAddDataModal

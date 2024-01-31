@@ -152,7 +152,7 @@ const FamilyForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editFami
                 <Button type="text" onClick={onCancleEditFormButton}>
                     Cancel
                 </Button>
-                {editFamilyData ? <SubmitButton buttonText="Edit"/> :
+                {editFamilyData ? <SubmitButton buttonText="Save"/> :
                 <SubmitButton buttonText="Add"/>
                 }
             </div>

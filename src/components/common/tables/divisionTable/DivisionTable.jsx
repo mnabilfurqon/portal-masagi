@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Flex } from 'antd';
 import './divisionTable.css'
 import { BiEdit } from "react-icons/bi";
-import { MdOutlineDelete } from "react-icons/md";
+import { BiTrash } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue, countValue, isAddModalOpen, isEditModalOpen, isDeleteModalOpen}) => {
+const DivisionTable = (props) => {
+  const {isDeleteButtonClicked, isEditButtonClicked, searchValue, sortValue, countValue, isAddModalOpen, isEditModalOpen, isDeleteModalOpen} = props;
   const navigate = useNavigate();
   const token = Cookies.get('token');
   const [divisionData, setDivisionData] = useState([]);
@@ -82,20 +83,21 @@ const DivisionTable = ({isDeleteButtonClicked, isEditButtonClicked, searchValue,
           title: 'Division',
           dataIndex: 'division',
           key: 'division',
+          ellipsis: true,
         },
         {
           title: <div className="action-title">Action</div>,
           key: 'action',
             render: (record) => (
               <div className="action-container">
-                <Space size="medium">
-                    <Button className="action-button" type="primary" size="small" onClick={() => isEditButtonClicked(record)} ghost>
+                <Flex gap={10}>
+                    <Button className="action-button-division" type="primary" size="small" onClick={() => isEditButtonClicked(record)} ghost>
                         <BiEdit className="action-icon-edit" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={() => isDeleteButtonClicked(record)} ghost>
-                        <MdOutlineDelete className="action-icon-delete" />
+                    <Button className="action-button-division" type="primary" size="small" onClick={() => isDeleteButtonClicked(record)} ghost>
+                        <BiTrash className="action-icon-delete" />
                     </Button>
-                </Space>
+                </Flex>
               </div>
             ),
         },
