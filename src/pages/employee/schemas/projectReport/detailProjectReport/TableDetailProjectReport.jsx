@@ -5,13 +5,13 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
-import "./tableTaskReport.css";
+import "./detailProjectReport.css";
 
-const TableTaskReport = (props) => {
+const TableDetailProjectReport = (props) => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const { searchValue, filterValue, countValue, urlApi } = props;
-  const [taskReportData, setTaskReportData] = useState([]);
+  const [projectReportData, setProjectReportData] = useState([]);
   const [projectFilter, setProjectFilter] = useState([]);
   const [statusFilter, setStatusFilter] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -62,7 +62,7 @@ const TableTaskReport = (props) => {
     }
   };
 
-  const getTaskReportData = async () => {
+  const getProjectReportData = async () => {
     try {
       var page;
       setLoading(true);
@@ -83,12 +83,12 @@ const TableTaskReport = (props) => {
           Authorization: token,
         },
       });
-      setTaskReportData(response.data.items);
+      setProjectReportData(response.data.items);
       setTableParams({
         ...tableParams,
         pagination: {
           ...tableParams.pagination,
-          total: response.data[0]._meta.total_items,
+          total: response.data._meta.total_items,
           pageSize: countValue,
         },
       });
@@ -124,13 +124,13 @@ const radioDataStatusRaw = statusFilter.map((item) => {
   };
 });
 
-  const isProject = radioDataProjectRaw.some((item) => item.key === filterValue[0]);
-  const projectParams = isProject ? filterValue[0] : null;
+  const isProject = radioDataProjectRaw.some((item) => item.key === filterValue);
+  const projectParams = isProject ? filterValue : null;
 
-  const isStatus = radioDataStatusRaw.some((item) => item.key === filterValue[0]);
-  const statusParams = isStatus ? filterValue[0] : null;
+  const isStatus = radioDataStatusRaw.some((item) => item.key === filterValue);
+  const statusParams = isStatus ? filterValue : null;
 
-  const data = taskReportData.map((item) => {
+  const data = projectReportData.map((item) => {
     return {
       key: item.uuid,
       project: item.project.name,
@@ -147,7 +147,7 @@ const radioDataStatusRaw = statusFilter.map((item) => {
     if (!token) {
       navigate("/login");
     }
-    getTaskReportData();
+    getProjectReportData();
     getProjectData();
     getStatusData();
   }, [token, navigate, params, searchValue, filterValue, countValue, urlApi]);
@@ -264,13 +264,13 @@ const radioDataStatusRaw = statusFilter.map((item) => {
       ellipsis: true,
       render: (record) => (
         <Button
-          className="detail-button-task-report"
+          className="detail-button-project-report"
           type="primary"
           onClick={() => handleDetailClick(record)}
           size="small"
           ghost
         >
-          <AiOutlineFileSearch className="detail-icon-task-report" />
+          <AiOutlineFileSearch className="detail-icon-project-report" />
         </Button>
       ),
     },
@@ -278,7 +278,7 @@ const radioDataStatusRaw = statusFilter.map((item) => {
 
   const handleDetailClick = (record) => {
     const value = record.key;
-    navigate(`/task-report/detail-task/${value}`);
+    navigate(`/project-report/detail-task/${value}`);
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -299,13 +299,13 @@ const radioDataStatusRaw = statusFilter.map((item) => {
     });
 
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setTaskReportData([]);
+      setProjectReportData([]);
     }
   };
 
   return (
     <>
-      <div className="task-report-table">
+      <div className="project-report-table">
         <p className="table-title">All Task</p>
         <Table
           columns={title}
@@ -320,4 +320,4 @@ const radioDataStatusRaw = statusFilter.map((item) => {
   );
 };
 
-export default TableTaskReport;
+export default TableDetailProjectReport;

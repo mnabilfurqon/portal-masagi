@@ -1,0 +1,57 @@
+.project-report {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.cards {
+  box-shadow: 0 10px 10px 0 #e0e6ed;
+}
+
+.text {
+  font-size: 100%;
+  margin-bottom: 0;
+  color: grey;
+}
+
+.number {
+  margin-top: 0;
+}
+
+.in-progress-icon {
+  color: #007BFF;
+  width: 100%;
+  font-size: 40px;
+}
+
+.open-icon {
+  color: #FFC107;
+  width: 100%;
+  font-size: 40px;
+}
+
+.done-icon {
+  color: #28A745;
+  width: 100%;
+  font-size: 40px;
+}
+
+.cancel-icon {
+  color: #DC3545;
+  width: 100%;
+  font-size: 40px;
+}
+
+.total-task-icon {
+  color: #6F42C1;
+  width: 100%;
+  font-size: 40px;
+}
+
+.summary-icon {
+  color: #FD7E14;
+  width: 100%;
+  font-size: 40px;
+}
