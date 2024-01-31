@@ -58,12 +58,8 @@
     pointer-events: none;
 }
 
-.action-button {
+.action-button-employee {
     border: none;
-}
-
-.ant-btn {
-    margin: 0 !important;
 }
 
 .action-icon {
@@ -74,6 +70,12 @@
 
 .action-icon:hover {
     color: #F9B700;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.action-icon-disabled {
+    color: #bebebe;
     font-size: 25px;
     cursor: pointer;
 }

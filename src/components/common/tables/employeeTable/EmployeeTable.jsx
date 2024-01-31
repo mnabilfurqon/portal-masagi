@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Flex } from 'antd';
 import './employeeTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import dayjs from 'dayjs';
@@ -107,6 +106,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
           title: 'Employee Name',
           dataIndex: 'employee_name',
           key: 'employee_name',
+          ellipsis: true,
         },
         {
           title: 'NIP',
@@ -141,33 +141,33 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
         {
           title: 'Action',
           key: 'action',
-            render: (record) => {
-              // console.log(record);
-              if (record.user_account) {
-                return (
-                  <Space size="small">
-                    <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
-                      <AiOutlineFileSearch className="action-icon" />
+            render: (record) => (
+                <Flex gap={10}>
+                    <Button className="action-button-employee" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+                        <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost disabled>
-                      <BsPersonAdd className="action-icon" />
-                    </Button>
-                  </Space>   
-                )           
-              } else {
-                return (  
-                  <Space size="small">
-                    <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
-                      <AiOutlineFileSearch className="action-icon" />
-                    </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost>
-                      <BsPersonAdd className="action-icon" />
-                    </Button>
-                  </Space>              
-                ) ;
-              }
-              
-            }
+
+                    {employeeData.map((item) => {
+                      if (item.uuid === record.key) {
+                        if (item.users !== null) {
+                          return (
+                            <Button key={item.uuid} className="action-button-employee" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost disabled>
+                              <BsPersonAdd className="action-icon-disabled" />
+                            </Button>
+                          );
+                        } else {
+                          return (
+                            <Button key={item.uuid} className="action-button-employee" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost>
+                              <BsPersonAdd className="action-icon" />
+                            </Button>
+                          );
+                        }
+                      }
+                    }
+                    )}
+
+                </Flex>
+            ),
         },
     ];
 

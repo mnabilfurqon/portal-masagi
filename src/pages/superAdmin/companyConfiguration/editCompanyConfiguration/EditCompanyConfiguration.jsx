@@ -90,7 +90,7 @@ const EditCompanyConfiguration = () => {
             <SuccessAddDataModal
             visible={isSuccessModalVisible}
             onClose={handleSuccessModalClose}
-            textParagraph="Data upload successful!"
+            textParagraph="Data change successful!"
             />
 
             <FailedAddDataModal

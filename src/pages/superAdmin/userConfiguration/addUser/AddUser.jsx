@@ -263,7 +263,7 @@ const AddUser = () => {
             <Flex justify='end' className='action'>
             <Form.Item>
                 <Flex gap={10} align='center' justify='end' >
-                    <Link to="/user" style={{color:"black"}} >Cancel</Link>
+                    <Link to="/company" style={{color:"black"}} >Cancel</Link>
                     <Button key="submit" htmlType='submit' type="none" className="update-button">
                         Save
                     </Button>

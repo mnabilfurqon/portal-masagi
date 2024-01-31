@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Flex } from 'antd';
 import './companyTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import moment from 'moment';
@@ -147,14 +146,14 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
           title: 'Action',
           key: 'action',
             render: (record) => (
-                <Space size="small">
-                  <Button className="action-button" type="primary" size="small" ghost onClick={() => handleDetailClick(record)}>
+                <Flex gap={10}>
+                  <Button className="action-button-company" type="primary" size="small" ghost onClick={() => handleDetailClick(record)}>
                       <AiOutlineFileSearch className="action-icon" />
                   </Button>
-                  <Button className="action-button" type="primary" size="small" ghost onClick={() => handleAddUserClick(record)}>
+                  <Button className="action-button-company" type="primary" size="small" ghost onClick={() => handleAddUserClick(record)}>
                       <BsPersonAdd className="action-icon" />
                   </Button>
-                </Space>
+                </Flex>
             ),
         },
     ];

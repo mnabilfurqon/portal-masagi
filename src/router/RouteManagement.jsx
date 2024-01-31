@@ -1235,6 +1235,15 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
+            
+            <Route
+              path="/task-report/detail-task/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <TaskDetail />
+                </LayoutComponent>
+              }
+            />
             {/* End of Task Management Configuration Route */}
           </React.Fragment>
         </Routes>
