@@ -79,6 +79,7 @@ const PermitRequestTable = (props) => {
             page: page,
             per_page: countValue,
             search: searchValue,
+            search_by: typePermit !== 'dinas' ? 'reason' : 'destination',
             type_permit: typePermit,
             date_permit: datePickerValue ? datePickerValue : null,
             desc: sortValue === 'latestEndPermitDate' ? true : false,

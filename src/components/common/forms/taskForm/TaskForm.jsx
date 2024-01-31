@@ -167,7 +167,7 @@ const TaskForm = ( {onFinish, onFinishFailed, buttonText}) => {
                         },
                     ]}
                     >
-                    <DatePicker placeholder='Please select deadline' format={format} disabledDate={disabledDate} showTime className='date-picker'/>
+                    <DatePicker placement='bottomRight' placeholder='Please select deadline' format={format} disabledDate={disabledDate} showTime className='date-picker'/>
                     </Form.Item>
 
                     <Form.Item
