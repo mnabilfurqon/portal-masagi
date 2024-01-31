@@ -2,7 +2,8 @@ import React, {useState} from 'react'
 import { Modal, Input, Button } from 'antd'
 import "./addEditModal.css"
 
-const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeholder, textButton, onFinishFailed, actionValue, handleActionValue, defaultDivisionName, loading}) => {
+const AddEditModal = (props) => {
+    const {visible, title, handleOk, handleCancle, subtitle, placeholder, textButton, onFinishFailed, actionValue, handleActionValue, defaultDivisionName, loading} = props
     const addTitle = <div className="add-title">{title}</div>
 
     if (defaultDivisionName) {
@@ -19,6 +20,7 @@ const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeho
                 <div className="modal-add-container">
                 <p className='subtitle'>{subtitle}</p>
                 <Input placeholder={defaultDivisionName} value={actionValue} className="input-modal" onChange={handleActionValue} allowClear/>
+                {actionValue !== '' ?
                 <Button
                     className="submit-button-modal"
                     onClick={handleOk}
@@ -26,6 +28,16 @@ const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeho
                 >
                     {textButton}
                 </Button>
+                :
+                <Button
+                    className="submit-button-modal-disabled"
+                    onClick={handleOk}
+                    loading={loading}
+                    disabled
+                >
+                    {textButton}
+                </Button>
+                }
                 </div>
             </Modal>
         )
@@ -43,6 +55,7 @@ const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeho
                 <div className="modal-add-container">
                 <p className='subtitle'>{subtitle}</p>
                 <Input placeholder={placeholder} value={actionValue} className="input-modal" onChange={handleActionValue} allowClear/>
+                {actionValue !== '' ?
                 <Button
                     className="submit-button-modal"
                     onClick={handleOk}
@@ -50,6 +63,16 @@ const AddEditModal = ({visible, title, handleOk, handleCancle, subtitle, placeho
                 >
                     {textButton}
                 </Button>
+                : 
+                <Button
+                    className="submit-button-modal-disabled"
+                    onClick={handleOk}
+                    loading={loading}
+                    disabled
+                >
+                    {textButton}
+                </Button>
+                }
                 </div>
             </Modal>
         )

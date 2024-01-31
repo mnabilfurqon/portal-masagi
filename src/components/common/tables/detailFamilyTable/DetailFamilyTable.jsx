@@ -6,7 +6,11 @@ const DetailFamilyTable = ({detailFamilyData}) => {
     if (!detailFamilyData) {
         return null;
     }
-    detailFamilyData.birth_date = dayjs(detailFamilyData.birth_date).format('DD/MM/YYYY');
+
+    // Pengecekan apakah birth_date belum diformat
+    if (detailFamilyData.birth_date && !/^\d{2}\/\d{2}\/\d{4}$/.test(detailFamilyData.birth_date)) {
+        detailFamilyData.birth_date = dayjs(detailFamilyData.birth_date).format('DD/MM/YYYY');
+    }
 
     return (
         <div className='table-container'>
