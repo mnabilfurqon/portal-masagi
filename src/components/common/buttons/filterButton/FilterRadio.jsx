@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Dropdown, Radio, Flex } from 'antd';
+import { Button, Dropdown, Radio, Flex, Space } from 'antd';
 import { BsFilter } from 'react-icons/bs';
 import './filterButton.css';
 
@@ -21,12 +21,14 @@ const FilterRadio = ({ onFilter, radioData }) => {
     <Dropdown
       overlay={
         <div>
-          <Radio.Group onChange={handleRadioChange} value={selectedValue}>
+          <Radio.Group onChange={handleRadioChange} value={selectedValue} className='radio-filter'>
+          <Space direction="vertical">
             {radioData.map((radioItem) => (
-              <Radio key={radioItem.value} value={radioItem.value}>
+              <Radio key={radioItem.key} value={radioItem.key}>
                 {radioItem.label}
               </Radio>
             ))}
+          </Space>
           </Radio.Group>
           <div style={{ marginTop: 5 }}></div>
           {selectedValue !== null && (
