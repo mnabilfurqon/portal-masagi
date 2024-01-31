@@ -636,9 +636,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === "/project-report") {
-    pageTitle = "Project Report";
-    finalPageTitle = pageTitle;
   } else if (location.pathname === "/task") {
     pageTitle = "Task";
     finalPageTitle = pageTitle;
@@ -668,6 +665,40 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/project-report") {
+    pageTitle = "Project Report";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/project-report/detail-project/")) {
+    pageTitle = (
+      <Link to="/project-report" className="page-title">
+        Project Report /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Project</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/project-report/detail-task/")) {
+    pageTitle = (
+      <span>
+        <Link to="/project-report" className="page-title">
+          Project Report /{" "}
+        </Link>
+        <Link to={-1} className="page-title">
+          Detail Project /{" "}
+        </Link>
+      </span>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Task </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
   } else if (location.pathname === "/task-report") {
     pageTitle = "Task Report";
     finalPageTitle = pageTitle;
@@ -685,7 +716,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       </>
     );
   }
-  
+
   return (
     <Layout className="layout-container">
       {/* Sider */}
@@ -935,11 +966,11 @@ const LayoutComponent = ({ children, roleNumber }) => {
               icon={<TbClipboardTypography />}
               title="Task Management"
             >
-              <Menu.Item key="/project-report">
-                <Link to="/project-report">Project Report</Link>
-              </Menu.Item>
               <Menu.Item key="/task">
                 <Link to="/task">Task</Link>
+              </Menu.Item>
+              <Menu.Item key="/project-report">
+                <Link to="/project-report">Project Report</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>

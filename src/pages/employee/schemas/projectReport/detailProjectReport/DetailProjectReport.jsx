@@ -5,16 +5,16 @@ import { VscIssueReopened } from "react-icons/vsc";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { MdOutlineCancel } from "react-icons/md";
 import { GoChecklist } from "react-icons/go";
-import SearchBox from "../../../../components/common/searchBox/SearchBox";
-import CountButton from "../../../../components/common/buttons/countButton/CountButton";
-import FilterRadio from "../../../../components/common/buttons/filterButton/FilterRadio";
-import TableTaskReport from "./tableTaskReport/TableTaskReport";
 import { useNavigate } from "react-router-dom";
+import SearchBox from "../../../../../components/common/searchBox/SearchBox";
+import CountButton from "../../../../../components/common/buttons/countButton/CountButton";
+import FilterRadio from "../../../../../components/common/buttons/filterButton/FilterRadio";
+import TableDetailProjectReport from "./TableDetailProjectReport";
 import axios from "axios";
 import Cookies from "js-cookie";
-import "./taskReport.css";
+import "./detailProjectReport.css";
 
-const TaskReport = () => {
+const DetailProjectReport = () => {
   let urlApi;
   const token = Cookies.get("token");
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const TaskReport = () => {
 
   const getSummaryData = async () => {
     try {
-      const response = await axios.get("http://103.82.93.38/api/v1/task/summary/employee",
+      const response = await axios.get("http://103.82.93.38/api/v1/task/summary",
         {
           headers: {
             Authorization: token,
@@ -136,7 +136,7 @@ const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
 
   return (
     <>
-      <Row gutter={[16, 16]} className="task-report">
+      <Row gutter={[16, 16]} className="project-report">
         <Col xs={12} sm={12} md={8} lg={6} xl={4}>
           <Card className="components">
             <TbProgress className="in-progress-icon" />
@@ -167,7 +167,7 @@ const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
         </Col>
         <Col xs={12} sm={12} md={8} lg={6} xl={4}>
           <Card className="components">
-            <TbClipboardList className="total-task-icon" />
+            <TbClipboardList className="total-project-icon" />
             <p className="text">Total Task</p>
             <h1 className="number">{totalTaskData}</h1>
           </Card>
@@ -193,7 +193,7 @@ const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
         </Col>
       </Row>
 
-      <TableTaskReport
+      <TableDetailProjectReport
         searchValue={searchValue}
         filterValue={filterValue}
         countValue={countValue}
@@ -203,4 +203,4 @@ const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
   );
 };
 
-export default TaskReport;
+export default DetailProjectReport;
