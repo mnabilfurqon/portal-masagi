@@ -52,30 +52,6 @@ const MainCompanyConfiguration = () => {
       title: 'Company Name',
       key: 'company_name',
     },
-    // {
-    //   title: 'Email Address',
-    //   key: 'email_address',
-    // },
-    // {
-    //   title: 'Address',
-    //   key: 'address',
-    // },
-    // {
-    //   title: 'Phone Number',
-    //   key: 'phone_number',
-    // },
-    // {
-    //   title: 'Website',
-    //   key: 'website',
-    // },
-    // {
-    //   title: 'Contact Name',
-    //   key: 'contact_name',
-    // },
-    // {
-    //   title: 'Contact Person',
-    //   key: 'contact_person',
-    // },
   ];
 
   const itemsSort = [
@@ -101,12 +77,12 @@ const MainCompanyConfiguration = () => {
     <div className='main-company-configuration'>
       <Row gutter={[16, 8]}>
         <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
-          <SearchBox onSearch={handleSearch} /> 
+          <SearchBox onSearch={handleSearch} placeholder='Search by Company Name' /> 
             </Col>
-        <Col xs={11} md={10} lg={8} xl={4} xxl={3}>
+        <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
           <FilterButton onFilter={handleFilter} treeData={treeData} />
         </Col>
-        <Col xs={13} md={8} lg={8} xl={6} xxl={3}>
+        <Col xs={24} md={8} lg={8} xl={6} xxl={3}>
           <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
         </Col>
         <Col xs={8} md={4} lg={12} xl={2} xxl={2}>

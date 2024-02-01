@@ -4,3 +4,7 @@
   border: 1px solid #629093;
   border-radius: 5px;
 }
+
+.action-button {
+  border: none;
+}

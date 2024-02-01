@@ -73,3 +73,11 @@
     font-size: 25px;
     cursor: pointer;
 }
+
+@media only screen and (max-width: 576px) {
+    .ant-pagination {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
