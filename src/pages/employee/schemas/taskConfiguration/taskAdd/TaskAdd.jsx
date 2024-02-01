@@ -36,7 +36,6 @@ const TaskAdd = () => {
                     'Authorization': token,
                 }
             });
-    
             setIsSuccessModalVisible(true);
         } catch (error) {
             setIsFailedModalVisible(true);
@@ -74,7 +73,7 @@ const TaskAdd = () => {
             <TaskForm
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            buttonText="Save"/>
+            buttonText="Add"/>
 
             <SuccessAddDataModal
             visible={isSuccessModalVisible}

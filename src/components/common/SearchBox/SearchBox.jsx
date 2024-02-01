@@ -3,7 +3,8 @@ import { IoIosSearch } from "react-icons/io";
 import './searchBox.css';
 import { Input } from 'antd';
 
-const SearchBox = ({onSearch}) => {
+const SearchBox = (props) => {
+    const {onSearch, placeholder} = props;
     const [searchValue, setSearchValue] = useState('');
     
     const handleChange = (e) => {
@@ -22,7 +23,7 @@ const SearchBox = ({onSearch}) => {
             prefix={<IoIosSearch/>} 
             value={searchValue}
             onChange={handleChange}
-            placeholder='Search'
+            placeholder={placeholder ? placeholder : 'Search'}
             allowClear
         />
     );
