@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import FilterRadio from '@common/buttons/filterButton/FilterRadio'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
 import CountButton from '@common/buttons/countButton/CountButton'
@@ -74,17 +74,17 @@ const LeaveMain = () => {
     };
     // end of date picker handler
 
-    const treeData = [
+    const radioData = [
         {
-          title: 'Approved',
+          label: 'Approved',
           key: 'approved',
         },
         {
-          title: 'Pending',
+          label: 'Pending',
           key: 'pending',
         },
         {
-          title: 'Rejected',
+          label: 'Rejected',
           key: 'rejected',
         },
     ];
@@ -320,7 +320,7 @@ const LeaveMain = () => {
             <SearchBox onSearch={handleSearch} /> 
             </Col>
             <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
-            <FilterButton onFilter={handleFilter} treeData={treeData} />
+            <FilterRadio onFilter={handleFilter} radioData={radioData} />
             </Col>
             <Col xs={24} md={8} lg={8} xl={6} xxl={3}>
             <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />

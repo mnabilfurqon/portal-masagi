@@ -18,15 +18,18 @@ import ResetPasswordModal from "@common/modals/resetPasswordModal/ResetPasswordM
 import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal';
 import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal';
 import Cookies from "js-cookie";
+import axios from "axios";
 import "./layoutComponent.css";
 
 const LayoutComponent = ({ children, roleNumber }) => {
   const token = Cookies.get("token");
+  const uuid = Cookies.get("user_uuid");
   const employeeName = Cookies.get("employee_name");
   const navigate = useNavigate();
   const [resetPasswordVisible, setResetPasswordVisible] = useState(false);
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -59,6 +62,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       const key = e.key;
       if (key === "1") {
         Cookies.remove("token");
+        Cookies.remove("user_uuid");
         Cookies.remove("role_uuid");
         Cookies.remove("username");
         Cookies.remove("company_uuid");
@@ -98,6 +102,28 @@ const LayoutComponent = ({ children, roleNumber }) => {
   };
 
   // reset password section handler
+  const resetPassword = async () => {
+    try {
+      setLoading(true)
+      await axios.put(`http://103.82.93.38/api/v1/users/reset-password/${uuid}`, {
+        password: newPassword
+      }, {
+        headers: {
+          Authorization: token
+        }
+      })
+      setConfirmNewPassword('')
+      setNewPassword('')
+      setNotMatchPassword('')
+      setResetPasswordVisible(false)
+      setIsSuccessModalVisible(true)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleCancleResetPassword = () => {
     setConfirmNewPassword('')
     setNewPassword('')
@@ -122,11 +148,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
     if (newPassword === '' || confirmNewPassword === '') {
       setNotMatchPassword('Please fill all the field')
     } else if (newPassword === confirmNewPassword) {
-      setConfirmNewPassword('')
-      setNewPassword('')
-      setNotMatchPassword('')
-      setResetPasswordVisible(false)
-      setIsSuccessModalVisible(true)
+      resetPassword()
     } else {
       setNotMatchPassword('Password not match')
     }
@@ -636,9 +658,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === "/project-report") {
-    pageTitle = "Project Report";
-    finalPageTitle = pageTitle;
   } else if (location.pathname === "/task") {
     pageTitle = "Task";
     finalPageTitle = pageTitle;
@@ -668,6 +687,40 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/project-report") {
+    pageTitle = "Project Report";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/project-report/detail-project/")) {
+    pageTitle = (
+      <Link to="/project-report" className="page-title">
+        Project Report /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Project</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/project-report/detail-task/")) {
+    pageTitle = (
+      <span>
+        <Link to="/project-report" className="page-title">
+          Project Report /{" "}
+        </Link>
+        <Link to={-1} className="page-title">
+          Detail Project /{" "}
+        </Link>
+      </span>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Task </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
   } else if (location.pathname === "/task-report") {
     pageTitle = "Task Report";
     finalPageTitle = pageTitle;
@@ -685,7 +738,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       </>
     );
   }
-  
+
   return (
     <Layout className="layout-container">
       {/* Sider */}
@@ -935,11 +988,11 @@ const LayoutComponent = ({ children, roleNumber }) => {
               icon={<TbClipboardTypography />}
               title="Task Management"
             >
-              <Menu.Item key="/project-report">
-                <Link to="/project-report">Project Report</Link>
-              </Menu.Item>
               <Menu.Item key="/task">
                 <Link to="/task">Task</Link>
+              </Menu.Item>
+              <Menu.Item key="/project-report">
+                <Link to="/project-report">Project Report</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>
@@ -1064,6 +1117,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
         confirmNewPassword={confirmNewPassword}
         messageError={notMatchPassword}
         onFinishFailed={handleFailedResetPassword}
+        loading={loading}
       />
 
       <SuccessAddDataModal
