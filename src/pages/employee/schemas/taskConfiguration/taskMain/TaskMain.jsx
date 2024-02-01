@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import FilterRadio from '@common/buttons/filterButton/FilterRadio'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import AddButton from '@common/buttons/addButton/AddButton'
@@ -91,10 +91,16 @@ const TaskMain = () => {
     // end of search handler
 
     // filter handler
-    const [filterValue, setFilterValue] = useState("");
+    const [filterProjectValue, setFilterProjectValue] = useState("");
 
-    const handleFilter = (value) => {
-        setFilterValue(value);
+    const handleFilterProject = (value) => {
+        setFilterProjectValue(value);
+    };
+
+    const [filterStatusValue, setFilterStatusValue] = useState("");
+
+    const handleFilterStatus = (value) => {
+        setFilterStatusValue(value);
     };
     // end of filter handler
 
@@ -132,39 +138,26 @@ const TaskMain = () => {
 
     const uniqueProjectNames = new Set();
 
-    const treeDataProjectRaw = filterData.map(item => {
+    const radioDataProject = filterData.map(item => {
         const projectName = item.project.name;
         if (!uniqueProjectNames.has(projectName)) {
             uniqueProjectNames.add(projectName);
                 return {
                     key: item.project.uuid,
-                    title: item.project.name,
+                    label: item.project.name,
                 }
         }
 
         return null;
     }).filter(item => item !== null);
 
-    const treeDataProject = {
-        key: 'project',
-        title: 'Project',
-        children: treeDataProjectRaw,
-    };
 
-    const treeDataStatusRaw = statusData.map(item => {
+    const radioDataStatus = statusData.map(item => {
         return {
             key: item.uuid,
-            title: item.name,
+            label: item.name,
         }
     });
-
-    const treeDataStatus = {
-        key: 'status',
-        title: 'Status',
-        children: treeDataStatusRaw,
-    };
-
-    const treeData = [treeDataProject, treeDataStatus];
 
     const itemsSort = [
         {
@@ -297,7 +290,8 @@ const TaskMain = () => {
 
     const propsTable = {
         searchValue,
-        filterValue,
+        filterProjectValue,
+        filterStatusValue,
         sortValue,
         countValue,
         columns,
@@ -309,19 +303,22 @@ const TaskMain = () => {
         <div>
             <div>
                 <Row gutter={[16, 8]}>
-                    <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
+                    <Col xs={24} md={24} lg={8} xl={5} xxl={5}>
                         <SearchBox onSearch={handleSearch} placeholder='Search by Task Name' /> 
                     </Col>
-                    <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
-                        <FilterButton onFilter={handleFilter} treeData={treeData} />
+                    <Col xs={24} md={12} lg={8} xl={4} xxl={3}>
+                        <FilterRadio onFilter={handleFilterProject} radioData={radioDataProject} title='Filter Project' />
                     </Col>
-                    <Col xs={24} md={8} lg={8} xl={6} xxl={3}>
+                    <Col xs={24} md={12} lg={8} xl={4} xxl={3}>
+                        <FilterRadio onFilter={handleFilterStatus} radioData={radioDataStatus} title='Filter Status' />
+                    </Col>
+                    <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
                         <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
                     </Col>
-                    <Col xs={8} md={4} lg={12} xl={2} xxl={2}>
+                    <Col xs={8} md={4} lg={4} xl={2} xxl={2}>
                         <CountButton className="count-button" onCount={handleCount} />
                     </Col>
-                    <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 2}} xxl={{span: 4, offset: 6}}>
+                    <Col xs={16} md={10} lg={12} xl={{span: 4, offset: 1}} xxl={{span: 4, offset: 4}}>
                         <Link to='/task/add-task'>
                             <AddButton buttonText="Add Task"/>
                         </Link>

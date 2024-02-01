@@ -84,7 +84,7 @@ const PermitRequestTable = (props) => {
             date_permit: datePickerValue ? datePickerValue : null,
             desc: sortValue === 'latestEndPermitDate' ? true : false,
             sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
-            status: filterValue[0],
+            status: filterValue ? filterValue : null,
           },
           headers: {
             Authorization: token,
@@ -113,7 +113,7 @@ const PermitRequestTable = (props) => {
       getPermitData();
     }, [token, navigate, params, countValue, searchValue, sortValue, filterValue, respondApproveModalVisible, respondRejectModalVisible, datePickerValue]);
 
-    const dataLeaveRaw = permitData
+    const dataLeave = permitData
     .map(item => {
       let status = "pending";
       let statusByHr = "pending";
@@ -152,21 +152,7 @@ const PermitRequestTable = (props) => {
       }
     });
 
-    const dataLeave = dataLeaveRaw.filter(item => { 
-      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
-      ? filterValue.includes(item.status)
-      : true
-
-      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
-      const dateItem = item.permit_date.split("/").reverse().join("/");
-      const isDateMatch = datePickerValue 
-      ? isDateInRange(dateItem, datePickerValue)
-      : true
-      
-      return isStatusMatch && isDateMatch;
-    });
-
-    const dataOfficialTravelRaw = permitData
+    const dataOfficialTravel = permitData
     .map(item => {
       let status = "pending";
       let statusByHr = "pending";
@@ -205,21 +191,7 @@ const PermitRequestTable = (props) => {
       }
     });
 
-    const dataOfficialTravel = dataOfficialTravelRaw.filter(item => {
-      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
-      ? filterValue.includes(item.status)
-      : true
-
-      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
-      const dateItem = item.permit_date.split("/").reverse().join("/");
-      const isDateMatch = datePickerValue
-      ? isDateInRange(dateItem, datePickerValue)
-      : true
-
-      return isStatusMatch && isDateMatch;
-    });
-
-    const dataOvertimeRaw = permitData
+    const dataOvertime = permitData
     .map(item => {
       let status = "pending";
       let statusByHr = "pending";
@@ -258,21 +230,7 @@ const PermitRequestTable = (props) => {
       }
     });
 
-    const dataOvertime = dataOvertimeRaw.filter(item => {
-      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
-      ? filterValue.includes(item.status)
-      : true
-
-      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
-      const dateItem = item.overtime_date.split("/").reverse().join("/");
-      const isDateMatch = datePickerValue
-      ? isDateInRange(dateItem, datePickerValue)
-      : true
-
-      return isStatusMatch && isDateMatch;
-    });
-
-    const dataPermitRaw = permitData
+    const dataPermit = permitData
     .map(item => {
       let status = "pending";
       let statusByHr = "pending";
@@ -309,20 +267,6 @@ const PermitRequestTable = (props) => {
         team_leader: item.team_lead_employee,
         status_by_team_leader: statusByTeamLeader,
       }
-    });
-
-    const dataPermit = dataPermitRaw.filter(item => {
-      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
-      ? filterValue.includes(item.status)
-      : true
-
-      // convert item.permit_date from DD/MM/YYYY to MM/DD/YYYY
-      const dateItem = item.permit_date.split("/").reverse().join("/");
-      const isDateMatch = datePickerValue
-      ? isDateInRange(dateItem, datePickerValue)
-      : true
-
-      return isStatusMatch && isDateMatch;
     });
 
     const handleTableChange = (pagination, filters, sorter) => {

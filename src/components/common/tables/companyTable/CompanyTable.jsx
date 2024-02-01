@@ -17,19 +17,6 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
     return moment(dateString).format("DD/MM/YYYY");
   }
 
-  // Handlre value filter button
-  const filterArray = Array.isArray(filterValue) ? filterValue : [];
-  const encodedFilterValue = filterArray.map(value => encodeURIComponent(value)).join(',');
-  // End of handler value filter button
-
-  // handle search value for status
-  if (searchValue === 'active') {
-    searchValue = 1;
-  } else if (searchValue === 'not active') {
-    searchValue = 0;
-  }
-  // end of handle search value for status
-
   const [tableParams, setTableParams] = useState({
     pagination : {
       current: 1,
@@ -72,7 +59,8 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
           page: page,
           per_page: countValue,
           search: searchValue,
-          search_by: encodedFilterValue? encodedFilterValue : 'company_name',
+          search_by: 'company_name',
+          is_active: filterValue ? filterValue : null,
           desc: sortValue === 'latestJoinDate' || sortValue === 'zToACompany' ? true : false,
           sort_by: sortValue === 'latestJoinDate' || sortValue === 'oldestJoinDate' ? 'created_date' : 'company_name',
         },
