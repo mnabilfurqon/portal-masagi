@@ -18,15 +18,18 @@ import ResetPasswordModal from "@common/modals/resetPasswordModal/ResetPasswordM
 import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal';
 import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal';
 import Cookies from "js-cookie";
+import axios from "axios";
 import "./layoutComponent.css";
 
 const LayoutComponent = ({ children, roleNumber }) => {
   const token = Cookies.get("token");
+  const uuid = Cookies.get("user_uuid");
   const employeeName = Cookies.get("employee_name");
   const navigate = useNavigate();
   const [resetPasswordVisible, setResetPasswordVisible] = useState(false);
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -59,6 +62,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       const key = e.key;
       if (key === "1") {
         Cookies.remove("token");
+        Cookies.remove("user_uuid");
         Cookies.remove("role_uuid");
         Cookies.remove("username");
         Cookies.remove("company_uuid");
@@ -98,6 +102,28 @@ const LayoutComponent = ({ children, roleNumber }) => {
   };
 
   // reset password section handler
+  const resetPassword = async () => {
+    try {
+      setLoading(true)
+      await axios.put(`http://103.82.93.38/api/v1/users/reset-password/${uuid}`, {
+        password: newPassword
+      }, {
+        headers: {
+          Authorization: token
+        }
+      })
+      setConfirmNewPassword('')
+      setNewPassword('')
+      setNotMatchPassword('')
+      setResetPasswordVisible(false)
+      setIsSuccessModalVisible(true)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleCancleResetPassword = () => {
     setConfirmNewPassword('')
     setNewPassword('')
@@ -122,11 +148,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
     if (newPassword === '' || confirmNewPassword === '') {
       setNotMatchPassword('Please fill all the field')
     } else if (newPassword === confirmNewPassword) {
-      setConfirmNewPassword('')
-      setNewPassword('')
-      setNotMatchPassword('')
-      setResetPasswordVisible(false)
-      setIsSuccessModalVisible(true)
+      resetPassword()
     } else {
       setNotMatchPassword('Password not match')
     }
@@ -1101,6 +1123,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
         confirmNewPassword={confirmNewPassword}
         messageError={notMatchPassword}
         onFinishFailed={handleFailedResetPassword}
+        loading={loading}
       />
 
       <SuccessAddDataModal

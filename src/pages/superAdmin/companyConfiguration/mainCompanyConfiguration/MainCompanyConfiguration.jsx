@@ -4,10 +4,10 @@ import AddButton from '@common/buttons/addButton/AddButton'
 import CompanyTable from '@common/tables/companyTable/CompanyTable'
 import { Link } from 'react-router-dom'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import FilterRadio from '@common/buttons/FilterButton/FilterRadio'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
-import { Button, Col, Row } from 'antd';
+import { Col, Row } from 'antd';
 
 const MainCompanyConfiguration = () => {
 
@@ -43,14 +43,14 @@ const MainCompanyConfiguration = () => {
   };
   // end of count handler
 
-  const treeData = [
+  const radioData = [
     {
-      title: 'Status',
-      key: 'is_active',
+      key: 'True',
+      label: 'Status Active',
     },
     {
-      title: 'Company Name',
-      key: 'company_name',
+      key: 'False',
+      label: 'Status Not Active',
     },
   ];
 
@@ -80,7 +80,7 @@ const MainCompanyConfiguration = () => {
           <SearchBox onSearch={handleSearch} placeholder='Search by Company Name' /> 
             </Col>
         <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
-          <FilterButton onFilter={handleFilter} treeData={treeData} />
+          <FilterRadio onFilter={handleFilter} radioData={radioData} />
         </Col>
         <Col xs={24} md={8} lg={8} xl={6} xxl={3}>
           <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
