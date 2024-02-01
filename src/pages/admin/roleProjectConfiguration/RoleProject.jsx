@@ -2,19 +2,16 @@ import React, { useState, useEffect, } from 'react'
 import { BiEdit } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom'
 import { MdOutlineDelete } from 'react-icons/md'
+import { AiOutlineSearch } from 'react-icons/ai'
 import { PiWarningCircleBold } from "react-icons/pi"
 import { Row, Col, Table, Input, Button, Flex, Modal, Form, Space } from 'antd'
-import { AiOutlineSearch, AiOutlinePlus, AiOutlineFileSearch, } from 'react-icons/ai'
 import AddButton from '@common/buttons/addButton/AddButton'
-import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import SuccessModal from '@common/modals/successModal/SuccessModal'
 import FailedModal from '@common/modals/failedModal/FailedModal'
 import Cookies from 'js-cookie'
 import axios from 'axios'
-import dayjs from 'dayjs'
 
 const RoleProject = () => {
   // Declaration
@@ -78,7 +75,7 @@ const RoleProject = () => {
       // console.log("Role Projects", RoleProjects);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.log("Error", error);
     }
   }
 
@@ -264,7 +261,7 @@ const RoleProject = () => {
       setLoading(false);
       setOpenAddModal(false);
       setOpenFailedModal(true);
-      console.log(error, values);
+      console.log("Error", error, "Values", values);
     }
   }
 
@@ -277,7 +274,7 @@ const RoleProject = () => {
   const editRoleProject = async (values) => {
     try {
       setLoading(true);
-      console.log("Values", values);
+      // console.log("Values", values);
       const response = await axios.put(`http://103.82.93.38/api/v1/role_project/${uuid}`, values, {
         headers: {
           Authorization: token,
@@ -295,7 +292,7 @@ const RoleProject = () => {
       setLoading(false);
       setOpenEditModal(false);
       setOpenFailedModal(true);
-      console.log(error, values);
+      console.log("Error", error, "Values", values);
     }
   }
 
@@ -325,7 +322,7 @@ const RoleProject = () => {
       setLoading(false);
       setOpenDeleteModal(false);
       setOpenFailedModal(true);
-      console.log(error);
+      console.log("Error", error);
     }
   }
 

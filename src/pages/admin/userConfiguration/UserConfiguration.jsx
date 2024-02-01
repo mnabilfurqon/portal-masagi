@@ -6,6 +6,7 @@ import { Table, Form, Space, Button, Row, Col, Input, Modal, Select, Radio } fro
 import SuccessModal from '@common/modals/successModal/SuccessModal'
 import FailedModal from '@common/modals/failedModal/FailedModal'
 import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import Cookies from 'js-cookie'
@@ -146,6 +147,22 @@ const UserConfiguration = () => {
       key: 'role',
     },
   ];
+
+  // Filter by Division Handler
+  const status = [
+    {
+      key: "all",
+      label: "All Status",
+    },
+    {
+      key: "active",
+      label: "Active",
+    },
+    {
+      key: "not_active",
+      label: "Not Active",
+    },
+  ]
 
   const itemsSort = [
     {
@@ -328,7 +345,8 @@ const UserConfiguration = () => {
         />
       </Col>
       <Col>
-        <FilterButton onFilter={handleFilter} treeData={treeData} />
+        {/* <FilterButton onFilter={handleFilter} treeData={treeData} /> */}
+        <FilterDropdown items={status} text="Filter "className="sort-button"/>
       </Col>
       <Col>
         <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
@@ -346,17 +364,6 @@ const UserConfiguration = () => {
       dataSource={sortedData} 
       loading={loading}
     />
-
-          {/* <EditUser 
-            form={form}
-            open={isEditModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            onFinishFailed={failedUpdateUser}
-            onFilter={updateUser}
-            uuid={uuid} 
-            // onClick={setIsEditModalOpen(true)}
-          /> */}
 
     {/* Edit Modal */}
     <Modal

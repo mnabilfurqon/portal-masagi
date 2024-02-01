@@ -23,6 +23,7 @@ const TypeProjectConfiguration = () => {
 
   const [form] = Form.useForm();
   const [formEdit] = Form.useForm();
+  const [uuid, setUuid] = useState();
   const [value, setValue] = useState('Website Development');
   const [loading, setLoading] = useState();
   const [formLayout, setFormLayout] = useState('vertical');
@@ -77,7 +78,7 @@ const TypeProjectConfiguration = () => {
       // console.log("Type Projects", typeProjects);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.log("Error", error);
     }
   }
 
@@ -158,10 +159,10 @@ const TypeProjectConfiguration = () => {
       key: 'action',
       render: (record) => (
         <Space size="middle">
-          <Button type="none" style={{margin:0, padding:0}} onClick={() => setOpenEditModal(true)}>
+          <Button type="none" style={{margin:0, padding:0}} onClick={() => handleEditClick(record)}>
             <BiEdit className="edit-icon" size="25" />
           </Button>
-          <Button type="none" style={{margin:0, padding:0}} onClick={() => setOpenDeleteModal(true)}>
+          <Button type="none" style={{margin:0, padding:0}} onClick={() => handleDeleteClick(record)}>
             <MdOutlineDelete className="icon-delete" size="25" />
           </Button>
         </Space>
@@ -225,6 +226,30 @@ const TypeProjectConfiguration = () => {
   const onCancelFailedModal = () => {
     setOpenFailedModal(false)
   }
+
+  // Edit Button Handler
+  const handleEditClick = (record) => {
+    // console.log(record);
+    const uuid = record.key;
+    const name = record.name;
+    const desc = record.description;
+
+    formEdit.setFieldsValue({
+      name: name, 
+      description: desc
+    })
+    setUuid(uuid);
+    // setEditValue(name);
+    setOpenEditModal(true);
+  }
+
+  // Delete Button Handler
+  const handleDeleteClick = (record) => {
+    const uuid = record.key;
+    setUuid(uuid);
+    setOpenDeleteModal(true);
+    // console.log(uuid);
+  }
   
   // Post Type Project
   const addTypeProject = async (values) => {
@@ -261,12 +286,12 @@ const TypeProjectConfiguration = () => {
   const editTypeProject = async (values) => {
     try {
       setLoading(true);
-      console.log("Values", values);
-      // const response = await axios.put("http://103.82.93.38/api/v1/type_project/", values, {
-      //   headers: {
-      //     Authorization: token,
-      //   }
-      // });
+      // console.log("Values", values);
+      const response = await axios.put(`http://103.82.93.38/api/v1/type_project/${uuid}`, values, {
+        headers: {
+          Authorization: token,
+        }
+      });
       setTimeout(() => {
         setLoading(false);
         setOpenEditModal(false);
@@ -292,11 +317,11 @@ const TypeProjectConfiguration = () => {
    const deleteTypeProject = async () => {
     try {
       setLoading(true);
-      // const response = await axios.delete(`http://103.82.93.38/api/v1/type_project/${uuid}`, {
-      //   headers: {
-      //     Authorization: token,
-      //   }
-      // });
+      const response = await axios.delete(`http://103.82.93.38/api/v1/type_project/${uuid}`, {
+        headers: {
+          Authorization: token,
+        }
+      });
       setTimeout(() => {
         setLoading(false);
         setOpenDeleteModal(false);
@@ -309,7 +334,7 @@ const TypeProjectConfiguration = () => {
       setLoading(false);
       setOpenDeleteModal(false);
       setOpenFailedModal(true);
-      console.log(error, values);
+      console.log("Error", error);
     }
   }
 
@@ -401,7 +426,7 @@ const TypeProjectConfiguration = () => {
         onFinishFailed={failedEditTypeProject}
         requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
         initialValues={{
-          name: value,
+          // name: value,
         }}
         >
           <Form.Item label="Type Project" name="name" rules={[ { required: true, message: "Please input your type project name!" }, ]}>

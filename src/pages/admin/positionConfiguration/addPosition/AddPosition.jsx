@@ -65,27 +65,6 @@ const AddPosition = (props) => {
         }
       : null;
   
-  // // Add Position to API
-  // const addPosition = async (values) => {
-  //   try {
-  //     const response = await axios.post("http://103.82.93.38/api/v1/position/", values, {
-  //       headers: {
-  //         Authorization: token,
-  //       }
-  //     });
-  //     setLoading(true);
-  //     setTimeout(() => {
-  //       setLoading(false);
-  //       setIsModalOpen(false);
-  //       setIsSuccessModalOpen(true);
-  //       setValue("");
-  //       console.log("New position added!");
-  //     }, 3000);
-  //   } catch (error) {
-  //     console.log(error, values);
-  //   }
-  // }
-  
   return (
   <>
     <AddButton handleClick={props.showModal} buttonText="Add Position" />
@@ -100,7 +79,7 @@ const AddPosition = (props) => {
         <Form
             {...formItemLayout}
             layout={formLayout}
-            form={form}
+            form={props.form}
             onFinish={props.onFinish}
             initialValues={{
                 layout: formLayout,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Col, Row, Table, DatePicker, Input, Button, Flex, Avatar } from 'antd'
 import { IoIosSearch } from "react-icons/io"
-import { AiOutlineFileSearch } from 'react-icons/ai'
+import { AiOutlineFileSearch, AiOutlineUser } from 'react-icons/ai'
 import axios from 'axios'
 import dayjs from "dayjs"
 import Cookies from 'js-cookie'
@@ -92,7 +92,7 @@ const columns = [
             // console.log("employee record", record)
             return (
             <Flex gap={4} align='center'>
-                <Avatar size={55}/>
+                <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                 <div style={{ margin: 0, padding: 0, }}>
                     <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
                     <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
@@ -135,7 +135,7 @@ const columns = [
         title: "Action",
         key: "action",
         render: (record) => (
-            <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+            <Button className="action-button" type="none" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                 <AiOutlineFileSearch className="action-icon" />
             </Button>
           ),

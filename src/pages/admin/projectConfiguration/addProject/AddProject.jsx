@@ -220,7 +220,7 @@ const AddProject = () => {
               message: 'Please input your project start date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" style={{ width: "100%" }}/>
         </Form.Item>
         <Form.Item 
           name="due_date" 
@@ -233,7 +233,7 @@ const AddProject = () => {
               message: 'Please input your project due date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" disabledDate={disableDate}/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" disabledDate={disableDate} style={{ width: "100%" }}/>
         </Form.Item>
 
         <Flex gap={20} align='center' justify='end'>

@@ -54,7 +54,7 @@ const AttendanceConfiguration = () => {
       navigate('/login');
     }
     getUserLocation();
-    console.log(cookies);
+    // console.log(cookies);
   }, [token, navigate,]);
 
   const day = dayjs();
@@ -150,6 +150,7 @@ const AttendanceConfiguration = () => {
     const imageSrc = webcamRefIn.current.getScreenshot()
     handleCaptureIn(imageSrc)
     setCheckInImage(imageSrc)    
+    // getUserLocation();
     setLoading(true);
     setTimeout(() => {
       setLoading(false);  
@@ -578,7 +579,7 @@ const AttendanceConfiguration = () => {
             <div className='attendance' id="after-checkout"  style={{ display:"block"}}>
             <center>
               {/* Image */}
-              <Avatar src={cookies.check_out_image} size={100} shape='circle'/>
+              {/* <Avatar src={cookies.check_out_image} size={100} shape='circle'/> */}
               <Image src={DoneAttendance} preview={false} width={100} />
               <p style={{ fontWeight: "bold", color: "black", }}>Checked out successfully!</p>
 
