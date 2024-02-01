@@ -12,6 +12,7 @@ const OvertimeDetail = () => {
     const navigate = useNavigate();
     const { uuid } = useParams();
     const token = Cookies.get('token');
+    const employeeUuid = Cookies.get('employee_uuid');
     const [overtimeData, setOvertimeData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
@@ -19,6 +20,7 @@ const OvertimeDetail = () => {
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [respondRejectModalVisible, setRespondRejectModalVisible] = useState(false);
     const [failedAddDataModalVisible, setFailedAddDataModalVisible] = useState(false);
+    let notRejectedByMe = false;
 
     const getOvertimeDetailData = async () => {
         try {
@@ -164,16 +166,91 @@ const OvertimeDetail = () => {
         onClose: handleFailedAddDataModal,
     };
 
+    if (overtimeData && overtimeData.reject_by !== null) {
+        if (overtimeData.reject_by.uuid !== employeeUuid) {
+            notRejectedByMe = true;
+        }
+    }
+
   return (
     <Spin spinning={loading} size='large' tip="Get Selected Data...">
         <PermitRequestDetailTable data={overtimeData} />
         <Flex justify='flex-end' gap={20} >
-        <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
-            Approve
-        </Button>
-        <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
-            Reject
-        </Button>
+
+        {/* for HR */}
+        {overtimeData && overtimeData.hr_employee && overtimeData.hr_employee.uuid === employeeUuid && overtimeData.approved_by_hr === false && overtimeData && overtimeData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+        
+        {overtimeData && overtimeData.hr_employee && overtimeData.hr_employee.uuid === employeeUuid && overtimeData.approved_by_hr === false && overtimeData && overtimeData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.hr_employee && overtimeData.hr_employee.uuid === employeeUuid && overtimeData.approved_by_hr === "Pending" && overtimeData && overtimeData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.hr_employee && overtimeData.hr_employee.uuid === employeeUuid && overtimeData.approved_by_hr === "Pending" && overtimeData && overtimeData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.hr_employee && overtimeData.hr_employee.uuid === employeeUuid && overtimeData.approved_by_hr === false && overtimeData && overtimeData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.hr_employee && overtimeData.hr_employee.uuid === employeeUuid && overtimeData.approved_by_hr === false && overtimeData && overtimeData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {/* for Team Leader */}
+        {overtimeData && overtimeData.team_lead_employee && overtimeData.team_lead_employee.uuid === employeeUuid && overtimeData.approved_by_team_lead === false && overtimeData && overtimeData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.team_lead_employee && overtimeData.team_lead_employee.uuid === employeeUuid && overtimeData.approved_by_team_lead === false && overtimeData && overtimeData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.team_lead_employee && overtimeData.team_lead_employee.uuid === employeeUuid && overtimeData.approved_by_team_lead === "Pending" && overtimeData && overtimeData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.team_lead_employee && overtimeData.team_lead_employee.uuid === employeeUuid && overtimeData.approved_by_team_lead === "Pending" && overtimeData && overtimeData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.team_lead_employee && overtimeData.team_lead_employee.uuid === employeeUuid && overtimeData.approved_by_team_lead === false && overtimeData && overtimeData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {overtimeData && overtimeData.team_lead_employee && overtimeData.team_lead_employee.uuid === employeeUuid && overtimeData.approved_by_team_lead === false && overtimeData && overtimeData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
         </Flex>
 
         <DialogModal {...propsApproveDialogModal} />

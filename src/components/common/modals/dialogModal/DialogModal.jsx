@@ -3,7 +3,7 @@ import './dialogModal.css'
 import { Modal, Button } from 'antd';
 
 const DialogModal = (props) => {
-    const { visible, handleYes, handleNo, textNoOption, textYesOption, dialogTitle, dialogText } = props;
+    const { visible, handleYes, handleNo, textNoOption, textYesOption, dialogTitle, dialogText, loading } = props;
     return (
         <Modal
         open={visible}
@@ -14,8 +14,8 @@ const DialogModal = (props) => {
         footer={
             <div>  
                 <Button className="no-button" onClick={handleNo}>{textNoOption}</Button>
-                {textYesOption === "APPROVE" ? <Button className="yes-button" onClick={handleYes}>{textYesOption}</Button> :
-                <Button className="reject-button" onClick={handleYes}>{textYesOption}</Button> }
+                {textYesOption === "APPROVE" ? <Button loading={loading} className="yes-button" onClick={handleYes}>{textYesOption}</Button> :
+                <Button loading={loading} className="reject-button" onClick={handleYes}>{textYesOption}</Button> }
             </div>
         }
         width={450}
