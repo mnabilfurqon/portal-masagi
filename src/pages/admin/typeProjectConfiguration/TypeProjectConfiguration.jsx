@@ -86,6 +86,7 @@ const TypeProjectConfiguration = () => {
     return {
       key: item.uuid,
       name: item.name,
+      description: item.description,
     }
   });
 

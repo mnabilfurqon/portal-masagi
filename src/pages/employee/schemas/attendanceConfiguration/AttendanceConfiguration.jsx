@@ -246,6 +246,11 @@ const AttendanceConfiguration = () => {
   }
 
   const onOkSuccessCheckInModal = () => {
+    var in16Hours = 2/3;
+    Cookies.set("check_in_time", checkIn.time, { expires: in16Hours });
+    Cookies.set("check_in_location", checkIn.location, { expires: in16Hours });
+    Cookies.set("check_in_image", checkInImage, { expires: in16Hours });
+
     document.getElementById("before-checkin").style.display="none";
     document.getElementById("before-checkout").style.display="block";
     setOpenCheckInSuccessModal(false);
@@ -256,6 +261,11 @@ const AttendanceConfiguration = () => {
   }
 
   const onOkSuccessCheckOutModal = () => {
+    var in8Hours = 8/24;
+    Cookies.set("check_out_time", checkOut.time, { expires: in8Hours });
+    Cookies.set("check_out_location", checkOut.location, { expires: in8Hours });
+    Cookies.set("check_out_image", checkOutImage, { expires: in8Hours });
+
     document.getElementById("before-checkout").style.display="none";
     // document.getElementById("after-checkout").style.display="block";
     setLoading(false);
@@ -303,10 +313,10 @@ const AttendanceConfiguration = () => {
         let checkInTime = day;
         setCheckIn({time: dayjs(checkInTime).format("DD-MM-YYYY hh:mm A"), location: values.geotagging_in})
 
-        var in16Hours = 2/3;
-        Cookies.set("check_in_time", checkInTime, { expires: in16Hours });
-        Cookies.set("check_in_location", values.geotagging_in, { expires: in16Hours });
-        Cookies.set("check_in_image", checkInImage, { expires: in16Hours });
+        // var in16Hours = 2/3;
+        // Cookies.set("check_in_time", checkInTime, { expires: in16Hours });
+        // Cookies.set("check_in_location", values.geotagging_in, { expires: in16Hours });
+        // Cookies.set("check_in_image", checkInImage, { expires: in16Hours });
         // Cookies.set("check_in_image", checkInFile, { expires: in16Hours });
 
         setOpenCheckInSuccessModal(true);
@@ -347,10 +357,10 @@ const AttendanceConfiguration = () => {
       let checkOutTime = day;
       setCheckIn({time: dayjs(checkOutTime).format("DD-MM-YYYY hh:mm A"), location: values.geotagging_in})
 
-      var in8Hours = 8/24;
-      Cookies.set("check_out_time", checkOutTime, { expires: in8Hours });
-      Cookies.set("check_out_location", values.geotagging_out, { expires: in8Hours });
-      Cookies.set("check_out_image", checkOutImage, { expires: in8Hours });
+      // var in8Hours = 8/24;
+      // Cookies.set("check_out_time", checkOutTime, { expires: in8Hours });
+      // Cookies.set("check_out_location", values.geotagging_out, { expires: in8Hours });
+      // Cookies.set("check_out_image", checkOutImage, { expires: in8Hours });
       // Cookies.set("check_out_image", checkOutFile, { expires: in8Hours });
 
       setOpenCheckOutSuccessModal(true);

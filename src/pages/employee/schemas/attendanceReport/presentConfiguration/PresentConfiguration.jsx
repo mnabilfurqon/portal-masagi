@@ -170,8 +170,7 @@ const PresentConfiguration = () => {
   const getAttendanceSummary = async () => {
     try {
       setLoading(true);
-      // const response = await axios.post(`http://103.82.93.38/api/v1/attendance/summary`, values,
-      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/summary?date=${filterValue}`,
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/summary_daily?date=${filterValue}`,
         {
           headers: { Authorization: token },
         }
@@ -189,7 +188,7 @@ const PresentConfiguration = () => {
       // console.log("total leaves", attendanceSummary.total_permit_by_type["Lembur"]);
       // console.log(response);
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -210,7 +209,7 @@ const PresentConfiguration = () => {
       // console.log("attendance company", attendanceCompany)
       // console.log(response);
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -241,11 +240,11 @@ const PresentConfiguration = () => {
         }
       );
       setLoading(false);
-      setReportDaily(response.data.items)
-      // console.log("Report Daily", reportDaily)
+      setReportDaily(response.data.items);
+      // console.log("Report Daily", reportDaily);
       // console.log(response);
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -258,7 +257,7 @@ const PresentConfiguration = () => {
       const total_hours = totalInSec/3600;
       const total_minutes = (totalInSec%3600)/60;
       const total_second = totalInSec%60;
-      return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+total_second;
+      return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
       // return totalInSec;
     }
 
@@ -276,7 +275,7 @@ const PresentConfiguration = () => {
           const total_hours = totalInSec/3600;
           const total_minutes = (totalInSec%3600)/60;
           const total_second = totalInSec%60;
-          return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+total_second;
+          return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
           // return totalInSec;
       } else {
           return "00:00:00";
@@ -293,72 +292,6 @@ const PresentConfiguration = () => {
         status: totalLateness(item.check_in_date),
     }
   })
-
-  const data = [
-    {
-      uuid: "1",
-      employee: "Albert",
-      in_time: "08.00 AM",
-      out_time: "05.00 PM",
-      total_hours: "09:00:00",
-      lateness: "00:000:00",
-      status: "on-time",
-    },
-    {
-      uuid: "2",
-      employee: "Banny",
-      in_time: "08.00 AM",
-      out_time: "05.00 PM",
-      total_hours: "09:00:00",
-      lateness: "00:000:00",
-      status: "on-time",
-    },
-    {
-      uuid: "3",
-      employee: "Flauny",
-      in_time: "08.00 AM",
-      out_time: "05.00 PM",
-      total_hours: "09:00:00",
-      lateness: "00:000:00",
-      status: "on-time",
-    },
-    {
-      uuid: "4",
-      employee: "Harry",
-      in_time: "08.50 AM",
-      out_time: "05.00 PM",
-      total_hours: "08:10:00",
-      lateness: "00:50:00",
-      status: "late",
-    },
-    {
-      uuid: "5",
-      employee: "Klaust",
-      in_time: "08.00 AM",
-      out_time: "05.00 PM",
-      total_hours: "09:00:00",
-      lateness: "00:00:00",
-      status: "on-time",
-    },
-    {
-      uuid: "6",
-      employee: "Ian",
-      in_time: "08.30 AM",
-      out_time: "05.00 PM",
-      total_hours: "08:03:00",
-      lateness: "00:30:00",
-      status: "late",
-    },
-    {
-      uuid: "7",
-      employee: "Zack",
-      in_time: "08.00 AM",
-      out_time: "05.00 PM",
-      total_hours: "09:00:00",
-      lateness: "00:00:00",
-      status: "on-time",
-    },
-  ]
 
   // Filter by Division Handler
   const division = [
@@ -386,7 +319,7 @@ const PresentConfiguration = () => {
 
   return (
     <>
-      <Spin size='large' spinning={loading}>
+      <Spin size='large' spinning={loading} tip="Loading...">
       <Row gutter={16}>
         <Col xs={24} sm={24} md={20} lg={20} xl={20} xxl={20}>
           <p className='week'>{dayDate}</p>
@@ -489,9 +422,7 @@ const PresentConfiguration = () => {
           // dataSource={dataSource}
           columns={columns}
           onChange={onChangeTable}
-          scroll={{
-            x: 200,
-          }}
+          scroll={{ x: 200 }}
           pagination={{
             pageSize: countValue,
           }}

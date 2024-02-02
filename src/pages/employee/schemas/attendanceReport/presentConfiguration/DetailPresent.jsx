@@ -101,7 +101,7 @@ const DetailPresent = () => {
         const total_hours = totalInSec/3600;
         const total_minutes = (totalInSec%3600)/60;
         const total_second = totalInSec%60;
-        return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+total_second;
+        return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
         // return totalInSec;
     }
 
@@ -119,7 +119,7 @@ const DetailPresent = () => {
             const total_hours = totalInSec/3600;
             const total_minutes = (totalInSec%3600)/60;
             const total_second = totalInSec%60;
-            return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+total_second;
+            return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
             // return totalInSec;
         } else {
             return "00:00:00";
