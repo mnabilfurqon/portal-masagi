@@ -21,6 +21,7 @@ const OfficialTravelMain = () => {
   const monthPickerFormat = 'YYYY-MM';
   const navigate = useNavigate();
   const token = Cookies.get("token");
+  const employeeUuid = Cookies.get("employee_uuid");
   const [uuidPermit, setUuidPermit] = useState("");
   const [loading, setLoading] = useState(false);
   const [approveModalVisible, setApproveModalVisible] = useState(false);
@@ -167,12 +168,31 @@ const OfficialTravelMain = () => {
                 <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                     <AiOutlineFileSearch className="action-icon" />
                 </Button>
-                <Button style={{border: 'none'}} type="primary" size="small" onClick={handleApproveModalOpen} ghost>
-                    <FaRegCheckSquare className="accept-icon"/>
-                </Button>
-                <Button style={{border: 'none'}} type="primary" size="small" onClick={handleRejectModalOpen} ghost>
-                    <CgCloseR className="reject-icon"/>
-                </Button>
+
+                    {/* for HR */}
+                    {record.hr && record.hr.uuid === employeeUuid && record.status_by_hr === 'pending' && (
+                        <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleApproveModalOpen(record)}} ghost>
+                            <FaRegCheckSquare className="accept-icon" />
+                        </Button>
+                    )}
+                    {record.hr && record.hr.uuid === employeeUuid && record.status_by_hr === 'pending' && (
+                        <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleRejectModalOpen(record)}} ghost>
+                            <CgCloseR className="reject-icon" />
+                        </Button>
+                    )}
+                    
+                    {/* for Team Leader */}
+                    {record.team_leader && record.team_leader.uuid === employeeUuid && record.status_by_team_leader === 'pending' && (
+                        <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleApproveModalOpen(record)}} ghost>
+                            <FaRegCheckSquare className="accept-icon" />
+                        </Button>
+                    )}
+                    {record.team_leader && record.team_leader.uuid === employeeUuid && record.status_by_team_leader === 'pending' && (
+                        <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleRejectModalOpen(record)}} ghost>
+                            <CgCloseR className="reject-icon" />
+                        </Button>
+                    )}
+    
             </Flex>
         ),
     },
@@ -278,6 +298,7 @@ const OfficialTravelMain = () => {
     visible: approveModalVisible,
     handleYes: handleApproveModalYes,
     handleNo: handleApproveModalNo,
+    loading: loading,
     textNoOption: "CANCEL",
     textYesOption: "APPROVE",
     dialogTitle: "Attention",
@@ -296,6 +317,7 @@ const OfficialTravelMain = () => {
     visible: rejectModalVisible,
     handleYes: handleRejectModalYes,
     handleNo: handleRejectModalNo,
+    loading: loading,
     textNoOption: "CANCEL",
     textYesOption: "REJECT",
     dialogTitle: "Attention",
