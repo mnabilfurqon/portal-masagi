@@ -57,11 +57,11 @@ const PermitEmployee = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col
-          xs={8}
-          md={{ span: 3, offset: 2 }}
-          lg={{ span: 4, offset: 2 }}
-          xl={{ span: 1, offset: 4 }}
-          xxl={{ span: 2, offset: 7 }}
+          xs={16}
+          md={12}
+          lg={8}
+          xl={{ span: 5, offset: 3 }}
+          xxl={{ span: 3, offset: 7 }}
         >
           <Button
             onClick={handleAddButton}

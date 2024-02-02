@@ -786,7 +786,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/official-travel/detail"
+              path="/official-travel/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailOfficialTravelData />
@@ -813,7 +813,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/leave/detail"
+              path="/leave/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailLeaveData />
@@ -840,7 +840,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/overtime/detail"
+              path="/overtime/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailOvertimeData />
@@ -867,7 +867,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/permit/detail"
+              path="/permit/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailPermitData />
@@ -1189,7 +1189,6 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
-
             {/* End of Permit Configuration Route */}
 
             {/* Task Management Configuration Route */}

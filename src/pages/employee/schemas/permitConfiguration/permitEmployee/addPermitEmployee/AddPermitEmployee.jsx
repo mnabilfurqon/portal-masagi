@@ -28,8 +28,10 @@ const AddPermitEmployee = () => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fileIn, setFileIn] = useState(null);
 
   const addPermit = async (values) => {
+    console.log(values);
     try {
       setLoading(true);
       values.date_permit = dayjs(values.date_permit, "DD/MM/YYYY").format(
@@ -44,7 +46,7 @@ const AddPermitEmployee = () => {
       form.append("reason", data.reason);
       form.append("date_permit", data.date_permit);
       form.append("end_date_permit", data.end_date_permit);
-      form.append("additional_file", data.additional_file);
+      form.append("additional_file", data.additional_file.file);
       await axios.post("http://103.82.93.38/api/v1/permit/", form, {
         headers: {
           Authorization: token,
@@ -113,18 +115,21 @@ const AddPermitEmployee = () => {
     return current && current < dayjs().startOf("day");
   };
 
-  const beforeUpload = (file) => {
-    const isPDF = file.type === "application/pdf";
-    if (!isPDF) {
-      message.error("Only PDF files are allowed!");
+  const handleCaptureIn = (file) => {
+    if (file) {
+      const fileObject = file instanceof File ? file : file.originFileObj;
+      const renamedFile = new File([fileObject], "photo_in.png", { type: "image/png" });
+      setFileIn(renamedFile);
     }
-
+  };
+  
+  const beforeUpload = (file) => {
     const isSizeAccepted = file.size / 1024 / 1024 <= 5;
     if (!isSizeAccepted) {
       message.error("File must be no more than 5 MB!");
     }
-
-    return isPDF && isSizeAccepted;
+  
+    return isSizeAccepted;
   };
 
   const successTitle = (
@@ -228,8 +233,11 @@ const AddPermitEmployee = () => {
         >
           <Upload
             beforeUpload={beforeUpload}
+            customRequest={({ file, onSuccess }) => {
+              handleCaptureIn(file);
+              onSuccess();
+            }}
             maxCount={1}
-            accept=".pdf"
             progress={{
               strokeColor: {
                 "0%": "#629093",
