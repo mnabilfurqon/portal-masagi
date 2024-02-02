@@ -13,6 +13,7 @@ const OfficialTravelDetail = () => {
   const navigate = useNavigate();
   const { uuid } = useParams();
   const token = Cookies.get('token');
+  const employeeUuid = Cookies.get('employee_uuid');
   const [officialTravelData, setOfficialTravelData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [approveModalVisible, setApproveModalVisible] = useState(false);
@@ -20,6 +21,7 @@ const OfficialTravelDetail = () => {
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [respondRejectModalVisible, setRespondRejectModalVisible] = useState(false);
   const [failedAddDataModalVisible, setFailedAddDataModalVisible] = useState(false);
+  let notRejectedByMe = false;
 
   const getOfficialTravelDetailData = async () => {
     try {
@@ -165,16 +167,91 @@ const OfficialTravelDetail = () => {
     onClose: handleFailedAddDataModal,
   };
 
+  if (officialTravelData && officialTravelData.reject_by !== null) {
+    if (officialTravelData.reject_by.uuid !== employeeUuid) {
+        notRejectedByMe = true;
+    }
+  }
+
   return (
     <Spin spinning={loading} size='large' tip="Get Selected Data...">
       <PermitRequestDetailTable data={officialTravelData} />
       <Flex justify='flex-end' gap={20} >
-      <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
-        Approve
-      </Button>
-      <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
-        Reject
-      </Button>
+
+        {/* for HR */}
+        {officialTravelData && officialTravelData.hr_employee && officialTravelData.hr_employee.uuid === employeeUuid && officialTravelData.approved_by_hr === false && officialTravelData && officialTravelData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+        
+        {officialTravelData && officialTravelData.hr_employee && officialTravelData.hr_employee.uuid === employeeUuid && officialTravelData.approved_by_hr === false && officialTravelData && officialTravelData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.hr_employee && officialTravelData.hr_employee.uuid === employeeUuid && officialTravelData.approved_by_hr === "Pending" && officialTravelData && officialTravelData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.hr_employee && officialTravelData.hr_employee.uuid === employeeUuid && officialTravelData.approved_by_hr === "Pending" && officialTravelData && officialTravelData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.hr_employee && officialTravelData.hr_employee.uuid === employeeUuid && officialTravelData.approved_by_hr === false && officialTravelData && officialTravelData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.hr_employee && officialTravelData.hr_employee.uuid === employeeUuid && officialTravelData.approved_by_hr === false && officialTravelData && officialTravelData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {/* for Team Leader */}
+        {officialTravelData && officialTravelData.team_lead_employee && officialTravelData.team_lead_employee.uuid === employeeUuid && officialTravelData.approved_by_team_lead === false && officialTravelData && officialTravelData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.team_lead_employee && officialTravelData.team_lead_employee.uuid === employeeUuid && officialTravelData.approved_by_team_lead === false && officialTravelData && officialTravelData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.team_lead_employee && officialTravelData.team_lead_employee.uuid === employeeUuid && officialTravelData.approved_by_team_lead === "Pending" && officialTravelData && officialTravelData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.team_lead_employee && officialTravelData.team_lead_employee.uuid === employeeUuid && officialTravelData.approved_by_team_lead === "Pending" && officialTravelData && officialTravelData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.team_lead_employee && officialTravelData.team_lead_employee.uuid === employeeUuid && officialTravelData.approved_by_team_lead === false && officialTravelData && officialTravelData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {officialTravelData && officialTravelData.team_lead_employee && officialTravelData.team_lead_employee.uuid === employeeUuid && officialTravelData.approved_by_team_lead === false && officialTravelData && officialTravelData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
       </Flex>
 
       <DialogModal {...propsApproveDialogModal} />
