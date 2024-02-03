@@ -22,21 +22,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
   const handleAddUserClick = (record) => {
     const value = record.key;
     navigate(`/employee/add-user/${value}`);
-    // navigate(`/user/add-user`);
   }
-
-  // Handlre value filter button
-  const filterArray = Array.isArray(filterValue) ? filterValue : [];
-  const encodedFilterValue = filterArray.map(value => encodeURIComponent(value)).join(',');
-  // End of handler value filter button
-
-  // handle search value for status
-  if (searchValue === 'active') {
-    searchValue = 1;
-  } else if (searchValue === 'not active') {
-    searchValue = 0;
-  }
-  // end of handle search value for status
 
   const [tableParams, setTableParams] = useState({
     pagination : {
@@ -70,7 +56,8 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
           page: page,
           per_page: countValue,
           search: searchValue,
-          search_by: encodedFilterValue? encodedFilterValue : 'name',
+          is_active: filterValue ? filterValue : null,
+          search_by: 'name',
           desc: sortValue === 'latestJoinDate' || sortValue === 'zToAEmployee' ? true : false,
           sort_by: sortValue === 'latestJoinDate' || sortValue === 'oldestJoinDate' ? 'created_date' : 'name',
         },

@@ -12,6 +12,7 @@ const LeaveDetail = () => {
     const navigate = useNavigate();
     const { uuid } = useParams();
     const token = Cookies.get("token");
+    const employeeUuid = Cookies.get("employee_uuid");
     const [leaveData, setLeaveData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
@@ -19,6 +20,7 @@ const LeaveDetail = () => {
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [respondRejectModalVisible, setRespondRejectModalVisible] = useState(false);
     const [failedAddDataModalVisible, setFailedAddDataModalVisible] = useState(false);
+    let notRejectedByMe = false;
 
     const getLeaveDetailData = async () => {
         try {
@@ -163,17 +165,92 @@ const LeaveDetail = () => {
         visible: failedAddDataModalVisible,
         onClose: handleFailedAddDataModal,
     };
-    
+
+    if (leaveData && leaveData.reject_by !== null) {
+        if (leaveData.reject_by.uuid !== employeeUuid) {
+            notRejectedByMe = true;
+        }
+    }
+
   return (
     <Spin spinning={loading} size='large' tip="Get Selected Data...">
         <PermitRequestDetailTable data={leaveData} />
         <Flex justify='flex-end' gap={20} >
-        <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
-            Approve
-        </Button>
-        <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
-            Reject
-        </Button>
+
+        {/* for HR */}
+        {leaveData && leaveData.hr_employee && leaveData.hr_employee.uuid === employeeUuid && leaveData.approved_by_hr === false && leaveData && leaveData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+        
+        {leaveData && leaveData.hr_employee && leaveData.hr_employee.uuid === employeeUuid && leaveData.approved_by_hr === false && leaveData && leaveData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {leaveData && leaveData.hr_employee && leaveData.hr_employee.uuid === employeeUuid && leaveData.approved_by_hr === "Pending" && leaveData && leaveData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {leaveData && leaveData.hr_employee && leaveData.hr_employee.uuid === employeeUuid && leaveData.approved_by_hr === "Pending" && leaveData && leaveData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {leaveData && leaveData.hr_employee && leaveData.hr_employee.uuid === employeeUuid && leaveData.approved_by_hr === false && leaveData && leaveData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {leaveData && leaveData.hr_employee && leaveData.hr_employee.uuid === employeeUuid && leaveData.approved_by_hr === false && leaveData && leaveData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {/* for Team Leader */}
+        {leaveData && leaveData.team_lead_employee && leaveData.team_lead_employee.uuid === employeeUuid && leaveData.approved_by_team_lead === false && leaveData && leaveData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {leaveData && leaveData.team_lead_employee && leaveData.team_lead_employee.uuid === employeeUuid && leaveData.approved_by_team_lead === false && leaveData && leaveData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {leaveData && leaveData.team_lead_employee && leaveData.team_lead_employee.uuid === employeeUuid && leaveData.approved_by_team_lead === "Pending" && leaveData && leaveData.reject_by === null && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {leaveData && leaveData.team_lead_employee && leaveData.team_lead_employee.uuid === employeeUuid && leaveData.approved_by_team_lead === "Pending" && leaveData && leaveData.reject_by === null && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
+        {leaveData && leaveData.team_lead_employee && leaveData.team_lead_employee.uuid === employeeUuid && leaveData.approved_by_team_lead === false && leaveData && leaveData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='approve-permit-button' onClick={handleApproveModalOpen}>
+                Approve
+            </Button>
+        )}
+
+        {leaveData && leaveData.team_lead_employee && leaveData.team_lead_employee.uuid === employeeUuid && leaveData.approved_by_team_lead === false && leaveData && leaveData.reject_by !== null && notRejectedByMe && (
+            <Button type="primary" className='reject-permit-button' onClick={handleRejectModalOpen}>
+                Reject
+            </Button>
+        )}
+
         </Flex>
 
         <DialogModal {...propsApproveDialogModal} />

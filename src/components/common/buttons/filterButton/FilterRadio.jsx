@@ -3,7 +3,8 @@ import { Button, Dropdown, Radio, Flex, Space } from 'antd';
 import { BsFilter } from 'react-icons/bs';
 import './filterButton.css';
 
-const FilterRadio = ({ onFilter, radioData }) => {
+const FilterRadio = (props) => {
+  const { onFilter, radioData, title } = props;
   const [selectedValue, setSelectedValue] = useState(null);
 
   const handleRadioChange = (e) => {
@@ -42,7 +43,7 @@ const FilterRadio = ({ onFilter, radioData }) => {
     >
       <Flex justify='center' align='center'>
         <Button icon={<BsFilter />} className='filter-button'>
-          Filter
+          {title ? title : 'Filter'}
         </Button>
       </Flex>
     </Dropdown>
