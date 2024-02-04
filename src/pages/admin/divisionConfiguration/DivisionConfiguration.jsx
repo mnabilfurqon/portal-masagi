@@ -19,7 +19,7 @@ import { Row, Col } from 'antd';
 const DivisionConfiguration = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
-  const [actionValue, setActionValue] = useState("");
+  const [actionValue, setActionValue] = useState('');
   const [uuid, setUuid] = useState("");
   const [defaultDivisionName, setDefaultDivisionName] = useState("");
   const [selectedLoading, setSelectedLoading] = useState(false);
@@ -97,7 +97,7 @@ const DivisionConfiguration = () => {
       });
       setIsAddModalOpen(false);
       setIsSuccessAddDataModalOpen(true);
-      setActionValue("");
+      setActionValue('');
     } catch (error) {
       console.log(error);
     } finally {
@@ -218,6 +218,7 @@ const DivisionConfiguration = () => {
   // Cancel Add Modal Handler
   const handleCancelAddModal = () => {
     setIsAddModalOpen(false);
+    setActionValue('');
   }
 
   // Success Add Modal Handler
@@ -238,6 +239,7 @@ const DivisionConfiguration = () => {
   // Cancel Edit Modal Handler
   const handleCancelEditModal = () => {
     setIsEditModalOpen(false);
+    setActionValue('');
   }
 
   // Success Edit Modal Handler
@@ -268,15 +270,15 @@ const DivisionConfiguration = () => {
     <>
       <Row gutter={[16, 8]}>
         <Col xs={24} md={24} lg={10} xl={6} xxl={6}>
-          <SearchBox onSearch={handleSearch} />
+          <SearchBox onSearch={handleSearch} placeholder='Search by Division Name' />
         </Col>
-        <Col xs={14} md={10} lg={10} xl={5} xxl={5}>
+        <Col xs={24} md={10} lg={10} xl={5} xxl={5}>
           <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
         </Col>
-        <Col xs={10} md={4} lg={4} xl={2} xxl={2}>
+        <Col xs={8} md={4} lg={4} xl={2} xxl={2}>
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
-        <Col xs={24} md={10} lg={24} xl={{span: 4, offset: 7}} xxl={{span: 4, offset: 7}}>
+        <Col xs={16} md={10} lg={24} xl={{span: 4, offset: 7}} xxl={{span: 4, offset: 7}}>
           <AddButton buttonText="Add Division" handleClick={isAddButtonClicked}/>
         </Col>
       </Row>
@@ -346,7 +348,7 @@ const DivisionConfiguration = () => {
         <SuccessAddDataModal
           visible={isSuccessEditDataModalOpen}
           onClose={handleOkSuccessEditDataModal}
-          textParagraph="Data changes successful!"
+          textParagraph="Data change successful!"
         />
 
         <FailedAddDataModal

@@ -1,7 +1,3 @@
-.dialog {
-    padding-left: 20px;
-}
-  
 .icon-warning {
     color: #dc3545;
 }
@@ -10,12 +6,12 @@
     color: #629093;
 }
   
-.delete-button {
+.delete-button-modal {
     background: #dc3545;
     color: white;
 }
   
-.delete-button:hover {
+.delete-button-modal:hover {
     background: #FF7481;
 }
   

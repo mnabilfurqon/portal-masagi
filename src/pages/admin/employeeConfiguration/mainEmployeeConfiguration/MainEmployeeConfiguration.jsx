@@ -5,9 +5,9 @@ import EmployeeTable from '@common/tables/employeeTable/EmployeeTable'
 import { Link } from 'react-router-dom'
 import { Row, Col } from 'antd'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
+import FilterRadio from '@common/buttons/filterButton/FilterRadio'
 
 const MainEmployeeConfiguration = () => {
 
@@ -43,15 +43,15 @@ const MainEmployeeConfiguration = () => {
   };
   // end of count handler
 
-  const treeData = [
+  const radioData = [
     {
-      title: 'Status',
-      key: 'is_active',
+      key: 'True',
+      label: 'Status Active'
     },
     {
-      title: 'Employee Name',
-      key: 'name',
-    },
+      key: 'False',
+      label: 'Status Not Active'
+    }
   ];
 
   const itemsSort = [
@@ -77,12 +77,12 @@ const MainEmployeeConfiguration = () => {
     <div className='main-employee-configuration'>
       <Row gutter={[16, 8]}>
         <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
-          <SearchBox onSearch={handleSearch} /> 
+          <SearchBox onSearch={handleSearch} placeholder='Search by Employee Name' /> 
             </Col>
-        <Col xs={11} md={10} lg={8} xl={4} xxl={3}>
-          <FilterButton onFilter={handleFilter} treeData={treeData} />
+        <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
+          <FilterRadio onFilter={handleFilter} radioData={radioData} />
         </Col>
-        <Col xs={13} md={8} lg={8} xl={6} xxl={3}>
+        <Col xs={24} md={8} lg={8} xl={6} xxl={3}>
           <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
         </Col>
         <Col xs={8} md={4} lg={12} xl={2} xxl={2}>

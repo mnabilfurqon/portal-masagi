@@ -528,10 +528,14 @@ const TaskDetail = () => {
             message.error('Comment cannot be empty');
             return;
         }
+        // detect if shift + enter is pressed so it will not submit
+        if (window.event.keyCode === 13 && window.event.shiftKey) {
+            return;
+        }
         commentSubmit(comment);
     }
     // end of handle comment input
-    
+
   return (
     <Spin spinning={loading} size='large' tip="Sync Data...">
         <div className='task-title'>
@@ -541,7 +545,7 @@ const TaskDetail = () => {
                     {detailTask.project && detailTask.project.name ? detailTask.project.name : 'Project Name'}
                 </Paragraph>
             </Flex>
-            <Row gutter={[16, 16]} style={{marginLeft: 32}}>
+            <Row gutter={[16, 16]} style={{marginLeft: 0}}>
                 <Col xs={8} sm={5} md={5} lg={3} xl={3} xxl={2}>
                 <Paragraph style={{color: '#888888'}}> Client </Paragraph>
                 </Col>
@@ -551,7 +555,7 @@ const TaskDetail = () => {
                 </Paragraph>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} style={{marginLeft: 32}}>
+            <Row gutter={[16, 16]} style={{marginLeft: 0}}>
                 <Col xs={8} sm={5} md={5} lg={3} xl={3} xxl={2}>
                 <Paragraph style={{color: '#888888'}}> Members </Paragraph>
                 </Col>
@@ -588,7 +592,7 @@ const TaskDetail = () => {
             <LuClipboardList style={{fontSize: 30, color: '#556172'}}/>
             <Paragraph editable={{onChange: handleTitleTaskChange}} strong={true} style={{ fontSize: 20, color: '#556172', width: '100%'}}>{editableTitleTask}</Paragraph>
         </Flex>
-        <Row gutter={[16, 16]} style={{marginLeft: 32}}>
+        <Row gutter={[16, 16]} style={{marginLeft: 0}}>
             <Col xs={24} sm={24} md={24} lg={24} xl={14} xxl={16}>
                 <Row gutter={[12, { xs: 8, sm: 16, md: 12, lg: 12 }]}>
                     <Col xs={24} sm={24} md={24} lg={24} xl={8} xxl={8}>
@@ -813,23 +817,22 @@ const TaskDetail = () => {
             <Paragraph strong={true} style={{ fontSize: 20, color: '#556172'}}>Comments</Paragraph>
         </Flex>
 
-        <Flex gap={16} style={{marginLeft: 40}}>
+        <Flex gap={16}>
             <Space>
                 <Avatar style={{ backgroundColor: '#17A2B8' }}> {employeeName.charAt(0)} </Avatar>
             </Space>
-            <Input
+            <Input.TextArea
                 value={comment}
                 onChange={handleCommentInput}
                 onPressEnter={handleCommentSubmit}
+                autoSize={{ minRows: 1, maxRows: 5 }}
                 placeholder='Add a comment...'
-                suffix={
-                    <CiPaperplane
-                    onClick={handleCommentSubmit}
-                    style={{ cursor: 'pointer', color: '#888888', fontSize: 25 }}
-                    onMouseOver={(e) => (e.target.style.color = '#629093')}
-                    onMouseOut={(e) => (e.target.style.color = '#888888')}
-                    />
-                }
+            />
+            <CiPaperplane
+                onClick={handleCommentSubmit}
+                style={{ cursor: 'pointer', color: '#888888', fontSize: 30 }}
+                onMouseOver={(e) => (e.target.style.color = '#629093')}
+                onMouseOut={(e) => (e.target.style.color = '#888888')}
             />
         </Flex>
 
@@ -837,7 +840,7 @@ const TaskDetail = () => {
             itemLayout="horizontal"
             dataSource={dataComment}
             locale={{ emptyText: 'No comments yet' }}
-            style={{marginTop: 24, marginLeft: 40}}
+            style={{marginTop: 24}}
             renderItem={(item) => (
             <List.Item>
                 <List.Item.Meta
@@ -849,7 +852,8 @@ const TaskDetail = () => {
                         <Paragraph style={{marginBottom: 0, fontSize: 10, color: '#cccccc'}}>{item.date}</Paragraph>
                     </Flex>
                 }
-                description={item.text}
+                // description = item.text that allows for line breaks \n
+                description={<Paragraph style={{marginBottom: 0, whiteSpace: 'pre-line'}}>{item.text}</Paragraph>}
                 />
             </List.Item>
             )}

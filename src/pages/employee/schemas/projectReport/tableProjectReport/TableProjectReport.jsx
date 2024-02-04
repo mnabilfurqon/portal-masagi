@@ -5,13 +5,13 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
-import "./tableTaskReport.css";
+import "./tableProjectReport.css";
 
-const TableTaskReport = (props) => {
+const TableProjectReport = (props) => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const { searchValue, filterValue, countValue, urlApi } = props;
-  const [taskReportData, setTaskReportData] = useState([]);
+  const [projectReportData, setProjectReportData] = useState([]);
   const [projectFilter, setProjectFilter] = useState([]);
   const [statusFilter, setStatusFilter] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -62,7 +62,7 @@ const TableTaskReport = (props) => {
     }
   };
 
-  const getTaskReportData = async () => {
+  const getProjectReportData = async () => {
     try {
       var page;
       setLoading(true);
@@ -71,7 +71,7 @@ const TableTaskReport = (props) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get(urlApi, {
+      const response = await axios.get("http://103.82.93.38/api/v1/project/", {
         params: {
           page: page,
           per_page: countValue,
@@ -83,12 +83,12 @@ const TableTaskReport = (props) => {
           Authorization: token,
         },
       });
-      setTaskReportData(response.data.items);
+      setProjectReportData(response.data.items);
       setTableParams({
         ...tableParams,
         pagination: {
           ...tableParams.pagination,
-          total: response.data[0]._meta.total_items,
+          total: response.data._meta.total_items,
           pageSize: countValue,
         },
       });
@@ -124,21 +124,19 @@ const radioDataStatusRaw = statusFilter.map((item) => {
   };
 });
 
-  const isProject = radioDataProjectRaw.some((item) => item.key === filterValue[0]);
-  const projectParams = isProject ? filterValue[0] : null;
+  const isProject = radioDataProjectRaw.some((item) => item.key === filterValue);
+  const projectParams = isProject ? filterValue : null;
 
-  const isStatus = radioDataStatusRaw.some((item) => item.key === filterValue[0]);
-  const statusParams = isStatus ? filterValue[0] : null;
+  const isStatus = radioDataStatusRaw.some((item) => item.key === filterValue);
+  const statusParams = isStatus ? filterValue : null;
 
-  const data = taskReportData.map((item) => {
+  const data = projectReportData.map((item) => {
     return {
       key: item.uuid,
-      project: item.project.name,
-      client: item.project.client.name,
-      task: item.name,
-      deadline: dayjs(item.deadline).format(dateFormat),
-      assignTo: item.asign_to_employee.name,
-      createdBy: item.created_by_employee.name,
+      client: item.client.name,
+      project: item.name,
+      start_date: dayjs(item.start_date).format(dateFormat),
+      due_date: dayjs(item.due_date).format(dateFormat),
       status: item.status.name,
     };
   });
@@ -147,18 +145,12 @@ const radioDataStatusRaw = statusFilter.map((item) => {
     if (!token) {
       navigate("/login");
     }
-    getTaskReportData();
+    getProjectReportData();
     getProjectData();
     getStatusData();
   }, [token, navigate, params, searchValue, filterValue, countValue, urlApi]);
 
   const title = [
-    {
-      key: "project",
-      title: "Project",
-      dataIndex: "project",
-      ellipsis: true,
-    },
     {
       key: "client",
       title: "Client",
@@ -166,27 +158,21 @@ const radioDataStatusRaw = statusFilter.map((item) => {
       ellipsis: true,
     },
     {
-      key: "task",
-      title: "Task",
-      dataIndex: "task",
+      key: "project",
+      title: "Project Name",
+      dataIndex: "project",
       ellipsis: true,
     },
     {
-      key: "deadline",
-      title: "Deadline",
-      dataIndex: "deadline",
+      key: "start_date",
+      title: "Start Date",
+      dataIndex: "start_date",
       ellipsis: true,
     },
     {
-      key: "assignTo",
-      title: "Assign To",
-      dataIndex: "assignTo",
-      ellipsis: true,
-    },
-    {
-      key: "createdBy",
-      title: "Created By",
-      dataIndex: "createdBy",
+      key: "due_date",
+      title: "Due Date",
+      dataIndex: "due_date",
       ellipsis: true,
     },
     {
@@ -264,13 +250,13 @@ const radioDataStatusRaw = statusFilter.map((item) => {
       ellipsis: true,
       render: (record) => (
         <Button
-          className="detail-button-task-report"
+          className="detail-button-project-report"
           type="primary"
           onClick={() => handleDetailClick(record)}
           size="small"
           ghost
         >
-          <AiOutlineFileSearch className="detail-icon-task-report" />
+          <AiOutlineFileSearch className="detail-icon-project-report" />
         </Button>
       ),
     },
@@ -278,7 +264,7 @@ const radioDataStatusRaw = statusFilter.map((item) => {
 
   const handleDetailClick = (record) => {
     const value = record.key;
-    navigate(`/task-report/detail-task/${value}`);
+    navigate(`/project-report/detail-project/${value}`);
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -299,14 +285,14 @@ const radioDataStatusRaw = statusFilter.map((item) => {
     });
 
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setTaskReportData([]);
+      setProjectReportData([]);
     }
   };
 
   return (
     <>
-      <div className="task-report-table">
-        <p className="table-title">All Task</p>
+      <div className="project-report-table">
+        <p className="table-title">All Project</p>
         <Table
           columns={title}
           dataSource={data}
@@ -320,4 +306,4 @@ const radioDataStatusRaw = statusFilter.map((item) => {
   );
 };
 
-export default TableTaskReport;
+export default TableProjectReport;

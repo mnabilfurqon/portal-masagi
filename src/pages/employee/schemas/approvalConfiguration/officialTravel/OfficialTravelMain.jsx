@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
-import { Col, DatePicker, Row, Space, Button } from 'antd'
+import { Col, DatePicker, Row, Flex, Button } from 'antd'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import FilterRadio from '@common/buttons/filterButton/FilterRadio'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import PermitRequestTable from '@common/tables/permitRequestTable/PermitRequestTable'
 import CountButton from '@common/buttons/countButton/CountButton'
@@ -21,6 +21,7 @@ const OfficialTravelMain = () => {
   const monthPickerFormat = 'YYYY-MM';
   const navigate = useNavigate();
   const token = Cookies.get("token");
+  const employeeUuid = Cookies.get("employee_uuid");
   const [uuidPermit, setUuidPermit] = useState("");
   const [loading, setLoading] = useState(false);
   const [approveModalVisible, setApproveModalVisible] = useState(false);
@@ -76,17 +77,17 @@ const OfficialTravelMain = () => {
   // end of date picker handler
 
 
-  const treeData = [
+  const radioData = [
     {
-      title: 'Approved',
+      label: 'Approved',
       key: 'approved',
     },
     {
-      title: 'Pending',
+      label: 'Pending',
       key: 'pending',
     },
     {
-      title: 'Rejected',
+      label: 'Rejected',
       key: 'rejected',
     },
   ];
@@ -163,17 +164,36 @@ const OfficialTravelMain = () => {
       title: 'Action',
       key: 'action',
         render: (record) => (
-            <Space size="small">
-                <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+            <Flex gap={10}>
+                <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                     <AiOutlineFileSearch className="action-icon" />
                 </Button>
-                <Button className="action-button" type="primary" size="small" onClick={handleApproveModalOpen} ghost>
-                    <FaRegCheckSquare className="accept-icon"/>
-                </Button>
-                <Button className="action-button" type="primary" size="small" onClick={handleRejectModalOpen} ghost>
-                    <CgCloseR className="reject-icon"/>
-                </Button>
-            </Space>
+
+                    {/* for HR */}
+                    {record.hr && record.hr.uuid === employeeUuid && record.status_by_hr === 'pending' && (
+                        <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleApproveModalOpen(record)}} ghost>
+                            <FaRegCheckSquare className="accept-icon" />
+                        </Button>
+                    )}
+                    {record.hr && record.hr.uuid === employeeUuid && record.status_by_hr === 'pending' && (
+                        <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleRejectModalOpen(record)}} ghost>
+                            <CgCloseR className="reject-icon" />
+                        </Button>
+                    )}
+                    
+                    {/* for Team Leader */}
+                    {record.team_leader && record.team_leader.uuid === employeeUuid && record.status_by_team_leader === 'pending' && (
+                        <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleApproveModalOpen(record)}} ghost>
+                            <FaRegCheckSquare className="accept-icon" />
+                        </Button>
+                    )}
+                    {record.team_leader && record.team_leader.uuid === employeeUuid && record.status_by_team_leader === 'pending' && (
+                        <Button style={{border: 'none'}} type="primary" size="small" onClick={() => {handleRejectModalOpen(record)}} ghost>
+                            <CgCloseR className="reject-icon" />
+                        </Button>
+                    )}
+    
+            </Flex>
         ),
     },
   ];
@@ -278,6 +298,7 @@ const OfficialTravelMain = () => {
     visible: approveModalVisible,
     handleYes: handleApproveModalYes,
     handleNo: handleApproveModalNo,
+    loading: loading,
     textNoOption: "CANCEL",
     textYesOption: "APPROVE",
     dialogTitle: "Attention",
@@ -296,6 +317,7 @@ const OfficialTravelMain = () => {
     visible: rejectModalVisible,
     handleYes: handleRejectModalYes,
     handleNo: handleRejectModalNo,
+    loading: loading,
     textNoOption: "CANCEL",
     textYesOption: "REJECT",
     dialogTitle: "Attention",
@@ -321,17 +343,22 @@ const OfficialTravelMain = () => {
         <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
           <SearchBox onSearch={handleSearch} /> 
         </Col>
-        <Col xs={11} md={10} lg={8} xl={4} xxl={3}>
-          <FilterButton onFilter={handleFilter} treeData={treeData} />
+        <Col xs={24} md={10} lg={8} xl={4} xxl={3}>
+          <FilterRadio onFilter={handleFilter} radioData={radioData} />
         </Col>
-        <Col xs={13} md={8} lg={8} xl={6} xxl={3}>
+        <Col xs={24} md={8} lg={8} xl={6} xxl={3}>
           <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
         </Col>
         <Col xs={8} md={4} lg={12} xl={2} xxl={2}>
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 2}} xxl={{span: 4, offset: 6}}>
-          <DatePicker picker="month" format={monthFormat} className='date-picker-month' onChange={handleDatePicker}/>
+        <DatePicker picker="month" format={monthFormat} className='date-picker-month' onChange={handleDatePicker} 
+            style={{ 
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis'
+            }} />
         </Col>
       </Row>
       <div style={{marginTop: 24}}>

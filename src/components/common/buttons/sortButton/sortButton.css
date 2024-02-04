@@ -6,6 +6,9 @@
     border: 1px solid #629093;
     border-radius: 4px;
     width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .sort-button:hover {

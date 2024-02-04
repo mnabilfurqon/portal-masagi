@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Flex } from 'antd';
 import './employeeTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsPersonAdd } from "react-icons/bs";
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import dayjs from 'dayjs';
@@ -23,21 +22,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
   const handleAddUserClick = (record) => {
     const value = record.key;
     navigate(`/employee/add-user/${value}`);
-    // navigate(`/user/add-user`);
   }
-
-  // Handlre value filter button
-  const filterArray = Array.isArray(filterValue) ? filterValue : [];
-  const encodedFilterValue = filterArray.map(value => encodeURIComponent(value)).join(',');
-  // End of handler value filter button
-
-  // handle search value for status
-  if (searchValue === 'active') {
-    searchValue = 1;
-  } else if (searchValue === 'not active') {
-    searchValue = 0;
-  }
-  // end of handle search value for status
 
   const [tableParams, setTableParams] = useState({
     pagination : {
@@ -71,7 +56,8 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
           page: page,
           per_page: countValue,
           search: searchValue,
-          search_by: encodedFilterValue? encodedFilterValue : 'name',
+          is_active: filterValue ? filterValue : null,
+          search_by: 'name',
           desc: sortValue === 'latestJoinDate' || sortValue === 'zToAEmployee' ? true : false,
           sort_by: sortValue === 'latestJoinDate' || sortValue === 'oldestJoinDate' ? 'created_date' : 'name',
         },
@@ -107,6 +93,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
           title: 'Employee Name',
           dataIndex: 'employee_name',
           key: 'employee_name',
+          ellipsis: true,
         },
         {
           title: 'NIP',
@@ -142,14 +129,31 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
           title: 'Action',
           key: 'action',
             render: (record) => (
-                <Space size="small">
-                    <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+                <Flex gap={10}>
+                    <Button className="action-button-employee" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                    <Button className="action-button" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost>
-                        <BsPersonAdd className="action-icon" />
-                    </Button>
-                </Space>
+
+                    {employeeData.map((item) => {
+                      if (item.uuid === record.key) {
+                        if (item.users !== null) {
+                          return (
+                            <Button key={item.uuid} className="action-button-employee" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost disabled>
+                              <BsPersonAdd className="action-icon-disabled" />
+                            </Button>
+                          );
+                        } else {
+                          return (
+                            <Button key={item.uuid} className="action-button-employee" type="primary" size="small" onClick={() => handleAddUserClick(record)} ghost>
+                              <BsPersonAdd className="action-icon" />
+                            </Button>
+                          );
+                        }
+                      }
+                    }
+                    )}
+
+                </Flex>
             ),
         },
     ];

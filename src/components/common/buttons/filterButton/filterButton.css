@@ -6,6 +6,9 @@
   border: 1px solid #629093;
   border-radius: 4px;
   width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .filter-button:hover {
@@ -40,4 +43,23 @@
   background-color: #ffffff !important;
   border-color: #629093 !important;
   color: #629093 !important;
+}
+
+.radio-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #629093;
+  border-radius: 4px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.radio-filter .ant-radio-checked .ant-radio-inner,
+.radio-filter .ant-radio:hover .ant-radio-inner,
+.radio-filter .ant-radio:active .ant-radio-inner{
+  background-color: #629093 !important;
+  border-color: #629093 !important;
 }

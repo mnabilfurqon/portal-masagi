@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Flex } from 'antd';
 import './educationTable.css'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import axios from 'axios';
@@ -63,11 +63,13 @@ const EducationTable = ({onDetailClick}) => {
           title: 'Education',
           dataIndex: 'education',
           key: 'education',
+          ellipsis: true,
         },
         {
           title: 'Institution',
           dataIndex: 'institute',
           key: 'institute',
+          ellipsis: true,
         },
         {
           title: 'Entry Year',
@@ -84,12 +86,13 @@ const EducationTable = ({onDetailClick}) => {
         {
           title: 'Action',
           key: 'action',
+          ellipsis: true,
             render: (record) => (
-                <Space size="small">
-                    <Button className="action-button" type="primary" size="small" ghost onClick={() => onDetailClick(record)}>
+                <Flex gap={10}>
+                    <Button className="action-button-education" type="primary" size="small" ghost onClick={() => onDetailClick(record)}>
                         <AiOutlineFileSearch className="action-icon" />
                     </Button>
-                </Space>
+                </Flex>
             ),
         },
     ];

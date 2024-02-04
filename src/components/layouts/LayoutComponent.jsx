@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useState, useEffect } from "react";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,13 +14,22 @@ import {
 } from "react-icons/ai";
 import { FaRegBell } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
+import ResetPasswordModal from "@common/modals/resetPasswordModal/ResetPasswordModal";
+import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal';
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal';
 import Cookies from "js-cookie";
+import axios from "axios";
 import "./layoutComponent.css";
 
 const LayoutComponent = ({ children, roleNumber }) => {
   const token = Cookies.get("token");
+  const uuid = Cookies.get("user_uuid");
   const employeeName = Cookies.get("employee_name");
   const navigate = useNavigate();
+  const [resetPasswordVisible, setResetPasswordVisible] = useState(false);
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+  const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -40,20 +49,30 @@ const LayoutComponent = ({ children, roleNumber }) => {
     const navigate = useNavigate();
     const items = [
       {
-        label: "Logout",
+        label: "Reset Password",
         key: "0",
       },
+      {
+        label: "Logout",
+        key: "1",
+      }
     ];
 
-    const handlerLogout = () => {
-      Cookies.remove("token");
-      Cookies.remove("role_uuid");
-      Cookies.remove("username");
-      Cookies.remove("company_uuid");
-      Cookies.remove("role_name");
-      Cookies.remove("employee_name");
-      Cookies.remove("employee_uuid");
-      navigate("/login");
+    const handlerLogout = (e) => {
+      const key = e.key;
+      if (key === "1") {
+        Cookies.remove("token");
+        Cookies.remove("user_uuid");
+        Cookies.remove("role_uuid");
+        Cookies.remove("username");
+        Cookies.remove("company_uuid");
+        Cookies.remove("role_name");
+        Cookies.remove("employee_name");
+        Cookies.remove("employee_uuid");
+        navigate("/login");
+      } else {
+        setResetPasswordVisible(true)
+      }
     };
 
     return (
@@ -73,7 +92,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
               >
                 {employeeName ? employeeName.charAt(0) : <AiOutlineUser />}
               </Avatar>
-              {username}
+              <span className="username">{username}</span>
               <FaChevronDown />
             </Space>
           </a>
@@ -81,6 +100,73 @@ const LayoutComponent = ({ children, roleNumber }) => {
       </>
     );
   };
+
+  // reset password section handler
+  const resetPassword = async () => {
+    try {
+      setLoading(true)
+      await axios.put(`http://103.82.93.38/api/v1/users/reset-password/${uuid}`, {
+        password: newPassword
+      }, {
+        headers: {
+          Authorization: token
+        }
+      })
+      setConfirmNewPassword('')
+      setNewPassword('')
+      setNotMatchPassword('')
+      setResetPasswordVisible(false)
+      setIsSuccessModalVisible(true)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCancleResetPassword = () => {
+    setConfirmNewPassword('')
+    setNewPassword('')
+    setNotMatchPassword('')
+    setResetPasswordVisible(false)
+  }
+
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmNewPassword, setConfirmNewPassword] = useState('')
+  const [notMatchPassword, setNotMatchPassword] = useState('')
+
+  const handleNewPassword = (e) => {
+      setNewPassword(e.target.value)
+
+  }
+
+  const handleConfirmNewPassword = (e) => {
+      setConfirmNewPassword(e.target.value)
+  }
+
+  const handleOkResetPassword = () => {
+    if (newPassword === '' || confirmNewPassword === '') {
+      setNotMatchPassword('Please fill all the field')
+    } else if (newPassword === confirmNewPassword) {
+      resetPassword()
+    } else {
+      setNotMatchPassword('Password not match')
+    }
+  }
+
+  const handleFailedResetPassword = () => {
+    setIsFailedModalVisible(true)
+  }
+
+  const handleSuccessModalClose = () => {
+    setIsSuccessModalVisible(false)
+  }
+
+  const handleFailedModalClose = () => {
+    setIsFailedModalVisible(false)
+  }
+
+  // end of reset password section handler
 
   // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
@@ -572,9 +658,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  } else if (location.pathname === "/project-report") {
-    pageTitle = "Project Report";
-    finalPageTitle = pageTitle;
   } else if (location.pathname === "/task") {
     pageTitle = "Task";
     finalPageTitle = pageTitle;
@@ -604,6 +687,40 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/project-report") {
+    pageTitle = "Project Report";
+    finalPageTitle = pageTitle;
+  } else if (location.pathname.includes("/project-report/detail-project/")) {
+    pageTitle = (
+      <Link to="/project-report" className="page-title">
+        Project Report /{" "}
+      </Link>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Project</span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
+  } else if (location.pathname.includes("/project-report/detail-task/")) {
+    pageTitle = (
+      <span>
+        <Link to="/project-report" className="page-title">
+          Project Report /{" "}
+        </Link>
+        <Link to={-1} className="page-title">
+          Detail Project /{" "}
+        </Link>
+      </span>
+    );
+    pageSubTitle = <span className="page-sub-title"> Detail Task </span>;
+    finalPageTitle = (
+      <>
+        {pageTitle}
+        {pageSubTitle}
+      </>
+    );
   } else if (location.pathname === "/task-report") {
     pageTitle = "Task Report";
     finalPageTitle = pageTitle;
@@ -621,7 +738,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       </>
     );
   }
-  
+
   return (
     <Layout className="layout-container">
       {/* Sider */}
@@ -871,11 +988,11 @@ const LayoutComponent = ({ children, roleNumber }) => {
               icon={<TbClipboardTypography />}
               title="Task Management"
             >
-              <Menu.Item key="/project-report">
-                <Link to="/project-report">Project Report</Link>
-              </Menu.Item>
               <Menu.Item key="/task">
                 <Link to="/task">Task</Link>
+              </Menu.Item>
+              <Menu.Item key="/project-report">
+                <Link to="/project-report">Project Report</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>
@@ -962,7 +1079,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
             </div>
 
             <Flex>
-              <Space style={{ padding: "10px" }}>
+              <Space>
                 <FaRegBell />
                 <MyDropdown />
               </Space>
@@ -988,6 +1105,31 @@ const LayoutComponent = ({ children, roleNumber }) => {
           </div>
         </Content>
       </Layout>
+
+      {/* Reset Password Modal */}
+      <ResetPasswordModal 
+        visible={resetPasswordVisible}
+        handleCancle={handleCancleResetPassword}
+        handleOk={handleOkResetPassword}
+        handleNewPassword={handleNewPassword}
+        newPassword={newPassword}
+        handleConfirmNewPassword={handleConfirmNewPassword}
+        confirmNewPassword={confirmNewPassword}
+        messageError={notMatchPassword}
+        onFinishFailed={handleFailedResetPassword}
+        loading={loading}
+      />
+
+      <SuccessAddDataModal
+        visible={isSuccessModalVisible}
+        onClose={handleSuccessModalClose}
+        textParagraph="Reset password successful!"
+      />
+
+      <FailedAddDataModal
+        visible={isFailedModalVisible}
+        onClose={handleFailedModalClose}
+      />
     </Layout>
   );
 };

@@ -36,6 +36,7 @@ const LoginPage = () => {
           },
         }
       );
+      Cookies.set("user_uuid", protectedResponse.data.user.uuid);
       Cookies.set("role_uuid", protectedResponse.data.user.role.uuid);
       Cookies.set("role_name", encodeURIComponent(protectedResponse.data.user.role.name));
       Cookies.set("username", protectedResponse.data.user.username);
