@@ -10,7 +10,7 @@ const TeamProjectTable = (props) => {
   const navigate = useNavigate();
   const [projectTeamData, setProjectTeamData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {searchValue, filterValue, sortValue, countValue, columns, isSuccessDeleteModalOpen} = props;
+  const {searchValue, sortValue, countValue, columns, isSuccessDeleteModalOpen} = props;
   const formatDate = (dateString) => {
     return moment(dateString).format("DD/MM/YYYY");
   }
@@ -47,7 +47,8 @@ const TeamProjectTable = (props) => {
             page: page,
             per_page: countValue,
             search: searchValue,
-            desc: sortValue === 'zToAProjectName' ? true : false,
+            desc: sortValue === 'latestJoinDate' || sortValue === 'zToAProjectName' ? true : false,
+            sort_by: sortValue === 'latestJoinDate' || sortValue === 'oldestJoinDate' ? 'created_date' : null,
           },
           headers: {
             "Authorization": token,
@@ -74,7 +75,7 @@ const TeamProjectTable = (props) => {
         navigate("/login");
       }
       getProjectTeamData();
-    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue, isSuccessDeleteModalOpen]);
+    }, [token, navigate, params, countValue, searchValue, sortValue, isSuccessDeleteModalOpen]);
 
     const data = projectTeamData.map(item => {
       const project = item.project && item.project[0];
