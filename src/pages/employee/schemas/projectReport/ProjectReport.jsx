@@ -18,12 +18,12 @@ const ProjectReport = () => {
   const [statusData, setStatusData] = useState([]);
   const [summaryProject, setSummaryProject] = useState({
     "in-progress": 0,
-    "done": 0,
-    "cancelled": 0
+    done: 0,
+    cancelled: 0,
   });
   const [totalProject, setTotalProject] = useState(0);
   const [searchValue, setSearchValue] = useState("");
-  const [filterValue, setFilterValue] = useState("");
+  const [filterStatusValue, setFilterStatusValue] = useState("");
   const [countValue, setCountValue] = useState("10");
 
   const getStatusData = async () => {
@@ -44,31 +44,33 @@ const ProjectReport = () => {
 
   const getProjectData = async () => {
     try {
-      const response = await axios.get("http://103.82.93.38/api/v1/project/summary", {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const response = await axios.get(
+        "http://103.82.93.38/api/v1/project/summary",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
       setTotalProject(response.data.total_project || 0);
-      setSummaryProject(response.data.project_by_type || {
-        "in-progress": 0,
-        "done": 0,
-        "cancelled": 0
-      });
+      setSummaryProject(
+        response.data.project_by_type || {
+          "in-progress": 0,
+          done: 0,
+          cancelled: 0,
+        }
+      );
     } catch (error) {
       console.log(error);
     }
-  };  
+  };
 
-  const radioDataStatusRaw = statusData.map((item) => {
+  const radioDataStatus = statusData.map((item) => {
     return {
       key: item.uuid,
       label: item.name,
-      type: "status",
     };
   });
-
-  const radioData = [...radioDataStatusRaw];
 
   useEffect(() => {
     if (!token) {
@@ -82,8 +84,8 @@ const ProjectReport = () => {
     setSearchValue(value);
   };
 
-  const handleFilter = (value) => {
-    setFilterValue(value);
+  const handleFilterStatus = (value) => {
+    setFilterStatusValue(value);
   };
 
   const handleCount = (value) => {
@@ -131,13 +133,13 @@ const ProjectReport = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col xs={16} md={6} lg={9} xl={6} xxl={4}>
-          <FilterRadio onFilter={handleFilter} radioData={radioData} />
+          <FilterRadio onFilter={handleFilterStatus} radioData={radioDataStatus} />
         </Col>
       </Row>
 
       <TableProjectReport
         searchValue={searchValue}
-        filterValue={filterValue}
+        filterStatusValue={filterStatusValue}
         countValue={countValue}
       />
     </>

@@ -10,9 +10,8 @@ import "./tableProjectReport.css";
 const TableProjectReport = (props) => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
-  const { searchValue, filterValue, countValue } = props;
+  const { searchValue, filterStatusValue, countValue } = props;
   const [projectReportData, setProjectReportData] = useState([]);
-  const [statusFilter, setStatusFilter] = useState([]);
   const [loading, setLoading] = useState(false);
   const dateFormat = "DD/MM/YYYY";
   const [tableParams, setTableParams] = useState({
@@ -32,22 +31,6 @@ const TableProjectReport = (props) => {
     per_page: tableParams.pagination.pageSize,
   });
 
-  const getStatusData = async () => {
-    try {
-      const response = await axios.get(
-        "http://103.82.93.38/api/v1/project_status/",
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      setStatusFilter(response.data.items);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getProjectReportData = async () => {
     try {
       var page;
@@ -62,7 +45,7 @@ const TableProjectReport = (props) => {
           page: page,
           per_page: countValue,
           search: searchValue,
-          status_uuid: statusParams,
+          status_uuid: filterStatusValue ? filterStatusValue : null,
         },
         headers: {
           Authorization: token,
@@ -84,19 +67,6 @@ const TableProjectReport = (props) => {
     }
   };
 
-  const radioDataStatusRaw = statusFilter.map((item) => {
-    return {
-      key: item.uuid,
-      label: item.name,
-      type: "status",
-    };
-  });
-
-  const isStatus = radioDataStatusRaw.some(
-    (item) => item.key === filterValue
-  );
-  const statusParams = isStatus ? filterValue : null;
-
   const data = projectReportData.map((item) => {
     return {
       key: item.uuid,
@@ -113,8 +83,7 @@ const TableProjectReport = (props) => {
       navigate("/login");
     }
     getProjectReportData();
-    getStatusData();
-  }, [token, navigate, params, searchValue, filterValue, countValue]);
+  }, [token, navigate, params, searchValue, filterStatusValue, countValue]);
 
   const title = [
     {

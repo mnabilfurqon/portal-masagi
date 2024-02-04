@@ -28,7 +28,8 @@ const DetailProjectReport = () => {
   const [totalTaskData, setTotalTaskCount] = useState(0);
   const [summary, setSummary] = useState(0);
   const [searchValue, setSearchValue] = useState("");
-  const [filterValue, setFilterValue] = useState("");
+  const [filterProjectValue, setFilterProjectValue] = useState("");
+  const [filterStatusValue, setFilterStatusValue] = useState("");
   const [countValue, setCountValue] = useState("10");
 
   if (roleName !== "Head of Division") {
@@ -68,7 +69,8 @@ const DetailProjectReport = () => {
 
   const getSummaryData = async () => {
     try {
-      const response = await axios.get("http://103.82.93.38/api/v1/task/summary",
+      const response = await axios.get(
+        "http://103.82.93.38/api/v1/task/summary",
         {
           headers: {
             Authorization: token,
@@ -87,31 +89,27 @@ const DetailProjectReport = () => {
   };
 
   const uniqueProjectNames = new Set();
-  const radioDataProjectRaw = filterData
-  .map((item) => {
-    const projectName = item.project.name;
-    if (!uniqueProjectNames.has(projectName)) {
-      uniqueProjectNames.add(projectName);
-      return {
-        key: item.project.uuid,
-        label: item.project.name,
-        type: "project",
-      };
-    }
+  const radioDataProject = filterData
+    .map((item) => {
+      const projectName = item.project.name;
+      if (!uniqueProjectNames.has(projectName)) {
+        uniqueProjectNames.add(projectName);
+        return {
+          key: item.project.uuid,
+          label: item.project.name,
+        };
+      }
 
-    return null;
-  })
-  .filter((item) => item !== null);
+      return null;
+    })
+    .filter((item) => item !== null);
 
-const radioDataStatusRaw = statusData.map((item) => {
-  return {
-    key: item.uuid,
-    label: item.name,
-    type: "status",
-  };
-});
-
-const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
+  const radioDataStatus = statusData.map((item) => {
+    return {
+      key: item.uuid,
+      label: item.name,
+    };
+  });
 
   useEffect(() => {
     if (!token) {
@@ -126,8 +124,12 @@ const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
     setSearchValue(value);
   };
 
-  const handleFilter = (value) => {
-    setFilterValue(value);
+  const handleFilterProject = (value) => {
+    setFilterProjectValue(value);
+  };
+
+  const handleFilterStatus = (value) => {
+    setFilterStatusValue(value);
   };
 
   const handleCount = (value) => {
@@ -182,20 +184,32 @@ const radioData = [...radioDataProjectRaw, ...radioDataStatusRaw];
       </Row>
 
       <Row gutter={[16, 8]}>
-        <Col xs={24} md={14} lg={12} xl={8} xxl={8}>
+        <Col xs={18} md={20} lg={21} xl={8} xxl={8}>
           <SearchBox onSearch={handleSearch} />
         </Col>
-        <Col xs={8} md={4} lg={3} xl={2} xxl={2}>
+        <Col xs={6} md={4} lg={3} xl={2} xxl={2}>
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
-        <Col xs={16} md={6} lg={9} xl={6} xxl={4}>
-          <FilterRadio onFilter={handleFilter} radioData={radioData} />
+        <Col xs={24} md={12} lg={12} xl={4} xxl={4}>
+          <FilterRadio
+            onFilter={handleFilterProject}
+            radioData={radioDataProject}
+            title='Filter Project'
+          />
+        </Col>
+        <Col xs={24} md={12} lg={12} xl={4} xxl={4}>
+          <FilterRadio
+            onFilter={handleFilterStatus}
+            radioData={radioDataStatus}
+            title='Filter Status'
+          />
         </Col>
       </Row>
 
       <TableDetailProjectReport
         searchValue={searchValue}
-        filterValue={filterValue}
+        filterProjectValue={filterProjectValue}
+        filterStatusValue={filterStatusValue}
         countValue={countValue}
         urlApi={urlApi}
       />
