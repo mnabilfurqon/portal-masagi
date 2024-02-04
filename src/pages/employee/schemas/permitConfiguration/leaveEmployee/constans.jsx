@@ -1,14 +1,14 @@
-export const filterData = [
+export const radioData = [
   {
-    title: 'Approved',
+    label: 'Approved',
     key: 'approved',
   },
   {
-    title: 'Rejected',
+    label: 'Rejected',
     key: 'rejected',
   },
   {
-    title: 'Pending',
+    label: 'Pending',
     key: 'pending',
   },
 ];

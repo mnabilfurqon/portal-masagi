@@ -49,10 +49,10 @@ const TableOfficialTravelEmployee = (props) => {
           page: page,
           per_page: countValue,
           search: searchValue,
+          filter: filterValue,
           type_permit: typePermit,
           desc: sortValue === 'latestEndPermitDate' ? true : false,
           sort_by: sortValue === 'latestEndPermitDate' || sortValue === 'oldestEndPermitDate' ? 'end_date_permit' : null,
-          status: filterValue[0]
         },
         headers: {
           Authorization: token,
@@ -130,12 +130,12 @@ const TableOfficialTravelEmployee = (props) => {
     });
 
     const dataOfficialTravel = dataOfficialTravelRaw.filter(item => {
-      const isStatusMatch = filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending')
-      ? filterValue.includes(item.status)
-      : true
-
+      const isStatusMatch = filterValue && (filterValue.includes('approved') || filterValue.includes('rejected') || filterValue.includes('pending'))
+        ? filterValue.includes(item.status)
+        : true;
+    
       return isStatusMatch;
-    });
+    }); 
 
   useEffect(() => {
     if (!token) {

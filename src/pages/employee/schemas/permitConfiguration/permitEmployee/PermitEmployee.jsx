@@ -1,11 +1,11 @@
 import { Button, Col, Row } from "antd";
 import React, { useState } from "react";
-import { filterData, sortItems } from "./constans";
+import { radioData, sortItems } from "./constans";
 import TablePermitEmployee from "./tablePermitEmployee/TablePermitEmployee";
 import SearchBox from "../../../../../components/common/searchBox/SearchBox";
-import FilterButton from "../../../../../components/common/buttons/filterButton/FilterButton";
 import SortButton from "../../../../../components/common/buttons/sortButton/SortButton";
 import CountButton from "../../../../../components/common/buttons/countButton/CountButton";
+import FilterRadio from "../../../../../components/common/buttons/filterButton/FilterRadio";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import "./permitEmployee.css";
@@ -44,7 +44,7 @@ const PermitEmployee = () => {
           <SearchBox onSearch={handleSearch} />
         </Col>
         <Col xs={11} md={10} lg={3} xl={3} xxl={3}>
-          <FilterButton onFilter={handleFilter} treeData={filterData} />
+          <FilterRadio onFilter={handleFilter} radioData={radioData} />
         </Col>
         <Col xs={13} md={8} lg={3} xl={3} xxl={3}>
           <SortButton
