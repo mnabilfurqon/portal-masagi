@@ -32,17 +32,13 @@ import OvertimeDetail from "../pages/employee/schemas/approvalConfiguration/over
 import PermitMain from "../pages/employee/schemas/approvalConfiguration/permit/PermitMain";
 import PermitDetail from "../pages/employee/schemas/approvalConfiguration/permit/PermitDetail";
 import OfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/OfficialTravelEmployee";
-// import DetailOfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelEmployee";
 import AddOfficialTravelEmployee from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/addOfficialTravelEmployee/AddOfficialTravelEmployee";
 import LeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/LeaveEmployee";
 import AddLeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/addLeaveEmployee/AddLeaveEmployee";
-// import DetailLeaveEmployee from "../pages/employee/schemas/permitConfiguration/leaveEmployee/detailLeaveEmployee/DetailLeaveEmployee";
 import PermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/PermitEmployee";
 import AddPermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/addPermitEmployee/AddPermitEmployee";
-// import DetailPermitEmployee from "../pages/employee/schemas/permitConfiguration/permitEmployee/detailPermitEmployee/DetailPermitEmployee";
 import OvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/OvertimeEmployee";
 import AddOvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/addOvertimeEmployee/AddOvertimeEmployee";
-// import DetailOvertimeEmployee from "../pages/employee/schemas/permitConfiguration/overtimeEmployee/detailOvertimeEmployee/DetailOvertimeEmployee";
 import HistoryConfiguration from "../pages/employee/schemas/historyConfiguration/HistoryConfiguration";
 import ReportConfiguration from "../pages/employee/schemas/attendanceReport/reportConfiguration/ReportConfiguartion";
 import AttendanceDetails from "../pages/employee/schemas/attendanceReport/attendanceDetails/AttendanceDetails";
@@ -69,13 +65,9 @@ import EditProject from "../pages/admin/projectConfiguration/editProject/EditPro
 import TypeProjectConfiguration from "../pages/admin/typeProjectConfiguration/TypeProjectConfiguration";
 import TaskReport from "../pages/employee/schemas/taskReport/TaskReport";
 import DetailOfficialTravelData from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelData";
-// import ProjectReport from "../pages/employee/schemas/projectReport/ProjectReport";
-// import DetailProjectReport from "../pages/employee/schemas/projectReport/DetailProjectReport";
-import DetailPresent from "../pages/employee/schemas/attendanceReport/presentConfiguration/DetailPresent";
 import RoleProject from "../pages/admin/roleProjectConfiguration/RoleProject";
 import ProjectReport from "../pages/employee/schemas/projectReport/ProjectReport";
 import DetailProjectReport from "../pages/employee/schemas/projectReport/detailProjectReport/DetailProjectReport";
-import PresentConfigurationForHR from "../pages/employee/schemas/attendanceReport/presentConfiguration/PresentConfigurationForHR";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -488,7 +480,7 @@ const RouteManagement = () => {
               path="/present"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <PresentConfigurationForHR />
+                  <PresentConfiguration />
                 </LayoutComponent>
               }
             />
@@ -497,8 +489,7 @@ const RouteManagement = () => {
               path="/present/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailPresent />
-                  {/* <AttendanceDetails /> */}
+                  <AttendanceDetails />
                 </LayoutComponent>
               }
             />
@@ -541,10 +532,9 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/official-travel/detail"
+              path="/official-travel/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  {/* <DetailOfficialTravelEmployee /> */}
                   <DetailOfficialTravelData />
                 </LayoutComponent>
               }
@@ -569,10 +559,9 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/leave/detail"
+              path="/leave/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  {/* <DetailLeaveEmployee /> */}
                   <DetailLeaveData />
                 </LayoutComponent>
               }
@@ -597,10 +586,9 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/overtime/detail"
+              path="/overtime/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  {/* <DetailOvertimeEmployee /> */}
                   <DetailOvertimeData />
                 </LayoutComponent>
               }
@@ -625,10 +613,9 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/permit/detail"
+              path="/permit/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  {/* <DetailPermitEmployee /> */}
                   <DetailPermitData />
                 </LayoutComponent>
               }
@@ -760,7 +747,7 @@ const RouteManagement = () => {
               path="/present/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailPresent />
+                  <AttendanceDetails />
                 </LayoutComponent>
               }
             />
@@ -803,7 +790,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/official-travel/detail"
+              path="/official-travel/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailOfficialTravelData />
@@ -830,7 +817,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/leave/detail"
+              path="/leave/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailLeaveData />
@@ -857,7 +844,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/overtime/detail"
+              path="/overtime/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailOvertimeData />
@@ -884,7 +871,7 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/permit/detail"
+              path="/permit/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <DetailPermitData />
@@ -971,7 +958,6 @@ const RouteManagement = () => {
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <TaskMain />
-                  {/* <ProjectReport /> */}
                 </LayoutComponent>
               }
             />
@@ -1011,15 +997,6 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
-
-            {/* <Route
-              path="/project-report/detail-project/:uuid"
-              element={
-                <LayoutComponent roleNumber={roleNumber}>
-                  <DetailProjectReport />
-                </LayoutComponent>
-              }
-            /> */}
 
             <Route
               path="/project-report/detail-task/:uuid"
@@ -1085,8 +1062,7 @@ const RouteManagement = () => {
               path="/present/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <DetailPresent />
-                  {/* <AttendanceDetails /> */}
+                  <AttendanceDetails />
                 </LayoutComponent>
               }
             />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Row, Col, Avatar, Flex, DatePicker, Table, Spin, Card, } from 'antd'
+import { Row, Col, Avatar, Flex, DatePicker, Table, Spin, Button, } from 'antd'
 import { AiOutlineUser } from "react-icons/ai"
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -26,50 +26,170 @@ const AttendanceDetails = () => {
   const [totalOfficialTravels, setTotalOfficialTravels] = useState(0);
 
   const date = dayjs();
-  const [filterBy, setFilterBy] = useState("month");
-  const [filterDate, setFilterDate] = useState();
+  const [filterBy, setFilterBy] = useState("Month");
+  const [typeReport, setTypeReport] = useState("Present");
+  const [filterDate, setFilterDate] = useState(date.format("YYYY-MM-DD"));
 
   // Header
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
-    getNipEmployee();
-    getEmployeeAttendanceDetail();
+    getDataEmployee();
+    getAttendanceReportEmployee();
     getAttendanceSummaryEmployee();
-  }, [token, navigate, filterDate]);
+  }, [token, navigate, filterDate, typeReport]);
 
-  const columns = [
-    {
-        title: 'Date',
-        dataIndex: 'date',
-        key: 'date',
-    },
-    {
-        title: 'In-Time',
-        dataIndex: 'in_time',
-        key: 'in_time',
-    },
-    {
-        title: 'Out-Time',
-        dataIndex: 'out_time',
-        key: 'out_time',
-    },
-    {
-        title: 'Total Hours',
-        dataIndex: 'total_hours',
-        key: 'total_hours',
-    },
-    {
-        title: 'Lateness',
-        dataIndex: 'lateness',
-        key: 'lateness',
-        className: 'lateness',
-    },
-  ]
+  // Table
+  const [columns, setColumns] = useState();
+  
+  useEffect(()=> {
+    if (typeReport === "Official Travel") {
+      setColumns(
+        [
+          {
+            title: "Agenda",
+            dataIndex: "agenda",
+            key: "agenda",
+          },
+          {
+            title: "Destination",
+            dataIndex: "destination",
+            key: "destination",
+          },
+          {
+            title: "Permit Date",
+            dataIndex: "date_permit",
+            key: "date_permit",
+          },
+          {
+            title: "End Permit Date",
+            dataIndex: "end_date_permit",
+            key: "end_date_permit",
+          },
+          {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            render: () => (
+              <Button className="active-button" type="primary" size="small" value="active" ghost>
+                approved
+              </Button>
+            ),
+          },
+        ]
+      )
+    } else if (typeReport === "Overtime") {
+      setColumns(
+        [
+          {
+            title: "Date",
+            dataIndex: "date_permit",
+            key: "date_permit",
+          },
+          {
+            title: "Start Overtime",
+            dataIndex: "start_overtime_time",
+            key: "start_overtime_time",
+          },
+          {
+            title: "End Overtime",
+            dataIndex: "end_overtime_time",
+            key: "end_overtime_time",
+          },
+          {
+            title: "Duration",
+            dataIndex: "hours_overtime",
+            key: "hours_overtime",
+          },
+          {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            render: () => (
+              <Button className="active-button" type="primary" size="small" value="active" ghost>
+                approved
+              </Button>
+            ),
+          },
+        ]
+      )
+    } else if (typeReport === "Leave" || typeReport === "Permit") {
+      setColumns(
+        [
+          {
+            title: "Type Leave",
+            dataIndex: "type_leave",
+            key: "type_leave",
+          },
+          {
+            title: "Reason",
+            dataIndex: "reason",
+            key: "reason",
+          },
+          {
+            title: "Permit Date",
+            dataIndex: "date_permit",
+            key: "date_permit",
+          },
+          {
+            title: "End Permit Date",
+            dataIndex: "end_date_permit",
+            key: "end_date_permit",
+          },
+          {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            render: () => (
+              <Button className="active-button" type="primary" size="small" value="active" ghost>
+                approved
+              </Button>
+            ),
+          },
+        ]
+      )
+    } else {
+      setColumns(
+        [
+          {
+            title: "Date",
+            dataIndex: "date",
+            key: "date",
+                
+          },
+          {
+            title: "In-Time",
+            dataIndex: "in_time",
+            key: "in_time",
+          },
+          {
+            title: "Out-Time",
+            dataIndex: "out_time",
+            key: "out_time",
+          },
+          {
+            title: "Total Hours",
+            dataIndex: "total_hours",
+            key: "total_hours",
+          },
+          {
+            title: "Lateness",
+            dataIndex: "lateness",
+            key: "lateness",
+            render: (record) => (
+              <span style={{ color: "red" }}>
+                {record}
+              </span>
+            ),
+          },
+        ]
+      )
+    }
+  }, [typeReport])
 
   // Get API Employee
-  const getNipEmployee = async () => {
+  const getDataEmployee = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`http://103.82.93.38/api/v1/employee/${data.employee.uuid}`,
@@ -116,16 +236,17 @@ const AttendanceDetails = () => {
   }
 
   // Get API Employee Attendance Detail
-  const getEmployeeAttendanceDetail = async () => {
+  const getAttendanceReportEmployee = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/employee_attendance_detail/${data.key}`,
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/report/employee/${data.employee.uuid}`,
         {
+          params: { date: filterDate, type_report: typeReport, filter_by: filterBy },
           headers: { Authorization: token },
         }
       );
       setLoading(false);
-      setEmployeeAttendanceDetail(response.data)
+      setEmployeeAttendanceDetail(response.data.items)
       // console.log("Attendance Detail", employeeAttendanceDetail)
     } catch (error) {
       console.log("Error", error);
@@ -135,26 +256,30 @@ const AttendanceDetails = () => {
     }
   }
 
-  const dataScr = employeeAttendanceDetail?.map(item => {
-    const totalHours = (date_out, date_in) => {
+  // Data
+  const [dataHistory, setDataHistory] = useState();
+  
+  useEffect(() => {
+    setDataHistory(employeeAttendanceDetail?.map(item => {
+      const totalHours = (date_out, date_in) => {
         const totalInSec = dayjs(date_out).diff(date_in, "s", true);
         const total_hours = totalInSec/3600;
         const total_minutes = (totalInSec%3600)/60;
         const total_second = totalInSec%60;
         return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
         // return totalInSec;
-    }
-
-    const totalLateness = (in_time) => {
+      }
+  
+      const totalLateness = (in_time) => {
         const inTime = dayjs(in_time).format("YYYY-MM-DD hh:mm:ss")
         // console.log("in_time", inTime);
-
+  
         const standard_in_time = dayjs().set('y', dayjs(in_time).get('y')).set('M', dayjs(in_time).get('M')).set('D', dayjs(in_time).get('D')).set('h', 8).set('m', 0).set('s', 0).format("YYYY-MM-DD hh:mm:ss");
         // console.log("standard_in_time", standard_in_time);
-
+  
         const totalInSec = dayjs(in_time).diff(standard_in_time, "s", true);
         // console.log("total_insec", totalInSec);
-
+  
         if (totalInSec > 0) {
             const total_hours = totalInSec/3600;
             const total_minutes = (totalInSec%3600)/60;
@@ -164,32 +289,71 @@ const AttendanceDetails = () => {
         } else {
             return "00:00:00";
         }
-    }
-    
-    return {
-        key: item.uuid,
-        date: dayjs(item.check_in_date).format("DD-MM-YYYY"),
-        in_time: dayjs(item.check_in_date).format("hh:mm A"),
-        out_time: dayjs(item.check_out_date).format("hh:mm A"),
-        total_hours: totalHours(item.check_out_date, item.check_in_date),
-        lateness: totalLateness(item.check_in_date),
-    }
-  })
+      }
+  
+      if (typeReport === "Official Travel") {
+        return {
+          // employee: item.attendance.employee,
+          key: item.uuid,
+          agenda: item.type.name,
+          destination: item.destination,
+          date_permit: dayjs(item.date_permit).format("DD/MM/YYYY"),
+          end_date_permit: dayjs(item.end_date_permit).format("DD/MM/YYYY"),
+          status: {approved_by_hr: item.approved_by_hr, approved_by_team_lead: item.approved_by_team_lead},
+        }
+      } else if (typeReport === "Overtime") {
+        return {
+          // employee: item.attendance.employee,
+          key: item.uuid,
+          date: dayjs(item.date_permit).format("DD/MM/YYYY"),
+          start_overtime_time: item.start_overtime_time,
+          end_overtime_time: item.end_overtime_time,
+          hours_overtime: item.hours_overtime,
+          status: {approved_by_hr: item.approved_by_hr, approved_by_team_lead: item.approved_by_team_lead},
+        }
+      } else if (typeReport === "Leave" || typeReport === "Permit") {
+        return {
+          // employee: item.attendance.employee,
+          key: item.uuid,
+          type_leave: item.type.name,
+          reason: item.reason,
+          date_permit: dayjs(item.date_permit).format("DD/MM/YYYY"),
+          end_date_permit: dayjs(item.end_date_permit).format("DD/MM/YYYY"),
+          status: {approved_by_hr: item.approved_by_hr, approved_by_team_lead: item.approved_by_team_lead},
+        }
+      } else if (typeReport === "Absent") {
+        return {
+          // employee: item.employee,
+          // date: dayjs(filterValue).format("DD-MM-YYYY"),
+          key: item.uuid,
+          in_time: "Absent",
+          out_time: "Absent",
+          total_hours: "Absent",
+          lateness: "Absent",
+          // status: "Absent",
+        }
+      } else {
+        return {
+          // employee: item.attendance.employee,
+          key: item.uuid,
+          date: dayjs(item.check_in_date).format("DD-MM-YYYY"),
+          in_time: dayjs(item.check_in_date).format("hh:mm A"),
+          out_time: dayjs(item.check_out_date).format("hh:mm A"),
+          total_hours: totalHours(item.check_out_date, item.check_in_date),
+          lateness: totalLateness(item.check_in_date),
+          // status: totalLateness(item.check_in_date),
+        }
+      }
+    }))
+  }, [employeeAttendanceDetail])
 
-  const onPresent = () => { setTableName("Presents"); }
-  const onAbsent = () => { setTableName("Absents"); }
-  const onTravel = () => { setTableName("Official Travels"); }
-  const onOvertime = () => { setTableName("Overtimes"); }
-  const onLeaves = () => { setTableName("Leaves"); }
-  const onPermit = () => { setTableName("Permits"); }
-
-  const [dataSource, setDataSource] = useState(dataScr);
-  const onChange = () => {
-
-  }
-
-  // console.log("employee attendances", dataScr)
-  // console.log(presents)
+  const onPresent = () => { setTableName("Presents"), setTypeReport("Present") }
+  const onAbsent = () => { setTableName("Absents"), setTypeReport("Absent") }
+  const onTravel = () => { setTableName("Official Travels"), setTypeReport("Official Travel") }
+  const onOvertime = () => { setTableName("Overtimes"), setTypeReport("Overtime") }
+  const onLeaves = () => { setTableName("Leaves"), setTypeReport("Leave") }
+  const onPermit = () => { setTableName("Permits"), setTypeReport("Permit") }
+  const onChange = () => { }
 
   return (
     <>
@@ -201,7 +365,7 @@ const AttendanceDetails = () => {
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
                     <h4 style={{ fontSize: 24, fontWeight: 600, margin: 0, }} >{data.employee.name}</h4>
-                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >{data.employee.division} | {employeePosition}</p>
+                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >{data.employee.division} | {data.employee.position}</p>
                     <h3 style={{ fontSize: 16, fontWeight: 400, margin: 0, }} >{employeeNip}</h3>
                 </div>
             </Col>
@@ -287,7 +451,7 @@ const AttendanceDetails = () => {
         <div className='table'>
             <p className='sub-title'>{tableName}</p>
             <Table 
-                dataSource={dataScr}
+                dataSource={dataHistory}
                 columns={columns}
                 pagination={false}
                 scroll={{
