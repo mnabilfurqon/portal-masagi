@@ -9,7 +9,7 @@ const ClientTable = (props) => {
   const navigate = useNavigate();
   const [clientData, setClientData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {searchValue, filterValue, sortValue, countValue, columns} = props;
+  const {searchValue, sortValue, countValue, columns} = props;
 
     const [tableParams, setTableParams] = useState({
         pagination : {
@@ -43,7 +43,8 @@ const ClientTable = (props) => {
             page: page,
             per_page: countValue,
             search: searchValue,
-            desc: sortValue === 'zToAClientName' ? true : false,
+            desc: sortValue === 'latestJoinDate' || sortValue === 'zToAClientName' ? true : false,
+            sort_by: sortValue === 'latestJoinDate' || sortValue === 'oldestJoinDate' ? 'created_date' : null,
           },
           headers: {
             "Authorization": token,
@@ -70,7 +71,7 @@ const ClientTable = (props) => {
         navigate("/login");
       }
       getClientData();
-    }, [token, navigate, params, countValue, searchValue, sortValue, filterValue]);
+    }, [token, navigate, params, countValue, searchValue, sortValue]);
 
     const data = clientData.map(item => {
       return {
