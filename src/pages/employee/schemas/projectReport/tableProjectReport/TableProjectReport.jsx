@@ -10,10 +10,8 @@ import "./tableProjectReport.css";
 const TableProjectReport = (props) => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
-  const { searchValue, filterValue, countValue, urlApi } = props;
+  const { searchValue, filterStatusValue, countValue } = props;
   const [projectReportData, setProjectReportData] = useState([]);
-  const [projectFilter, setProjectFilter] = useState([]);
-  const [statusFilter, setStatusFilter] = useState([]);
   const [loading, setLoading] = useState(false);
   const dateFormat = "DD/MM/YYYY";
   const [tableParams, setTableParams] = useState({
@@ -33,35 +31,6 @@ const TableProjectReport = (props) => {
     per_page: tableParams.pagination.pageSize,
   });
 
-  const getProjectData = async () => {
-    try {
-      const response = await axios.get(urlApi, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      setProjectFilter(response.data.items);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getStatusData = async () => {
-    try {
-      const response = await axios.get(
-        "http://103.82.93.38/api/v1/task_status/",
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      setStatusFilter(response.data.items);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getProjectReportData = async () => {
     try {
       var page;
@@ -76,8 +45,7 @@ const TableProjectReport = (props) => {
           page: page,
           per_page: countValue,
           search: searchValue,
-          project_uuid: projectParams,
-          status_uuid: statusParams,
+          status_uuid: filterStatusValue ? filterStatusValue : null,
         },
         headers: {
           Authorization: token,
@@ -98,37 +66,6 @@ const TableProjectReport = (props) => {
       setLoading(false);
     }
   };
-  
-  const uniqueProjectNames = new Set();
-  const radioDataProjectRaw = projectFilter
-  .map((item) => {
-    const projectName = item.project.name;
-    if (!uniqueProjectNames.has(projectName)) {
-      uniqueProjectNames.add(projectName);
-      return {
-        key: item.project.uuid,
-        label: item.project.name,
-        type: "project",
-      };
-    }
-
-    return null;
-  })
-  .filter((item) => item !== null);
-
-const radioDataStatusRaw = statusFilter.map((item) => {
-  return {
-    key: item.uuid,
-    label: item.name,
-    type: "status",
-  };
-});
-
-  const isProject = radioDataProjectRaw.some((item) => item.key === filterValue);
-  const projectParams = isProject ? filterValue : null;
-
-  const isStatus = radioDataStatusRaw.some((item) => item.key === filterValue);
-  const statusParams = isStatus ? filterValue : null;
 
   const data = projectReportData.map((item) => {
     return {
@@ -146,9 +83,7 @@ const radioDataStatusRaw = statusFilter.map((item) => {
       navigate("/login");
     }
     getProjectReportData();
-    getProjectData();
-    getStatusData();
-  }, [token, navigate, params, searchValue, filterValue, countValue, urlApi]);
+  }, [token, navigate, params, searchValue, filterStatusValue, countValue]);
 
   const title = [
     {

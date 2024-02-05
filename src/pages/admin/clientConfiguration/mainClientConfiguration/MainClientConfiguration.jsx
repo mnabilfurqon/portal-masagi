@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import AddButton from '@common/buttons/addButton/AddButton'
@@ -20,14 +19,6 @@ const MainClientConfiguration = () => {
     };
     // end of search handler
 
-    // filter handler
-    const [filterValue, setFilterValue] = useState("");
-
-    const handleFilter = (value) => {
-        setFilterValue(value);
-    };
-    // end of filter handler
-
     // sort handler
     const [sortValue, setSortValue] = useState("");
 
@@ -44,17 +35,6 @@ const MainClientConfiguration = () => {
     };
     // end of count handler
 
-    const treeData = [
-        {
-          title: 'Newest',
-          key: 'newest',
-        },
-        {
-          title: 'Latest',
-          key: 'latest',
-        },
-    ];
-
     const itemsSort = [
         {
           key: 'aToZClientName',
@@ -64,6 +44,14 @@ const MainClientConfiguration = () => {
           key: 'zToAClientName',
           label: 'Z to A Client Name'
         },
+        {
+            key: 'latestJoinDate',
+            label: 'Latest Join Date'
+          },
+          {
+            key: 'oldestJoinDate',
+            label: 'Oldest Join Date'
+          },
     ];
 
     const columns = [
@@ -111,7 +99,6 @@ const MainClientConfiguration = () => {
 
     const propsTable = {
         searchValue,
-        filterValue,
         sortValue,
         countValue,
         columns,
@@ -121,19 +108,16 @@ const MainClientConfiguration = () => {
         <div>
             <div>
                 <Row gutter={[16, 8]}>
-                    <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
+                    <Col xs={24} md={20} lg={8} xl={8} xxl={6}>
                         <SearchBox onSearch={handleSearch} /> 
                     </Col>
-                    <Col xs={11} md={10} lg={8} xl={4} xxl={3}>
-                        <FilterButton onFilter={handleFilter} treeData={treeData} />
-                    </Col>
-                    <Col xs={13} md={8} lg={8} xl={6} xxl={3}>
-                        <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
-                    </Col>
-                    <Col xs={8} md={4} lg={12} xl={2} xxl={2}>
+                    <Col xs={6} md={4} lg={3} xl={2} xxl={2}>
                         <CountButton className="count-button" onCount={handleCount} />
                     </Col>
-                    <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 2}} xxl={{span: 4, offset: 6}}>
+                    <Col xs={18} md={12} lg={6} xl={4} xxl={3}>
+                        <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
+                    </Col>
+                    <Col xs={24} md={12} lg={7} xl={{span: 4, offset: 6}} xxl={{span: 4, offset: 9}}>
                         <Link to='/client/add-client'>
                             <AddButton buttonText="Add Client"/>
                         </Link>
