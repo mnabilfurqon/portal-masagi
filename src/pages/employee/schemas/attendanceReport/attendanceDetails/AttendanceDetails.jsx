@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Row, Col, Avatar, Flex, DatePicker, Table, Spin, } from 'antd'
+import { Row, Col, Avatar, Flex, DatePicker, Table, Spin, Card, } from 'antd'
 import { AiOutlineUser } from "react-icons/ai"
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -15,6 +15,7 @@ const AttendanceDetails = () => {
   
   const [loading, setLoading] = useState(false);
   const [employeeNip, setEmployeeNip] = useState();
+  const [employeePosition, setEmployeePosition] = useState();
   const [employeeAttendanceDetail, setEmployeeAttendanceDetail] = useState();
   const [tableName, setTableName] = useState("Presents");
   const [totalPresent, setTotalPresent] = useState(0);
@@ -35,7 +36,7 @@ const AttendanceDetails = () => {
     }
     getNipEmployee();
     getEmployeeAttendanceDetail();
-    getAttendanceSummaryEmployee()
+    getAttendanceSummaryEmployee();
   }, [token, navigate, filterDate]);
 
   const columns = [
@@ -78,6 +79,7 @@ const AttendanceDetails = () => {
       );
       setLoading(false);
       setEmployeeNip(response.data.nip)
+      setEmployeePosition(response.data.position.name)
     } catch (error) {
       console.log("Error", error);
       setLoading(false);
@@ -174,143 +176,12 @@ const AttendanceDetails = () => {
     }
   })
 
-  const presents = [
-    {
-        key: "1",
-        date: "01-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "2",
-        date: "03-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "3",
-        date: "03-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "4",
-        date: "04-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "5",
-        date: "05-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "6",
-        date: "06-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "7",
-        date: "07-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-]
-
-const absents = [
-    {
-        key: "1",
-        date: "08-10-2023",
-        in_time: "",
-        out_time: "",
-        total_hours: "00:00:00",
-        lateness: "00:00:00",
-    },
-]
-
-const officialTravel = [
-    {
-        key: "1",
-        date: "09-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-]
-
-const overtimes = [
-    {
-        key: "1",
-        date: "10-10-2023",
-        in_time: "05:00 PM",
-        out_time: "07:00 PM",
-        total_hours: "02:00:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "2",
-        date: "11-10-2023",
-        in_time: "05:00 PM",
-        out_time: "07:30 PM",
-        total_hours: "02:30:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "3",
-        date: "12-10-2023",
-        in_time: "05:00 PM",
-        out_time: "07:00 PM",
-        total_hours: "02:00:00",
-        lateness: "00:00:00",
-    },
-]
-
-const leaves = [
-    {
-        key: "1",
-        date: "13-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-    {
-        key: "2",
-        date: "15-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-]
-
-const permits = [
-    {
-        key: "1",
-        date: "14-10-2023",
-        in_time: "08:00 AM",
-        out_time: "05:00 PM",
-        total_hours: "09:00:00",
-        lateness: "00:00:00",
-    },
-]
+  const onPresent = () => { setTableName("Presents"); }
+  const onAbsent = () => { setTableName("Absents"); }
+  const onTravel = () => { setTableName("Official Travels"); }
+  const onOvertime = () => { setTableName("Overtimes"); }
+  const onLeaves = () => { setTableName("Leaves"); }
+  const onPermit = () => { setTableName("Permits"); }
 
   const [dataSource, setDataSource] = useState(dataScr);
   const onChange = () => {
@@ -330,7 +201,7 @@ const permits = [
             <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
                 <div className='profile-info'>
                     <h4 style={{ fontSize: 24, fontWeight: 600, margin: 0, }} >{data.employee.name}</h4>
-                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >{data.employee.division} | {data.employee.position}</p>
+                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >{data.employee.division} | {employeePosition}</p>
                     <h3 style={{ fontSize: 16, fontWeight: 400, margin: 0, }} >{employeeNip}</h3>
                 </div>
             </Col>
@@ -352,7 +223,7 @@ const permits = [
                         </svg>}
                     title="Total Presents"
                     value={totalPresent}
-                    onClick={() => (setTableName("Presents"), setDataSource(presents))}
+                    onClick={onPresent}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -363,7 +234,7 @@ const permits = [
                         </svg>}
                     title="Absents"
                     value={totalAbsent}
-                    onClick={() => (setTableName("Absents"), setDataSource(absents))}
+                    onClick={onAbsent}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -374,7 +245,7 @@ const permits = [
                         </svg>}
                     title="Official Travels"
                     value={totalOfficialTravels}
-                    onClick={() => (setTableName("Official Travels"), setDataSource(officialTravel))}
+                    onClick={onTravel}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -385,7 +256,7 @@ const permits = [
                         </svg>}
                     title="Overtimes"
                     value={totalOvertime}
-                    onClick={() => (setTableName("Overtimes"), setDataSource(overtimes))}
+                    onClick={onOvertime}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -396,7 +267,7 @@ const permits = [
                         </svg>}
                     title="Leaves"
                     value={totalLeaves}
-                    onClick={() => (setTableName("Leaves"), setDataSource(leaves))}
+                    onClick={onLeaves}
                 />
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
@@ -407,7 +278,7 @@ const permits = [
                         </svg>}
                     title="Permits"
                     value={totalPermit}
-                    onClick={() => (setTableName("Permits"), setDataSource(permits))}
+                    onClick={onPermit}
                 />
             </Col>
         </Row>

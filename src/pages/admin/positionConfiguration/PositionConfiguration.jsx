@@ -23,6 +23,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   const [loading, setLoading] = useState(false);
 
   const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
   const [positionData, setPositionData] = useState([]);
 
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -83,7 +84,8 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
       key: 'action',
       render: (record) => (
         <Space size="small">
-          <EditPosition 
+          <EditPosition
+          form={editForm} 
           uuid={(record)} 
           isModalOpen={openEditModal}
           onClick={() => handelOpenEditModal(record)}
@@ -263,8 +265,9 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
     const uuid = record.key
     const name = record.name
     setUuid(uuid);
-    setEditValue(name);  
+    editForm.setFieldsValue({name: name});
     setOpenEditModal(true);
+    // setEditValue(name);  
     // console.log(uuid, editValue);
   }
 
@@ -308,8 +311,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   return (
     <>
     <Row gutter={[10, 10]} justify="space-between">
-      <Row gutter={[10, 10]} justify="start">
-        <Col>
+        <Col xs={24} md={16} lg={8}>
           {/* <SearchBox /> */}
           <Input 
           className='search-box'
@@ -321,15 +323,13 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
           allowClear
           />
         </Col>
-        <Col>
+        <Col xs={12} md={8} lg={4}>
           <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
         </Col>
-        <Col>
+        <Col xs={12} md={8} lg={3}>
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
-      </Row>
-      
-      <Row justify="end">
+        <Col xs={24} md={16} lg={6}>
           <AddPosition
           showModal={() => setOpenAddModal(true)}
           isModalOpen={openAddModal}
@@ -338,7 +338,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
           loading={loading}
           form={form}
           />
-      </Row>
+        </Col>
     </Row>
     <br />
 

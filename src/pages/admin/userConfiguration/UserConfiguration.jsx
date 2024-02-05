@@ -23,6 +23,7 @@ const UserConfiguration = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [filterByStatus, setFilterByStatus] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [failedModalOpen, setFailedModalOpen] = useState(false);
@@ -66,15 +67,19 @@ const UserConfiguration = () => {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      responsive: ["sm"],
+      // responsive: ["sm"],
     },
     {
       title: 'Status',
       key: 'status',
       dataIndex: 'status',
-      responsive: ["md"],
+      // responsive: ["md"],
+      filteredValue: [filterByStatus],
+      onFilter: (value, record) => {
+        return String(record.status).toLowerCase().includes(value.toLowerCase());
+      },
       render: (record) => {
-        if (record) {
+        if (record === "active") {
           return (
             <Button key={record.uuid} className="active-button" type="primary" size="small" value="active" ghost>
               active
@@ -106,18 +111,28 @@ const UserConfiguration = () => {
     return {
       key: item.uuid,
       username: item.username,
-      status: item.is_active,
+      status: (item.is_active ? "active" : "not"),
       role: item.role.name,
       role_uuid: item.role.uuid,
     }
   });
 
   // Filter Handler
-  const [filterValue, setFilterValue] = useState("");
-
-  const handleFilter = (value) => {
-    setFilterValue(value);
+  const handleFilter = (e) => {
+    const value = e.key;
+    setFilterByStatus(value);
   };
+
+  const status = [
+    {
+      key: "active",
+      label: "Active",
+    },
+    {
+      key: "not",
+      label: "Not Active",
+    },
+  ]
 
   // Sort Handler
   const [sortValue, setSortValue] = useState("");
@@ -132,37 +147,6 @@ const UserConfiguration = () => {
   const handleCount = (value) => {
     setCountValue(value);
   };
-
-  const treeData = [
-    {
-      title: 'Status',
-      key: 'status',
-    },
-    {
-      title: 'Username',
-      key: 'username',
-    },
-    {
-      title: 'Role',
-      key: 'role',
-    },
-  ];
-
-  // Filter by Division Handler
-  const status = [
-    {
-      key: "all",
-      label: "All Status",
-    },
-    {
-      key: "active",
-      label: "Active",
-    },
-    {
-      key: "not_active",
-      label: "Not Active",
-    },
-  ]
 
   const itemsSort = [
     {
@@ -192,7 +176,7 @@ const UserConfiguration = () => {
     form.setFieldsValue({
       username: record.username,
       role_uuid: record.role_uuid,
-      is_active: record.status,
+      is_active: (record.status === "active" ? true : false),
     })
     const uuid = record.key;
     setUuid(uuid);
@@ -332,8 +316,8 @@ const UserConfiguration = () => {
   
   return (
   <>
-    <Row gutter="10" justify="start">
-      <Col>
+    <Row gutter={[10, 10]} justify="start">
+      <Col xs={24} md={10} lg={8}>
         <Input 
         className='search-box'
         prefix={<IoIosSearch />} 
@@ -344,14 +328,13 @@ const UserConfiguration = () => {
         allowClear
         />
       </Col>
-      <Col>
-        {/* <FilterButton onFilter={handleFilter} treeData={treeData} /> */}
-        <FilterDropdown items={status} text="Filter "className="sort-button"/>
+      <Col xs={8} md={5} lg={4}>
+        <FilterDropdown items={status} text="Filter "className="sort-button" onClick={handleFilter}/>
       </Col>
-      <Col>
+      <Col xs={8} md={5} lg={4}>
         <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
       </Col>
-      <Col>
+      <Col xs={8} md={4} lg={3}>
         <CountButton className="count-button" onCount={handleCount} />
       </Col>
     </Row>

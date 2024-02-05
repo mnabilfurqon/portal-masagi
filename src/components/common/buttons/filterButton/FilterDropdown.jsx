@@ -2,12 +2,13 @@ import { Button, Dropdown } from 'antd'
 import React from 'react'
 import { MdFilterList } from "react-icons/md"
 
-const FilterDropdown = ({items, text, className}) => {
+const FilterDropdown = ({items, text, className, onClick}) => {
   return (
     <>
         <Dropdown 
             menu={{
-                items
+                items,
+                onClick,
             }}
             placement='bottom'
             className={className}

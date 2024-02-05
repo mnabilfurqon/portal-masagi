@@ -75,6 +75,7 @@ import DetailPresent from "../pages/employee/schemas/attendanceReport/presentCon
 import RoleProject from "../pages/admin/roleProjectConfiguration/RoleProject";
 import ProjectReport from "../pages/employee/schemas/projectReport/ProjectReport";
 import DetailProjectReport from "../pages/employee/schemas/projectReport/detailProjectReport/DetailProjectReport";
+import PresentConfigurationForHR from "../pages/employee/schemas/attendanceReport/presentConfiguration/PresentConfigurationForHR";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -487,7 +488,7 @@ const RouteManagement = () => {
               path="/present"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <PresentConfiguration />
+                  <PresentConfigurationForHR />
                 </LayoutComponent>
               }
             />
