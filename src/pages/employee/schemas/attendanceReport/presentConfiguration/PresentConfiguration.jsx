@@ -650,8 +650,8 @@ const PresentConfiguration = () => {
             division: item.attendance.employee.division.name,
           },
           date_permit: dayjs(item.date_permit).format("DD-MM-YYYY"),
-          start_overtime_time: item.start_overtime_time,
-          end_overtime_time: item.end_overtime_time,
+          start_overtime_time: dayjs(item.start_overtime_time, "hh:mm:ss").format("hh:mm A"),
+          end_overtime_time: dayjs(item.end_overtime_time, "hh:mm:ss").format("hh:mm A"),
           hours_overtime: item.hours_overtime,
           status: {approved_by_hr: item.approved_by_hr, approved_by_team_lead: item.approved_by_team_lead},
         }
