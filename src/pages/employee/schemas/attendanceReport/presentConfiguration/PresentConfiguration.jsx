@@ -15,11 +15,13 @@ const PresentConfiguration = () => {
   // Declaration
   const navigate = useNavigate();
   const token = Cookies.get("token")
+  const role = Cookies.get("role_name")
   const [loading, setLoading] = useState(false);
   const [reportDaily, setReportDaily] = useState();
   const [positions, setPositions] = useState();
+  const [divisions, setDivisions] = useState();
   const [attendanceSummary, setAttendanceSummary] = useState();
-  const [attendanceCompany, setAttendanceCompany] = useState();
+  const [tableName, setTableName] = useState("Presents");
   const [totalPresent, setTotalPresent] = useState(0);
   const [totalAbsents, setTotalAbsents] = useState(0);
   const [totalEmployee, setTotalEmployee] = useState(0);
@@ -46,28 +48,94 @@ const PresentConfiguration = () => {
     getAttendanceSummary()
     getReportDaily()
     getListPosition()
-  }, [token, navigate, filterDate, typeReport, filterValue]);
+    getListDivision()
+  }, [token, navigate, filterDate, typeReport, filterValue,]);
 
   // Date Filter Handler
+  const [filterName, setFilterName] = useState(role === "HR" ? "All Division" : "All Position");
   const onChange = (e) => {
     setFilterDate(e.format('YYYY-MM-DD'))
     setDayDate(e.format('dddd, DD MMMM YYYY'))
     getAttendanceSummary()
   }
 
-  const handleFilter = (e) => {
-    // console.log(e);
+  const position = positions?.map(item => {
+    return {
+      key: item.uuid,
+      label: item.name,
+    }
+  })
+
+  const division = divisions?.map(item => {
+    return {
+      key: item.uuid,
+      label: item.name,
+    }
+  })
+
+  const handleFilterPosition = (e) => {
     const value = e.key;
     setFilterValue(value);
+    setFilterBy("Position");
+
+    // Get Position
+    const getPositionName = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://103.82.93.38/api/v1/position/${value}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setLoading(false);
+        setFilterName(response.data.name)
+        // console.log("division", response.data)
+      } catch (error) {
+        // console.log("Error", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    }    
+
+    getPositionName();
+  };
+
+  const handleFilterDivision = (e) => {
+    const value = e.key;
+    setFilterValue(value);
+    setFilterBy("Division");
+
+    // Get Division
+    const getDivisionName = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://103.82.93.38/api/v1/division/${value}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setLoading(false);
+        setFilterName(response.data.name)
+        // console.log("division", response.data)
+      } catch (error) {
+        // console.log("Error", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    }    
+
+    getDivisionName();
   };
 
   // OnClick Handler
-  const onPresents = () => {setTypeReport("Present")}
-  const onAbsents = () => {setTypeReport("Absent")}
-  const onTravels = () => {setTypeReport("Official Travel")}
-  const onOvertimes = () => {setTypeReport("Overtime")}
-  const onLeaves = () => {setTypeReport("Leave")}
-  const onPermits = () => {setTypeReport("Permit")}
+  const onPresents = () => {setTypeReport("Present"), setTableName("Presents")}
+  const onAbsents = () => {setTypeReport("Absent"), setTableName("Absents")}
+  const onTravels = () => {setTypeReport("Official Travel"), setTableName("Official Travels")}
+  const onOvertimes = () => {setTypeReport("Overtime"), setTableName("Overtimes")}
+  const onLeaves = () => {setTypeReport("Leave"), setTableName("Leaves")}
+  const onPermits = () => {setTypeReport("Permit"), setTableName("Permits")}
 
   // Search Handler
   const [searchValue, setSearchValue] = useState("");
@@ -106,7 +174,11 @@ const PresentConfiguration = () => {
                   <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                   <div style={{ margin: 0, padding: 0, }}>
                       <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position.name}</h5>
+                      {(role === "HR") ?
+                          <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                          :
+                          <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position}</h5>
+                      }
                   </div>
               </Flex>
               )
@@ -182,7 +254,11 @@ const PresentConfiguration = () => {
                   <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                   <div style={{ margin: 0, padding: 0, }}>
                       <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position.name}</h5>
+                      {(role === "HR") ?
+                          <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                          :
+                          <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position}</h5>
+                      }
                   </div>
               </Flex>
               )
@@ -258,7 +334,11 @@ const PresentConfiguration = () => {
                   <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                   <div style={{ margin: 0, padding: 0, }}>
                       <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position.name}</h5>
+                      {(role === "HR") ?
+                          <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                          :
+                          <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position}</h5>
+                      }
                   </div>
               </Flex>
               )
@@ -336,7 +416,11 @@ const PresentConfiguration = () => {
                   <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                   <div style={{ margin: 0, padding: 0, }}>
                       <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position.name}</h5>
+                      {(role === "HR") ?
+                          <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                          :
+                          <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position}</h5>
+                      }
                   </div>
               </Flex>
               )
@@ -405,7 +489,7 @@ const PresentConfiguration = () => {
 
   const handleDetailClick = (record) => {
     // console.log("action record", record)
-    const uuid = record.key
+    const uuid = record.employee.uuid
     navigate(`/present/detail/${uuid}`, { state: { data: record } });
     // navigate('/report/detail');
   };
@@ -458,6 +542,27 @@ const PresentConfiguration = () => {
       // console.log(response);
     } catch (error) {
       console.log("Error", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Get API Division
+  const getListDivision = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/division/`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setDivisions(response.data.items)
+      // console.log("positions", positions)
+      // console.log(response);
+    } catch (error) {
+      // console.log("Error", error);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -523,7 +628,12 @@ const PresentConfiguration = () => {
       if (typeReport === "Official Travel") {
         return {
           key: item.uuid,
-          employee: item.attendance.employee,
+          employee: {
+            uuid: item.attendance.employee.uuid,
+            name: item.attendance.employee.name,
+            position: item.attendance.employee.position.name,
+            division: item.attendance.employee.division.name,
+          },
           agenda: item.type.name,
           destination: item.destination,
           date_permit: dayjs(item.date_permit).format("DD/MM/YYYY"),
@@ -533,17 +643,27 @@ const PresentConfiguration = () => {
       } else if (typeReport === "Overtime") {
         return {
           key: item.uuid,
-          employee: item.attendance.employee,
-          date: dayjs(item.date_permit).format("DD/MM/YYYY"),
-          start_overtime_time: item.start_overtime_time,
-          end_overtime_time: item.end_overtime_time,
+          employee: {
+            uuid: item.attendance.employee.uuid,
+            name: item.attendance.employee.name,
+            position: item.attendance.employee.position.name,
+            division: item.attendance.employee.division.name,
+          },
+          date_permit: dayjs(item.date_permit).format("DD-MM-YYYY"),
+          start_overtime_time: dayjs(item.start_overtime_time, "hh:mm:ss").format("hh:mm A"),
+          end_overtime_time: dayjs(item.end_overtime_time, "hh:mm:ss").format("hh:mm A"),
           hours_overtime: item.hours_overtime,
           status: {approved_by_hr: item.approved_by_hr, approved_by_team_lead: item.approved_by_team_lead},
         }
       } else if (typeReport === "Leave" || typeReport === "Permit") {
         return {
           key: item.uuid,
-          employee: item.attendance.employee,
+          employee: {
+            uuid: item.attendance.employee.uuid,
+            name: item.attendance.employee.name,
+            position: item.attendance.employee.position.name,
+            division: item.attendance.employee.division.name,
+          },
           type_leave: item.type.name,
           reason: item.reason,
           date_permit: dayjs(item.date_permit).format("DD/MM/YYYY"),
@@ -553,7 +673,12 @@ const PresentConfiguration = () => {
       } else if (typeReport === "Absent") {
         return {
           key: item.uuid,
-          employee: item.employee,
+          employee: {
+            uuid: item.employee.uuid,
+            name: item.employee.name,
+            position: item.employee.position.name,
+            division: item.employee.division.name,
+          },
           date: dayjs(filterValue).format("DD-MM-YYYY"),
           in_time: "Absent",
           out_time: "Absent",
@@ -564,7 +689,12 @@ const PresentConfiguration = () => {
       } else {
         return {
           key: item.uuid,
-          employee: item.attendance.employee,
+          employee: {
+            uuid: item.attendance.employee.uuid,
+            name: item.attendance.employee.name,
+            position: item.attendance.employee.position.name,
+            division: item.attendance.employee.division.name,
+          },
           date: dayjs(item.check_in_date).format("DD-MM-YYYY"),
           in_time: dayjs(item.check_in_date).format("hh:mm A"),
           out_time: dayjs(item.check_out_date).format("hh:mm A"),
@@ -575,14 +705,6 @@ const PresentConfiguration = () => {
       }
     }))
   }, [reportDaily])
-
-  // Filter by Division Handler
-  const position = positions?.map(item => {
-    return {
-      key: item.uuid,
-      label: item.name,
-    }
-  })
 
   return (
     <>
@@ -659,7 +781,7 @@ const PresentConfiguration = () => {
           />
         </Col>
       </Row>
-      <br /> <br />
+      <br /> <br /> <br />
 
       <Row gutter={[16, 8]}>
         <Col xs={24} sm={24} md={14} lg={18} xl={18} xxl={18}>
@@ -677,22 +799,23 @@ const PresentConfiguration = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col xs={18} sm={18} md={6} lg={4} xl={4} xxl={4}>
-          <FilterDropdown className="sort-button" text="All Position" items={position} onClick={(e)=>handleFilter(e)}/>
+          {(role === "HR") ?
+            <FilterDropdown className="sort-button" text={filterName} items={division} onClick={(e)=>handleFilterDivision(e)}/>
+            :
+            <FilterDropdown className="sort-button" text={filterName} items={position} onClick={(e)=>handleFilterPosition(e)}/>
+          }
         </Col>
       </Row>
-      <br /> <br />
+      <br />
 
       <div className='table'>
-        <p className='sub-title'>{typeReport}</p>
+        <p className='sub-title'>{tableName}</p>
         <Table 
           dataSource={dataReportDaily}
-          // dataSource={dataSource}
           columns={columns}
           onChange={onChangeTable}
           scroll={{ x: 200 }}
-          pagination={{
-            pageSize: countValue,
-          }}
+          pagination={{ pageSize: countValue }}
         />
       </div>
       </Spin>

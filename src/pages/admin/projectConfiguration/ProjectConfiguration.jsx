@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Row, Col, Table, Input, Button, Flex } from 'antd'
-import { AiOutlineSearch, AiOutlinePlus, AiOutlineFileSearch, } from 'react-icons/ai'
+import { AiOutlineSearch, AiOutlineFileSearch, } from 'react-icons/ai'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
 import AddButton from '@common/buttons/addButton/AddButton'
-import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
-import SuccessModal from '@common/modals/successModal/SuccessModal'
-import FailedModal from '@common/modals/failedModal/FailedModal'
 import './projectConfiguration.css'
 
 const ProjectConfiguration = () => {
@@ -76,29 +73,35 @@ const ProjectConfiguration = () => {
 
   // Filter Handler
   const [filterValue, setFilterValue] = useState("");
+  const [filterName, setFilterName] = useState("All Status");
 
-  const handleFilter = (value) => {
+  const handleFilter = (e) => {
+    const value = e.key;
     setFilterValue(value);
+
+    if (value === "done") {
+      setFilterName("Done")
+    } else if (value === "cancel") {
+      setFilterName("Cancel")
+    } else {
+      setFilterName("InProgress")
+    }
   };
 
-  const treeData = [
+  const status = [
     {
-      title: 'All',
-      key: 'all',
+      key: "done",
+      label: "Done",
     },
     {
-      title: 'Cancel',
-      key: 'cancel',
+      key: "cancel",
+      label: "Cancel",
     },
     {
-      title: 'Done',
-      key: 'done',
+      key: "in-progress",
+      label: "InProgress",
     },
-    {
-      title: 'In-Progress',
-      key: 'inProgress',
-    },
-  ];
+  ]
 
   // Sort Handler
   const [sortValue, setSortValue] = useState("");
@@ -171,6 +174,10 @@ const ProjectConfiguration = () => {
       title: 'Status',
       key: 'status',
       dataIndex: 'status',
+      filteredValue: [filterValue],
+      onFilter: (value, record) => {
+        return String(record.status).toLowerCase().includes(value.toLowerCase());
+      },
       render: (record) => {
         // console.log(record)
         if (record === "done") {
@@ -205,46 +212,10 @@ const ProjectConfiguration = () => {
     },
   ];
 
-  // Data
-  const dataSource = [
-    {
-        key: "1",
-        client: "PT Suka-Suka",
-        projectName: "HRIS",
-        startDate: "10/11/2022",
-        dueDate: "20/02/2023",
-        status: "done",
-    },
-    {
-        key: "2",
-        client: "PT Suka-Suka",
-        projectName: "Mobile E-Learning",
-        startDate: "10/12/2022",
-        dueDate: "20/02/2024",
-        status: "inProgress",
-    },
-    {
-        key: "3",
-        client: "PT Suka-Suka",
-        projectName: "Desktop E-Learning",
-        startDate: "05/01/2021",
-        dueDate: "22/12/2021",
-        status: "cancel",
-    },
-    {
-        key: "4",
-        client: "PT Suka-Suka",
-        projectName: "Website E-Learning",
-        startDate: "15/01/2020",
-        dueDate: "25/10/2020",
-        status: "done",
-    },
-  ]
-
   return (
     <>
       <Row gutter={[5, 10]} justify="space-between">
-      <Col lg={8} md={12} sm={24}>
+        <Col lg={8} md={12} xs={24}>
         <Input 
           className='search-box'
           prefix={<AiOutlineSearch/>} 
@@ -253,24 +224,19 @@ const ProjectConfiguration = () => {
           allowClear
         />
         {/* <SearchBox /> */}
-      </Col>
-      <Col lg={3} md={6} sm={8}>
-        <FilterButton onFilter={handleFilter} treeData={treeData} />
-      </Col>
-      <Col lg={3} md={6} sm={8}>
-        <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
-      </Col>
-      <Col lg={3} md={8} sm={8}>
-        <CountButton className="count-button" onCount={handleCount} />
-      </Col>
-      <Col lg={6} md={16} sm={24}>
-        {/* <Button onClick={() => navigate("/add-project")} className="add-button" style={{ color: "white", width: "100%", }} >
-          <Flex justify='center' align='center' gap={10}>
-            + Add Project
-          </Flex> 
-        </Button> */}
-        <AddButton handleClick={() => navigate("/add-project")} buttonText="Add Projects" />
-      </Col>
+        </Col>
+        <Col lg={3} md={6} xs={8}>
+          <FilterDropdown onClick={(e)=>handleFilter(e)} items={status} text={filterName} className="sort-button"/>
+        </Col>
+        <Col lg={3} md={6} xs={8}>
+          <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
+        </Col>
+        <Col lg={3} md={8} xs={8}>
+          <CountButton className="count-button" onCount={handleCount} />
+        </Col>
+        <Col lg={6} md={16} xs={24}>
+          <AddButton handleClick={() => navigate("/add-project")} buttonText="Add Projects" />
+        </Col>
       </Row>
       <br />
 

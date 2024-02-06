@@ -740,7 +740,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  }
+  } else if (location.pathname === "/type-project") {
+    pageTitle = "Type Project";
+    finalPageTitle = pageTitle;
+  } 
 
   return (
     <Layout className="layout-container">

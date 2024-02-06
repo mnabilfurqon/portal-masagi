@@ -6,7 +6,6 @@ import { AiOutlineFileSearch, AiOutlineUser } from 'react-icons/ai'
 import axios from 'axios'
 import dayjs from "dayjs"
 import Cookies from 'js-cookie'
-import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 import './reportConfiguartion.css'
@@ -15,9 +14,12 @@ const ReportConfiguartion = () => {
     
   // Declaration
   const navigate = useNavigate();
+  const cookies = Cookies.get()
   const token = Cookies.get("token")
+  const role = Cookies.get("role_name")
   const [loading, setLoading] = useState(false);
   const [positions, setPositions] = useState();
+  const [divisions, setDivisions] = useState();
   const [attendanceCompany, setAttendanceCompany] = useState();
   const [reportCompany, setReportCompany] = useState();
   const [totalPresent, setTotalPresent] = useState(0);
@@ -30,6 +32,8 @@ const ReportConfiguartion = () => {
   const date = dayjs();
   const [filterBy, setFilterBy] = useState("Week");
   const [filterDate, setFilterDate] = useState(date.format("YYYY-MM-DD"));
+  const [filterPosition, setFilterPosition] = useState();
+  const [filterDivision, setFilterDivision] = useState();
     
   // Header
   useEffect(() => {
@@ -40,7 +44,9 @@ const ReportConfiguartion = () => {
     getAttendanceCompany()
     getReportCompany()
     getListPosition()
-  }, [token, navigate, filterDate, filterBy]);
+    getListDivision()
+    // console.log(cookies)
+  }, [token, navigate, filterDate, filterBy, filterDivision, filterPosition]);
 
   // Get API Summary Company
   const getSummaryCompany = async () => {
@@ -96,7 +102,7 @@ const ReportConfiguartion = () => {
       setLoading(true);
       const response = await axios.get(`http://103.82.93.38/api/v1/attendance/report_company`,
         {
-          params: { filter_by: filterBy, date: filterDate},
+          params: { filter_by: filterBy, date: filterDate, filter_position: filterPosition, filter_division: filterDivision},
           headers: { Authorization: token },
         }
       );
@@ -126,22 +132,46 @@ const ReportConfiguartion = () => {
       // console.log("positions", positions)
       // console.log(response);
     } catch (error) {
-      console.log("Error", error);
+      // console.log("Error", error);
       setLoading(false);
     } finally {
       setLoading(false);
     }
   }
-  
-  // Sort Handler
-  const [sortValue, setSortValue] = useState("");
-  
-  const handleSort = (value) => {
-      setSortValue(value);
-  };
+
+  // Get API Division
+  const getListDivision = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/division/`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setDivisions(response.data.items)
+      // console.log("positions", positions)
+      // console.log(response);
+    } catch (error) {
+      // console.log("Error", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // Filter Handler
+  const [filterUpName, setFilterUpName] = useState("This Month");
+  const [filterDownName, setFilterDownName] = useState(role === "HR" ? "All Division" : "All Position");
+
   const position = positions?.map(item => {
+    return {
+      key: item.uuid,
+      label: item.name,
+    }
+  })
+
+  const division = divisions?.map(item => {
     return {
       key: item.uuid,
       label: item.name,
@@ -159,10 +189,64 @@ const ReportConfiguartion = () => {
       },
   ]
   
-  const onChange = () => {}
   const handleFilterByTime = (e) => {
     const value = e.key;
     setFilterBy(value);
+    setFilterUpName(value === "week" ? "This Week" : "This Month")
+  }
+  
+  const handleFilterDivision = (e) => {
+    const value = e.key;
+    setFilterDivision(value);
+
+    // Get Division
+    const getDivisionName = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://103.82.93.38/api/v1/division/${value}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setLoading(false);
+        setFilterDownName(response.data.name)
+        // console.log("division", response.data)
+      } catch (error) {
+        console.log("Error", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    }    
+
+    getDivisionName();
+  }
+
+  const handleFilterPosition = (e) => {
+    const value = e.key;
+    setFilterPosition(value);
+
+    // Get Position
+    const getPositionName = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://103.82.93.38/api/v1/position/${value}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setLoading(false);
+        setFilterDownName(response.data.name)
+        // console.log("division", response.data)
+      } catch (error) {
+        console.log("Error", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    }    
+
+    getPositionName();
   }
   
   // Search Handler
@@ -196,7 +280,11 @@ const ReportConfiguartion = () => {
                 <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                 <div style={{ margin: 0, padding: 0, }}>
                     <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                    <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                    { (cookies.role_name === "HR") ? 
+                        <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                        :
+                        <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position}</h5>
+                    }
                 </div>
             </Flex>
             )
@@ -243,10 +331,6 @@ const ReportConfiguartion = () => {
     },
   ]
   
-  const onChangeTable = (pagination, filter, sorter, extra) => {
-      //
-  }
-  
   const handleDetailClick = (record) => {
       // console.log("action record", record)
       const uuid = record.employee.uuid
@@ -256,12 +340,12 @@ const ReportConfiguartion = () => {
   
   const dataSource = reportCompany?.map(item => {
       return {
-          key: item.uuid,
+          key: item.employee_uuid,
           employee: { 
               uuid: item.employee_uuid, 
               name: item.employee_name,
               division: item.division,
-              // position: item.position,
+              position: item.position,
           },
           presents: item.present,
           absents: item.absent,
@@ -274,13 +358,12 @@ const ReportConfiguartion = () => {
 
   return (
     <Spin spinning={loading} size='large' tip="Loading...">
-        <Row gutter={16}>
+        <Row gutter={[16, 0]}>
             <Col xs={24} sm={24} md={12} lg={16} xl={16} xxl={16}>
-                {/* <p className='week'>Week {(dayjs(filterDate).duration().weeks()) ? dayjs(filterDate).duration().weeks() : ""}</p> */}
                 <p className='week'>Week {(dayjs(filterDate).week()) ? dayjs(filterDate).week() : ""} (of year)</p>
             </Col>
             <Col xs={12} sm={12} md={6} lg={4} xl={4} xxl={4}>
-                <FilterDropdown className="sort-button" text="This Month" items={times} onClick={(e)=>handleFilterByTime(e)} />
+                <FilterDropdown className="sort-button" text={filterUpName} items={times} onClick={(e)=>handleFilterByTime(e)} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={4} xl={4} xxl={4}>
                 <DatePicker onChange={(e)=>setFilterDate(e.format("YYYY-MM-DD"))} picker="month" placeholder='Filter By' style={{ width: "100%", }} />
@@ -410,7 +493,11 @@ const ReportConfiguartion = () => {
                 <CountButton className="count-button" onCount={handleCount} />
             </Col>
             <Col xs={18} sm={18} md={6} lg={4} xl={4} xxl={4}>
-                <FilterDropdown className="sort-button" text="All Position" items={position} />
+                { (cookies.role_name === "HR") ? 
+                    <FilterDropdown className="sort-button" text={filterDownName} items={division} onClick={handleFilterDivision}/>
+                    :
+                    <FilterDropdown className="sort-button" text={filterDownName} items={position} onClick={handleFilterPosition}/>
+                }
             </Col>
         </Row>
         <br /> <br />
@@ -419,15 +506,9 @@ const ReportConfiguartion = () => {
             <p className='sub-title'>Attendance Report</p>
             <Table 
                 dataSource={dataSource}
-                // dataSource={dataReport}
                 columns={columns}
-                onChange={onChangeTable}
-                scroll={{
-                    x: 200,
-                }}
-                pagination={{
-                    pageSize: countValue,
-                }}
+                scroll={{ x: 200 }}
+                pagination={{ pageSize: countValue, }}
             />
         </div>
     </Spin>

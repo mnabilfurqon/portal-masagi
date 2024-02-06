@@ -93,7 +93,7 @@ const AttendanceConfiguration = () => {
       // console.log("User Location: ", location);
       // console.log("User Current Location: ", userCurrentLocation);
     } catch (error) {
-      console.log("Galat", error);
+      console.log("Error", error);
       setLoading(false)
       setSpinning(false)
     } finally {
@@ -246,14 +246,14 @@ const AttendanceConfiguration = () => {
   }
 
   const onOkSuccessCheckInModal = () => {
+    setOpenCheckInSuccessModal(false);
+    // document.getElementById("before-checkin").style.display="none";
+    // document.getElementById("before-checkout").style.display="block";
+    
     var in16Hours = 2/3;
     Cookies.set("check_in_time", checkIn.time, { expires: in16Hours });
     Cookies.set("check_in_location", checkIn.location, { expires: in16Hours });
     Cookies.set("check_in_image", checkInImage, { expires: in16Hours });
-
-    document.getElementById("before-checkin").style.display="none";
-    document.getElementById("before-checkout").style.display="block";
-    setOpenCheckInSuccessModal(false);
   }
 
   const onCancelSuccessCheckInModal = () => {
@@ -261,15 +261,14 @@ const AttendanceConfiguration = () => {
   }
 
   const onOkSuccessCheckOutModal = () => {
+    setOpenCheckOutSuccessModal(false);
+    // document.getElementById("before-checkout").style.display="none";
+    // document.getElementById("after-checkout").style.display="block";
+
     var in8Hours = 8/24;
     Cookies.set("check_out_time", checkOut.time, { expires: in8Hours });
     Cookies.set("check_out_location", checkOut.location, { expires: in8Hours });
     Cookies.set("check_out_image", checkOutImage, { expires: in8Hours });
-
-    document.getElementById("before-checkout").style.display="none";
-    // document.getElementById("after-checkout").style.display="block";
-    setLoading(false);
-    setOpenCheckOutSuccessModal(false);
   }
 
   const onCancelSuccessCheckOutModal = () => {
@@ -325,7 +324,7 @@ const AttendanceConfiguration = () => {
         // console.log("response", response);
         // console.log(checkIn);
       } catch (error) {
-        console.log("Galat", error);
+        console.log("Error", error);
         setLoading(false)
         setOpenSubmitAttendanceCheckIn(false);
         setOpenFailedModal(true);
@@ -369,20 +368,20 @@ const AttendanceConfiguration = () => {
       // console.log("response", response);
       // console.log(checkOut);
     } catch (error) {
-      console.log("Galat", error);
+      console.log("Error", error);
       setOpenSubmitAttendanceCheckOut(false);
       setOpenFailedModal(true);
     }
   }
 
   const failedAttendanceCheckIn = (error) => {
-    console.log("Galat", error);
+    console.log("Error", error);
     setOpenSubmitAttendanceCheckIn(false);
     setIsFailedModalOpen(true);
   };
 
   const failedAttendanceCheckOut = (error) => {
-    console.log("Galat", error);
+    console.log("Error", error);
     setOpenSubmitAttendanceCheckOut(false);
     setIsFailedModalOpen(true);
   };

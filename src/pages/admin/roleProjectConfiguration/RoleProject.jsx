@@ -3,7 +3,7 @@ import { BiEdit } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom'
 import { MdOutlineDelete } from 'react-icons/md'
 import { AiOutlineSearch } from 'react-icons/ai'
-import { PiWarningCircleBold } from "react-icons/pi"
+import { PiWarningCircle } from "react-icons/pi"
 import { Row, Col, Table, Input, Button, Flex, Modal, Form, Space } from 'antd'
 import AddButton from '@common/buttons/addButton/AddButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
@@ -437,7 +437,7 @@ const RoleProject = () => {
         }
       >
         <div className="dialog">
-          <PiWarningCircleBold className="icon-warning" size="70"/>
+          <PiWarningCircle className="icon-warning" size="70"/>
           <h1>Attention</h1>
           <p>Are you sure delete this role project?</p>
         </div>
