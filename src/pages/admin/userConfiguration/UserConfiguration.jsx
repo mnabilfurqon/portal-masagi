@@ -1,36 +1,32 @@
 import React, { useEffect, useState } from 'react'
+import { BiEdit } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
-import { Table, Tag, Space, Button, Row, Col, Input } from 'antd'
-import { useNavigate, useParams, Link } from 'react-router-dom'
-import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
-import { SuccessUpdateModal } from '@common/modals/successModal/SuccessModal'
+import { useNavigate } from 'react-router-dom';
+import { Table, Form, Space, Button, Row, Col, Input, Modal, Select, Radio } from 'antd'
 import SuccessModal from '@common/modals/successModal/SuccessModal'
 import FailedModal from '@common/modals/failedModal/FailedModal'
-import SearchBox from '@common/SearchBox/SearchBox'
-import './userConfiguration.css'
-import EditUser from './editUser/EditUser'
 import FilterButton from '@common/buttons/FilterButton/FilterButton'
+import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import './userConfiguration.css'
 
 const UserConfiguration = () => {
-  // {searchValue, filterValue, sortValue, countValue }
-
   // Declaration
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
+  const [form] = Form.useForm();
+  const [uuid, setUuid] = useState();
   const [users, setUsers] = useState([]);
-  const [isActive, setIsActive] = useState();
-  const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const {showModal} = useParams();
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [filterByStatus, setFilterByStatus] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [failedModalOpen, setFailedModalOpen] = useState(false);
 
   // Header
   useEffect(() => {
@@ -38,17 +34,14 @@ const UserConfiguration = () => {
       navigate('/login');
     }
     getUsersData();
-  }, [token, navigate, isAddModalOpen, isEditModalOpen, isDeleteModalOpen]);
+  }, [token, navigate, successModalOpen]);
 
   // API GET Users Data
   const getUsersData = async () => {
     try {
       setLoading(true);
       const response = await axios.get('http://103.82.93.38/api/v1/users/', {
-      // const response = await axios.get('http://127.0.0.1:5000/api/v1/users/', {
-        headers: {
-          Authorization: token,
-        }
+        headers: { Authorization: token, }
       });
       setUsers(response.data[0].items);
       // console.log(response.data[0]);
@@ -74,15 +67,19 @@ const UserConfiguration = () => {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      responsive: ["sm"],
+      // responsive: ["sm"],
     },
     {
       title: 'Status',
       key: 'status',
       dataIndex: 'status',
-      responsive: ["md"],
+      // responsive: ["md"],
+      filteredValue: [filterByStatus],
+      onFilter: (value, record) => {
+        return String(record.status).toLowerCase().includes(value.toLowerCase());
+      },
       render: (record) => {
-        if (record) {
+        if (record === "active") {
           return (
             <Button key={record.uuid} className="active-button" type="primary" size="small" value="active" ghost>
               active
@@ -102,7 +99,9 @@ const UserConfiguration = () => {
       key: 'action',
       render: (record) => (
         <Space size="small">
-          <EditUser uuid={(record)} onClick={setIsEditModalOpen(true)}/>
+          <Button type="none" style={{margin:0, padding:0}} onClick={() => handleOpenEditModal(record)}>
+            <BiEdit className="edit-icon" size="25" />
+          </Button>
         </Space>
       ),
     },
@@ -112,52 +111,28 @@ const UserConfiguration = () => {
     return {
       key: item.uuid,
       username: item.username,
-      status: item.is_active,
+      status: (item.is_active ? "active" : "not"),
       role: item.role.name,
+      role_uuid: item.role.uuid,
     }
   });
 
-  // // Filter data berdasarkan searchValue
-  // const filteredData = data?.filter(item =>
-  //   item.username?.toLowerCase().includes(searchValue?.toLowerCase()) &&
-  //   // conditional rendering if else untuk filterValue
-  //   (filterValue === 'active' ? item.status === 'active' : filterValue === 'notActive' ? item.status === 'notActive' : true )
-  // );
-
-  // // Sort data berdasarkan sortValue
-  // const sortedData = [...filteredData].sort((a, b) => {
-  //   if (sortValue === 'aToZ') {
-  //     return a.username.localeCompare(b.username);
-  //   } else if (sortValue === 'zToA') {
-  //     return b.username.localeCompare(a.username);
-  //   } else {
-  //     return 0;
-  //   }
-  // });
-
-  // const paginationConfig = {
-  //   pageSize: countValue, // Jumlah item per halaman berdasarkan countValue
-  //   showTotal: (total, range) => (
-  //     <span style={{ color: '#556172' }}>
-  //       Page {Math.ceil(range[0] / paginationConfig.pageSize)} of {Math.ceil(total / paginationConfig.pageSize)}
-  //     </span>
-  //   ),
-  //   showLessItems: true,
-  // };
-
-  // Search Handler
-  const [searchValue, setSearchValue] = useState("");
-
-  const handleSearch = (value) => {
-    setSearchValue(value);
-  };
-
   // Filter Handler
-  const [filterValue, setFilterValue] = useState("");
-
-  const handleFilter = (value) => {
-    setFilterValue(value);
+  const handleFilter = (e) => {
+    const value = e.key;
+    setFilterByStatus(value);
   };
+
+  const status = [
+    {
+      key: "active",
+      label: "Active",
+    },
+    {
+      key: "not",
+      label: "Not Active",
+    },
+  ]
 
   // Sort Handler
   const [sortValue, setSortValue] = useState("");
@@ -172,21 +147,6 @@ const UserConfiguration = () => {
   const handleCount = (value) => {
     setCountValue(value);
   };
-
-  const treeData = [
-    {
-      title: 'Status',
-      key: 'status',
-    },
-    {
-      title: 'Username',
-      key: 'username',
-    },
-    {
-      title: 'Role',
-      key: 'role',
-    },
-  ];
 
   const itemsSort = [
     {
@@ -210,73 +170,252 @@ const UserConfiguration = () => {
     }
   });
 
+  // Edit Modal Handler
+  const handleOpenEditModal = (record) => {
+    // console.log(record);
+    form.setFieldsValue({
+      username: record.username,
+      role_uuid: record.role_uuid,
+      is_active: (record.status === "active" ? true : false),
+    })
+    const uuid = record.key;
+    setUuid(uuid);
+    setIsEditModalOpen(true);
+  };
+  
+  const handleOk = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setIsEditModalOpen(false);
+    }, 3000);
+  };
+
+  const handleCancel = () => {
+    setIsEditModalOpen(false);
+  };
+  
+  const failedUpdateUser = (error) => {
+    console.log(error);
+    setIsEditModalOpen(false);
+    setFailedModalOpen(true);
+  };
+
+  const handleSuccessModalOk = () => {
+    setSuccessModalOpen(false)
+    form.setFieldsValue({ password: "" })
+  }
+
+  const handleSuccessModalCancel = () => {
+    setSuccessModalOpen(false)
+    form.setFieldsValue({ password: "" })
+  }
+
+  const handleFailedModalOk = () => {
+    setFailedModalOpen(false)
+  }
+
+  const handleFailedModalCancel = () => {
+    setFailedModalOpen(false)
+  }
+
+  // PUT API to Update User
+  const updateUser = async (values) => {
+    try {
+      setLoading(true);
+      // console.log("values", values);
+      // console.log("form", form.getFieldsValue());
+      const response = await axios.put(`http://103.82.93.38/api/v1/users/${uuid}`, values,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setIsEditModalOpen(false);
+      setSuccessModalOpen(true);
+      console.log("User updated!");
+      // console.log(response);
+    } catch (error) {
+      console.log(error);
+      setIsEditModalOpen(false);
+      setFailedModalOpen(true);
+    }
+  }
+
+  // Edit Modal //
+  const [user, setUser] = useState();
+  const [roles, setRoles] = useState();
+  const [employees, setEmployees] = useState();
+  const [formLayout, setFormLayout] = useState('vertical');
+
+  // Form Layout
+  const formItemLayout =
+    formLayout === 'horizontal'
+      ? {
+          labelCol: {
+            span: 4,
+          },
+          wrapperCol: {
+            span: 14,
+          },
+        }
+      : null;
+      
+  useEffect(() => {
+    getUser()
+    getRoles()
+    getEmployees()
+  }, [uuid]);
+
+  // GET API User by Id
+  const getUser = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.get(`http://103.82.93.38/api/v1/users/${uuid}`, {
+          headers: { Authorization: token },
+        }
+      );
+      setUser(response.data);
+      // console.log("data user", user);
+      // console.log("data respons", response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // GET API Roles
+  const getRoles = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.get(`http://103.82.93.38/api/v1/role/`, {
+          headers: { Authorization: token },
+        }
+      );
+      setRoles(response.data[0].items);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // GET API Employee
+  const getEmployees = async () => {
+    try {
+        const response = await axios.get(`http://103.82.93.38/api/v1/employee/`, {
+            headers: { Authorization: token },
+        }
+    );
+    setEmployees(response.data.items);
+    } catch (error) {
+        console.log(error);
+    }
+  }
+  
   return (
   <>
-      {/* <Row gutter={[16, 8]}>
-        <Col xs={24} md={14} lg={8} xl={6} xxl={6}>
-          <SearchBox onSearch={handleSearch} /> 
-            </Col>
-        <Col xs={12} md={10} lg={8} xl={4} xxl={3}>
-          <FilterButton onFilter={handleFilter} treeData={treeData} />
-        </Col>
-        <Col xs={12} md={8} lg={8} xl={4} xxl={3}>
-          <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
-        </Col>
-        <Col xs={8} md={4} lg={12} xl={2} xxl={2}>
-          <CountButton className="count-button" onCount={handleCount} />
-        </Col>
-        <Col xs={16} md={12} lg={12} xl={{span: 4, offset: 4}} xxl={{span: 4, offset: 6}}>
-          <Link to='/company/add-company'>
-            <AddButton buttonText="Add Company"/> 
-          </Link>
-        </Col>
-      </Row>
-      <br /> */}
-
-    <Row gutter="10" justify="start">
-      <Col>
+    <Row gutter={[10, 10]} justify="start">
+      <Col xs={24} md={10} lg={8}>
         <Input 
         className='search-box'
         prefix={<IoIosSearch />} 
-        placeholder='Search' 
-        onSearch={(value)=>{ 
-          setSearchText(value)
-        }}
+        placeholder='Search'
         onChange={(e) => {
           setSearchText(e.target.value);
         }}
         allowClear
         />
       </Col>
-      <Col>
-        <FilterButton onFilter={handleFilter} treeData={treeData} />
+      <Col xs={8} md={5} lg={4}>
+        <FilterDropdown items={status} text="Filter "className="sort-button" onClick={handleFilter}/>
       </Col>
-      <Col>
+      <Col xs={8} md={5} lg={4}>
         <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
       </Col>
-      <Col>
+      <Col xs={8} md={4} lg={3}>
         <CountButton className="count-button" onCount={handleCount} />
-      </Col>
-      <Col>
-        {/* <AddPosition /> */}
       </Col>
     </Row>
     <br />
 
     <Table 
-    columns={columns} 
-    pagination={{
-      pageSize: countValue,
-    }} 
-    dataSource={sortedData} 
-    loading={loading}
-    // dataSource={data}
-    // onChange={sortedData} 
-    // onChange={sortValue} 
-    // pagination={paginationConfig}
-    // searchValue={searchValue} 
-    // filterValue={filterValue} 
-    // countValue={countValue}
+      columns={columns} 
+      pagination={{ pageSize: countValue, }} 
+      scroll={ { x: 200 } }
+      dataSource={sortedData} 
+      loading={loading}
+    />
+
+    {/* Edit Modal */}
+    <Modal
+        centered
+        open={isEditModalOpen}
+        title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Edit User</h2>}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={ <div></div> }
+      >
+        <Form
+          {...formItemLayout}
+          layout={formLayout}
+          form={form}
+          name='editUser'
+          onFinish={updateUser}
+          onFinishFailed={failedUpdateUser}
+          initialValues={{
+            layout: formLayout,
+          }}
+        >
+          <Form.Item label="Username" name="username">
+            <Input placeholder="Username"/>
+          </Form.Item>
+          <Form.Item label="Password" name="password">
+            <Input.Password placeholder="Password" />
+          </Form.Item>
+          <Form.Item label="Role" name="role_uuid">
+            <Select>
+              {roles?.map(role => {
+                return (
+                  <Select.Option key={(role.uuid)} value={(role.uuid)} loading={loading}>{(role.name)}</Select.Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Status" name="is_active">
+            <Radio.Group>
+              <Radio value={true}>Actice</Radio>
+              <Radio value={false}>Not Active</Radio>
+            </Radio.Group>
+          </Form.Item>
+          {/* <Form.Item label="Employee" name="employee_uuid" >
+            <Select>
+              {employees?.map(employee => 
+                <Select.Option key={(employee.uuid)} value={(employee.uuid)}>{(employee.name)}</Select.Option>)
+              }
+            </Select>
+          </Form.Item> */}
+            
+          <div>
+            <Button type="primary" htmlType="submit" className='add-button' loading={loading}>
+              Update
+            </Button>
+          </div>
+        </Form>
+      </Modal>
+
+    <SuccessModal 
+      action="Update" 
+      handleOk={handleSuccessModalOk} 
+      handleCancel={handleSuccessModalCancel} 
+      isModalOpen={successModalOpen} 
+    />
+
+    <FailedModal 
+      handleOk={handleFailedModalOk} 
+      handleCancel={handleFailedModalCancel} 
+      isModalOpen={failedModalOpen} 
     />
   </>
   )

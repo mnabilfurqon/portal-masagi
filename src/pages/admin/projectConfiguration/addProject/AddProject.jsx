@@ -116,7 +116,7 @@ const AddProject = () => {
         setLoading(true)
         values.due_date = dayjs(values.due_date).format("YYYY-MM-DD HH:mm:ss")
         values.start_date = dayjs(values.start_date).format("YYYY-MM-DD HH:mm:ss")
-        console.log(values);
+        // console.log(values);
         const response = await axios.post("http://103.82.93.38/api/v1/project/", values, 
         // const response = await axios.post(`http://127.0.0.1:5000/api/v1/project/`, values,
         {
@@ -220,7 +220,7 @@ const AddProject = () => {
               message: 'Please input your project start date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" style={{ width: "100%" }}/>
         </Form.Item>
         <Form.Item 
           name="due_date" 
@@ -233,7 +233,7 @@ const AddProject = () => {
               message: 'Please input your project due date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" disabledDate={disableDate}/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" disabledDate={disableDate} style={{ width: "100%" }}/>
         </Form.Item>
 
         <Flex gap={20} align='center' justify='end'>

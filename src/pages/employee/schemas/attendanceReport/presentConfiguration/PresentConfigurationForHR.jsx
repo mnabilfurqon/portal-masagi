@@ -11,13 +11,13 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 import dayjs from 'dayjs'
 
-const PresentConfiguration = () => {
+const PresentConfigurationForHR = () => {
   // Declaration
   const navigate = useNavigate();
   const token = Cookies.get("token")
   const [loading, setLoading] = useState(false);
   const [reportDaily, setReportDaily] = useState();
-  const [positions, setPositions] = useState();
+  const [divisions, setDivisions] = useState();
   const [attendanceSummary, setAttendanceSummary] = useState();
   const [attendanceCompany, setAttendanceCompany] = useState();
   const [totalPresent, setTotalPresent] = useState(0);
@@ -34,7 +34,7 @@ const PresentConfiguration = () => {
   const currentDayDate = today.format('dddd, DD MMMM YYYY')
   const [filterDate, setFilterDate] = useState(currentDate);
   const [filterValue, setFilterValue] = useState();
-  const [filterBy, setFilterBy] = useState("Position");
+  const [filterBy, setFilterBy] = useState("Division");
   const [dayDate, setDayDate] = useState(currentDayDate);
   // console.log(filterValue)
 
@@ -45,7 +45,7 @@ const PresentConfiguration = () => {
     }
     getAttendanceSummary()
     getReportDaily()
-    getListPosition()
+    getListDivision()
   }, [token, navigate, filterDate, typeReport, filterValue]);
 
   // Date Filter Handler
@@ -106,7 +106,7 @@ const PresentConfiguration = () => {
                   <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                   <div style={{ margin: 0, padding: 0, }}>
                       <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position.name}</h5>
+                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division.name}</h5>
                   </div>
               </Flex>
               )
@@ -182,7 +182,7 @@ const PresentConfiguration = () => {
                   <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                   <div style={{ margin: 0, padding: 0, }}>
                       <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position.name}</h5>
+                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division.name}</h5>
                   </div>
               </Flex>
               )
@@ -258,7 +258,7 @@ const PresentConfiguration = () => {
                   <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                   <div style={{ margin: 0, padding: 0, }}>
                       <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position.name}</h5>
+                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division.name}</h5>
                   </div>
               </Flex>
               )
@@ -336,7 +336,7 @@ const PresentConfiguration = () => {
                   <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                   <div style={{ margin: 0, padding: 0, }}>
                       <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position.name}</h5>
+                      <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division.name}</h5>
                   </div>
               </Flex>
               )
@@ -443,18 +443,18 @@ const PresentConfiguration = () => {
     }
   }
 
-  // Get API Position
-  const getListPosition = async () => {
+  // Get API Division
+  const getListDivision = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://103.82.93.38/api/v1/position/`,
+      const response = await axios.get(`http://103.82.93.38/api/v1/division/`,
         {
           headers: { Authorization: token },
         }
       );
       setLoading(false);
-      setPositions(response.data.items)
-      // console.log("positions", positions)
+      setDivisions(response.data.items)
+      // console.log("divisions", divisions)
       // console.log(response);
     } catch (error) {
       console.log("Error", error);
@@ -577,7 +577,7 @@ const PresentConfiguration = () => {
   }, [reportDaily])
 
   // Filter by Division Handler
-  const position = positions?.map(item => {
+  const division = divisions?.map(item => {
     return {
       key: item.uuid,
       label: item.name,
@@ -677,7 +677,7 @@ const PresentConfiguration = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col xs={18} sm={18} md={6} lg={4} xl={4} xxl={4}>
-          <FilterDropdown className="sort-button" text="All Position" items={position} onClick={(e)=>handleFilter(e)}/>
+          <FilterDropdown className="sort-button" text="All Division" items={division} onClick={(e)=>handleFilter(e)}/>
         </Col>
       </Row>
       <br /> <br />
@@ -700,4 +700,4 @@ const PresentConfiguration = () => {
   )
 }
 
-export default PresentConfiguration
+export default PresentConfigurationForHR

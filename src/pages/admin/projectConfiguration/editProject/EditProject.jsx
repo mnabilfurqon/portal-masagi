@@ -170,9 +170,13 @@ const EditProject = () => {
         setLoading(true)
         values.due_date = dayjs(values.due_date).format("YYYY-MM-DD");
         values.start_date = dayjs(values.start_date).format("YYYY-MM-DD");
-        // values.done_at = ((values.done_at) ? dayjs(values.done_at).format("YYYY-MM-DD") : "");
-        // values.cancel_at = ((values.cancel_at) ? dayjs(values.cancel_at).format("YYYY-MM-DD") : "");
-        console.log(values);
+        if (values.done_at) {
+          values.done_at = dayjs(values.done_at).format("YYYY-MM-DD");
+        };
+        if (values.cancel_at) {
+          values.cancel_at = dayjs(values.cancel_at).format("YYYY-MM-DD");
+        };
+        // console.log("Values", values);
         const response = await axios.put(`http://103.82.93.38/api/v1/project/${uuid}`, values, 
         // const response = await axios.put(`http://127.0.0.1:5000/api/v1/project/${uuid}`, values,
         {
@@ -180,8 +184,8 @@ const EditProject = () => {
         });
         setOpenSuccessModal(true);
         setLoading(false)
-        console.log("Project updates!");
-        console.log("Response", response);
+        console.log("Project updated!");
+        // console.log("Response", response);
       } catch (error) {
         setLoading(false)
         setOpenFailedModal(true);
@@ -277,7 +281,7 @@ const EditProject = () => {
               message: 'Please input your project start date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY"/>
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" style={{ width: "100%" }}/>
         </Form.Item>
         <Form.Item 
           name="due_date" 
@@ -290,7 +294,7 @@ const EditProject = () => {
               message: 'Please input your project due date!', },
           ]}
         >
-          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" disabledDate={disableDate}
+          <DatePicker placeholder='DD/MM/YYYY' format="DD/MM/YYYY" disabledDate={disableDate} style={{ width: "100%" }}
           // defaultValue={dayjs(project.due_date, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")}
           />
         </Form.Item>
@@ -313,7 +317,9 @@ const EditProject = () => {
           colon={false} 
           labelAlign='left'
         >
-          <DatePicker placeholder='DD/MM/YYYY' disabled/>
+          <DatePicker placeholder='DD/MM/YYYY' style={{ width: "100%" }}
+            disabled
+          />
         </Form.Item>
         <Form.Item 
           // name="done_at" 
@@ -322,7 +328,9 @@ const EditProject = () => {
           colon={false} 
           labelAlign='left' 
         >
-          <DatePicker placeholder='DD/MM/YYYY' disabled/>
+          <DatePicker placeholder='DD/MM/YYYY' style={{ width: "100%" }}
+            disabled
+          />
         </Form.Item>
 
         <Flex gap={20} align='center' justify='end'>

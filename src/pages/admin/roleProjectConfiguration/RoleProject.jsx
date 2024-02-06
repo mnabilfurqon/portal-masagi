@@ -2,33 +2,30 @@ import React, { useState, useEffect, } from 'react'
 import { BiEdit } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom'
 import { MdOutlineDelete } from 'react-icons/md'
+import { AiOutlineSearch } from 'react-icons/ai'
 import { PiWarningCircleBold } from "react-icons/pi"
 import { Row, Col, Table, Input, Button, Flex, Modal, Form, Space } from 'antd'
-import { AiOutlineSearch, AiOutlinePlus, AiOutlineFileSearch, } from 'react-icons/ai'
 import AddButton from '@common/buttons/addButton/AddButton'
-import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import SuccessModal from '@common/modals/successModal/SuccessModal'
 import FailedModal from '@common/modals/failedModal/FailedModal'
 import Cookies from 'js-cookie'
 import axios from 'axios'
-import dayjs from 'dayjs'
 
-const TypeProjectConfiguration = () => {
+const RoleProject = () => {
   // Declaration
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
   const [form] = Form.useForm();
   const [formEdit] = Form.useForm();
+  const [editValue, setEditValue] = useState('');
   const [uuid, setUuid] = useState();
-  const [value, setValue] = useState('Website Development');
   const [loading, setLoading] = useState();
   const [formLayout, setFormLayout] = useState('vertical');
   const [requiredMark, setRequiredMarkType] = useState('optional');
-  const [typeProjects, setTypeProjects] = useState();
+  const [RoleProjects, setRoleProjects] = useState();
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -61,32 +58,31 @@ const TypeProjectConfiguration = () => {
     if (!token) {
       navigate('/login');
     }
-    getTypeProject();
+    getRoleProject();
   }, [token, navigate, openSuccessAddModal, openSuccessEditModal, openSuccessDeleteModal]);
 
-  // Get Type Project
-  const getTypeProject = async () => {
+  // Get Role Project
+  const getRoleProject = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://103.82.93.38/api/v1/type_project/", {
+      const response = await axios.get(`http://103.82.93.38/api/v1/role_project/`, {
         headers: {
           Authorization: token,
         }
       });
       setLoading(false);
-      setTypeProjects(response.data.items);
-      // console.log("Type Projects", typeProjects);
+      setRoleProjects(response.data.items);
+      // console.log("Role Projects", RoleProjects);
     } catch (error) {
       setLoading(false);
       console.log("Error", error);
     }
   }
 
-  const data = typeProjects?.map(item => {
+  const data = RoleProjects?.map(item => {
     return {
       key: item.uuid,
       name: item.name,
-      description: item.description,
     }
   });
 
@@ -112,11 +108,11 @@ const TypeProjectConfiguration = () => {
   const itemsSort = [
     {
       key: 'aToZ',
-      label: 'A-Z Type Project'
+      label: 'A-Z Role Project'
     },
     {
       key: 'zToA',
-      label: 'Z-A Type Project'
+      label: 'Z-A Role Project'
     },
   ];
 
@@ -137,16 +133,30 @@ const TypeProjectConfiguration = () => {
     setCountValue(value);
   };
 
-  // Detail Button Handler
-  const handleDetailClick = (record) => {
-    const value = record.key;
-    navigate(`/project/detail-project/${value}`);
+  // Edit Button Handler
+  const handleEditClick = (record) => {
+    // console.log(record);
+    const uuid = record.key;
+    const name = record.name;
+
+    formEdit.setFieldsValue({name: name})
+    setUuid(uuid);
+    setEditValue(name);
+    setOpenEditModal(true);
+  }
+
+  // Delete Button Handler
+  const handleDeleteClick = (record) => {
+    const uuid = record.key;
+    setUuid(uuid);
+    setOpenDeleteModal(true);
+    // console.log(uuid);
   }
 
   // Table
   const columns = [
     {
-      title: 'Type Project',
+      title: 'Role Project',
       dataIndex: 'name',
       key: 'name',
       width: "85%",
@@ -182,6 +192,7 @@ const TypeProjectConfiguration = () => {
 
   const onOkSuccessAddModal = () => {
     setOpenSuccessAddModal(false)
+    form.setFieldsValue( {name: ""} )
   }
 
   const onCancelSuccessAddModal = () => {
@@ -227,37 +238,13 @@ const TypeProjectConfiguration = () => {
   const onCancelFailedModal = () => {
     setOpenFailedModal(false)
   }
-
-  // Edit Button Handler
-  const handleEditClick = (record) => {
-    // console.log(record);
-    const uuid = record.key;
-    const name = record.name;
-    const desc = record.description;
-
-    formEdit.setFieldsValue({
-      name: name, 
-      description: desc
-    })
-    setUuid(uuid);
-    // setEditValue(name);
-    setOpenEditModal(true);
-  }
-
-  // Delete Button Handler
-  const handleDeleteClick = (record) => {
-    const uuid = record.key;
-    setUuid(uuid);
-    setOpenDeleteModal(true);
-    // console.log(uuid);
-  }
   
-  // Post Type Project
-  const addTypeProject = async (values) => {
+  // Post Role Project
+  const addRoleProject = async (values) => {
     try {
       setLoading(true);
-      console.log("Values", values);
-      const response = await axios.post("http://103.82.93.38/api/v1/type_project/", values, {
+    //   console.log("Values", values);
+      const response = await axios.post("http://103.82.93.38/api/v1/role_project/", values, {
         headers: {
           Authorization: token,
         }
@@ -267,28 +254,28 @@ const TypeProjectConfiguration = () => {
         setOpenAddModal(false);
         setOpenSuccessAddModal(true);
         // setValue("");
-        console.log("New type project added!");
+        console.log("New role project added!");
       }, 3000);
     } catch (error) {
       // setValue("");
       setLoading(false);
       setOpenAddModal(false);
       setOpenFailedModal(true);
-      console.log(error, values);
+      console.log("Error", error, "Values", values);
     }
   }
 
-  const failedAddTypeProject = (error, values) => {
+  const failedAddRoleProject = (error, values) => {
     console.log(error, values);
     setOpenFailedModal(true)
   }
 
-  // Put Type Project
-  const editTypeProject = async (values) => {
+  // Put Role Project
+  const editRoleProject = async (values) => {
     try {
       setLoading(true);
       // console.log("Values", values);
-      const response = await axios.put(`http://103.82.93.38/api/v1/type_project/${uuid}`, values, {
+      const response = await axios.put(`http://103.82.93.38/api/v1/role_project/${uuid}`, values, {
         headers: {
           Authorization: token,
         }
@@ -298,27 +285,27 @@ const TypeProjectConfiguration = () => {
         setOpenEditModal(false);
         setOpenSuccessEditModal(true);
         // setValue("");
-        console.log("Type project updates!");
+        console.log("Role project updates!");
       }, 3000);
     } catch (error) {
       // setValue("");
       setLoading(false);
       setOpenEditModal(false);
       setOpenFailedModal(true);
-      console.log(error, values);
+      console.log("Error", error, "Values", values);
     }
   }
 
-  const failedEditTypeProject = (error, values) => {
+  const failedEditRoleProject = (error, values) => {
     console.log(error, values);
     setOpenFailedModal(true)
   }
 
-   // Delete Type Project
-   const deleteTypeProject = async () => {
+   // Delete Role Project
+   const deleteRoleProject = async () => {
     try {
       setLoading(true);
-      const response = await axios.delete(`http://103.82.93.38/api/v1/type_project/${uuid}`, {
+      const response = await axios.delete(`http://103.82.93.38/api/v1/role_project/${uuid}`, {
         headers: {
           Authorization: token,
         }
@@ -328,7 +315,7 @@ const TypeProjectConfiguration = () => {
         setOpenDeleteModal(false);
         setOpenSuccessDeleteModal(true);
         // setValue("");
-        console.log("Type project deleted!");
+        console.log("Role project deleted!");
       }, 3000);
     } catch (error) {
       // setValue("");
@@ -360,8 +347,8 @@ const TypeProjectConfiguration = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col lg={8} md={16} sm={16} xs={24}>
-          {/* Add Type Project Modal */}
-          <AddButton handleClick={() => setOpenAddModal(true)} buttonText="Add Type Project" />
+          {/* Add Role Project Modal */}
+          <AddButton handleClick={() => setOpenAddModal(true)} buttonText="Add Role Project" />
         </Col>
       </Row>
       <br />
@@ -374,11 +361,11 @@ const TypeProjectConfiguration = () => {
       scroll={{ x: 200, }}
       />
 
-      {/* Add Type Project */}
+      {/* Add Role Project */}
       <Modal
       centered
       open={openAddModal}
-      title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Add Type Project</h2>}
+      title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Add Role Project</h2>}
       onCancel={onCancelAddModal}
       footer={<div></div>}
       >
@@ -386,36 +373,30 @@ const TypeProjectConfiguration = () => {
         {...formItemLayout}
         layout={formLayout}
         form={form}
-        onFinish={addTypeProject}
-        onFinishFailed={failedAddTypeProject}
+        onFinish={addRoleProject}
+        onFinishFailed={failedAddRoleProject}
         requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
         initialValues={{
-        //   layout: formLayout,
+          // layout: formLayout,
         }}
         >
-          <Form.Item label="Type Project" name="name" rules={[ { required: true, message: "Please input your type project name!" }, ]}>
+          <Form.Item label="Role Project" name="name" rules={[ { required: true, message: "Please input your role project name!" }, ]}>
             <Input
-            placeholder="Enter your type project name"
+            placeholder="Enter your role project name"
             name="name"
             />
           </Form.Item>
-          <Form.Item label="Description" name="description">
-            <Input
-            placeholder="Enter your type project description"
-            name="description"
-            />
-          </Form.Item>
           <Button htmlType='submit' loading={loading} className="add-button">
-            Add Type Project
+            Add Role Project
           </Button>
         </Form>
       </Modal>
 
-      {/* Edit Type Project */}
+      {/* Edit Role Project */}
       <Modal
       centered
       open={openEditModal}
-      title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Edit Type Project</h2>}
+      title={<h2 style={{color:"#1E2F66", fontWeight:600, }}>Edit Role Project</h2>}
       onCancel={onCancelEditModal}
       footer={<div></div>}
       >
@@ -423,23 +404,17 @@ const TypeProjectConfiguration = () => {
         {...formItemLayout}
         layout={formLayout}
         form={formEdit}
-        onFinish={editTypeProject}
-        onFinishFailed={failedEditTypeProject}
+        onFinish={editRoleProject}
+        onFinishFailed={failedEditRoleProject}
         requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
         initialValues={{
-          // name: value,
+          // name: editValue,
         }}
         >
-          <Form.Item label="Type Project" name="name" rules={[ { required: true, message: "Please input your type project name!" }, ]}>
+          <Form.Item label="Role Project" name="name" rules={[ { required: true, message: "Please input your role project name!" }, ]}>
             <Input
-            placeholder="Enter your type project name"
+            placeholder="Enter your role project name"
             name="name"
-            />
-          </Form.Item>
-          <Form.Item label="Description" name="description">
-            <Input
-            placeholder="Enter your type project description"
-            name="description"
             />
           </Form.Item>
           <Button htmlType='submit' loading={loading} className="add-button">
@@ -448,7 +423,7 @@ const TypeProjectConfiguration = () => {
         </Form>
       </Modal>
 
-      {/* Delete Type Project */}
+      {/* Delete Role Project */}
       <Modal
         centered={true}
         open={openDeleteModal}
@@ -457,34 +432,34 @@ const TypeProjectConfiguration = () => {
         footer={
           <div>
             <Button type="text" onClick={() => setOpenDeleteModal(false)}>CANCEL</Button>
-            <Button className="delete-button" type="danger" onClick={deleteTypeProject} loading={loading}>DELETE</Button>
+            <Button className="delete-button" type="danger" onClick={deleteRoleProject} loading={loading}>DELETE</Button>
           </div>
         }
       >
         <div className="dialog">
           <PiWarningCircleBold className="icon-warning" size="70"/>
           <h1>Attention</h1>
-          <p>Are you sure delete this type project?</p>
+          <p>Are you sure delete this role project?</p>
         </div>
       </Modal>
 
       {/* Success and Failed Modals */}
       <SuccessModal 
-      action="Add type project" 
+      action="Add role project" 
       isModalOpen={openSuccessAddModal} 
       handleOk={onOkSuccessAddModal} 
       handleCancel={onCancelSuccessAddModal} 
       />
 
       <SuccessModal 
-      action="Edit type project" 
+      action="Edit role project" 
       isModalOpen={openSuccessEditModal} 
       handleOk={onOkSuccessEditModal} 
       handleCancel={onCancelSuccessEditModal} 
       />
 
       <SuccessModal 
-      action="Delete type project" 
+      action="Delete role project" 
       isModalOpen={openSuccessDeleteModal} 
       handleOk={onOkSuccessDeleteModal} 
       handleCancel={onCancelSuccessDeleteModal} 
@@ -499,4 +474,4 @@ const TypeProjectConfiguration = () => {
   )
 }
 
-export default TypeProjectConfiguration
+export default RoleProject

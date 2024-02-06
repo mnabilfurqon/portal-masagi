@@ -69,8 +69,13 @@ import EditProject from "../pages/admin/projectConfiguration/editProject/EditPro
 import TypeProjectConfiguration from "../pages/admin/typeProjectConfiguration/TypeProjectConfiguration";
 import TaskReport from "../pages/employee/schemas/taskReport/TaskReport";
 import DetailOfficialTravelData from "../pages/employee/schemas/permitConfiguration/officialTravelEmployee/detailOfficialTravelEmployee/DetailOfficialTravelData";
+// import ProjectReport from "../pages/employee/schemas/projectReport/ProjectReport";
+// import DetailProjectReport from "../pages/employee/schemas/projectReport/DetailProjectReport";
+import DetailPresent from "../pages/employee/schemas/attendanceReport/presentConfiguration/DetailPresent";
+import RoleProject from "../pages/admin/roleProjectConfiguration/RoleProject";
 import ProjectReport from "../pages/employee/schemas/projectReport/ProjectReport";
 import DetailProjectReport from "../pages/employee/schemas/projectReport/detailProjectReport/DetailProjectReport";
+import PresentConfigurationForHR from "../pages/employee/schemas/attendanceReport/presentConfiguration/PresentConfigurationForHR";
 
 const RouteManagement = () => {
   const token = Cookies.get("token");
@@ -428,6 +433,17 @@ const RouteManagement = () => {
               }
             />
             {/* End of Type Project Configuration Route */}
+
+            {/* Role Project Configuration Route */}
+            <Route
+              path="/role-project"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <RoleProject />
+                </LayoutComponent>
+              }
+            />
+            {/* End of Role Project Configuration Route */}
           </React.Fragment>
         </Routes>
       </Suspense>
@@ -472,16 +488,17 @@ const RouteManagement = () => {
               path="/present"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <PresentConfiguration />
+                  <PresentConfigurationForHR />
                 </LayoutComponent>
               }
             />
 
             <Route
-              path="/present/detail"
+              path="/present/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <AttendanceDetails />
+                  <DetailPresent />
+                  {/* <AttendanceDetails /> */}
                 </LayoutComponent>
               }
             />
@@ -740,10 +757,10 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/present/detail"
+              path="/present/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <AttendanceDetails />
+                  <DetailPresent />
                 </LayoutComponent>
               }
             />
@@ -954,6 +971,7 @@ const RouteManagement = () => {
               element={
                 <LayoutComponent roleNumber={roleNumber}>
                   <TaskMain />
+                  {/* <ProjectReport /> */}
                 </LayoutComponent>
               }
             />
@@ -993,6 +1011,15 @@ const RouteManagement = () => {
                 </LayoutComponent>
               }
             />
+
+            {/* <Route
+              path="/project-report/detail-project/:uuid"
+              element={
+                <LayoutComponent roleNumber={roleNumber}>
+                  <DetailProjectReport />
+                </LayoutComponent>
+              }
+            /> */}
 
             <Route
               path="/project-report/detail-task/:uuid"
@@ -1055,10 +1082,11 @@ const RouteManagement = () => {
             />
 
             <Route
-              path="/present/detail"
+              path="/present/detail/:uuid"
               element={
                 <LayoutComponent roleNumber={roleNumber}>
-                  <AttendanceDetails />
+                  <DetailPresent />
+                  {/* <AttendanceDetails /> */}
                 </LayoutComponent>
               }
             />

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import './addUser.css'
-import { Form, Input, Radio, Select, Flex, Button } from 'antd'
 import { Link } from 'react-router-dom'
-import SubmitButton from '@common/buttons/submitButton/SubmitButton'
-import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal'
-import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
+import { Form, Input, Radio, Select, Flex, Button } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
+import SuccessModal from '@common/modals/successModal/SuccessModal'
+import FailedModal from '@common/modals/failedModal/FailedModal'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import './addUser.css'
 
 const AddUser = () => {
     // Declaration
@@ -26,8 +25,8 @@ const AddUser = () => {
     const [companies, setCompanies] = useState();
     const [employees, setEmployees] = useState();
 
-    const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
-    const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
 
     // Header 
     useEffect(() => {
@@ -37,26 +36,25 @@ const AddUser = () => {
         getRoles();
         getCompanies();
         getEmployees();
-        console.log("Token: ", token)
-        console.log("Company_uuid: ", company)
-        console.log("Emplyee_uuid: ", employee)
-        // console.log("Cookies: ", cookies)
-        // console.log(company)
-
-        // form.setFieldsValue({
-        //     company_uuid: company,
-        //     employee_uuid: employee.uuid,
-        // })
     }, [token, navigate]);
 
     // Handle Modal
-    const handleSuccessModalClose = () => {
-        setIsSuccessModalVisible(false);
+    const handleSuccessModalOk = () => {
+        setIsSuccessModalOpen(false);
         navigate("/user");
     };
 
-    const handleFailedModalClose = () => {
-        setIsFailedModalVisible(false);
+    const handleSuccessModalCancel = () => {
+        setIsSuccessModalOpen(false);
+        navigate("/user");
+    };
+
+    const handleFailedModalOk = () => {
+        setIsFailedModalOpen(false);
+    };
+
+    const handleFailedModalCancel = () => {
+        setIsFailedModalOpen(false);
     };
 
     // Form Layout
@@ -106,7 +104,7 @@ const AddUser = () => {
             }
         );
         setCompanies(response.data.items);
-        console.log("Companies", companies);
+        // console.log("Companies", companies);
         } catch (error) {
             console.log(error);
         } finally {
@@ -124,7 +122,7 @@ const AddUser = () => {
             }
         );
         setEmployees(response.data.items);
-        console.log("Employees", employees);
+        // console.log("Employees", employees);
         } catch (error) {
             console.log(error);
         } finally {
@@ -135,23 +133,23 @@ const AddUser = () => {
     // POST API to Insert New User - Form Handler
     const onFinish = async (values) => {
         try {
-            console.log(values);
+            // console.log(values);
             // console.log(values.username);
             const response = await axios.post("http://103.82.93.38/api/v1/users/", values, 
             // const response = await axios.post(`http://127.0.0.1:5000/api/v1/users/`, values,
                 {
                 headers: { Authorization: token, },
             });
-            setIsSuccessModalVisible(true);
+            setIsSuccessModalOpen(true);
             console.log("New user added!");
           } catch (error) {
             console.log(error);
-            setIsFailedModalVisible(true);
+            setIsFailedModalOpen(true);
         }
     };
 
     const onFinishFailed = (errorInfo) => {
-        setIsFailedModalVisible(true);
+        setIsFailedModalOpen(true);
         console.log('Failed:', errorInfo);
     };
 
@@ -288,15 +286,17 @@ const AddUser = () => {
             </Flex>
         </Form>
 
-        <SuccessAddDataModal
-            visible={isSuccessModalVisible}
-            onClose={handleSuccessModalClose}
-            textParagraph="Data upload successful!"
+        <SuccessModal
+            action="Delete"
+            handleOk={handleSuccessModalOk}
+            handleCancel={handleSuccessModalCancel}
+            isModalOpen={isSuccessModalOpen}
         />
 
-        <FailedAddDataModal
-            visible={isFailedModalVisible}
-            onClose={handleFailedModalClose}
+        <FailedModal
+            handleOk={handleFailedModalOk}
+            handleCancel={handleFailedModalCancel}
+            isModalOpen={isFailedModalOpen}
         />
     </>
     )

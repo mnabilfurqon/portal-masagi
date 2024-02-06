@@ -30,7 +30,7 @@ const ProjectConfiguration = () => {
     getProjects();
   }, [token, navigate]);
 
-  // Get Type Project
+  // Get All Project
   const getProjects = async () => {
     try {
       setLoading(true);

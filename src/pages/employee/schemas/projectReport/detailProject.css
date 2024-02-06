@@ -1,0 +1,17 @@
+.card {
+  box-shadow: 0 2px 1px 0 #e0e6ed;
+}
+
+table {
+  padding: 0;
+  margin: 0;
+}
+
+tbody {
+  padding: 0;
+  margin: 0;
+}
+
+td {
+  padding: 0;
+}

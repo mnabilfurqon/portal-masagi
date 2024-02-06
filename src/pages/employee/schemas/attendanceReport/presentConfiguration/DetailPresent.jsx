@@ -1,173 +1,226 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Flex, DatePicker, Row, Col, Table, Spin } from 'antd'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Row, Col, Avatar, Flex, DatePicker, Table, Spin, } from 'antd'
+import { AiOutlineUser } from "react-icons/ai"
 import axios from 'axios'
-import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
+import dayjs from 'dayjs'
 import HistoryButton from '@common/buttons/historyButton/HistoryButton'
-import './historyConfiguration.css'
 
-const HistoryConfiguration = () => {
-    const navigate = useNavigate();
-    const token = Cookies.get("token")
-    const cookies = Cookies.get()
-    const [loading, setLoading] = useState(false);
-    const [tableName, setTableName] = useState("Presents");
-    const [employeeAttendanceDetail, setEmployeeAttendanceDetail] = useState();
-
-    const [totalPresent, setTotalPresent] = useState(0);
-    const [totalAbsent, setTotalAbsent] = useState(0);
-    const [totalPermit, setTotalPermit] = useState(0);
-    const [totalLeaves, setTotalLeaves] = useState(0);
-    const [totalOvertime, setTotalOvertime] = useState(0);
-    const [totalOfficialTravels, setTotalOfficialTravels] = useState(0);
+const DetailPresent = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const token = Cookies.get("token")
+  const { data } = location.state || {};
   
-    const date = dayjs();
-    const [filterBy, setFilterBy] = useState("Month");
-    const [typeReport, setTypeReport] = useState("Present");
-    const [filterDate, setFilterDate] = useState();
+  const [loading, setLoading] = useState(false);
+  const [employeeNip, setEmployeeNip] = useState();
+  const [employeeAttendanceDetail, setEmployeeAttendanceDetail] = useState();
+  const [tableName, setTableName] = useState("Presents");
+  const [totalPresent, setTotalPresent] = useState(0);
+  const [totalAbsent, setTotalAbsent] = useState(0);
+  const [totalPermit, setTotalPermit] = useState(0);
+  const [totalLeaves, setTotalLeaves] = useState(0);
+  const [totalOvertime, setTotalOvertime] = useState(0);
+  const [totalOfficialTravels, setTotalOfficialTravels] = useState(0);
 
-    // Header
-    useEffect(() => {
-      if (!token) {
-        navigate('/login');
-      }
-      getAttendanceSummaryEmployee();
-      getAttendanceReportEmployee();
-      // console.log(cookies);
-    }, [token, navigate, filterDate]);
-    
-    const columns = [
-        {
-            title: 'Date',
-            dataIndex: 'date',
-            key: 'date',
-        },
-        {
-            title: 'In-Time',
-            dataIndex: 'in_time',
-            key: 'in_time',
-        },
-        {
-            title: 'Out-Time',
-            dataIndex: 'out_time',
-            key: 'out_time',
-        },
-        {
-            title: 'Total Hours',
-            dataIndex: 'total_hours',
-            key: 'total_hours',
-        },
-        {
-            title: 'Lateness',
-            dataIndex: 'lateness',
-            key: 'lateness',
-            className: 'lateness',
-        },
-    ]
+  const date = dayjs();
+  const [filterBy, setFilterBy] = useState("month");
+  const [filterDate, setFilterDate] = useState();
 
-    // Get API Attendance Summary Employee
-    const getAttendanceSummaryEmployee = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://103.82.93.38/api/v1/attendance/summary/employee`,
-          {
-            params: { employee_uuid: cookies.employee_uuid, filter_by: filterBy,  date: filterDate },
-            headers: { Authorization: token },
-          }
-        );
-        setLoading(false);
-        setTotalPresent(response.data.present)
-        setTotalAbsent(response.data.absent)
-        setTotalPermit(response.data.permit)
-        setTotalLeaves(response.data.leaves)
-        setTotalOvertime(response.data.overtime)
-        setTotalOfficialTravels(response.data.official_travel)
-        // console.log("Attendance summary employee", response.data)
-        // console.log(response);
-      } catch (error) {
-        console.log("Error", error);
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
+  // Header
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
     }
-  
-    // Get API Employee Attendance Detail
-    const getAttendanceReportEmployee = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://103.82.93.38/api/v1/attendance/report/employee/${cookies.employee_uuid}`,
-          {
-            params: { date: filterDate, type_report: typeReport, filter_by: filterBy },
-            headers: { Authorization: token },
-          }
-        );
-        setLoading(false);
-        setEmployeeAttendanceDetail(response.data)
-        // console.log("Attendance Detail", employeeAttendanceDetail)
-      } catch (error) {
-        console.log("Error", error);
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
-    }
-  
-    const dataHistory = employeeAttendanceDetail?.map(item => {
-      const totalHours = (date_out, date_in) => {
-          const totalInSec = dayjs(date_out).diff(date_in, "s", true);
-          const total_hours = totalInSec/3600;
-          const total_minutes = (totalInSec%3600)/60;
-          const total_second = totalInSec%60;
-          return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
-          // return totalInSec;
-      }
-  
-      const totalLateness = (in_time) => {
-          const inTime = dayjs(in_time).format("YYYY-MM-DD hh:mm:ss")
-          // console.log("in_time", inTime);
-  
-          const standard_in_time = dayjs().set('y', dayjs(in_time).get('y')).set('M', dayjs(in_time).get('M')).set('D', dayjs(in_time).get('D')).set('h', 8).set('m', 0).set('s', 0).format("YYYY-MM-DD hh:mm:ss");
-          // console.log("standard_in_time", standard_in_time);
-  
-          const totalInSec = dayjs(in_time).diff(standard_in_time, "s", true);
-          // console.log("total_insec", totalInSec);
-  
-          if (totalInSec > 0) {
-              const total_hours = totalInSec/3600;
-              const total_minutes = (totalInSec%3600)/60;
-              const total_second = totalInSec%60;
-              return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
-              // return totalInSec;
-          } else {
-              return "00:00:00";
-          }
-      }
-      
-      return {
-          key: item.uuid,
-          date: dayjs(item.check_in_date).format("DD-MM-YYYY"),
-          in_time: dayjs(item.check_in_date).format("hh:mm A"),
-          out_time: dayjs(item.check_out_date).format("hh:mm A"),
-          total_hours: totalHours(item.check_out_date, item.check_in_date),
-          lateness: totalLateness(item.check_in_date),
-      }
-    })
-    
-    // const [dataSource, setDataSource] = useState(presents);
-    const onChange = () => { }
+    getNipEmployee();
+    getEmployeeAttendanceDetail();
+    getAttendanceSummaryEmployee();
+}, [token, navigate, filterDate]);
 
-    return (
-    <Spin spinning={loading} size='large' tip="Laoding...">
-        <Flex align='center' justify='space-between'>
-            <p className='title'>History</p>
-            <DatePicker onChange={(e)=>setFilterDate(e.format("YYYY-MM-DD"))} picker="month" />
+  const columns = [
+    {
+        title: 'Date',
+        dataIndex: 'date',
+        key: 'date',
+    },
+    {
+        title: 'In-Time',
+        dataIndex: 'in_time',
+        key: 'in_time',
+    },
+    {
+        title: 'Out-Time',
+        dataIndex: 'out_time',
+        key: 'out_time',
+    },
+    {
+        title: 'Total Hours',
+        dataIndex: 'total_hours',
+        key: 'total_hours',
+    },
+    {
+        title: 'Lateness',
+        dataIndex: 'lateness',
+        key: 'lateness',
+        className: 'lateness',
+    },
+  ]
+
+  // Get API Employee
+  const getNipEmployee = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/employee/${data.employee.uuid}`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setEmployeeNip(response.data.nip)
+    } catch (error) {
+      console.log("Galat", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Get API Attendance Summary Employee
+  const getAttendanceSummaryEmployee = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/summary/employee`,
+        {
+          params: { employee_uuid: data.employee.uuid, filter_by: filterBy,  date: filterDate },
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setTotalPresent(response.data.present)
+      setTotalAbsent(response.data.absent)
+      setTotalPermit(response.data.permit)
+      setTotalLeaves(response.data.leaves)
+      setTotalOvertime(response.data.overtime)
+      setTotalOfficialTravels(response.data.official_travel)
+      // console.log("Attendance summary employee", response.data)
+      // console.log(response);
+    } catch (error) {
+      console.log("Error", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Get API Attendance Report Employee
+  const getAttendanceReportEmployee = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/report/employee/${data.employee.uuid}`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+    //   setEmployeeNip(response.data.nip)
+    } catch (error) {
+      console.log("Galat", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Get API Employee Attendance Detail
+  const getEmployeeAttendanceDetail = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/employee_attendance_detail/${data.key}`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setEmployeeAttendanceDetail(response.data)
+      // console.log("Attendance Detail", employeeAttendanceDetail)
+    } catch (error) {
+      console.log("Galat", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const dataScr = employeeAttendanceDetail?.map(item => {
+    const totalHours = (date_out, date_in) => {
+        const totalInSec = dayjs(date_out).diff(date_in, "s", true);
+        const total_hours = totalInSec/3600;
+        const total_minutes = (totalInSec%3600)/60;
+        const total_second = totalInSec%60;
+        return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
+        // return totalInSec;
+    }
+
+    const totalLateness = (in_time) => {
+        const inTime = dayjs(in_time).format("YYYY-MM-DD hh:mm:ss")
+        // console.log("in_time", inTime);
+
+        const standard_in_time = dayjs().set('y', dayjs(in_time).get('y')).set('M', dayjs(in_time).get('M')).set('D', dayjs(in_time).get('D')).set('h', 8).set('m', 0).set('s', 0).format("YYYY-MM-DD hh:mm:ss");
+        // console.log("standard_in_time", standard_in_time);
+
+        const totalInSec = dayjs(in_time).diff(standard_in_time, "s", true);
+        // console.log("total_insec", totalInSec);
+
+        if (totalInSec > 0) {
+            const total_hours = totalInSec/3600;
+            const total_minutes = (totalInSec%3600)/60;
+            const total_second = totalInSec%60;
+            return Math.floor(total_hours)+":"+Math.floor(total_minutes)+":"+Math.floor(total_second);
+            // return totalInSec;
+        } else {
+            return "00:00:00";
+        }
+    }
+    
+    return {
+        key: item.uuid,
+        date: dayjs(item.check_in_date).format("DD-MM-YYYY"),
+        in_time: dayjs(item.check_in_date).format("hh:mm A"),
+        out_time: dayjs(item.check_out_date).format("hh:mm A"),
+        total_hours: totalHours(item.check_out_date, item.check_in_date),
+        lateness: totalLateness(item.check_in_date),
+    }
+  })
+
+  const [dataSource, setDataSource] = useState(dataScr);
+  const onChange = () => {  }
+
+  return (
+    <>
+    <Spin spinning={loading}>
+        <Row align='middle' gutter={[56, 8]}>
+            <Col xs={8} sm={6} md={6} lg={4} xl={3} xxl={2}>
+                <Avatar size={120} icon={<AiOutlineUser />} />
+            </Col>
+            <Col xs={16} sm={18} md={18} lg={20} xl={21} xxl={22}>
+                <div className='profile-info'>
+                    <h4 style={{ fontSize: 24, fontWeight: 600, margin: 0, }} >{data.employee.name}</h4>
+                    <p style={{ fontSize: 14, fontWeight: 400, color: "gray", margin: 0, }} >{data.employee.division.name} | {data.employee.position.name}</p>
+                    <h3 style={{ fontSize: 16, fontWeight: 400, margin: 0, }} >{employeeNip}</h3>
+                </div>
+            </Col>
+        </Row>
+        <br /> <hr /> <br />
+
+        <Flex justify='space-between' align='center'>
+            <p style={{ fontSize: 20, fontWeight: 500, margin: 0, }} >History</p>
+            <DatePicker picker='month' onChange={(e) => setFilterDate(e.format("YYYY-MM-DD"))} />
         </Flex>
-        <br />
+        <br /> <br />
 
         <Row gutter={[16, 16]}>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -175,10 +228,10 @@ const HistoryConfiguration = () => {
                         </svg>}
                     title="Total Presents"
                     value={totalPresent}
-                    onClick={() => (setTableName("Presents"), setTypeReport("Present"))}
+                    onClick={() => (setTableName("Presents"))}
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -186,10 +239,10 @@ const HistoryConfiguration = () => {
                         </svg>}
                     title="Absents"
                     value={totalAbsent}
-                    onClick={() => (setTableName("Absents"), setTypeReport("Absent"))}
+                    onClick={() => (setTableName("Absents"))}
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -197,10 +250,10 @@ const HistoryConfiguration = () => {
                         </svg>}
                     title="Official Travels"
                     value={totalOfficialTravels}
-                    onClick={() => (setTableName("Official Travels"), setTypeReport("Official Travel"))}
+                    onClick={() => (setTableName("Official Travels"))}
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -208,10 +261,10 @@ const HistoryConfiguration = () => {
                         </svg>}
                     title="Overtimes"
                     value={totalOvertime}
-                    onClick={() => (setTableName("Overtimes"), setTypeReport("Overtime"))}
+                    onClick={() => (setTableName("Overtimes"))}
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -219,10 +272,10 @@ const HistoryConfiguration = () => {
                         </svg>}
                     title="Leaves"
                     value={totalLeaves}
-                    onClick={() => (setTableName("Leaves"), setTypeReport("Leave"))}
+                    onClick={() => (setTableName("Leaves"))}
                 />
             </Col>
-            <Col xs={12} md={8} lg={6} xl={4} xxl={4}>
+            <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
                 <HistoryButton 
                     icon={
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -230,7 +283,7 @@ const HistoryConfiguration = () => {
                         </svg>}
                     title="Permits"
                     value={totalPermit}
-                    onClick={() => (setTableName("Permits"), setTypeReport("Permit"))}
+                    onClick={() => (setTableName("Permits"))}
                 />
             </Col>
         </Row>
@@ -239,7 +292,7 @@ const HistoryConfiguration = () => {
         <div className='table'>
             <p className='sub-title'>{tableName}</p>
             <Table 
-                dataSource={dataHistory}
+                dataSource={dataScr}
                 columns={columns}
                 pagination={false}
                 scroll={{
@@ -248,7 +301,8 @@ const HistoryConfiguration = () => {
             />
         </div>
     </Spin>
+    </>
   )
 }
 
-export default HistoryConfiguration
+export default DetailPresent
