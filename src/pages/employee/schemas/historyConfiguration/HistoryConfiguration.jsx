@@ -153,7 +153,6 @@ const HistoryConfiguration = () => {
               title: "Date",
               dataIndex: "date",
               key: "date",
-                  
             },
             {
               title: "In-Time",
@@ -223,7 +222,8 @@ const HistoryConfiguration = () => {
           }
         );
         setLoading(false);
-        setEmployeeAttendanceDetail(response.data.items)
+        (typeReport === "Absent") ? setEmployeeAttendanceDetail(response.data.absent_dates) : setEmployeeAttendanceDetail(response.data.items);
+        // console.log(typeReport, employeeAttendanceDetail)
         // console.log("Attendance Detail", employeeAttendanceDetail)
       } catch (error) {
         console.log("Error", error);
@@ -237,6 +237,20 @@ const HistoryConfiguration = () => {
     const [dataHistory, setDataHistory] = useState();
     
     useEffect(() => {
+    typeReport === "Absent" ? 
+      ( 
+        setDataHistory(employeeAttendanceDetail.map(item => {
+          return {
+              key: item,
+              date: dayjs(item).format("DD-MM-YYYY"),
+              in_time: "Absent",
+              out_time: "Absent",
+              total_hours: "Absent",
+              lateness: "Absent",
+            }
+          }))
+      )
+      :
       setDataHistory(employeeAttendanceDetail?.map(item => {
         const totalHours = (date_out, date_in) => {
           const totalInSec = dayjs(date_out).diff(date_in, "s", true);
@@ -270,7 +284,6 @@ const HistoryConfiguration = () => {
     
         if (typeReport === "Official Travel") {
           return {
-            // employee: item.attendance.employee,
             key: item.uuid,
             agenda: item.type.name,
             destination: item.destination,
@@ -280,9 +293,10 @@ const HistoryConfiguration = () => {
           }
         } else if (typeReport === "Overtime") {
           return {
-            // employee: item.attendance.employee,
             key: item.uuid,
-            date: dayjs(item.date_permit).format("DD/MM/YYYY"),
+            date_permit: dayjs(item.date_permit).format("DD-MM-YYYY"),
+            // start_overtime_time: dayjs(item.start_overtime_time).format("hh:mm A"),
+            // end_overtime_time: dayjs(item.end_overtime_time).format("hh:mm A"),
             start_overtime_time: item.start_overtime_time,
             end_overtime_time: item.end_overtime_time,
             hours_overtime: item.hours_overtime,
@@ -290,7 +304,6 @@ const HistoryConfiguration = () => {
           }
         } else if (typeReport === "Leave" || typeReport === "Permit") {
           return {
-            // employee: item.attendance.employee,
             key: item.uuid,
             type_leave: item.type.name,
             reason: item.reason,
@@ -298,34 +311,18 @@ const HistoryConfiguration = () => {
             end_date_permit: dayjs(item.end_date_permit).format("DD/MM/YYYY"),
             status: {approved_by_hr: item.approved_by_hr, approved_by_team_lead: item.approved_by_team_lead},
           }
-        } else if (typeReport === "Absent") {
-          return {
-            // employee: item.employee,
-            // date: dayjs(filterValue).format("DD-MM-YYYY"),
-            key: item.uuid,
-            in_time: "Absent",
-            out_time: "Absent",
-            total_hours: "Absent",
-            lateness: "Absent",
-            // status: "Absent",
-          }
         } else {
           return {
-            // employee: item.attendance.employee,
             key: item.uuid,
             date: dayjs(item.check_in_date).format("DD-MM-YYYY"),
             in_time: dayjs(item.check_in_date).format("hh:mm A"),
             out_time: dayjs(item.check_out_date).format("hh:mm A"),
             total_hours: totalHours(item.check_out_date, item.check_in_date),
             lateness: totalLateness(item.check_in_date),
-            // status: totalLateness(item.check_in_date),
           }
         }
       }))
     }, [employeeAttendanceDetail])
-    
-    // const [dataSource, setDataSource] = useState(presents);
-    const onChange = () => { }
 
     return (
     <Spin spinning={loading} size='large' tip="Laoding...">

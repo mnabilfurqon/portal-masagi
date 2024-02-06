@@ -628,7 +628,12 @@ const PresentConfiguration = () => {
       if (typeReport === "Official Travel") {
         return {
           key: item.uuid,
-          employee: item.attendance.employee,
+          employee: {
+            uuid: item.attendance.employee.uuid,
+            name: item.attendance.employee.name,
+            position: item.attendance.employee.position.name,
+            division: item.attendance.employee.division.name,
+          },
           agenda: item.type.name,
           destination: item.destination,
           date_permit: dayjs(item.date_permit).format("DD/MM/YYYY"),
@@ -644,7 +649,7 @@ const PresentConfiguration = () => {
             position: item.attendance.employee.position.name,
             division: item.attendance.employee.division.name,
           },
-          date: dayjs(item.date_permit).format("DD/MM/YYYY"),
+          date_permit: dayjs(item.date_permit).format("DD-MM-YYYY"),
           start_overtime_time: item.start_overtime_time,
           end_overtime_time: item.end_overtime_time,
           hours_overtime: item.hours_overtime,
@@ -776,7 +781,7 @@ const PresentConfiguration = () => {
           />
         </Col>
       </Row>
-      <br /> <br />
+      <br /> <br /> <br />
 
       <Row gutter={[16, 8]}>
         <Col xs={24} sm={24} md={14} lg={18} xl={18} xxl={18}>
@@ -801,19 +806,16 @@ const PresentConfiguration = () => {
           }
         </Col>
       </Row>
-      <br /> <br />
+      <br />
 
       <div className='table'>
         <p className='sub-title'>{tableName}</p>
         <Table 
           dataSource={dataReportDaily}
-          // dataSource={dataSource}
           columns={columns}
           onChange={onChangeTable}
           scroll={{ x: 200 }}
-          pagination={{
-            pageSize: countValue,
-          }}
+          pagination={{ pageSize: countValue }}
         />
       </div>
       </Spin>

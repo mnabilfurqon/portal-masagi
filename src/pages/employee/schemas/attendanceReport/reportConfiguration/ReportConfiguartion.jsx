@@ -6,7 +6,6 @@ import { AiOutlineFileSearch, AiOutlineUser } from 'react-icons/ai'
 import axios from 'axios'
 import dayjs from "dayjs"
 import Cookies from 'js-cookie'
-import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
 import './reportConfiguartion.css'
@@ -160,13 +159,6 @@ const ReportConfiguartion = () => {
       setLoading(false);
     }
   }
-  
-  // Sort Handler
-  const [sortValue, setSortValue] = useState("");
-  
-  const handleSort = (value) => {
-      setSortValue(value);
-  };
 
   // Filter Handler
   const [filterUpName, setFilterUpName] = useState("This Month");
@@ -220,7 +212,7 @@ const ReportConfiguartion = () => {
         setFilterDownName(response.data.name)
         // console.log("division", response.data)
       } catch (error) {
-        // console.log("Error", error);
+        console.log("Error", error);
         setLoading(false);
       } finally {
         setLoading(false);
@@ -247,7 +239,7 @@ const ReportConfiguartion = () => {
         setFilterDownName(response.data.name)
         // console.log("division", response.data)
       } catch (error) {
-        // console.log("Error", error);
+        console.log("Error", error);
         setLoading(false);
       } finally {
         setLoading(false);
@@ -339,10 +331,6 @@ const ReportConfiguartion = () => {
     },
   ]
   
-  const onChangeTable = (pagination, filter, sorter, extra) => {
-      //
-  }
-  
   const handleDetailClick = (record) => {
       // console.log("action record", record)
       const uuid = record.employee.uuid
@@ -370,9 +358,8 @@ const ReportConfiguartion = () => {
 
   return (
     <Spin spinning={loading} size='large' tip="Loading...">
-        <Row gutter={16}>
+        <Row gutter={[16, 0]}>
             <Col xs={24} sm={24} md={12} lg={16} xl={16} xxl={16}>
-                {/* <p className='week'>Week {(dayjs(filterDate).duration().weeks()) ? dayjs(filterDate).duration().weeks() : ""}</p> */}
                 <p className='week'>Week {(dayjs(filterDate).week()) ? dayjs(filterDate).week() : ""} (of year)</p>
             </Col>
             <Col xs={12} sm={12} md={6} lg={4} xl={4} xxl={4}>
@@ -519,15 +506,9 @@ const ReportConfiguartion = () => {
             <p className='sub-title'>Attendance Report</p>
             <Table 
                 dataSource={dataSource}
-                // dataSource={dataReport}
                 columns={columns}
-                onChange={onChangeTable}
-                scroll={{
-                    x: 200,
-                }}
-                pagination={{
-                    pageSize: countValue,
-                }}
+                scroll={{ x: 200 }}
+                pagination={{ pageSize: countValue, }}
             />
         </div>
     </Spin>

@@ -2,19 +2,16 @@ import React, { useState, useEffect, } from 'react'
 import { BiEdit } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom'
 import { MdOutlineDelete } from 'react-icons/md'
-import { PiWarningCircleBold } from "react-icons/pi"
+import { PiWarningCircle } from "react-icons/pi"
 import { Row, Col, Table, Input, Button, Flex, Modal, Form, Space } from 'antd'
 import { AiOutlineSearch, AiOutlinePlus, AiOutlineFileSearch, } from 'react-icons/ai'
 import AddButton from '@common/buttons/addButton/AddButton'
-import SearchBox from '@common/SearchBox/SearchBox'
-import FilterButton from '@common/buttons/FilterButton/FilterButton'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import SuccessModal from '@common/modals/successModal/SuccessModal'
 import FailedModal from '@common/modals/failedModal/FailedModal'
 import Cookies from 'js-cookie'
 import axios from 'axios'
-import dayjs from 'dayjs'
 
 const TypeProjectConfiguration = () => {
   // Declaration
@@ -24,7 +21,6 @@ const TypeProjectConfiguration = () => {
   const [form] = Form.useForm();
   const [formEdit] = Form.useForm();
   const [uuid, setUuid] = useState();
-  const [value, setValue] = useState('Website Development');
   const [loading, setLoading] = useState();
   const [formLayout, setFormLayout] = useState('vertical');
   const [requiredMark, setRequiredMarkType] = useState('optional');
@@ -92,11 +88,6 @@ const TypeProjectConfiguration = () => {
 
   // Search Handler
   const [searchText, setSearchText] = useState("");
-  const [searchValue, setSearchValue] = useState("");
-
-  const handleSearch = (value) => {
-    setSearchValue(value);
-  };
 
   const onChangeSearch = (e) => {
     setSearchText(e.target.value);
@@ -137,12 +128,6 @@ const TypeProjectConfiguration = () => {
     setCountValue(value);
   };
 
-  // Detail Button Handler
-  const handleDetailClick = (record) => {
-    const value = record.key;
-    navigate(`/project/detail-project/${value}`);
-  }
-
   // Table
   const columns = [
     {
@@ -172,10 +157,6 @@ const TypeProjectConfiguration = () => {
   ];
 
   // Modal Handler
-  const onOkAddModal = () => {
-    setOpenAddModal(false)
-  }
-
   const onCancelAddModal = () => {
     setOpenAddModal(false)
   }
@@ -186,10 +167,6 @@ const TypeProjectConfiguration = () => {
 
   const onCancelSuccessAddModal = () => {
     setOpenSuccessAddModal(false)
-  }
-
-  const onOkEditModal = () => {
-    setOpenEditModal(false)
   }
 
   const onCancelEditModal = () => {
@@ -256,7 +233,7 @@ const TypeProjectConfiguration = () => {
   const addTypeProject = async (values) => {
     try {
       setLoading(true);
-      console.log("Values", values);
+      // console.log("Values", values);
       const response = await axios.post("http://103.82.93.38/api/v1/type_project/", values, {
         headers: {
           Authorization: token,
@@ -360,18 +337,17 @@ const TypeProjectConfiguration = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col lg={8} md={16} sm={16} xs={24}>
-          {/* Add Type Project Modal */}
           <AddButton handleClick={() => setOpenAddModal(true)} buttonText="Add Type Project" />
         </Col>
       </Row>
       <br />
 
       <Table 
-      columns={columns} 
-      pagination={{ pageSize: countValue, }} 
-      dataSource={sortedData} 
-      loading={loading}
-      scroll={{ x: 200, }}
+        columns={columns} 
+        pagination={{ pageSize: countValue, }} 
+        dataSource={sortedData} 
+        loading={loading}
+        scroll={{ x: 200 }}
       />
 
       {/* Add Type Project */}
@@ -462,7 +438,7 @@ const TypeProjectConfiguration = () => {
         }
       >
         <div className="dialog">
-          <PiWarningCircleBold className="icon-warning" size="70"/>
+          <PiWarningCircle className="icon-warning" size="70"/>
           <h1>Attention</h1>
           <p>Are you sure delete this type project?</p>
         </div>
