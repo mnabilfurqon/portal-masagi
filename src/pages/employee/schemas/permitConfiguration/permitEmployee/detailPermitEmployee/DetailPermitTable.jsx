@@ -88,6 +88,14 @@ const DetailPermitTable = ({data}) => {
               <td></td>
             </tr>
             <tr>
+              <th>File</th>
+              <td>{data.additional_file}</td>
+            </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
               <th>HR</th>
               <td>{data.hr_employee.name}</td>
             </tr>

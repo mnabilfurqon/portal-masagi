@@ -115,22 +115,14 @@ const AddPermitEmployee = () => {
     return current && current < dayjs().startOf("day");
   };
 
-  const handleCaptureIn = (file) => {
-    if (file) {
-      const fileObject = file instanceof File ? file : file.originFileObj;
-      const renamedFile = new File([fileObject], "photo_in.png", { type: "image/png" });
-      setFileIn(renamedFile);
-    }
-  };
-  
-  const beforeUpload = (file) => {
-    const isSizeAccepted = file.size / 1024 / 1024 <= 5;
-    if (!isSizeAccepted) {
-      message.error("File must be no more than 5 MB!");
-    }
-  
-    return isSizeAccepted;
-  };
+  const handleCaptureIn = url => {
+    fetch(url)
+    .then(res => res.blob())
+    .then(blob => {
+      const file = new File([blob], "photo_in.png", { type: "image/png"})
+      setFileIn(file)
+  })
+  }
 
   const successTitle = (
     <div className="success-title-permit">
@@ -232,11 +224,7 @@ const AddPermitEmployee = () => {
           ]}
         >
           <Upload
-            beforeUpload={beforeUpload}
-            customRequest={({ file, onSuccess }) => {
-              handleCaptureIn(file);
-              onSuccess();
-            }}
+            beforeUpload={handleCaptureIn}
             maxCount={1}
             progress={{
               strokeColor: {

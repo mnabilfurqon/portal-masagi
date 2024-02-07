@@ -29,7 +29,6 @@ const AddOfficialTravelEmployee = () => {
         "YYYY-MM-DD"
       );
       const data = excludeObject(values, ['team_leader','hr'])
-      console.log(data)
       const form = new FormData();
       form.append("type_permit_uuid", data.type_permit_uuid);
       form.append("destination", data.destination);

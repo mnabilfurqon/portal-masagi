@@ -47,12 +47,12 @@ const AddOvertimeEmployee = () => {
         "YYYY-MM-DD"
       );
       const data = excludeObject(values, ["team_leader", "hr"]);
+      console.log(data);
       const form = new FormData();
       form.append("type_permit_uuid", data.type_permit_uuid);
       form.append("start_overtime_time", data.start_overtime_time);
       form.append("end_overtime_time", data.end_overtime_time);
       form.append("hours_overtime", data.hours_overtime);
-      form.append('end_date_permit', data.date_permit)
       form.append("reason", data.reason);
       form.append("date_permit", data.date_permit);
       form.append("end_date_permit", data.end_date_permit);
@@ -126,23 +126,23 @@ const AddOvertimeEmployee = () => {
     return current && (current < today || current > today.endOf("day"));
   };
 
-  const handleStartTimeChange = (time) => {
-    setStartTime(time);
-    calculateDuration(time, endTime);
-  };
+  // const handleStartTimeChange = (time) => {
+  //   setStartTime(time);
+  //   calculateDuration(time, endTime);
+  // };
 
-  const handleEndTimeChange = (time) => {
-    setEndTime(time);
-    calculateDuration(startTime, time);
-  };
+  // const handleEndTimeChange = (time) => {
+  //   setEndTime(time);
+  //   calculateDuration(startTime, time);
+  // };
 
-  const calculateDuration = (start, end) => {
-    if (start && end) {
-      const duration = moment.duration(end.diff(start));
-      const formattedDuration = moment.utc(duration.asMilliseconds()).format('HH:mm');
-      setDuration(formattedDuration);
-    }
-  };  
+  // const calculateDuration = (start, end) => {
+  //   if (start && end) {
+  //     const duration = moment.duration(end.diff(start));
+  //     const formattedDuration = moment.utc(duration.asMilliseconds()).format('HH:mm');
+  //     setDuration(formattedDuration);
+  //   }
+  // };  
 
   const successTitle = (
     <div className="success-title-overtime">
@@ -217,7 +217,7 @@ const AddOvertimeEmployee = () => {
             className="start-overtime-input"
             placeholder="00:00"
             format="HH:mm"
-            onChange={handleStartTimeChange}
+            // onChange={handleStartTimeChange}
           />
         </Form.Item>
         <Form.Item
@@ -234,7 +234,7 @@ const AddOvertimeEmployee = () => {
             className="end-overtime-input"
             placeholder="00:00"
             format="HH:mm"
-            onChange={handleEndTimeChange}
+            // onChange={handleEndTimeChange}
           />
         </Form.Item>
         <Form.Item
@@ -243,8 +243,10 @@ const AddOvertimeEmployee = () => {
         >
           <TimePicker
             className="duration-input"
-            placeholder={duration}
-            disabled
+            placeholder="00:00"
+            format="HH:mm"
+            // placeholder={duration}
+            // disabled
           />
         </Form.Item>
         <Form.Item
