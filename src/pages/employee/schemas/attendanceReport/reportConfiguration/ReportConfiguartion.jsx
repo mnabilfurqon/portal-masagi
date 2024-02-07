@@ -7,7 +7,7 @@ import axios from 'axios'
 import dayjs from "dayjs"
 import Cookies from 'js-cookie'
 import CountButton from '@common/buttons/countButton/CountButton'
-import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
+import FilterDropdown from '@common/buttons/filterButton/FilterDropdown'
 import './reportConfiguartion.css'
 
 const ReportConfiguartion = () => {
