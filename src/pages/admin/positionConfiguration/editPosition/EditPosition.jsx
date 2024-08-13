@@ -133,10 +133,10 @@ const EditPosition = (props) => {
         <Form
           {...formItemLayout}
           layout={formLayout}
-          form={form}
+          form={props.form}
           initialValues={{
             layout: formLayout,
-            name: props.value,
+            // name: props.value,
           }}
         >
           <Form.Item label="Name" name="name">

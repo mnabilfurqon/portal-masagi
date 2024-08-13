@@ -27,7 +27,7 @@ const AddCompanyConfiguration = () => {
         try {
             setLoading(true);
             values.date_founded = dayjs(values.date_founded, "DD/MM/YYYY").format("YYYY-MM-DD");
-            const response = await axios.post("http://103.82.93.38/api/v1/company/", values, {
+            const response = await axios.post("https://attendanceapi.masagi.co.id/api/v1/company/", values, {
                 headers: {
                 "Authorization": token,
                 },

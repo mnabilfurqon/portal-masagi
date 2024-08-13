@@ -20,7 +20,7 @@ const EditCompanyConfiguration = () => {
         try {
             setLoading(true);
             setTip("Get Selected Data...");
-            const response = await axios.get(`http://103.82.93.38/api/v1/company/${uuid}`, {
+            const response = await axios.get(`https://attendanceapi.masagi.co.id/api/v1/company/${uuid}`, {
                 headers: {
                   "Authorization": token,
                 },
@@ -50,7 +50,7 @@ const EditCompanyConfiguration = () => {
         try {
             setLoading(true);
             setTip("Save Data...");
-            await axios.put(`http://103.82.93.38/api/v1/company/${uuid}`, values, {
+            await axios.put(`https://attendanceapi.masagi.co.id/api/v1/company/${uuid}`, values, {
                 headers: {
                 "Authorization": token,
                 },

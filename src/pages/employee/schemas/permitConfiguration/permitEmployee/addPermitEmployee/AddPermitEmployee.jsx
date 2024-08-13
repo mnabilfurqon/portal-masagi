@@ -42,11 +42,12 @@ const AddPermitEmployee = () => {
       );
       const data = excludeObject(values, ['team_leader','hr'])
       const form = new FormData();
+      console.log(data);
       form.append("type_permit_uuid", data.type_permit_uuid);
       form.append("reason", data.reason);
       form.append("date_permit", data.date_permit);
       form.append("end_date_permit", data.end_date_permit);
-      form.append("additional_file", data.additional_file.file);
+      form.append("additional_file", data.additional_file);
       await axios.post("http://103.82.93.38/api/v1/permit/", form, {
         headers: {
           Authorization: token,
@@ -155,6 +156,7 @@ const AddPermitEmployee = () => {
         wrapperCol={{ span: 15 }}
         layout="horizontal"
         onFinish={addPermit}
+        encType="multipart/form-data"
       >
         <Form.Item
           label="Type permit"
@@ -224,7 +226,10 @@ const AddPermitEmployee = () => {
           ]}
         >
           <Upload
-            beforeUpload={handleCaptureIn}
+            onChange={(e) => {
+              const selectedFile = e.target.files[0];
+              setFileIn(selectedFile);
+            }}
             maxCount={1}
             progress={{
               strokeColor: {

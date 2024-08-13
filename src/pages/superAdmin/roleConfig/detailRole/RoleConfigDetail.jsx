@@ -26,8 +26,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://103.82.93.38/api/v1/role/${uuid}`,
-        // `http://127.0.0.1:5000/api/v1/role/${uuid}`,
+        `https://attendanceapi.masagi.co.id/api/v1/role/${uuid}`,
         {
           headers: {
             Authorization: token,
@@ -54,8 +53,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       const response = await axios.put(
-        `http://103.82.93.38/api/v1/role/${uuid}`,
-        // 'http://127.0.0.1:5000/api/v1/role/${uuid}',
+        `https://attendanceapi.masagi.co.id/api/v1/role/${uuid}`,
         {
           name: roleName,
         },
@@ -78,8 +76,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       await axios.post(
-        `http://103.82.93.38/api/v1/role/permission/add`,
-        // 'http://127.0.0.1:5000/api/v1/role/permission/add',
+        `https://attendanceapi.masagi.co.id/api/v1/role/permission/add`,
         {
           role_uuid: uuid,
           permission_uuids: permissions,
@@ -106,8 +103,7 @@ const RoleConfigDetail = () => {
     try {
       setLoading(true);
       await axios.delete(
-        `http://103.82.93.38/api/v1/role/permission/revoke`,
-        // 'http://127.0.0.1:5000/api/v1/role/permission/revoke',
+        `https://attendanceapi.masagi.co.id/api/v1/role/permission/revoke`,
         {
           headers: {
             Authorization: token,

@@ -568,6 +568,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
+  } else if (location.pathname === "/role-project") {
+    pageTitle = "Role Project";
+    finalPageTitle = pageTitle;
   } else if (location.pathname === "/client") {
     pageTitle = "Client";
     finalPageTitle = pageTitle;
@@ -737,7 +740,10 @@ const LayoutComponent = ({ children, roleNumber }) => {
         {pageSubTitle}
       </>
     );
-  }
+  } else if (location.pathname === "/type-project") {
+    pageTitle = "Type Project";
+    finalPageTitle = pageTitle;
+  } 
 
   return (
     <Layout className="layout-container">
@@ -826,6 +832,9 @@ const LayoutComponent = ({ children, roleNumber }) => {
               </Menu.Item>
               <Menu.Item key="/role">
                 <Link to="/role">Role</Link>
+              </Menu.Item>
+              <Menu.Item key="/role-project">
+                <Link to="/role-project">Role Project</Link>
               </Menu.Item>
               <Menu.Item key="/team-project">
                 <Link to="/team-project">Team Project</Link>

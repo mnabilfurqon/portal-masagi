@@ -4,7 +4,7 @@ import AddButton from '@common/buttons/addButton/AddButton'
 import CompanyTable from '@common/tables/companyTable/CompanyTable'
 import { Link } from 'react-router-dom'
 import SearchBox from '@common/SearchBox/SearchBox'
-import FilterRadio from '@common/buttons/FilterButton/FilterRadio'
+import FilterRadio from '@common/buttons/filterButton/FilterRadio'
 import SortButton from '@common/buttons/sortButton/SortButton'
 import CountButton from '@common/buttons/countButton/CountButton'
 import { Col, Row } from 'antd';

@@ -46,8 +46,7 @@ const RoleConfigTable = (props) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get('http://103.82.93.38/api/v1/role/', {
-      // const response = await axios.get("http://127.0.0.1:5000/api/v1/role/", {
+      const response = await axios.get('https://attendanceapi.masagi.co.id/api/v1/role/', {
         params: {
           page: page,
           per_page: countValue,
@@ -79,7 +78,7 @@ const RoleConfigTable = (props) => {
     try {
       setDeleting(true);
       await axios.delete(
-        `http://103.82.93.38/api/v1/role/${uuid}`,
+        `https://attendanceapi.masagi.co.id/api/v1/role/${uuid}`,
         {
           headers: {
             Authorization: token,

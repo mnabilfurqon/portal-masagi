@@ -16,7 +16,7 @@ const DetailCompanyConfiguration = () => {
   const getSelectedCompanyData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://103.82.93.38/api/v1/company/${uuid}`, {
+      const response = await axios.get(`https://attendanceapi.masagi.co.id/api/v1/company/${uuid}`, {
         headers: {
           "Authorization": token,
         },

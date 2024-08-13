@@ -54,7 +54,7 @@ const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
       } else {
         page = tableParams.pagination.current;
       }
-      const response = await axios.get("http://103.82.93.38/api/v1/company/", {
+      const response = await axios.get("https://attendanceapi.masagi.co.id/api/v1/company/", {
         params: {
           page: page,
           per_page: countValue,

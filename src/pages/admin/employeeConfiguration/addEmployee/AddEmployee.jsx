@@ -60,9 +60,9 @@ const AddEmployee = () => {
         getDivision();
         getPosition();
         getCompanies();
-        console.log(token)
-        console.log(cookies)
-        console.log(company)
+        // console.log(token)
+        // console.log(cookies)
+        // console.log(company)
     }, [token, navigate]);
 
     // GET API Division
@@ -72,8 +72,8 @@ const AddEmployee = () => {
                 headers: { Authorization: token },
             }
         );
-        // console.log(response.data);
         setDivision(response.data.items);
+        // console.log(response.data);
         // console.log("division: ", division)
         // console.log("division: ", response.data);
         } catch (error) {

@@ -4,7 +4,7 @@ import axios from 'axios'
 import "./positionConfiguration.css"
 import { IoIosSearch } from "react-icons/io";
 import { MdOutlineDelete } from 'react-icons/md'
-import { Table, Space, Row, Col, Input, Button, } from "antd"
+import { Table, Space, Row, Col, Input, Form, } from "antd"
 import { DeleteConfirmationDialog } from '@common/deleteConfirmation/DeleteConfirmation'
 import { useNavigate } from 'react-router-dom'
 import EditPosition from './editPosition/EditPosition'
@@ -22,10 +22,9 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
   const [positionData, setPositionData] = useState([]);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -55,7 +54,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
       });
       setPositionData(response.data.items);
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
     } finally {
       setLoading(false);
     }
@@ -85,7 +84,8 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
       key: 'action',
       render: (record) => (
         <Space size="small">
-          <EditPosition 
+          <EditPosition
+          form={editForm} 
           uuid={(record)} 
           isModalOpen={openEditModal}
           onClick={() => handelOpenEditModal(record)}
@@ -140,6 +140,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   // Success Modal Handle
   const handleSuccessModalOk = () => {
     setIsSuccessModalOpen(false);
+    form.setFieldsValue({ name: "" })
   };
 
   const handleSuccessModalCancel = () => {
@@ -254,7 +255,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
         console.log("Position updated!");
       }, 3000);
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
       setOpenEditModal(false);
       setIsFailedModalOpen(true);
     }
@@ -264,8 +265,9 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
     const uuid = record.key
     const name = record.name
     setUuid(uuid);
-    setEditValue(name);  
+    editForm.setFieldsValue({name: name});
     setOpenEditModal(true);
+    // setEditValue(name);  
     // console.log(uuid, editValue);
   }
 
@@ -287,7 +289,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
         console.log("Position deleted!");
       }, 3000);
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
       setOpenDeleteModal(false);
       setIsFailedModalOpen(true);
     }
@@ -309,8 +311,7 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
   return (
     <>
     <Row gutter={[10, 10]} justify="space-between">
-      <Row gutter={[10, 10]} justify="start">
-        <Col>
+        <Col xs={24} md={16} lg={8}>
           {/* <SearchBox /> */}
           <Input 
           className='search-box'
@@ -322,23 +323,22 @@ const PositionConfiguration = () => { // {searchValue, sortValue, countValue}
           allowClear
           />
         </Col>
-        <Col>
+        <Col xs={12} md={8} lg={4}>
           <SortButton className="sort-button" onSort={handleSort} items={itemsSort} />
         </Col>
-        <Col>
+        <Col xs={12} md={8} lg={3}>
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
-      </Row>
-      
-      <Row justify="end">
+        <Col xs={24} md={16} lg={6}>
           <AddPosition
           showModal={() => setOpenAddModal(true)}
           isModalOpen={openAddModal}
           onCancel={onCancelAddModal}
           onFinish={addPosition}
           loading={loading}
+          form={form}
           />
-      </Row>
+        </Col>
     </Row>
     <br />
 

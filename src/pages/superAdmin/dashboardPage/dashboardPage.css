@@ -1,0 +1,96 @@
+.dashboard-card {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.dashboard-card .ant-card-head {
+  background-color: #629093;
+  color: #fff;
+  padding: 16px 24px;
+  border-bottom: 1px solid #ddd;
+}
+
+.dashboard-card .ant-card-body {
+  background-color: #fff;
+  padding: 24px;
+}
+
+.statistic-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.statistic-item {
+  margin: 20px;
+  width: calc(33.33% - 20px);
+}
+
+.progress-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.ant-progress {
+  margin: 10px;
+  width: 30%;
+}
+
+.ant-progress-line {
+  height: 15px;
+  border-radius: 10px;
+}
+
+.ant-progress-inner {
+  background-color: #f0f0f0;
+}
+
+.ant-progress-bg {
+  background-color: #87d068;
+}
+
+.ant-progress-text {
+  font-size: 14px;
+  color: #333;
+}
+
+.system-info {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.system-info h3 {
+  margin-top: 0;
+  font-weight: bold;
+  color: #333;
+}
+
+.system-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.system-info li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.system-info li:last-child {
+  border-bottom: none;
+}
+
+.system-info li span {
+  font-weight: bold;
+  color: #666;
+}
+
+.system-info li span::after {
+  content: ": ";
+}

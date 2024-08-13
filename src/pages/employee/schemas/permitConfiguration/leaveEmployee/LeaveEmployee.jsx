@@ -2,10 +2,10 @@ import { Button, Col, Row } from "antd";
 import React, { useState } from "react";
 import { radioData, sortItems } from "./constans";
 import TableLeaveEmployee from "./tableLeaveEmployee/TableLeaveEmployee";
-import SearchBox from "../../../../../components/common/searchBox/SearchBox";
-import SortButton from "../../../../../components/common/buttons/sortButton/SortButton";
-import CountButton from "../../../../../components/common/buttons/countButton/CountButton";
-import FilterRadio from "../../../../../components/common/buttons/filterButton/FilterRadio";
+import SearchBox from "@common/SearchBox/SearchBox";
+import SortButton from "@common/buttons/sortButton/SortButton";
+import FilterRadio from "@common/buttons/filterButton/FilterRadio";
+import CountButton from "@common/buttons/countButton/CountButton";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import "./leaveEmployee.css";
@@ -57,11 +57,11 @@ const LeaveEmployee = () => {
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
         <Col
-          xs={8}
-          md={{ span: 3, offset: 2 }}
-          lg={{ span: 4, offset: 2 }}
-          xl={{ span: 1, offset: 4 }}
-          xxl={{ span: 2, offset: 7 }}
+          xs={16}
+          md={12}
+          lg={{ span: 6, offset: 1}}
+          xl={{ span: 5, offset: 3}}
+          xxl={{ span: 3, offset: 7 }}
         >
           <Button
             onClick={handleAddButton}

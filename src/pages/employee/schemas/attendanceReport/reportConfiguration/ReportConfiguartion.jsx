@@ -1,31 +1,79 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Col, Row, Table, DatePicker, Input, Button, Flex, Avatar } from 'antd'
+import { Col, Row, Table, DatePicker, Input, Button, Flex, Avatar, Spin, Card } from 'antd'
 import { IoIosSearch } from "react-icons/io"
-import { AiOutlineFileSearch } from 'react-icons/ai'
+import { AiOutlineFileSearch, AiOutlineUser } from 'react-icons/ai'
 import axios from 'axios'
 import dayjs from "dayjs"
 import Cookies from 'js-cookie'
-import HistoryButton from '@common/buttons/historyButton/HistoryButton'
 import CountButton from '@common/buttons/countButton/CountButton'
-import FilterDropdown from '@common/buttons/FilterButton/FilterDropdown'
+import FilterDropdown from '@common/buttons/filterButton/FilterDropdown'
 import './reportConfiguartion.css'
 
 const ReportConfiguartion = () => {
     
   // Declaration
   const navigate = useNavigate();
+  const cookies = Cookies.get()
   const token = Cookies.get("token")
+  const role = Cookies.get("role_name")
   const [loading, setLoading] = useState(false);
+  const [positions, setPositions] = useState();
+  const [divisions, setDivisions] = useState();
   const [attendanceCompany, setAttendanceCompany] = useState();
+  const [reportCompany, setReportCompany] = useState();
+  const [totalPresent, setTotalPresent] = useState(0);
+  const [totalAbsent, setTotalAbsent] = useState(0);
+  const [totalPermit, setTotalPermit] = useState(0);
+  const [totalLeaves, setTotalLeaves] = useState(0);
+  const [totalOvertime, setTotalOvertime] = useState(0);
+  const [totalOfficialTravels, setTotalOfficialTravels] = useState(0);
+
+  const date = dayjs();
+  const [filterBy, setFilterBy] = useState("Week");
+  const [filterDate, setFilterDate] = useState(date.format("YYYY-MM-DD"));
+  const [filterPosition, setFilterPosition] = useState();
+  const [filterDivision, setFilterDivision] = useState();
     
   // Header
   useEffect(() => {
     if (!token) {
       navigate('/login');
     }
+    getSummaryCompany()
     getAttendanceCompany()
-  }, [token, navigate,]);
+    getReportCompany()
+    getListPosition()
+    getListDivision()
+    // console.log(cookies)
+  }, [token, navigate, filterDate, filterBy, filterDivision, filterPosition]);
+
+  // Get API Summary Company
+  const getSummaryCompany = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/summary_company`,
+        {
+          params: { filter_by: filterBy, date: filterDate },
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      // console.log("Summary company", response.data)
+      setTotalPresent(response.data.present)
+      setTotalAbsent(response.data.absent)
+      setTotalPermit(response.data.permit)
+      setTotalLeaves(response.data.leaves)
+      setTotalOvertime(response.data.overtime)
+      setTotalOfficialTravels(response.data.official_travel)
+      // console.log(response);
+    } catch (error) {
+      console.log("Error", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // Get API Attendance Company
   const getAttendanceCompany = async () => {
@@ -38,53 +86,190 @@ const ReportConfiguartion = () => {
       );
       setLoading(false);
       setAttendanceCompany(response.data.items)
-    //   console.log("attendance company", attendanceCompany)
+      // console.log("attendance company", attendanceCompany)
       // console.log(response);
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
       setLoading(false);
     } finally {
       setLoading(false);
     }
   }
 
-// Sort Handler
-const [sortValue, setSortValue] = useState("");
+  // Get API Report Company
+  const getReportCompany = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/attendance/report_company`,
+        {
+          params: { filter_by: filterBy, date: filterDate, filter_position: filterPosition, filter_division: filterDivision},
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setReportCompany(response.data)
+    //   console.log("report company", reportCompany)
+      // console.log(response);
+    } catch (error) {
+      console.log("Error", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-const handleSort = (value) => {
-    setSortValue(value);
-};
+  // Get API Position
+  const getListPosition = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/position/`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setPositions(response.data.items)
+      // console.log("positions", positions)
+      // console.log(response);
+    } catch (error) {
+      // console.log("Error", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-const itemsSort = [
-    {
-      key: 'week',
-      label: 'This Week'
-    },
-    {
-      key: 'month',
-      label: 'This Month'
-    },
-];
+  // Get API Division
+  const getListDivision = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://103.82.93.38/api/v1/division/`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setLoading(false);
+      setDivisions(response.data.items)
+      // console.log("positions", positions)
+      // console.log(response);
+    } catch (error) {
+      // console.log("Error", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-const onChange = () => {}
+  // Filter Handler
+  const [filterUpName, setFilterUpName] = useState("This Month");
+  const [filterDownName, setFilterDownName] = useState(role === "HR" ? "All Division" : "All Position");
 
-// Search Handler
-const [searchValue, setSearchValue] = useState("");
+  const position = positions?.map(item => {
+    return {
+      key: item.uuid,
+      label: item.name,
+    }
+  })
 
-// Count Handler
-const [countValue, setCountValue] = useState("10");
+  const division = divisions?.map(item => {
+    return {
+      key: item.uuid,
+      label: item.name,
+    }
+  })
 
-const handleCount = (value) => {
-  setCountValue(value);
-};
+  const times = [
+      {
+          key: "week",
+          label: "This Week",
+      },
+      {
+          key: "month",
+          label: "This Month",
+      },
+  ]
+  
+  const handleFilterByTime = (e) => {
+    const value = e.key;
+    setFilterBy(value);
+    setFilterUpName(value === "week" ? "This Week" : "This Month")
+  }
+  
+  const handleFilterDivision = (e) => {
+    const value = e.key;
+    setFilterDivision(value);
 
-// Table
-const columns = [
+    // Get Division
+    const getDivisionName = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://103.82.93.38/api/v1/division/${value}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setLoading(false);
+        setFilterDownName(response.data.name)
+        // console.log("division", response.data)
+      } catch (error) {
+        console.log("Error", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    }    
+
+    getDivisionName();
+  }
+
+  const handleFilterPosition = (e) => {
+    const value = e.key;
+    setFilterPosition(value);
+
+    // Get Position
+    const getPositionName = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://103.82.93.38/api/v1/position/${value}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setLoading(false);
+        setFilterDownName(response.data.name)
+        // console.log("division", response.data)
+      } catch (error) {
+        console.log("Error", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    }    
+
+    getPositionName();
+  }
+  
+  // Search Handler
+  const [searchValue, setSearchValue] = useState("");
+  
+  // Count Handler
+  const [countValue, setCountValue] = useState("10");
+  
+  const handleCount = (value) => {
+    setCountValue(value);
+  };
+  
+  // Table
+  const columns = [
     {
         title: "Employee",
         dataIndex: "employee",
         key: "employee",
         width: '50%',
+        filteredValue: [searchValue],
+        onFilter: (value, record) => {
+          return String(record.employee.name).toLowerCase().includes(value.toLowerCase());
+        },
         // defaultSortOrder: "ascend",
         sortDirections: ["descend", "ascend"],
         sorter: (a, b) => {return a.employee.name.localeCompare(b.employee.name)},
@@ -92,10 +277,14 @@ const columns = [
             // console.log("employee record", record)
             return (
             <Flex gap={4} align='center'>
-                <Avatar size={55}/>
+                <Avatar size={55} style={{ backgroundColor: "skyBlue"}} icon={<AiOutlineUser />}/>
                 <div style={{ margin: 0, padding: 0, }}>
                     <h3 style={{ margin: 0, padding: 0, fontSize: 14, }}>{record.name}</h3>
-                    <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                    { (cookies.role_name === "HR") ? 
+                        <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.division}</h5>
+                        :
+                        <h5 style={{ margin: 0, padding: 0, fontSize: 12, color: "gray", }}>{record.position}</h5>
+                    }
                 </div>
             </Flex>
             )
@@ -135,221 +324,159 @@ const columns = [
         title: "Action",
         key: "action",
         render: (record) => (
-            <Button className="action-button" type="primary" size="small" onClick={() => {handleDetailClick(record)}} ghost>
+            <Button type="none" size="small" onClick={() => {handleDetailClick(record)}} ghost>
                 <AiOutlineFileSearch className="action-icon" />
             </Button>
           ),
     },
-]
+  ]
+  
+  const handleDetailClick = (record) => {
+      // console.log("action record", record)
+      const uuid = record.employee.uuid
+      navigate(`/report/detail/${uuid}`, { state: { data: record } });
+      // navigate('/report/detail');
+  };
+  
+  const dataSource = reportCompany?.map(item => {
+      return {
+          key: item.employee_uuid,
+          employee: { 
+              uuid: item.employee_uuid, 
+              name: item.employee_name,
+              division: item.division,
+              position: item.position,
+          },
+          presents: item.present,
+          absents: item.absent,
+          official_travels: item.official_travel,
+          overtimes: item.overtime,
+          leaves: item.leaves,
+          permits: item.permit,
+      }
+  })
 
-const onChangeTable = (pagination, filter, sorter, extra) => {
-    //
-}
-
-const handleDetailClick = (record) => {
-    // console.log("action record", record)
-    const uuid = record.key
-    navigate(`/report/detail/${uuid}`, { state: { data: record } });
-    // navigate('/report/detail');
-};
-
-const dataSource = attendanceCompany?.map(item => {
-    return {
-        key: item.uuid,
-        employee: { 
-            uuid: item.employee.uuid, 
-            name: item.employee.name,
-            position: item.employee.position.name,
-            division: item.employee.division.name,
-        },
-    }
-})
-const data = [
-    {
-        key: "1",
-        employee: "Albert",
-        presents: "7",
-        absents: "0",
-        official_travels: "0",
-        overtimes: "1",
-        leaves: "0",
-        permits: "0",
-    },
-    {
-        key: "2",
-        employee: "Banny",
-        presents: "7",
-        absents: "0",
-        official_travels: "0",
-        overtimes: "1",
-        leaves: "0",
-        permits: "0",
-    },
-    {
-        key: "3",
-        employee: "Flauny",
-        presents: "7",
-        absents: "0",
-        official_travels: "0",
-        overtimes: "1",
-        leaves: "0",
-        permits: "0",
-    },
-    {
-        key: "4",
-        employee: "Harry",
-        presents: "7",
-        absents: "0",
-        official_travels: "0",
-        overtimes: "1",
-        leaves: "0",
-        permits: "0",
-    },
-    {
-        key: "5",
-        employee: "Klaust",
-        presents: "7",
-        absents: "0",
-        official_travels: "0",
-        overtimes: "1",
-        leaves: "0",
-        permits: "0",
-    },
-    {
-        key: "6",
-        employee: "Ian",
-        presents: "7",
-        absents: "0",
-        official_travels: "0",
-        overtimes: "1",
-        leaves: "0",
-        permits: "0",
-    },
-    {
-        key: "7",
-        employee: "Zack",
-        presents: "7",
-        absents: "0",
-        official_travels: "0",
-        overtimes: "1",
-        leaves: "0",
-        permits: "0",
-    },
-]
-
-const times = [
-    {
-        key: "week",
-        label: "This Week",
-    },
-    {
-        key: "month",
-        label: "This Month",
-    },
-]
-
-const division = [
-    {
-        key: "all",
-        label: "All Division",
-    },
-    {
-        key: "it",
-        label: "IT",
-    },
-    {
-        key: "marketing",
-        label: "Marketing",
-    },
-    {
-        key: "finance",
-        label: "Finance",
-    },
-    {
-        key: "hr",
-        label: "Human Resource",
-    },
-]
-
-return (
-    <>
-        <Row gutter={16}>
+  return (
+    <Spin spinning={loading} size='large' tip="Loading...">
+        <Row gutter={[16, 0]}>
             <Col xs={24} sm={24} md={12} lg={16} xl={16} xxl={16}>
-                <p className='week'>Week 1</p>
+                <p className='week'>Week {(dayjs(filterDate).week()) ? dayjs(filterDate).week() : ""} (of year)</p>
             </Col>
             <Col xs={12} sm={12} md={6} lg={4} xl={4} xxl={4}>
-                <FilterDropdown className="sort-button" text="This Week" items={times} />
+                <FilterDropdown className="sort-button" text={filterUpName} items={times} onClick={(e)=>handleFilterByTime(e)} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={4} xl={4} xxl={4}>
-                <DatePicker onChange={onChange} picker="month" placeholder='Filter By' style={{ width: "100%", }} />
+                <DatePicker onChange={(e)=>setFilterDate(e.format("YYYY-MM-DD"))} picker="month" placeholder='Filter By' style={{ width: "100%", }} />
             </Col>
         </Row>
         <br />
 
         <Row gutter={[16, 16]}>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
-                <HistoryButton 
-                    icon={
+                <Card className='summary-button'>
+                    <center>
+                    <div>
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M48.625 45.3639V12.2219C48.625 11.8109 48.4928 11.4732 48.2285 11.2089C47.9642 10.9446 47.6266 10.8125 47.2156 10.8125H8.78435C8.37338 10.8125 8.03574 10.9446 7.77144 11.2089C7.50713 11.4732 7.37498 11.8109 7.37498 12.2219V29.1458H5.08331V12.2219C5.08331 11.1982 5.44387 10.3251 6.16498 9.60248C6.88609 8.88137 7.75922 8.52081 8.78435 8.52081H47.2156C48.2392 8.52081 49.1123 8.88137 49.835 9.60248C50.5561 10.3236 50.9166 11.1967 50.9166 12.2219V42.2358C50.9166 42.9661 50.7028 43.6185 50.275 44.1929C49.8472 44.7673 49.2972 45.1592 48.625 45.3639ZM21.125 31.1739C19.2214 31.1739 17.5996 30.504 16.2598 29.1641C14.9199 27.8228 14.25 26.201 14.25 24.2989C14.25 22.3938 14.9199 20.7721 16.2598 19.4337C17.5996 18.0939 19.2214 17.4239 21.125 17.4239C23.0286 17.4239 24.6503 18.0939 25.9902 19.4337C27.33 20.7721 28 22.3938 28 24.2989C28 26.2026 27.33 27.8243 25.9902 29.1641C24.6503 30.504 23.0286 31.1739 21.125 31.1739ZM5.08331 47.7427V43.9729C5.08331 43.0272 5.35831 42.1426 5.90831 41.3191C6.45984 40.4941 7.20081 39.854 8.13123 39.3987C10.2946 38.3614 12.4587 37.5837 14.6235 37.0658C16.7899 36.5464 18.9571 36.2866 21.125 36.2866C23.2944 36.2866 25.4616 36.5464 27.6264 37.0658C29.7913 37.5853 31.9546 38.3629 34.1164 39.3987C35.0484 39.854 35.7894 40.4941 36.3394 41.3191C36.8909 42.1426 37.1666 43.0272 37.1666 43.9729V47.745L5.08331 47.7427Z" fill="#007BFF"/>
-                        </svg>}
-                    title="Total Presents"
-                    value="21"
-                />
+                        </svg>
+                    </div>
+                    <span style={{ fontSize: 14, marginTop: 10, paddingBottom: 0 }}>
+                        Total Presents
+                    </span>
+                    <h2  style={{ fontSize: 24, margin: 0, fontWeight: "bold", }}>
+                        {totalPresent}
+                    </h2>
+                    </center>
+                </Card>
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
-                <HistoryButton 
-                    icon={
+                <Card className='summary-button'>
+                    <center>
+                    <div>
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18.8333 28.1192C23.4052 28.1192 26.8542 24.6702 26.8542 20.0983C26.8542 15.5265 23.4052 12.0775 18.8333 12.0775C14.2615 12.0775 10.8125 15.5265 10.8125 20.0983C10.8125 24.6702 14.2615 28.1192 18.8333 28.1192ZM21.125 30.2917H16.5417C10.2236 30.2917 5.08334 35.4319 5.08334 41.75V44.0417H32.5833V41.75C32.5833 35.4319 27.4431 30.2917 21.125 30.2917ZM47.0048 19.5048L41.75 24.7596L36.4952 19.5048L33.2548 22.7452L38.5073 27.9977L33.2525 33.2525L36.4929 36.4929L41.7477 31.2381L47.0048 36.4952L50.2452 33.2548L44.9904 28L50.2452 22.7452L47.0048 19.5048Z" fill="#DC3545"/>
-                        </svg>}
-                    title="Absents"
-                    value="1"
-                />
+                        </svg>
+                    </div>
+                    <span style={{ fontSize: 14, marginTop: 10, paddingBottom: 0 }}>
+                        Absents
+                    </span>
+                    <h2  style={{ fontSize: 24, margin: 0, fontWeight: "bold", }}>
+                        {totalAbsent}
+                    </h2>
+                    </center>
+                </Card>
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
-                <HistoryButton 
-                    icon={
+                <Card className='summary-button'>
+                    <center>
+                    <div>
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M47.6167 9.46044C48.9688 10.8125 48.9688 12.9896 47.6167 14.3188L38.7021 23.2334L43.5604 44.2938L40.3292 47.5479L31.4375 30.5209L22.5 39.4584L23.325 45.1188L20.8729 47.5479L16.8396 40.2604L9.52917 36.2042L11.9583 33.7292L17.6875 34.5771L26.5563 25.7084L9.52917 16.7479L12.7833 13.5167L33.8438 18.375L42.7583 9.46044C44.0417 8.13127 46.3333 8.13127 47.6167 9.46044Z" fill="#28A745"/>
-                        </svg>}
-                    title="Official Travels"
-                    value="1"
-                />
+                        </svg>
+                    </div>
+                    <span style={{ fontSize: 14, marginTop: 10, paddingBottom: 0 }}>
+                        Official Travels
+                    </span>
+                    <h2  style={{ fontSize: 24, margin: 0, fontWeight: "bold", }}>
+                        {totalOfficialTravels}
+                    </h2>
+                    </center>
+                </Card>
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
-                <HistoryButton 
-                    icon={
+                <Card className='summary-button'>
+                    <center>
+                    <div>
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M33.6604 35.0583L25.7083 30.2916V16.5416H29.1458V28.5729L36.2042 32.7666C35.2646 33.4083 34.3938 34.1875 33.6604 35.0583ZM30.475 46.15C29.65 46.2646 28.8479 46.3333 28 46.3333C17.8708 46.3333 9.66667 38.1291 9.66667 28C9.66667 17.8708 17.8708 9.66665 28 9.66665C38.1292 9.66665 46.3333 17.8708 46.3333 28C46.3333 28.8479 46.2646 29.65 46.15 30.475C47.7313 30.7041 49.1979 31.2083 50.55 31.9416C50.7792 30.6583 50.9167 29.3521 50.9167 28C50.9167 15.3958 40.6042 5.08331 28 5.08331C15.3958 5.08331 5.08334 15.3958 5.08334 28C5.08334 40.6041 15.3271 50.9166 28 50.9166C29.3521 50.9166 30.6583 50.7791 31.9417 50.55C31.2083 49.1979 30.7042 47.7312 30.475 46.15ZM41.75 34.875V41.75H34.875V46.3333H41.75V53.2083H46.3333V46.3333H53.2083V41.75H46.3333V34.875H41.75Z" fill="#FD7E14"/>
-                        </svg>}
-                    title="Overtimes"
-                    value="3"
-                />
+                        </svg>
+                    </div>
+                    <span style={{ fontSize: 14, marginTop: 10, paddingBottom: 0 }}>
+                        Overtimes
+                    </span>
+                    <h2  style={{ fontSize: 24, margin: 0, fontWeight: "bold", }}>
+                        {totalOvertime}
+                    </h2>
+                    </center>
+                </Card>
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
-                <HistoryButton 
-                    icon={
+                <Card className='summary-button'>
+                    <center>
+                    <div>
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M28 48.625H14.25C13.0344 48.625 11.8686 48.1421 11.0091 47.2826C10.1495 46.423 9.66666 45.2572 9.66666 44.0417V16.5417C9.66666 15.3261 10.1495 14.1603 11.0091 13.3008C11.8686 12.4412 13.0344 11.9583 14.25 11.9583H41.75C42.9656 11.9583 44.1314 12.4412 44.9909 13.3008C45.8504 14.1603 46.3333 15.3261 46.3333 16.5417V26.8542M37.1667 7.375V16.5417M18.8333 7.375V16.5417M9.66666 25.7083H46.3333M50.9167 50.9167C50.9167 49.7011 50.4338 48.5353 49.5742 47.6758C48.7147 46.8162 47.5489 46.3333 46.3333 46.3333H41.75C40.5344 46.3333 39.3686 46.8162 38.5091 47.6758C37.6496 48.5353 37.1667 49.7011 37.1667 50.9167M39.4583 39.4583C39.4583 40.6739 39.9412 41.8397 40.8008 42.6992C41.6603 43.5588 42.8261 44.0417 44.0417 44.0417C45.2572 44.0417 46.423 43.5588 47.2826 42.6992C48.1421 41.8397 48.625 40.6739 48.625 39.4583C48.625 38.2428 48.1421 37.077 47.2826 36.2174C46.423 35.3579 45.2572 34.875 44.0417 34.875C42.8261 34.875 41.6603 35.3579 40.8008 36.2174C39.9412 37.077 39.4583 38.2428 39.4583 39.4583Z" stroke="#6F42C1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>}
-                    title="Leaves"
-                    value="2"
-                />
+                        </svg>
+                    </div>
+                    <span style={{ fontSize: 14, marginTop: 10, paddingBottom: 0 }}>
+                        Leaves
+                    </span>
+                    <h2  style={{ fontSize: 24, margin: 0, fontWeight: "bold", }}>
+                        {totalLeaves}
+                    </h2>
+                    </center>
+                </Card>
             </Col>
             <Col xs={12} sm={8} md={8} lg={6} xl={4} xxl={4}>
-                <HistoryButton 
-                    icon={
+                <Card className='summary-button'>
+                    <center>
+                    <div>
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M37.1346 9.66665C36.9937 8.40621 36.3931 7.24192 35.4478 6.39637C34.5025 5.55083 33.2787 5.08335 32.0104 5.08331H23.9896C22.7213 5.08335 21.4975 5.55083 20.5522 6.39637C19.6069 7.24192 19.0063 8.40621 18.8654 9.66665H14.8229C13.4554 9.66665 12.1439 10.2099 11.1769 11.1769C10.2099 12.1439 9.66666 13.4554 9.66666 14.8229V45.7604C9.66666 47.1279 10.2099 48.4394 11.1769 49.4064C12.1439 50.3734 13.4554 50.9166 14.8229 50.9166H25.7106C25.6943 50.4591 25.7429 50.0016 25.855 49.5577L26.3752 47.4791H14.8229C14.3671 47.4791 13.9299 47.2981 13.6076 46.9757C13.2852 46.6534 13.1042 46.2162 13.1042 45.7604V14.8229C13.1042 14.3671 13.2852 13.9299 13.6076 13.6076C13.9299 13.2852 14.3671 13.1041 14.8229 13.1041H19.7019C20.6277 14.486 22.2021 15.3958 23.9896 15.3958H32.0104C33.7979 15.3958 35.3723 14.486 36.2981 13.1041H41.1771C41.6329 13.1041 42.0701 13.2852 42.3924 13.6076C42.7147 13.9299 42.8958 14.3671 42.8958 14.8229V27.6791C43.8973 26.7625 45.0867 26.1666 46.3333 25.8894V14.8229C46.3333 14.1458 46.2 13.4753 45.9408 12.8497C45.6817 12.2241 45.3019 11.6557 44.8231 11.1769C44.3443 10.6981 43.7759 10.3183 43.1503 10.0591C42.5247 9.80002 41.8542 9.66665 41.1771 9.66665H37.1346ZM37.1552 9.88665L37.1667 10.2396C37.1667 10.1204 37.1621 10.0035 37.1552 9.88665ZM23.9896 8.52081H32.0104C32.4662 8.52081 32.9034 8.70189 33.2257 9.02422C33.5481 9.34655 33.7292 9.78372 33.7292 10.2396C33.7292 10.6954 33.5481 11.1326 33.2257 11.4549C32.9034 11.7772 32.4662 11.9583 32.0104 11.9583H23.9896C23.5337 11.9583 23.0966 11.7772 22.7742 11.4549C22.4519 11.1326 22.2708 10.6954 22.2708 10.2396C22.2708 9.78372 22.4519 9.34655 22.7742 9.02422C23.0966 8.70189 23.5337 8.52081 23.9896 8.52081ZM31.1075 39.4583H18.8333C18.3775 39.4583 17.9403 39.6394 17.618 39.9617C17.2957 40.284 17.1146 40.7212 17.1146 41.1771C17.1146 41.6329 17.2957 42.0701 17.618 42.3924C17.9403 42.7147 18.3775 42.8958 18.8333 42.8958H27.961C28.2933 42.371 28.6829 41.8829 29.1252 41.4406L31.1075 39.4583ZM28 33.7291H18.8333C18.3775 33.7291 17.9403 33.5481 17.618 33.2257C17.2957 32.9034 17.1146 32.4662 17.1146 32.0104C17.1146 31.5546 17.2957 31.1174 17.618 30.7951C17.9403 30.4727 18.3775 30.2916 18.8333 30.2916H28C28.4558 30.2916 28.893 30.4727 29.2153 30.7951C29.5377 31.1174 29.7187 31.5546 29.7187 32.0104C29.7187 32.4662 29.5377 32.9034 29.2153 33.2257C28.893 33.5481 28.4558 33.7291 28 33.7291ZM37.1667 24.5625H18.8333C18.3775 24.5625 17.9403 24.3814 17.618 24.0591C17.2957 23.7367 17.1146 23.2996 17.1146 22.8437C17.1146 22.3879 17.2957 21.9507 17.618 21.6284C17.9403 21.3061 18.3775 21.125 18.8333 21.125H37.1667C37.6225 21.125 38.0597 21.3061 38.382 21.6284C38.7043 21.9507 38.8854 22.3879 38.8854 22.8437C38.8854 23.2996 38.7043 23.7367 38.382 24.0591C38.0597 24.3814 37.6225 24.5625 37.1667 24.5625ZM44.2708 29.5354L30.7431 43.0608C29.955 43.8493 29.3958 44.837 29.1252 45.9185L28.0756 50.1146C27.9712 50.5321 27.9768 50.9695 28.0917 51.3842C28.2067 51.7989 28.4271 52.1767 28.7315 52.4809C29.0359 52.7851 29.4139 53.0052 29.8287 53.1198C30.2435 53.2345 30.6809 53.2397 31.0983 53.135L35.2921 52.0877C36.3747 51.817 37.3633 51.2569 38.1521 50.4675L51.6775 36.9421C52.6219 35.9522 53.1416 34.6322 53.1255 33.2642C53.1095 31.8962 52.5589 30.5888 51.5915 29.6214C50.6241 28.654 49.3167 28.1034 47.9487 28.0874C46.5807 28.0713 45.2607 28.591 44.2708 29.5354Z" fill="#FFC107"/>
-                        </svg>}
-                    title="Permits"
-                    value="1"
-                />
+                        </svg>
+                    </div>
+                    <span style={{ fontSize: 14, marginTop: 10, paddingBottom: 0 }}>
+                        Permits
+                    </span>
+                    <h2  style={{ fontSize: 24, margin: 0, fontWeight: "bold", }}>
+                        {totalPermit}
+                    </h2>
+                    </center>
+                </Card>
             </Col>
         </Row>
         <br /> <br />
-
+        
         <Row gutter={[16, 8]}>
             <Col xs={24} sm={24} md={14} lg={18} xl={18} xxl={18}>
             <Input 
@@ -366,7 +493,11 @@ return (
                 <CountButton className="count-button" onCount={handleCount} />
             </Col>
             <Col xs={18} sm={18} md={6} lg={4} xl={4} xxl={4}>
-                <FilterDropdown className="sort-button" text="All Division" items={division} />
+                { (cookies.role_name === "HR") ? 
+                    <FilterDropdown className="sort-button" text={filterDownName} items={division} onClick={handleFilterDivision}/>
+                    :
+                    <FilterDropdown className="sort-button" text={filterDownName} items={position} onClick={handleFilterPosition}/>
+                }
             </Col>
         </Row>
         <br /> <br />
@@ -376,16 +507,11 @@ return (
             <Table 
                 dataSource={dataSource}
                 columns={columns}
-                onChange={onChangeTable}
-                scroll={{
-                    x: 200,
-                }}
-                pagination={{
-                    pageSize: countValue,
-                }}
+                scroll={{ x: 200 }}
+                pagination={{ pageSize: countValue, }}
             />
         </div>
-    </>
+    </Spin>
   )
 }
 

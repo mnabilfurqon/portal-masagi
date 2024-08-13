@@ -195,6 +195,7 @@ const EmployeeTable = ({searchValue, filterValue, sortValue, countValue}) => {
         division_id: item.division_id,
         company_id: item.company_id,
         nip: item.nip,
+        user_account: item.users,
       }
     });
 
