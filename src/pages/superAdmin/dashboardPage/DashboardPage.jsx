@@ -3,7 +3,7 @@ import { Layout, Card, Statistic, Progress } from "antd";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
-import "./DashboardPage.css";
+import "./dashboardPage.css";
 
 const DashboardPage = () => {
   const token = Cookies.get("token");
