@@ -105,7 +105,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
   const resetPassword = async () => {
     try {
       setLoading(true)
-      await axios.put(`http://103.82.93.38/api/v1/users/reset-password/${uuid}`, {
+      await axios.put(`https://attendanceapi.masagi.co.id/api/v1/users/reset-password/${uuid}`, {
         password: newPassword
       }, {
         headers: {

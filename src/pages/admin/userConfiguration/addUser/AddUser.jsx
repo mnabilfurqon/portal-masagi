@@ -1,32 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { Form, Input, Radio, Select, Flex, Button } from 'antd'
-import { useNavigate, useParams } from 'react-router-dom'
-import SuccessModal from '@common/modals/successModal/SuccessModal'
-import FailedModal from '@common/modals/failedModal/FailedModal'
+import { Link, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal'
+import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import './addUser.css'
 
 const AddUser = () => {
     // Declaration
-    const cookies = Cookies.get();
     const token = Cookies.get("token");
-    const company = Cookies.get("company_uuid");
+    const company = useParams();
     const navigate = useNavigate();
-    const employee = useParams();
-
+    
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('horizontal');
     const [requiredMark, setRequiredMarkType] = useState('optional');
     const [loading, setLoading] = useState(false);
     
     const [roles, setRoles] = useState();
+    const [employee, setEmployee] = useState();
     const [companies, setCompanies] = useState();
-    const [employees, setEmployees] = useState();
 
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-    const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
+    const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+    const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
 
     // Header 
     useEffect(() => {
@@ -34,27 +32,18 @@ const AddUser = () => {
           navigate("/login");
         }
         getRoles();
-        getCompanies();
         getEmployees();
+        getCompanies();
     }, [token, navigate]);
 
     // Handle Modal
-    const handleSuccessModalOk = () => {
-        setIsSuccessModalOpen(false);
-        navigate("/user");
+    const handleSuccessModalClose = () => {
+        setIsSuccessModalVisible(false);
+        navigate("/company");
     };
 
-    const handleSuccessModalCancel = () => {
-        setIsSuccessModalOpen(false);
-        navigate("/user");
-    };
-
-    const handleFailedModalOk = () => {
-        setIsFailedModalOpen(false);
-    };
-
-    const handleFailedModalCancel = () => {
-        setIsFailedModalOpen(false);
+    const handleFailedModalClose = () => {
+        setIsFailedModalVisible(false);
     };
 
     // Form Layout
@@ -80,9 +69,8 @@ const AddUser = () => {
     // GET API Roles
     const getRoles = async () => {
         try {
-            setLoading(true);
-            const response = await axios.get(`http://103.82.93.38/api/v1/role/`, {
-            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
+            setLoading(true)
+            const response = await axios.get(`https://attendanceapi.masagi.co.id/api/v1/role/`, {
                 headers: { Authorization: token },
             }
         );
@@ -90,67 +78,60 @@ const AddUser = () => {
         } catch (error) {
             console.log(error);
         } finally {
-            setLoading(false);
-        }
-    }
-
-    // GET API Company
-    const getCompanies = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
-            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
-                headers: { Authorization: token },
-            }
-        );
-        setCompanies(response.data.items);
-        // console.log("Companies", companies);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
+            setLoading(false)
         }
     }
 
     // GET API Employee
     const getEmployees = async () => {
         try {
-            setLoading(true);
-            const response = await axios.get(`http://103.82.93.38/api/v1/employee/`, {
-            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/`, {
+            setLoading(true)
+            const response = await axios.get(`https://attendanceapi.masagi.co.id/api/v1/employee/`, {
                 headers: { Authorization: token },
             }
         );
-        setEmployees(response.data.items);
-        // console.log("Employees", employees);
+        setEmployee(response.data.items);
         } catch (error) {
             console.log(error);
         } finally {
-            setLoading(false);
+            setLoading(false)
+        }
+    }
+
+    // GET API Company
+    const getCompanies = async () => {
+        try {
+            setLoading(true)
+            const response = await axios.get(`https://attendanceapi.masagi.co.id/api/v1/company/`, {
+                headers: { Authorization: token },
+            }
+        );
+        setCompanies(response.data.items);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
         }
     }
 
     // POST API to Insert New User - Form Handler
     const onFinish = async (values) => {
         try {
-            // console.log(values);
-            // console.log(values.username);
-            const response = await axios.post("http://103.82.93.38/api/v1/users/", values, 
-            // const response = await axios.post(`http://127.0.0.1:5000/api/v1/users/`, values,
+            const response = await axios.post("https://attendanceapi.masagi.co.id/api/v1/users/", values,
                 {
                 headers: { Authorization: token, },
             });
-            setIsSuccessModalOpen(true);
+            setIsSuccessModalVisible(true);
             console.log("New user added!");
           } catch (error) {
             console.log(error);
-            setIsFailedModalOpen(true);
+            setIsFailedModalVisible(true);
         }
     };
 
-    const onFinishFailed = (errorInfo) => {
-        setIsFailedModalOpen(true);
-        console.log('Failed:', errorInfo);
+    const onFinishFailed = (error, values) => {
+        setIsFailedModalVisible(true);
+        console.log('Failed:', error, values);
     };
 
 
@@ -166,10 +147,10 @@ const AddUser = () => {
           requiredMark={requiredMark === 'customize' ? customizeRequiredMark : requiredMark}
           initialValues={{
             layout: formLayout,
-            company_uuid: company,
-            employee_uuid: employee.uuid,
+            company_uuid: company.uuid,
           }}
-          autoComplete="off"
+          autoComplete='off'
+          onLoadedData={loading}
         >
             <Form.Item
             label="Username"
@@ -182,9 +163,7 @@ const AddUser = () => {
                 message: 'Please input your username!',
                 },
             ]}>
-                <Input 
-                placeholder="Username"
-                />
+                <Input autoComplete='off' placeholder="Username" />
             </Form.Item>
             <Form.Item
             label="Password"
@@ -197,9 +176,7 @@ const AddUser = () => {
                 message: 'Please input your password!',
                 },
             ]}>
-                <Input.Password
-                placeholder="Password" 
-                />
+                <Input.Password autoComplete='off' placeholder="Password" />
             </Form.Item>
             <Form.Item 
             label="Role" 
@@ -215,7 +192,7 @@ const AddUser = () => {
             ]}>
                 <Select>
                   {roles?.map(role => 
-                    <Select.Option key={(role.uuid)} value={(role.uuid)}>{(role.name)}</Select.Option>)
+                    <Select.Option key={(role.uuid)} value={(role.uuid)} loading={loading} >{(role.name)}</Select.Option>)
                   }
                 </Select>
             </Form.Item>
@@ -241,6 +218,7 @@ const AddUser = () => {
             labelAlign='left'
             name="company_uuid"
             colon={false}
+            disabled
             rules={[
                 {
                 required: true,
@@ -250,34 +228,14 @@ const AddUser = () => {
             >
                 <Select disabled>
                   {companies?.map(company => 
-                    <Select.Option key={(company.uuid)} value={(company.uuid)}>{(company.company_name)}</Select.Option>)
+                    <Select.Option key={(company.uuid)} value={(company.uuid)} >{(company.company_name)}</Select.Option>)
                   }
                 </Select>
             </Form.Item>
-            <Form.Item
-            label="Employee"
-            labelAlign='left'
-            name="employee_uuid"
-            colon={false}
-            rules={[
-                {
-                required: true,
-                message: 'Please select your employee!',
-                },
-            ]}
-            >
-                <Select disabled>
-                  {employees?.map(employee => 
-                    <Select.Option key={(employee.uuid)} value={(employee.uuid)}>{(employee.name)}</Select.Option>)
-                  }
-                </Select>
-            </Form.Item>
-
             <Flex justify='end' className='action'>
             <Form.Item>
                 <Flex gap={10} align='center' justify='end' >
-                    <Link to="/employee" style={{color:"black"}} >Cancel</Link>
-                    {/* <SubmitButton buttonText={"Save"} /> */}
+                    <Link to="/company" style={{color:"black"}} >Cancel</Link>
                     <Button key="submit" htmlType='submit' type="none" className="update-button">
                         Save
                     </Button>
@@ -286,17 +244,15 @@ const AddUser = () => {
             </Flex>
         </Form>
 
-        <SuccessModal
-            action="Delete"
-            handleOk={handleSuccessModalOk}
-            handleCancel={handleSuccessModalCancel}
-            isModalOpen={isSuccessModalOpen}
+        <SuccessAddDataModal
+            visible={isSuccessModalVisible}
+            onClose={handleSuccessModalClose}
+            textParagraph="Data upload successful!"
         />
 
-        <FailedModal
-            handleOk={handleFailedModalOk}
-            handleCancel={handleFailedModalCancel}
-            isModalOpen={isFailedModalOpen}
+        <FailedAddDataModal
+            visible={isFailedModalVisible}
+            onClose={handleFailedModalClose}
         />
     </>
     )

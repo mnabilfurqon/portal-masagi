@@ -46,8 +46,7 @@ const AdminRoleConfigTable = (props) => {
       } else {
         page = tableParams.pagination.current;
       }
-      console.log(sortValue);
-      const response = await axios.get('http://103.82.93.38/api/v1/role/', {
+      const response = await axios.get('https://attendanceapi.masagi.co.id/api/v1/role/', {
         params: {
           page: page,
           per_page: countValue,
@@ -79,7 +78,7 @@ const AdminRoleConfigTable = (props) => {
     try {
       setDeleting(true);
       await axios.delete(
-        `http://103.82.93.38/api/v1/role/${uuid}`,
+        `https://attendanceapi.masagi.co.id/api/v1/role/${uuid}`,
         {
           headers: {
             Authorization: token,
@@ -141,6 +140,11 @@ const AdminRoleConfigTable = (props) => {
       dataIndex: 'roleName',
     },
     {
+      key: 'company',
+      title: 'Company',
+      dataIndex: 'company',
+    },
+    {
       key: 'action',
       title: <div className='action-title'>Action</div>,
       render: record => (
@@ -172,6 +176,8 @@ const AdminRoleConfigTable = (props) => {
       roleName: item.name,
       createdDate: item.created_date,
       updatedDate: item.updated_date,
+      // company: item.company ? item.company.company_name : null,
+      company_uuid: item.company ? item.company.uuid : null,
     };
   });
 
@@ -184,7 +190,6 @@ const AdminRoleConfigTable = (props) => {
       return 0;
     }
   });
-
 
   const handleTableChange = (pagination, sorter) => {
     setTableParams({

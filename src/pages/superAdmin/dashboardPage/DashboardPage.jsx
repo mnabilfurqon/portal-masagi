@@ -8,12 +8,33 @@ import "./dashboardPage.css";
 const DashboardPage = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
-  const [absenData, setAbsenData] = useState(0);
-  const [izinData, setIzinData] = useState(0);
+  const [attendanceData, setAttendanceData] = useState(0);
+  const [summaryAttendance, setSummaryAttendance] = useState(0);
+  const [permitData, setPermitData] = useState(0);
+  const [summaryPermit, setSummaryPermit] = useState(0);
   const [totalUser, setTotalUser] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const getAbsenData = async () => {
+  const getAttendanceData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "https://attendanceapi.masagi.co.id/api/v1/attendance/company",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setAttendanceData(response.items);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getSummaryAttendance = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
@@ -24,7 +45,7 @@ const DashboardPage = () => {
           },
         }
       );
-      setAbsenData(response.present);
+      setSummaryAttendance(response.data.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -32,7 +53,26 @@ const DashboardPage = () => {
     }
   };
   
-  const getIzinData = async () => {
+  const getPermitData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "https://attendanceapi.masagi.co.id/api/v1/permit/",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setPermitData(response.data[0].items);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const getSummaryPermit = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
@@ -43,7 +83,7 @@ const DashboardPage = () => {
           },
         }
       );
-      setIzinData(response.data.data);
+      setSummaryPermit(response.data.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -74,8 +114,10 @@ const DashboardPage = () => {
     if (!token) {
       navigate("/login");
     }
-    getAbsenData();
-    getIzinData();
+    getAttendanceData();
+    getSummaryAttendance();
+    getPermitData();
+    getSummaryPermit();
     getTotalUser();
   }, [token, navigate]);
 
@@ -90,12 +132,12 @@ const DashboardPage = () => {
         <div className="statistic-container">
           <Statistic
             title={<span style={{ fontWeight: "bold" }}>Total Absen</span>}
-            value={absenData}
+            value={attendanceData}
             valueStyle={{ color: "#73B3B7" }}
           />
           <Statistic
             title={<span style={{ fontWeight: "bold" }}>Total Izin</span>}
-            value={izinData}
+            value={permitData}
             valueStyle={{ color: "#73B3B7" }}
           />
           <Statistic
@@ -108,7 +150,7 @@ const DashboardPage = () => {
       <div className="progress-container">
         <Progress
           type="line"
-          percent={absenData}
+          percent={summaryAttendance}
           format={(percent) => `${percent} / 100`}
           strokeColor={{
             "0%": "#108ee9",
@@ -119,7 +161,7 @@ const DashboardPage = () => {
         />
         <Progress
           type="line"
-          percent={izinData}
+          percent={summaryPermit}
           format={(percent) => `${percent} / 100`}
           strokeColor={{
             "0%": "#108ee9",

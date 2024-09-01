@@ -140,6 +140,11 @@ const RoleConfigTable = (props) => {
       dataIndex: 'roleName',
     },
     {
+      key: 'company',
+      title: 'Company',
+      dataIndex: 'company',
+    },
+    {
       key: 'action',
       title: <div className='action-title'>Action</div>,
       render: record => (
@@ -171,6 +176,8 @@ const RoleConfigTable = (props) => {
       roleName: item.name,
       createdDate: item.created_date,
       updatedDate: item.updated_date,
+      // company: item.company ? item.company.company_name : null,
+      company_uuid: item.company ? item.company.uuid : null,
     };
   });
 

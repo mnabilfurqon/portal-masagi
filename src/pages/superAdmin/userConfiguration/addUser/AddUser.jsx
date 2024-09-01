@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import './addUser.css'
 import { Form, Input, Radio, Select, Flex, Button } from 'antd'
 import { Link, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import SubmitButton from '@common/buttons/submitButton/SubmitButton'
 import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal'
 import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import './addUser.css'
 
 const AddUser = () => {
     // Declaration
@@ -35,8 +34,6 @@ const AddUser = () => {
         getRoles();
         getEmployees();
         getCompanies();
-        // console.log("token", token);
-        // console.log("company", company);
     }, [token, navigate]);
 
     // Handle Modal
@@ -73,13 +70,11 @@ const AddUser = () => {
     const getRoles = async () => {
         try {
             setLoading(true)
-            const response = await axios.get(`http://103.82.93.38/api/v1/role/`, {
-            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/role/`, {
+            const response = await axios.get(`https://attendanceapi.masagi.co.id/api/v1/role/`, {
                 headers: { Authorization: token },
             }
         );
         setRoles(response.data[0].items);
-        // console.log("roles", response.data[0].items);
         } catch (error) {
             console.log(error);
         } finally {
@@ -91,8 +86,7 @@ const AddUser = () => {
     const getEmployees = async () => {
         try {
             setLoading(true)
-            const response = await axios.get(`http://103.82.93.38/api/v1/employee/`, {
-            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/employee/`, {
+            const response = await axios.get(`https://attendanceapi.masagi.co.id/api/v1/employee/`, {
                 headers: { Authorization: token },
             }
         );
@@ -108,8 +102,7 @@ const AddUser = () => {
     const getCompanies = async () => {
         try {
             setLoading(true)
-            const response = await axios.get(`http://103.82.93.38/api/v1/company/`, {
-            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/company/`, {
+            const response = await axios.get(`https://attendanceapi.masagi.co.id/api/v1/company/`, {
                 headers: { Authorization: token },
             }
         );
@@ -124,9 +117,7 @@ const AddUser = () => {
     // POST API to Insert New User - Form Handler
     const onFinish = async (values) => {
         try {
-            // console.log("values", values);
-            const response = await axios.post("http://103.82.93.38/api/v1/users/", values,
-            // const response = await axios.get(`http://127.0.0.1:5000/api/v1/users/`, values, 
+            const response = await axios.post("https://attendanceapi.masagi.co.id/api/v1/users/", values,
                 {
                 headers: { Authorization: token, },
             });
@@ -241,25 +232,6 @@ const AddUser = () => {
                   }
                 </Select>
             </Form.Item>
-            {/* <Form.Item
-            label="Employee"
-            labelAlign='left'
-            name="employee_uuid"
-            colon={false}
-            disabled
-            rules={[
-                {
-                required: true,
-                message: 'Please select your employee!',
-                },
-            ]}
-            >
-                <Select>
-                  {employee?.map(item => 
-                    <Select.Option key={(item.uuid)} value={(item.uuid)} loading={loading} >{(item.name)}</Select.Option>)
-                  }
-                </Select>
-            </Form.Item> */}
             <Flex justify='end' className='action'>
             <Form.Item>
                 <Flex gap={10} align='center' justify='end' >
