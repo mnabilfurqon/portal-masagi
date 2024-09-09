@@ -177,6 +177,7 @@ const RoleConfigTable = (props) => {
       createdDate: item.created_date,
       updatedDate: item.updated_date,
       // company: item.company ? item.company.company_name : null,
+      company: `PT UPI EDU ${Math.floor(Math.random() * 100)}`, // data dummy company
       company_uuid: item.company ? item.company.uuid : null,
     };
   });
