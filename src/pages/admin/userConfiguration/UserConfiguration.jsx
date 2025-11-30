@@ -1,5 +1,5 @@
-import { dummyUsers } from "@common/dummy/dummyUsers";
-import { dummyRoles } from "@common/dummy/dummyRoles";
+import { dummyUsers } from "../../../../components/common/dummy/dummyUsers";
+import { dummyRoles } from "../../../../components/common/dummy/dummyRoles";
 import { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
