@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Layout,
   Card,
@@ -39,7 +39,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-import "./DashboardPage.css";
+import "./dashboardPage.css";
 
 const DashboardPage = () => {
   const { Text, Title } = Typography;
