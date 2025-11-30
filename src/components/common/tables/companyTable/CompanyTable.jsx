@@ -7,7 +7,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { dummyCompanies } from "../../../../components/common/dummy/DummyCompany";
+import { dummyCompanies } from "../../dummy/dummyCompanies";
 
 const CompanyTable = ({ searchValue, filterValue, sortValue, countValue }) => {
   const token = Cookies.get("token");
