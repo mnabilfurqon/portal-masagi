@@ -43,7 +43,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  // Logout Components
   const MyDropdown = () => {
     const username = Cookies.get("username");
     const navigate = useNavigate();
@@ -162,9 +161,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
     setIsFailedModalVisible(false);
   };
 
-  // end of reset password section handler
-
-  // Ganti Judul Tiap Ganti Halaman
   let pageTitle = "Dashboard";
   let pageSubTitle = "";
   let finalPageTitle = "Dashboard";
@@ -743,9 +739,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
 
   return (
     <Layout className="layout-container">
-      {/* Sider */}
       {roleNumber === 1 ? (
-        // Login sebagai Super Admin
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -783,7 +777,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
           </Menu>
         </Sider>
       ) : roleNumber === 2 ? (
-        // Login sebagai Admin
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -845,7 +838,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
           </Menu>
         </Sider>
       ) : roleNumber === 3 ? (
-        // Login sebagai HR
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -918,7 +910,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
           </Menu>
         </Sider>
       ) : roleNumber === 4 ? (
-        // Login sebagai Team Leader
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -1003,7 +994,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
           </Menu>
         </Sider>
       ) : (
-        // Login sebagai Employee
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -1059,7 +1049,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
         </Sider>
       )}
 
-      {/* Header */}
       <Layout>
         <Header
           style={{
@@ -1092,7 +1081,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
           </Flex>
         </Header>
 
-        {/* Content */}
         <Content
           style={{
             margin: "0 16px",
@@ -1111,7 +1099,6 @@ const LayoutComponent = ({ children, roleNumber }) => {
         </Content>
       </Layout>
 
-      {/* Reset Password Modal */}
       <ResetPasswordModal
         visible={resetPasswordVisible}
         handleCancle={handleCancleResetPassword}

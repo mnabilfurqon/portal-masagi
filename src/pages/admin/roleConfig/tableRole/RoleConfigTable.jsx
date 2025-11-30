@@ -41,19 +41,16 @@ const RoleConfigTable = (props) => {
     try {
       setLoading(true);
 
-      // Simulate delay API
       await new Promise((resolve) => setTimeout(resolve, 400));
 
       let data = [...dummyRoles];
 
-      // SEARCH
       if (searchValue) {
         data = data.filter((item) =>
           item.name.toLowerCase().includes(searchValue.toLowerCase())
         );
       }
 
-      // SORT BY DATE OR NAME
       if (sortValue === "latestJoinDate") {
         data.sort(
           (a, b) => new Date(b.created_date) - new Date(a.created_date)
@@ -68,7 +65,6 @@ const RoleConfigTable = (props) => {
         data.sort((a, b) => b.name.localeCompare(a.name));
       }
 
-      // PAGINATION
       const totalItems = data.length;
       const startIndex = (tableParams.pagination.current - 1) * countValue;
       const paginatedData = data.slice(startIndex, startIndex + countValue);
@@ -96,7 +92,6 @@ const RoleConfigTable = (props) => {
 
       await new Promise((resolve) => setTimeout(resolve, 400));
 
-      // Remove role from dummyRoles
       const index = dummyRoles.findIndex((item) => item.uuid === uuid);
       if (index !== -1) dummyRoles.splice(index, 1);
     } catch (err) {
@@ -192,8 +187,7 @@ const RoleConfigTable = (props) => {
       roleName: item.name,
       createdDate: item.created_date,
       updatedDate: item.updated_date,
-      // company: item.company ? item.company.company_name : null,
-      company: `PT UPI EDU ${Math.floor(Math.random() * 100)}`, // data dummy company
+      company: `PT UPI EDU ${Math.floor(Math.random() * 100)}`,
       company_uuid: item.company ? item.company.uuid : null,
     };
   });
