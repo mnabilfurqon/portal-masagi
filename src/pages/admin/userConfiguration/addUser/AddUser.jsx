@@ -9,7 +9,7 @@ import axios from "axios";
 import "./addUser.css";
 import { dummyRoles } from "@common/dummy/dummyRoles";
 import { dummyEmployees } from "@common/dummy/dummyEmployees";
-import { dummyCompanies } from "@common/dummy/dummyCompany";
+import { dummyCompanies } from "@common/dummy/DummyCompanies";
 import { dummyUsers } from "@common/dummy/dummyUsers";
 import { v4 as uuidv4 } from "uuid";
 

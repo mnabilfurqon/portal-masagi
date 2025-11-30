@@ -5,7 +5,7 @@ import "./detailCompanyConfiguration.css";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { dummyCompanies } from "@common/dummy/DummyCompany";
+import { dummyCompanies } from "@common/dummy/DummyCompanies";
 
 const DetailCompanyConfiguration = () => {
   const token = Cookies.get("token");

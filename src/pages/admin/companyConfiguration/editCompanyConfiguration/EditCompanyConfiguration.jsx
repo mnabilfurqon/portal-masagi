@@ -7,7 +7,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
 import { Spin } from "antd";
-import { dummyCompanies } from "@common/dummy/DummyCompany";
+import { dummyCompanies } from "@common/dummy/DummyCompanies";
 
 const EditCompanyConfiguration = () => {
   const token = Cookies.get("token");
