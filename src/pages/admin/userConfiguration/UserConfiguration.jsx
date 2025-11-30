@@ -1,5 +1,3 @@
-import { dummyUsers } from "../../../../components/common/dummy/dummyUsers";
-import { dummyRoles } from "../../../../components/common/dummy/dummyRoles";
 import { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
@@ -21,6 +19,8 @@ import FailedModal from "@common/modals/failedModal/FailedModal";
 import FilterDropdown from "@common/buttons/filterButton/FilterDropdown";
 import SortButton from "@common/buttons/sortButton/SortButton";
 import CountButton from "@common/buttons/countButton/CountButton";
+import { dummyUsers } from "../../../components/common/dummy/dummyUsers";
+import { dummyRoles } from "../../../components/common/dummy/dummyRoles";
 import Cookies from "js-cookie";
 import "./userConfiguration.css";
 
