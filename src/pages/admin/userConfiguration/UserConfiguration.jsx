@@ -20,9 +20,9 @@ import FilterDropdown from "@common/buttons/filterButton/FilterDropdown";
 import SortButton from "@common/buttons/sortButton/SortButton";
 import CountButton from "@common/buttons/countButton/CountButton";
 import Cookies from "js-cookie";
-import "./userConfiguration.css";
 import { dummyUsers } from "@common/dummy/dummyUsers";
 import { dummyRoles } from "@common/dummy/dummyRoles";
+import "./userConfiguration.css";
 
 const UserConfiguration = () => {
   const token = Cookies.get("token");

@@ -1,4 +1,4 @@
-export let dummyRoles = [
+export const dummyRoles = [
   {
     uuid: "ROLE-001",
     name: "Admin",
