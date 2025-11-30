@@ -1,3 +1,5 @@
+import { dummyUsers } from "@common/dummy/dummyUsers";
+import { dummyRoles } from "@common/dummy/dummyRoles";
 import { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
@@ -20,8 +22,6 @@ import FilterDropdown from "@common/buttons/filterButton/FilterDropdown";
 import SortButton from "@common/buttons/sortButton/SortButton";
 import CountButton from "@common/buttons/countButton/CountButton";
 import Cookies from "js-cookie";
-import { dummyUsers } from "@common/dummy/dummyUsers";
-import { dummyRoles } from "@common/dummy/dummyRoles";
 import "./userConfiguration.css";
 
 const UserConfiguration = () => {
