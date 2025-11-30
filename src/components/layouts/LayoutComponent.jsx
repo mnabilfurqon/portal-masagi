@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Flex, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { LogoMasagi } from "../../assets/";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,8 +15,8 @@ import {
 import { FaRegBell } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
 import ResetPasswordModal from "@common/modals/resetPasswordModal/ResetPasswordModal";
-import SuccessAddDataModal from '@common/modals/successModal/SuccessAddDataModal';
-import FailedAddDataModal from '@common/modals/failedModal/FailedAddDataModal';
+import SuccessAddDataModal from "@common/modals/successModal/SuccessAddDataModal";
+import FailedAddDataModal from "@common/modals/failedModal/FailedAddDataModal";
 import Cookies from "js-cookie";
 import axios from "axios";
 import "./layoutComponent.css";
@@ -55,7 +55,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       {
         label: "Logout",
         key: "1",
-      }
+      },
     ];
 
     const handlerLogout = (e) => {
@@ -71,7 +71,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
         Cookies.remove("employee_uuid");
         navigate("/login");
       } else {
-        setResetPasswordVisible(true)
+        setResetPasswordVisible(true);
       }
     };
 
@@ -101,70 +101,66 @@ const LayoutComponent = ({ children, roleNumber }) => {
     );
   };
 
-  // reset password section handler
   const resetPassword = async () => {
     try {
-      setLoading(true)
-      await axios.put(`https://attendanceapi.masagi.co.id/api/v1/users/reset-password/${uuid}`, {
-        password: newPassword
-      }, {
-        headers: {
-          Authorization: token
-        }
-      })
-      setConfirmNewPassword('')
-      setNewPassword('')
-      setNotMatchPassword('')
-      setResetPasswordVisible(false)
-      setIsSuccessModalVisible(true)
+      setLoading(true);
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      setConfirmNewPassword("");
+      setNewPassword("");
+      setNotMatchPassword("");
+      setResetPasswordVisible(false);
+
+      setIsSuccessModalVisible(true);
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      setIsFailedModalVisible(true);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleCancleResetPassword = () => {
-    setConfirmNewPassword('')
-    setNewPassword('')
-    setNotMatchPassword('')
-    setResetPasswordVisible(false)
-  }
+    setConfirmNewPassword("");
+    setNewPassword("");
+    setNotMatchPassword("");
+    setResetPasswordVisible(false);
+  };
 
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmNewPassword, setConfirmNewPassword] = useState('')
-  const [notMatchPassword, setNotMatchPassword] = useState('')
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [notMatchPassword, setNotMatchPassword] = useState("");
 
   const handleNewPassword = (e) => {
-      setNewPassword(e.target.value)
-
-  }
+    setNewPassword(e.target.value);
+  };
 
   const handleConfirmNewPassword = (e) => {
-      setConfirmNewPassword(e.target.value)
-  }
+    setConfirmNewPassword(e.target.value);
+  };
 
   const handleOkResetPassword = () => {
-    if (newPassword === '' || confirmNewPassword === '') {
-      setNotMatchPassword('Please fill all the field')
+    if (newPassword === "" || confirmNewPassword === "") {
+      setNotMatchPassword("Please fill all the field");
     } else if (newPassword === confirmNewPassword) {
-      resetPassword()
+      resetPassword();
     } else {
-      setNotMatchPassword('Password not match')
+      setNotMatchPassword("Password not match");
     }
-  }
+  };
 
   const handleFailedResetPassword = () => {
-    setIsFailedModalVisible(true)
-  }
+    setIsFailedModalVisible(true);
+  };
 
   const handleSuccessModalClose = () => {
-    setIsSuccessModalVisible(false)
-  }
+    setIsSuccessModalVisible(false);
+  };
 
   const handleFailedModalClose = () => {
-    setIsFailedModalVisible(false)
-  }
+    setIsFailedModalVisible(false);
+  };
 
   // end of reset password section handler
 
@@ -743,7 +739,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
   } else if (location.pathname === "/type-project") {
     pageTitle = "Type Project";
     finalPageTitle = pageTitle;
-  } 
+  }
 
   return (
     <Layout className="layout-container">
@@ -1116,7 +1112,7 @@ const LayoutComponent = ({ children, roleNumber }) => {
       </Layout>
 
       {/* Reset Password Modal */}
-      <ResetPasswordModal 
+      <ResetPasswordModal
         visible={resetPasswordVisible}
         handleCancle={handleCancleResetPassword}
         handleOk={handleOkResetPassword}

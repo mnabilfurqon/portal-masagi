@@ -21,6 +21,7 @@ const AddCompanyConfiguration = () => {
     }
   }, [token, navigate]);
 
+  // Modal Handler
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
 
@@ -28,12 +29,15 @@ const AddCompanyConfiguration = () => {
     try {
       setLoading(true);
 
+      // Format date for dummy
       values.date_founded = dayjs(values.date_founded, "DD/MM/YYYY").format(
         "YYYY-MM-DD"
       );
 
+      // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 500));
 
+      // Build new dummy company data
       const newCompany = {
         uuid: uuidv4(),
         company_name: values.company_name,
@@ -49,6 +53,7 @@ const AddCompanyConfiguration = () => {
         updated_date: dayjs().format("YYYY-MM-DD"),
       };
 
+      // Insert into dummyCompanies
       dummyCompanies.push(newCompany);
 
       setIsSuccessModalVisible(true);

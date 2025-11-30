@@ -33,6 +33,7 @@ const RoleConfig = () => {
     try {
       setLoading(true);
 
+      // simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const newRole = {
@@ -40,9 +41,10 @@ const RoleConfig = () => {
         name: roleName,
         created_date: new Date().toISOString(),
         updated_date: new Date().toISOString(),
-        permission: [],
+        permission: [], // role baru belum punya permission
       };
 
+      // push ke dummyRoles (in-memory)
       dummyRoles.push(newRole);
 
       setModalOpen(false);

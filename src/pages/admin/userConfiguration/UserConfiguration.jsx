@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -20,62 +20,44 @@ import FilterDropdown from "@common/buttons/filterButton/FilterDropdown";
 import SortButton from "@common/buttons/sortButton/SortButton";
 import CountButton from "@common/buttons/countButton/CountButton";
 import Cookies from "js-cookie";
-import axios from "axios";
 import "./userConfiguration.css";
+import { dummyUsers } from "@common/dummy/dummyUsers";
+import { dummyRoles } from "@common/dummy/dummyRoles";
 
 const UserConfiguration = () => {
-  // Declaration
   const token = Cookies.get("token");
   const navigate = useNavigate();
-
   const [form] = Form.useForm();
   const [uuid, setUuid] = useState();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(dummyUsers);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filterByStatus, setFilterByStatus] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [failedModalOpen, setFailedModalOpen] = useState(false);
-
-  // Header
+  const [roles, setRoles] = useState(dummyRoles);
+  
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-    getUsersData();
+    if (!token) navigate("/login");
+    loadUsers();
   }, [token, navigate, successModalOpen]);
 
-  // API GET Users Data
-  const getUsersData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        "https://attendanceapi.masagi.co.id/api/v1/users/",
-        {
-          headers: { Authorization: token },
-        }
-      );
-      setUsers(response.data[0].items);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+  const loadUsers = async () => {
+    setLoading(true);
+    await new Promise((r) => setTimeout(r, 300));
+    setUsers(dummyUsers);
+    setLoading(false);
   };
 
-  // Table
   const columns = [
     {
       title: "Username",
       dataIndex: "username",
       key: "username",
       filteredValue: [searchText],
-      onFilter: (value, record) => {
-        return String(record.username)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      onFilter: (value, record) =>
+        record.username.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Role",
@@ -92,40 +74,18 @@ const UserConfiguration = () => {
       key: "status",
       dataIndex: "status",
       filteredValue: [filterByStatus],
-      onFilter: (value, record) => {
-        return String(record.status)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      render: (record) => {
-        if (record === "active") {
-          return (
-            <Button
-              key={record.uuid}
-              className="active-button"
-              type="primary"
-              size="small"
-              value="active"
-              ghost
-            >
-              active
-            </Button>
-          );
-        } else {
-          return (
-            <Button
-              key={record.uuid}
-              className="not-active-button"
-              type="primary"
-              size="small"
-              value="notActive"
-              ghost
-            >
-              not active
-            </Button>
-          );
-        }
-      },
+      onFilter: (value, record) =>
+        record.status.toLowerCase().includes(value.toLowerCase()),
+      render: (record) =>
+        record === "active" ? (
+          <Button className="active-button" type="primary" size="small" ghost>
+            active
+          </Button>
+        ) : (
+          <Button className="not-active-button" type="primary" size="small" ghost>
+            not active
+          </Button>
+        ),
     },
     {
       title: "Action",
@@ -144,215 +104,85 @@ const UserConfiguration = () => {
     },
   ];
 
-  const data = users?.map((item) => {
-    return {
-      key: item.uuid,
-      username: item.username,
-      status: item.is_active ? "active" : "not",
-      role: item.role.name,
-      role_uuid: item.role.uuid,
-      company: item.company ? item.company.company_name : null,
-      company_uuid: item.company ? item.company.uuid : null,
-    };
-  });
+  const data = users.map((item) => ({
+    key: item.uuid,
+    username: item.username,
+    status: item.is_active ? "active" : "not",
+    role: item.role.name,
+    role_uuid: item.role.uuid,
+    company: item.company.company_name,
+    company_uuid: item.company.uuid,
+  }));
 
-  // Filter Handler
   const handleFilter = (e) => {
-    const value = e.key;
-    setFilterByStatus(value);
+    setFilterByStatus(e.key);
   };
 
   const status = [
-    {
-      key: "active",
-      label: "Active",
-    },
-    {
-      key: "not",
-      label: "Not Active",
-    },
+    { key: "active", label: "Active" },
+    { key: "not", label: "Not Active" },
   ];
 
-  // Sort Handler
   const [sortValue, setSortValue] = useState("");
 
   const handleSort = (value) => {
     setSortValue(value);
   };
 
-  // Count Handler
-  const [countValue, setCountValue] = useState("10");
-
-  const handleCount = (value) => {
-    setCountValue(value);
-  };
-
   const itemsSort = [
-    {
-      key: "aToZ",
-      label: "A-Z Username",
-    },
-    {
-      key: "zToA",
-      label: "Z-A Username",
-    },
+    { key: "aToZ", label: "A-Z Username" },
+    { key: "zToA", label: "Z-A Username" },
   ];
 
-  // Sort data berdasarkan sortValue
   const sortedData = [...data].sort((a, b) => {
-    if (sortValue === "aToZ") {
-      return a.username.localeCompare(b.username);
-    } else if (sortValue === "zToA") {
-      return b.username.localeCompare(a.username);
-    } else {
-      return 0;
-    }
+    if (sortValue === "aToZ") return a.username.localeCompare(b.username);
+    if (sortValue === "zToA") return b.username.localeCompare(a.username);
+    return 0;
   });
 
-  // Edit Modal Handler
+  const [countValue, setCountValue] = useState("10");
+  const handleCount = (value) => setCountValue(value);
+
   const handleOpenEditModal = (record) => {
     form.setFieldsValue({
       username: record.username,
       role_uuid: record.role_uuid,
-      is_active: record.status === "active" ? true : false,
+      is_active: record.status === "active",
     });
-    const uuid = record.key;
-    setUuid(uuid);
+    setUuid(record.key);
     setIsEditModalOpen(true);
   };
 
-  const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setIsEditModalOpen(false);
-    }, 3000);
-  };
-
-  const handleCancel = () => {
-    setIsEditModalOpen(false);
-  };
-
-  const failedUpdateUser = (error) => {
-    console.log(error);
-    setIsEditModalOpen(false);
-    setFailedModalOpen(true);
-  };
-
-  const handleSuccessModalOk = () => {
-    setSuccessModalOpen(false);
-    form.setFieldsValue({ password: "" });
-  };
-
-  const handleSuccessModalCancel = () => {
-    setSuccessModalOpen(false);
-    form.setFieldsValue({ password: "" });
-  };
-
-  const handleFailedModalOk = () => {
-    setFailedModalOpen(false);
-  };
-
-  const handleFailedModalCancel = () => {
-    setFailedModalOpen(false);
-  };
-
-  // PUT API to Update User
   const updateUser = async (values) => {
     try {
       setLoading(true);
-      const response = await axios.put(
-        `https://attendanceapi.masagi.co.id/api/v1/users/${uuid}`,
-        values,
-        {
-          headers: { Authorization: token },
-        }
-      );
-      setLoading(false);
+      await new Promise((r) => setTimeout(r, 400));
+
+      const index = dummyUsers.findIndex((u) => u.uuid === uuid);
+      if (index !== -1) {
+        dummyUsers[index] = {
+          ...dummyUsers[index],
+          username: values.username,
+          password: values.password || dummyUsers[index].password,
+          is_active: values.is_active,
+          role: dummyRoles.find((r) => r.uuid === values.role_uuid),
+        };
+      }
+
       setIsEditModalOpen(false);
       setSuccessModalOpen(true);
-      console.log("User updated!");
+      loadUsers();
     } catch (error) {
-      console.log(error);
       setIsEditModalOpen(false);
       setFailedModalOpen(true);
-    }
-  };
-
-  // Edit Modal //
-  const [user, setUser] = useState();
-  const [roles, setRoles] = useState();
-  const [employees, setEmployees] = useState();
-  const [formLayout, setFormLayout] = useState("vertical");
-
-  // Form Layout
-  const formItemLayout =
-    formLayout === "horizontal"
-      ? {
-          labelCol: {
-            span: 4,
-          },
-          wrapperCol: {
-            span: 14,
-          },
-        }
-      : null;
-
-  useEffect(() => {
-    getUser();
-    getRoles();
-    getEmployees();
-  }, [uuid]);
-
-  // GET API User by Id
-  const getUser = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `https://attendanceapi.masagi.co.id/api/v1/users/${uuid}`,
-        {
-          headers: { Authorization: token },
-        }
-      );
-      setUser(response.data);
-    } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }
   };
 
-  // GET API Roles
-  const getRoles = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `https://attendanceapi.masagi.co.id/api/v1/role/`,
-        {
-          headers: { Authorization: token },
-        }
-      );
-      setRoles(response.data[0].items);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // GET API Employee
-  const getEmployees = async () => {
-    try {
-      const response = await axios.get(
-        `hhttps://attendanceapi.masagi.co.id/api/v1/employee/`,
-        {
-          headers: { Authorization: token },
-        }
-      );
-      setEmployees(response.data.items);
-    } catch (error) {
-      console.log(error);
-    }
+  const failedUpdateUser = () => {
+    setIsEditModalOpen(false);
+    setFailedModalOpen(true);
   };
 
   return (
@@ -363,12 +193,11 @@ const UserConfiguration = () => {
             className="search-box"
             prefix={<IoIosSearch />}
             placeholder="Search"
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
             allowClear
+            onChange={(e) => setSearchText(e.target.value)}
           />
         </Col>
+
         <Col xs={8} md={5} lg={4}>
           <FilterDropdown
             items={status}
@@ -377,98 +206,90 @@ const UserConfiguration = () => {
             onClick={handleFilter}
           />
         </Col>
+
         <Col xs={8} md={5} lg={4}>
           <SortButton
             className="sort-button"
-            onSort={handleSort}
             items={itemsSort}
+            onSort={handleSort}
           />
         </Col>
+
         <Col xs={8} md={4} lg={3}>
           <CountButton className="count-button" onCount={handleCount} />
         </Col>
       </Row>
+
       <br />
 
       <Table
         columns={columns}
         pagination={{ pageSize: countValue }}
-        scroll={{ x: 200 }}
         dataSource={sortedData}
         loading={loading}
+        scroll={{ x: 300 }}
       />
 
-      {/* Edit Modal */}
       <Modal
         centered
         open={isEditModalOpen}
         title={<h2 style={{ color: "#1E2F66", fontWeight: 600 }}>Edit User</h2>}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={<div></div>}
+        onCancel={() => setIsEditModalOpen(false)}
+        footer={null}
       >
         <Form
-          {...formItemLayout}
-          layout={formLayout}
           form={form}
+          layout="vertical"
           name="editUser"
           onFinish={updateUser}
           onFinishFailed={failedUpdateUser}
-          initialValues={{
-            layout: formLayout,
-          }}
         >
           <Form.Item label="Username" name="username">
-            <Input placeholder="Username" />
+            <Input />
           </Form.Item>
+
           <Form.Item label="Password" name="password">
-            <Input.Password placeholder="Password" />
+            <Input.Password />
           </Form.Item>
+
           <Form.Item label="Role" name="role_uuid">
             <Select>
-              {roles?.map((role) => {
-                return (
-                  <Select.Option
-                    key={role.uuid}
-                    value={role.uuid}
-                    loading={loading}
-                  >
-                    {role.name}
-                  </Select.Option>
-                );
-              })}
+              {roles.map((role) => (
+                <Select.Option key={role.uuid} value={role.uuid}>
+                  {role.name}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
+
           <Form.Item label="Status" name="is_active">
             <Radio.Group>
-              <Radio value={true}>Actice</Radio>
+              <Radio value={true}>Active</Radio>
               <Radio value={false}>Not Active</Radio>
             </Radio.Group>
           </Form.Item>
 
-          <div>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="add-button"
-              loading={loading}
-            >
-              Update
-            </Button>
-          </div>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+            className="add-button"
+          >
+            Update
+          </Button>
         </Form>
       </Modal>
 
       <SuccessModal
         action="Update"
-        handleOk={handleSuccessModalOk}
-        handleCancel={handleSuccessModalCancel}
+        handleOk={() => setSuccessModalOpen(false)}
+        handleCancel={() => setSuccessModalOpen(false)}
         isModalOpen={successModalOpen}
       />
 
       <FailedModal
-        handleOk={handleFailedModalOk}
-        handleCancel={handleFailedModalCancel}
+        handleOk={() => setFailedModalOpen(false)}
+        handleCancel={() => setFailedModalOpen(false)}
         isModalOpen={failedModalOpen}
       />
     </>

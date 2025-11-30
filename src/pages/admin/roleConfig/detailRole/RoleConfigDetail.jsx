@@ -30,6 +30,7 @@ const RoleConfigDetail = () => {
 
       await new Promise((resolve) => setTimeout(resolve, 400));
 
+      // Cari role berdasarkan uuid
       const roleFound = dummyRoles.find((item) => item.uuid === uuid);
 
       if (!roleFound) {
@@ -39,8 +40,10 @@ const RoleConfigDetail = () => {
 
       setDetailRole(roleFound);
 
+      // Dummy resource list
       setResource(dummyPermissions);
 
+      // Permission selected
       const currentPerms = roleFound.permission.map(
         (item) => item.permission.uuid
       );
@@ -137,6 +140,19 @@ const RoleConfigDetail = () => {
       setRoleName(detailRole.name);
     }
   }, [detailRole]);
+
+  const changeMethodToName = (resource) => {
+    const res = resource.map((item) => {
+      item.permission = item.permission.map((x) => {
+        return {
+          uuid: x.uuid,
+          name: x.method,
+        };
+      });
+      return item;
+    });
+    return res;
+  };
 
   const getDifferece = (arr1, arr2) => {
     const result = arr1.filter((item) => {

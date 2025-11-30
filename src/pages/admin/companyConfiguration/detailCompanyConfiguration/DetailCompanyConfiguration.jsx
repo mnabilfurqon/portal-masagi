@@ -18,8 +18,10 @@ const DetailCompanyConfiguration = () => {
     try {
       setLoading(true);
 
+      // simulate delay API
       await new Promise((resolve) => setTimeout(resolve, 400));
 
+      // find company by uuid
       const result = dummyCompanies.find((item) => item.uuid === uuid);
 
       if (result) {
@@ -41,6 +43,7 @@ const DetailCompanyConfiguration = () => {
     getSelectedCompanyData();
   }, [token, navigate]);
 
+  // handle edit company data bring uuid to edit company page
   const handleEditCompanyData = () => {
     navigate(`/company/edit-company/${uuid}`);
   };
