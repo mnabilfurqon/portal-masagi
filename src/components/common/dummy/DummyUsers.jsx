@@ -1,4 +1,4 @@
-export let dummyUsers = [
+export const dummyUsers = [
   {
     uuid: "USER-001",
     username: "Super Admin",
