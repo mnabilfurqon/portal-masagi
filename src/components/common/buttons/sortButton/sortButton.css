@@ -1,0 +1,18 @@
+.sort-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #629093;
+    border: 1px solid #629093;
+    border-radius: 4px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sort-button:hover {
+    background-color: #629093 !important;
+    border-color: #629093 !important;
+    color: #ffffff !important;
+}

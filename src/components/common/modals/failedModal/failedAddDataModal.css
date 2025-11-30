@@ -1,0 +1,30 @@
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-modal-failed {
+    font-size: 100px;
+    color: #DC3545;
+    margin-top: 20px;
+}
+
+.back-button {
+    width: 20%;
+    border-radius: 4px;
+    background-color: #DC3545;
+}
+
+.back-button:hover {
+    width: 20%;
+    border-radius: 4px;
+    background-color: #ffffff !important;
+    color: #DC3545 !important;
+    border-color: #DC3545 !important;
+}
+
+.failed-title {
+    margin-bottom: 0;
+}

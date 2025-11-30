@@ -1,0 +1,59 @@
+.modal-add-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+    justify-content: start;
+    align-items: start;
+}
+  
+.input-modal {
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    font-size: 16px;
+    margin-bottom: 5px;
+    height: 100%;
+}
+  
+.submit-button-modal {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background-color: #629093;
+    color: white;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.submit-button-modal:hover {
+    background-color: #73B3B7;
+    color: #ffffff !important;
+    border: 1px solid #73B3B7 !important;
+}
+
+.submit-button-modal-disabled {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background-color: #629093;
+    color: white;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+ 
+/* Judul Modal */
+.add-title {
+    font-size: 30px;
+    color: #0C2E60 !important;
+    margin-bottom: 20px;
+    height: 100%;
+}

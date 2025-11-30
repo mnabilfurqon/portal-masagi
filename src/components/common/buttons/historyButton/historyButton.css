@@ -1,0 +1,23 @@
+.button {
+  box-shadow: 0 10px 10px 0 #e0e6ed;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  /* border-style: none; */
+}
+
+.button:hover {
+  background: #e0e6ed;
+}
+
+.button:hover span,
+h2 {
+  color: black;
+}
+
+.summary-button {
+  box-shadow: 0 10px 10px 0 #e0e6ed;
+  width: 100%;
+  height: 100%;
+}

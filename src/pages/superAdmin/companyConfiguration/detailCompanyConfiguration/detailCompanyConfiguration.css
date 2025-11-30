@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+}
+
+.edit-data-button {
+    background-color: #629093;
+    border-color: #629093;
+    border-radius: 4px;
+    width: 100px;
+}
+
+.edit-data-button:hover {
+    background-color: #ffffff !important;
+    border-color: #629093 !important;
+    color: #629093 !important;
+}

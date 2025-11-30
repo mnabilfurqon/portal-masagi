@@ -1,0 +1,174 @@
+import React, {useState} from 'react';
+import { Button, Form, Input, DatePicker } from 'antd';
+import SubmitButton from '../../buttons/submitButton/SubmitButton';
+import './educationForm.css';
+import dayjs from 'dayjs';
+
+const EducationForm = ( {onFinish, onFinishFailed, onCancleEditFormButton, editEducationData}) => {
+    // Address Input
+    const { TextArea } = Input;
+    const [form] = Form.useForm();
+    // Date Picker
+    const dateFormatYear = 'YYYY';
+
+    if (editEducationData) {
+        form.setFieldsValue({
+            education: editEducationData.education,
+            institute: editEducationData.institute,
+            major: editEducationData.major,
+            thesis: editEducationData.thesis,
+            ipk: editEducationData.ipk,
+            certificate_number: editEducationData.certificate_number,
+            entry_year: dayjs(editEducationData.entry_year, dateFormatYear),
+            out_year: dayjs(editEducationData.out_year, dateFormatYear),
+        })
+    }
+
+    return (
+    <>
+        <Form
+            form={form}
+            name="education"
+            className='add-education-form'
+            labelCol={{
+            span: 6,
+            className: 'add-education-label'
+            }}
+            wrapperCol={{
+            className: 'add-education-input'
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+            initialValues={{
+                entry_year: dayjs('1970', dateFormatYear),
+                out_year: dayjs('1970', dateFormatYear),
+            }}
+        >
+            <Form.Item
+            label="Education"
+            name="education"
+            colon={false}
+            rules={[
+                {
+                required: true,
+                message: 'Please input your education!',
+                },
+            ]}
+            >
+            <Input placeholder='Enter education' className='input-button'/>
+            </Form.Item>
+
+            <Form.Item
+            label="Institution"
+            name="institute"
+            colon={false}
+            rules={[
+                {
+                required: true,
+                message: 'Please input your institution!',
+                },
+            ]}
+            >
+            <Input placeholder='Enter Institution' className='input-button'/>
+            </Form.Item>
+
+            <Form.Item
+            label="Major"
+            name="major"
+            colon={false}
+            rules={[
+                {
+                required: true,
+                message: 'Please input your major!',
+                },
+            ]}
+            >
+            <Input placeholder='Enter Major, insert - if not appropriate' className='input-button'/>
+            </Form.Item>
+
+            <Form.Item
+            label="Thesis"
+            name="thesis"
+            colon={false}
+            rules={[
+                {
+                required: true,
+                message: 'Please input your thesis!',
+                },
+            ]}
+            >
+            <TextArea rows={4} className='input-thesis' placeholder='Enter Thesis, insert - if not appropriate'/>
+            </Form.Item>
+
+            <Form.Item
+            label="IPK"
+            name="ipk"
+            colon={false}
+            rules={[
+                {
+                required: true,
+                message: 'Please input your IPK!',
+                },
+                {
+                    pattern: /^[0-9.]+$/,
+                    message: 'Please enter a valid IPK (numbers and dot(.) only)!',
+                },
+            ]}
+            >
+            <Input placeholder='Enter IPK, insert 0 if not appropriate' className='input-button'/>
+            </Form.Item>
+
+            <Form.Item
+            label="Certificate Number"
+            name="certificate_number"
+            colon={false}
+            >
+            <Input placeholder='Enter certificate number' className='input-button'/>
+            </Form.Item>
+
+            <Form.Item
+            label="Entry Year"
+            name="entry_year"
+            colon={false}
+            rules={[
+                {
+                required: true,
+                message: 'Please input your entry year!',
+                },
+            ]}
+            >
+            <DatePicker placeholder='YYYY' format={dateFormatYear} className='date-picker' picker='year'/>
+            </Form.Item>
+
+            <Form.Item
+            label="Out Year"
+            name="out_year"
+            colon={false}
+            rules={[
+                {
+                required: true,
+                message: 'Please input your out year!',
+                },
+            ]}
+            >
+            <DatePicker placeholder='YYYY' format={dateFormatYear} className='date-picker' picker='year'/>
+            </Form.Item>
+
+            <Form.Item
+            >
+            <div className='action-button'>
+                <Button type="text" onClick={onCancleEditFormButton}>
+                    Cancel
+                </Button>
+                {editEducationData ? <SubmitButton buttonText="Save"/> :
+                <SubmitButton buttonText="Add"/>
+                }
+            </div>
+            </Form.Item>
+        </Form>
+    </>
+  )
+}
+
+export default EducationForm

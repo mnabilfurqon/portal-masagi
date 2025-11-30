@@ -1,0 +1,120 @@
+.role-table-container {
+  margin-top: 24px;
+}
+
+.modal-container, .modal-success, .modal-failed {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.input-role {
+  margin-bottom: 20px;
+  margin-top: -20px;
+}
+
+.add-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+}
+.add-button:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.add-role-buttons {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.add-role-buttons:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.view-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #629093;
+  color: white;
+  width: 100px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.view-role-button:hover {
+  background-color: #73B3B7;
+  color: #ffffff !important;
+  border: 1px solid #73B3B7 !important;
+}
+
+.back-role-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: #DC3545;
+  color: white;
+  width: 100px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.back-role-button:hover {
+  background-color: #FF7481;
+  color: #FFFFFF !important;
+  border: 1px solid #DC3545 !important;
+}
+
+.add-role-title {
+  background: #F8F9FA;
+  font-size: 30px;
+  color: #0C2E60 !important;
+  margin-bottom: 40px;
+  height: 100%;
+}
+
+.success-icon {
+  color: #00FF00;
+}
+
+.success-title, .modal-success, .modal-failed {
+  align-items: center;
+  text-align: center;
+}
+
+.failed-role-icon {
+  color: red;
+  width: 100%;
+}
+
+.failed-role-header {
+  margin-top: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.success-header {
+  margin-top: 20px;
+  font-size: 30px;
+}

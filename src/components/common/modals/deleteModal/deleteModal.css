@@ -1,0 +1,17 @@
+.icon-warning {
+    color: #dc3545;
+}
+  
+.cancel-delete-button:hover {
+    color: #629093;
+}
+  
+.delete-button-modal {
+    background: #dc3545;
+    color: white;
+}
+  
+.delete-button-modal:hover {
+    background: #FF7481;
+}
+  
