@@ -7,10 +7,10 @@ import FailedAddDataModal from "@common/modals/failedModal/FailedAddDataModal";
 import Cookies from "js-cookie";
 import axios from "axios";
 import "./addUser.css";
-import { dummyRoles } from "@common/dummy/dummyRoles";
-import { dummyEmployees } from "@common/dummy/dummyEmployees";
-import { dummyCompanies } from "@common/dummy/DummyCompanies";
-import { dummyUsers } from "@common/dummy/dummyUsers";
+import { dummyRoles } from "../../../../components/common/dummy/dummyRoles";
+import { dummyEmployees } from "../../../../components/common/dummy/dummyEmployees";
+import { dummyCompanies } from "../../../../components/common/dummy/dummyCompanies";
+import { dummyUsers } from "../../../../components/common/dummy/dummyUsers";
 import { v4 as uuidv4 } from "uuid";
 
 const AddUser = () => {

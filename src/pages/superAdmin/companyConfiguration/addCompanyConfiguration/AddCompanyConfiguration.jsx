@@ -7,7 +7,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
 import { Spin } from "antd";
-import { dummyCompanies } from "@common/dummy/DummyCompanies";
+import { dummyCompanies } from "../../../../components/common/dummy/dummyCompanies";
 import { v4 as uuidv4 } from "uuid";
 
 const AddCompanyConfiguration = () => {
