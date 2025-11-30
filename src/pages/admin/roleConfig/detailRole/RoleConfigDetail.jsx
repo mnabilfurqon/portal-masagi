@@ -30,20 +30,15 @@ const RoleConfigDetail = () => {
 
       await new Promise((resolve) => setTimeout(resolve, 400));
 
-      // Cari role berdasarkan uuid
       const roleFound = dummyRoles.find((item) => item.uuid === uuid);
 
       if (!roleFound) {
         console.log("Role not found in dummy");
         return;
       }
-
       setDetailRole(roleFound);
-
-      // Dummy resource list
       setResource(dummyPermissions);
 
-      // Permission selected
       const currentPerms = roleFound.permission.map(
         (item) => item.permission.uuid
       );

@@ -22,10 +22,8 @@ const EditCompanyConfiguration = () => {
       setLoading(true);
       setTip("Get Selected Data...");
 
-      // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 400));
 
-      // find company from dummy
       const result = dummyCompanies.find((item) => item.uuid === uuid);
 
       if (result) {
@@ -48,7 +46,6 @@ const EditCompanyConfiguration = () => {
     getSelectedCompanyData();
   }, [token, navigate]);
 
-  // Modal Handler
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [isFailedModalVisible, setIsFailedModalVisible] = useState(false);
 
@@ -59,10 +56,8 @@ const EditCompanyConfiguration = () => {
       setLoading(true);
       setTip("Save Data...");
 
-      // simulate update delay
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // update dummy data (in-memory)
       const index = dummyCompanies.findIndex((item) => item.uuid === uuid);
       if (index !== -1) {
         dummyCompanies[index] = {

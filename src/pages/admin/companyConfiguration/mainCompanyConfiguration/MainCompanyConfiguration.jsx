@@ -10,38 +10,29 @@ import CountButton from '@common/buttons/countButton/CountButton'
 import { Col, Row } from 'antd';
 
 const MainCompanyConfiguration = () => {
-
-  // search handler
   const [searchValue, setSearchValue] = useState("");
 
   const handleSearch = (value) => {
     setSearchValue(value);
   };
-  // end of search handler
 
-  // filter handler
   const [filterValue, setFilterValue] = useState("");
 
   const handleFilter = (value) => {
     setFilterValue(value);
   };
-  // end of filter handler
 
-  // sort handler
   const [sortValue, setSortValue] = useState("");
 
   const handleSort = (value) => {
     setSortValue(value);
   };
-  // end of sort handler
 
-  // count handler
   const [countValue, setCountValue] = useState("10");
 
   const handleCount = (value) => {
     setCountValue(value);
   };
-  // end of count handler
 
   const radioData = [
     {
